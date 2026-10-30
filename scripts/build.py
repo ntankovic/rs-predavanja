@@ -34,7 +34,9 @@ def main():
             import sys
             for directory in sorted((ROOT / 'lectures').glob('[0-9][0-9]-*')):
                 for target, filename in (('lecture', 'chapter.qmd'), ('slides', 'slides.qmd')):
-                    if (directory / filename).is_file() or (directory / Path(filename).with_suffix('.hr.qmd')).is_file():
+                    # Build only the requested language; e.g. Lecture 00 has a Croatian chapter only.
+                    localized = Path(filename).with_suffix('.hr.qmd') if args.lang == 'hr' else Path(filename)
+                    if (directory / localized).is_file():
                         subprocess.run([sys.executable, __file__, target, directory.name, '--lang', args.lang], check=True)
             subprocess.run([sys.executable, __file__, 'book', '--lang', args.lang], check=True)
         return

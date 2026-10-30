@@ -37,7 +37,7 @@ The book must be readable independently of the slides. Slides should support cla
 
 ## Lecture 00: course introduction and assessment
 
-A separate [slides-only orientation](lectures/00-course-introduction/README.md) introduces course organization and assessment. It takes 20 minutes, is excluded from the student book, and does not reduce Lecture 01's 60-minute plan. This is an explicit exception to the chapter-plus-slides and 60-minute requirements below. `lecture.json` declares its format and duration. Historical 2022/23 administrative rules remain visibly marked pending lecturer confirmation; the deck is not ready for classroom release until current policies and student-facing links are supplied.
+A separate [slides-only orientation](lectures/00-course-introduction/README.md) introduces course organization and assessment. It takes 20 minutes, is excluded from the student book, and does not reduce Lecture 01's 60-minute plan. This is an explicit exception to the chapter-plus-slides and 60-minute requirements below. Lecturer decision 2026-10-30: Lecture 00 also has a Croatian student chapter (`chapter.hr.qmd`) built as a standalone PDF and published on the course site; it stays out of the book, and there is no English chapter yet. `lecture.json` declares its format and duration. Historical 2022/23 administrative rules remain visibly marked pending lecturer confirmation; the deck is not ready for classroom release until current policies and student-facing links are supplied.
 
 ## Syllabus status
 

@@ -201,3 +201,10 @@ Validation: English slides and chapter PDF rebuilt successfully; all 39 slides p
 2026-10-13 — Story reorder at the lecturer's request; nothing removed or merged. "Zašto raspodijeliti posao?" and Facebook now follow the definition and classification exercise, before the workload and concurrency slides. "Kako razviti loš sustav" (the fallacies) now follows "Naš portal: pretpostavke", before the 101 ms exercise. Chapter section "Why distribute the work?" (with the Facebook subsection) moved to the same place; the sentence about overlapping with remote waits moved into the concurrency section. Note transitions, timing (41 slides / 60 min) and the COURSE.md narrative order updated. Checks: hr/en browser checks, language check, English chapter PDF.
 
 2026-10-13 — Speaker notes: each slide starts with a one-line **Priča:** / **Story:** cue; note items are separated by blank lines; timing lines were removed from notes and the title slide (timing stays in `timing.json` and this brief). The language check passes.
+
+## Hrvatsko poglavlje, 2026-10-30
+
+Na nastavnikov zahtjev dodan je `chapter.hr.qmd`, prijevod engleskog `chapter.qmd` (stanje 2026-10-13) prema iznimci za predavanje 01 (engleski kao sidro). Pojmovi i definicije 1.1–1.7 preuzeti su doslovno iz `slides.hr.qmd` i `references/terminology.md` (npr. „svojstvo napredovanja”, „raspodijeljeno zaključavanje”); nazivi sudionika prate hrvatske dijagrame (Preglednik, Usluga predaje, Usluga zadataka, Pohrana predaja). Sve slike koriste `.hr.pdf` inačice. Jedina sadržajna dopuna: rečenica da svojstvo sigurnosti (safety) nije zaštita od napadača (security), prema rječniku.
+
+- Build: `just lecture 01-foundations` → `output/hr/lectures/01-foundations.pdf` (31 stranica); pregled svih stranica u smanjenom prikazu, stranice 17–18 detaljno; oznake „Slika”/„Definicija” provjerene.
+- [ ] Nastavnikov jezični i sadržajni pregled hrvatskog poglavlja.

@@ -1,0 +1,244 @@
+---
+title: "Uvod u kolegij i pravila polaganja"
+lang: hr
+language:
+  crossref-fig-title: "Slika"
+  crossref-fig-prefix: "slika"
+  crossref-tbl-title: "Tablica"
+  crossref-tbl-prefix: "tablica"
+format:
+  pdf:
+    include-in-header:
+      text: |
+        \usepackage{needspace}
+        \titlehead{\centering\includegraphics[width=18mm]{../../assets/shared/fipu-logo.pdf}}
+---
+
+## Čemu služi ovaj tekst
+
+Ovo je pisani pratitelj uvodnog predavanja. Opisuje kako je kolegij organiziran, gdje pronaći materijale i pomoć, kako izgleda rad na projektu i kako se kolegij polaže. Tehnički sadržaj počinje u predavanju 01.
+
+Pročitajte ga na početku semestra i vratite mu se prije predaje projekta. Ako se neko pravilo ovdje i na službenim mjestima kolegija razlikuje, vrijedi ono što nastavnik objavi na E-Učenju i web-stranici kolegija.
+
+## Kolegij ukratko
+
+### Čime se kolegij bavi
+
+Raspodijeljeni sustav čini više komponenti koje rade neovisno i surađuju razmjenom poruka. Kolegij ima tri cilja:
+
+- **razumjeti koncepte:** sudionike, poruke i zajedničko stanje te ispade, redoslijed događaja i koordinaciju;
+- **izgraditi sustave:** kroz programske zadatke i projekt;
+- **objasniti svoje odluke:** kao *solution architect / engineer*, koji ne pita samo radi li sustav, nego i zašto je građen baš tako i što se događa kad nešto pođe po zlu.
+
+### Teme kolegija
+
+Predavanja su grupirana u četiri cjeline. Svaka odgovara na jedno glavno pitanje.
+
+| Cjelina | Glavna pitanja |
+|:---|:---|
+| Arhitekture i komunikacija komponenti | Tko s kim komunicira? Gdje može doći do ispada? |
+| Vrijeme, replikacija i konsenzus | Što se dogodilo prvo? O čemu se možemo usuglasiti? |
+| Oporavak, tijekovi rada i skaliranje | Kako se oporaviti i povećati kapacitet? |
+| Sigurnost i procjena arhitekture | Koja jamstva sustav može pružiti i pod kojim pretpostavkama? |
+
+Kroz sva predavanja provlači se isti primjer: portal za predaju studentskih projekata. Prvo predavanje počinje pitanjem koje je mnogima poznato: pri prijenosu projekta od 20 MB istekne vrijeme čekanja. Je li projekt predan? Trebate li ga poslati ponovno?
+
+### Nastavnici
+
+| Dio nastave | Nastavnik |
+|:---|:---|
+| Predavanja | izv. prof. dr. sc. Nikola Tanković |
+| Vježbe | Luka Blašković, mag. inf. |
+
+Obveze za predavanja i vježbe organizirane su zasebno. Pratite zahtjeve koji se objavljuju za svaki dio nastave.
+
+## Predavanja, snimke i sudjelovanje
+
+**Dolazak na predavanja nije obvezan.** Ako dolazite, evidentirajte prisutnost QR kodom ili poveznicom [bit.ly/rs-tu-sam](https://bit.ly/rs-tu-sam) i aktivno sudjelujte: postavljajte pitanja, uspoređujte alternative i objasnite svoje odluke.
+
+Sva su predavanja snimljena, a AI dobro objašnjava pojmove. Ako na predavanju samo slušate, snimka vam je jednako dobra. Uživo dobivate nešto drugo:
+
+- **odgovor na vlastito pitanje**, dok zabuna nastaje i na vašem primjeru;
+- **prioritete**: što je bitno za projekt i obranu, a što je samo zanimljivo;
+- **razmišljanje naglas**: kako se rješava problem bez gotovog odgovora, s kompromisima i greškama;
+- **raspravu s kolegama**: isti problem ima više obranjivih rješenja, a obrana projekta traži upravo to.
+
+Studenti dolaze iz različitih razloga i to je u redu:
+
+| Ako ste… | Predavanje vam daje… |
+|:---|:---|
+| samouki, s AI-jem i snimkama | provjeru razumijete li zaista; dođite barem kad zapnete |
+| netko kome treba ritam | strukturu tjedna i manje gradiva za kraj semestra |
+| tihi, ne volite pitati naglas | slušanje bez pritiska; pitanja možete postaviti u Google Chatu |
+| zaposleni ili s obvezama | snimke i materijale kao punu zamjenu |
+| usmjereni na ocjenu | način razmišljanja koji se traži na obrani |
+
+Dođite kad vam to nešto daje. Ako dođete, sudjelujte.
+
+## Materijali i pomoć
+
+Materijali za kolegij nalaze se na dva mjesta:
+
+- [E-Učenje](https://moodle.srce.hr/)
+- [web-stranica kolegija](https://ntankovic.unipu.hr/rs)
+
+Snimke svih predavanja nalaze se na [popisu za reprodukciju na YouTubeu](https://www.youtube.com/playlist?list=PLIeA2EYS12RVaj1GdVP4fkNrLiK5k6VD-).
+
+**Kako tražiti pomoć.** Prije pitanja pregledajte materijale za kolegij. Prvo mjesto za sva pitanja je Google Chat, grupa **„FIPU RS”**. Izbjegavajte e-poštu.
+
+Tehničko pitanje najbrže dobiva dobar odgovor kada sadrži tri stvari:
+
+1. što ste očekivali da će se dogoditi;
+2. što se stvarno dogodilo (poruka o pogrešci, log);
+3. mali primjer kojim se problem može ponoviti.
+
+## Praktični rad i projekt
+
+### Dva tipična projekta
+
+Projekti na kolegiju obično pripadaju jednoj od dviju vrsta (@fig-intro-practical). Prikazi su primjeri, a ne obvezna arhitektura projekta.
+
+- **Mikroservisi:** klijent šalje zahtjev jednoj usluzi, a ona dalje komunicira s drugim uslugama, sinkrono ili asinkrono.
+- **Raspodijeljena obrada podataka:** posao se dijeli na više procesa koji rade paralelno, a njihovi se rezultati na kraju objedinjuju.
+
+![Dvije tipične vrste projekata. Lijevo strelice pokazuju zahtjeve od klijenta prema uslugama (odgovori su izostavljeni); desno pokazuju tok podataka.](assets/practical-work.hr.pdf){#fig-intro-practical width=100% fig-pos="H" fig-alt="Mikroservisi: klijent šalje zahtjev usluzi A, a ona uslugama B i C. Obrada podataka: podaci se dijele na dva procesa koji rade paralelno, a njihovi se rezultati objedinjuju."}
+
+Rad na projektu, kao i zadaci na vježbama, prolazi kroz četiri koraka: **postavi problem → predloži rješenje → implementiraj → testiraj i doradi**. Najprije odredite problem i očekivano ponašanje. Testiranjem provjerite rješenje i po potrebi se vratite na ranije korake.
+
+### Priprema za projekt
+
+Budite spremni koristiti i objasniti sljedeće:
+
+| Područje | Što trebate znati |
+|:---|:---|
+| Python | kolekcije (rječnici, liste, skupovi, n-torke i imenovane n-torke), funkcije, moduli i klase |
+| Alati Pythona | sažeti zapisi kolekcija (comprehensions), lambda izrazi, imenovani argumenti i zadane vrijednosti |
+| Konkurentnost | `asyncio` (`async` / `await`), skupovi dretvi i procesa |
+| Web-servisi | FastAPI, `httpx` i Uvicorn |
+| Kontejneri | Docker Compose i Docker Swarm (orkestracija) |
+| Ovisnosti projekta | instalacija paketa, popis ovisnosti i svaka korištena biblioteka |
+
+Za svaku biblioteku u projektu trebate znati zašto je tu i što radi.
+
+### Nadogradnja aplikacije za diplomski rad
+
+Uz odobrenje nastavnika aplikaciju možete po želji nadograđivati za **RITR** (5. godina) i **diplomski rad** (kraj studija). Isti rad ne vrednuje se dvaput: procjenjuje se samo dodani dio, pa on mora biti jasno razgraničen.
+
+| Rad | ECTS | Približan opseg dodanog rada |
+|:---|:---|:---|
+| RITR | 6 | ≈ 180 sati |
+| Diplomski rad | 30 | ≈ 900 sati |
+
+Sati slijede iz zakonske definicije: jedan ECTS bod predstavlja 30 sati prosječnog studentskog rada.[^ects] Svaki rad ima **vlastiti repozitorij**. U README-u navedite što je napravljeno prije, što kasnije i za koji kolegij ili rad.
+
+[^ects]: Zakon o visokom obrazovanju i znanstvenoj djelatnosti, NN 119/22, čl. 67. st. 2., <https://narodne-novine.nn.hr/clanci/sluzbeni/2022_10_119_1834.html>.
+
+## Uporaba AI-ja i vaša odgovornost
+
+**AI je dopušten.** Koristite ga za tehnologije obrađene na predavanjima ili odobrene od profesora. Izbor AI alata ne mijenja pravilo o odobrenju projektnih tehnologija.
+
+Podjela uloga prikazana je na slici [-@fig-intro-ai]: vi određujete zahtjeve i arhitekturu, AI predlaže kod, a vi ga provjeravate, testirate i obrazlažete odluke. Vi vodite i sljedeću doradu.
+
+![Vi vodite rad, AI predlaže. Odgovornost za kod i odluke ostaje na vama.](assets/ai-responsibility.hr.pdf){#fig-intro-ai width=100% fig-pos="H" fig-alt="Vi određujete zahtjeve i arhitekturu, AI predlaže kod, a vi provjeravate, testirate i obrazlažete odluke. Vi vodite sljedeću doradu."}
+
+Razumijte **svaku liniju koda**. Na obrani možete dobiti zadatak objasniti bilo koji dio koda i povezati ga s arhitekturnom odlukom: zašto ste odabrali određenu tehnologiju ili granicu usluge, koje ste alternative razmotrili i koje posljedice ili kompromisi proizlaze iz izbora. Radna demonstracija ili objašnjenje koje je napisao AI samo po sebi to ne pokazuje.
+
+> **Arhitektura je skup informiranih odluka. Dokažite svoje.**
+
+**Preporučeni alati.** Za rad na kodu projekta, objašnjenja i provjere preporučuje se [Claude Code](https://code.claude.com/docs/en/overview); za ideje za sučelje i interaktivne prototipove [Claude Design](https://claude.com/product/design); za razumijevanje promjena i pregled koda [Codex](https://learn.chatgpt.com/docs/code-review). Za istraživanje su dostupni i otvoreni modeli, na primjer [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) i [DeepSeek-Coder-V2](https://github.com/deepseek-ai/DeepSeek-Coder-V2). Njihove su težine dostupne za preuzimanje, ali za pokretanje trebaju odgovarajući alat i računalo, a licence ovise o modelu. Alat predlaže — vi provjeravate i objašnjavate.
+
+## Commitovi i individualni doprinos
+
+Na projektu radite **kontinuirano**: **nekoliko commitova tjedno** kroz najmanje **2–3 tjedna**. Autentičnost commitova se provjerava, a u timskom projektu prati se rad svakog člana. Projekt izrađen u nekoliko dana ili s jednim commitom ne zadovoljava traženi način rada.
+
+![Izmišljeni primjer povijesti commitova. Uz svaki commit vidljivi su autor, opis promjene i datum.](assets/github-history.hr.pdf){#fig-intro-commits width=100% fig-pos="H" fig-alt="Izmišljeni primjer šest commitova od 3. do 20. studenoga, nekoliko tjedno: Ana tri, Marko dva, Iva jedan. Uz svaki commit vidljivi su autor, opis promjene i datum."}
+
+Broj commitova sam po sebi ne pokazuje kvalitetu doprinosa; pregledava se sadržaj promjena. Timski rezultat ne zamjenjuje individualno razumijevanje: budite spremni objasniti vlastite promjene.
+
+## Kako položiti kolegij
+
+### Tijek polaganja
+
+Slika [-@fig-intro-bpmn] prikazuje cijeli tijek polaganja kolegija kao BPMN dijagram. Znak **+** označava paralelno grananje (oba se puta odvijaju istodobno), a znak **X** isključivi odabir (nastavlja se samo jednim putem). Strelice pokazuju redoslijed koraka.
+
+![Izvorni hodogram polaganja kolegija. Tri su pravila u međuvremenu promijenjena: vrijedi najmanje 3 **radna** dana između predaje i obrane, pravilo o predaji 7 dana prije ispitnog roka više ne vrijedi, a umjesto commita svakih 1–2 dana traži se nekoliko commitova tjedno kroz najmanje 2–3 tjedna.](assets/hodogram_rs.png){#fig-intro-bpmn width=100% fig-pos="H" fig-alt="Izvorni BPMN hodogram polaganja kolegija: projekt, bodovi s vježbi, predaja, oslobođenje od usmenog, obrana, unos ocjene i ponovna prijava."}
+
+Tijek riječima:
+
+1. **Rad na projektu i prikupljanje bodova s vježbi odvijaju se paralelno.**
+2. Dovršen projekt predajete prema uputama, sa svim traženim materijalima, na službeno mjesto za predaju.
+3. **Prijava ispitnog roka obvezna je na oba puta**, s oslobođenjem i bez njega.
+4. **S oslobođenjem od usmenog ispita** naznačite oslobođenje pri prijavi, a slijedi unos ocjene u ISVU.
+5. **Bez oslobođenja** rezervirate termin, branite projekt i pristupate usmenom ispitu. Pozitivan ishod vodi unosu ocjene u ISVU na dan obrane, a negativan ponovnoj prijavi ispitnog roka.
+
+### Oslobođenje od usmenog ispita
+
+Za oslobođenje su potrebni:
+
+- najmanje **50 % bodova s vježbi**,
+- projekt **bez spornih dijelova** i
+- **odobrenje nastavnika**.
+
+Oslobođenje vrijedi do kraja akademske godine. Nastavnik i dalje može pozvati bilo kojeg studenta na usmeni ispit. Prag od 50 % uvjet je za oslobođenje, a ne formula za ukupnu ocjenu kolegija.
+
+### Predaja i obrana: brojite radne dane
+
+Obrana je najmanje **3 radna dana nakon predaje**, a najkasnije na prijavljeni ispitni rok (@fig-intro-deadlines). Termin obrane rezervirate na [ntankovic.unipu.hr/termin](https://ntankovic.unipu.hr/termin); termini se otvaraju 10 dana unaprijed.
+
+![Obrana je najmanje 3 radna dana nakon predaje i najkasnije na ispitni rok. Razmaci su shematski, a ne kalendar.](assets/deadlines.hr.pdf){#fig-intro-deadlines width=100% fig-pos="H" fig-alt="Obrana je najmanje 3 radna dana nakon predaje i najkasnije na ispitni rok."}
+
+Tri radna dana nisu tri kalendarska dana. Ako predate u petak, subota i nedjelja ne broje se: ponedjeljak je prvi, utorak drugi, a srijeda treći radni dan, pa je obrana najranije moguća u srijedu (@fig-intro-calendar). Blagdani se također ne broje kao radni dani. Planirajte predaju unatrag od ispitnog roka i ostavite vremena za provjeru projekta.
+
+![Primjer brojanja radnih dana, bez blagdana.](assets/submission-calendar.hr.pdf){#fig-intro-calendar width=100% fig-pos="H" fig-alt="Kalendarski primjer: predaja u petak, subota i nedjelja ne broje se, ponedjeljak je prvi, utorak drugi, a srijeda treći radni dan, kada je obrana najranije moguća. Primjer je bez blagdana."}
+
+### Ako projekt ne obranite ove godine
+
+Akademska godina završava **30. rujna**. Godišnji odmor nastavnika traje od 20. srpnja do 25. kolovoza (@fig-intro-year). Taj datum nije zajamčeni ispitni termin, a godišnji odmor nije službena promjena rasporeda ispitnih rokova.
+
+![Kraj akademske godine i godišnji odmor nastavnika.](assets/academic-year.hr.pdf){#fig-intro-year width=100% fig-pos="H" fig-alt="Godišnji odmor nastavnika: od 20. srpnja do 25. kolovoza. Akademska godina završava 30. rujna."}
+
+Neuspješan pojedinačni izlazak na ispit ne znači odmah novu temu. Ali ako projekt ne obranite do završetka akademske godine:
+
+- ponovno prijavljujete projekt,
+- izrađujete **novi projekt samostalno** i branite ga.
+
+Prijedlog novog projekta odobrava nastavnik.
+
+## Kako se pripremiti za obranu
+
+### Objasnite svoj projekt
+
+Na obrani ne pokazujete samo da projekt radi, nego i da razumijete zašto radi. Slika [-@fig-intro-evidence] prikazuje tri koraka: predvidite očekivano ponašanje, pokažite kod, poruke i logove, a zatim objasnite opaženi rezultat i uzrok eventualnog ispada.
+
+![Tri koraka objašnjenja projekta.](assets/project-evidence.hr.pdf){#fig-intro-evidence width=100% fig-pos="H" fig-alt="Predvidi očekivano ponašanje, pokaži kod, poruke i logove, objasni rezultat i uzrok ispada."}
+
+Pratite jedan zahtjev kroz sustav: **zahtjev → usluge i poruke → stanje → odgovor**. Pokažite logove usluga, relevantan kod te uobičajeni slučaj i slučaj ispada. Na testnim podacima možete pokazati ispad usluge, spor odgovor ili ponovljeni zahtjev; odaberite primjer koji vaš projekt doista podržava. Obrazložite barem jednu odluku u dizajnu i njezin kompromis.
+
+**Primjer.** Pri predaji projekta istekne vrijeme čekanja. Kako biste u svom sustavu pokazali je li predaja prihvaćena? Koje biste logove otvorili i koje stanje provjerili?
+
+### Dorada projekta: objasnite izmjenu
+
+Umjesto izmjene koda uživo objašnjavate doradu na vlastitom projektu (@fig-intro-change): gdje bi izmjena išla u uslugama, datotekama i porukama, kako biste je proveli i koje su posljedice za ispade, stanje i testiranje. Nastavnik zatim postavlja potpitanja. Manju izmjenu po potrebi možete pokazati u kodu, bez AI alata.
+
+![Tri koraka objašnjenja izmjene na vlastitom projektu.](assets/design-change.hr.pdf){#fig-intro-change width=100% fig-pos="H" fig-alt="Tri koraka: gdje bi išla izmjena u uslugama, datotekama i porukama; kako biste je proveli; koje su posljedice za ispade, stanje i testiranje."}
+
+Primjeri pitanja (pitanja se biraju prema projektu, pa ih ne dobiva svaki student):
+
+- Kako biste dodali **ponovni pokušaj** (retry) pri isteku vremena čekanja?
+- Gdje biste dodali **novu uslugu** i kako bi komunicirala s ostalima?
+- Što se mijenja ako pokrenete **dvije replike** usluge?
+- Što ako usluga ne odgovori, što ako se zahtjev ponovi i kako biste provjerili da izmjena radi?
+
+## Kontrolni popis
+
+Prije prvog tehničkog predavanja trebali biste znati:
+
+- [ ] gdje se nalaze materijali, snimke i potvrđena pravila kolegija (E-Učenje, web-stranica kolegija, YouTube);
+- [ ] gdje postaviti pitanje (Google Chat, „FIPU RS”);
+- [ ] da je AI dopušten, ali da odgovarate za svaku liniju koda i svaku odluku;
+- [ ] da na projektu radite kontinuirano, s nekoliko commitova tjedno kroz najmanje 2–3 tjedna;
+- [ ] uvjete za oslobođenje od usmenog ispita;
+- [ ] da je obrana najmanje 3 radna dana nakon predaje i najkasnije na ispitni rok;
+- [ ] što se događa ako projekt ne obranite do 30. rujna.
+
+Sljedeće predavanje počinje s pitanjem s početka ovog teksta: **pri prijenosu projekta od 20 MB istekne vrijeme čekanja. Trebate li ga poslati ponovno?**

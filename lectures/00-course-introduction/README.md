@@ -120,3 +120,11 @@ Checks: `just slides 00-course-introduction` and `just browser-check 00-course-i
 Na nastavnikov zahtjev u hrvatski deck je dodan slajd „Nadogradnja aplikacije za diplomski rad”, preuzet iz BA uvoda, iza „Priprema za projekt”. Sadržaj: nadogradnja po želji i uz odobrenje nastavnika; RITR (5. godina) 6 ECTS ≈ 180 h, diplomski rad 30 ECTS ≈ 900 h (NN 119/22, čl. 67. st. 2.: 1 ECTS = 30 h); vlastiti repozitorij i README s napomenama o tome što je napravljeno prije, što kasnije i za što. Bilješke prema AGENTS.md nemaju redak s vremenom. Otvoreno: timing.json i ovaj README još opisuju engleski deck od 14 slajdova; hrvatski deck sada ima 22 slajda, a engleski prijevod slijedi nakon pregleda. Headless provjera (hr): PASS.
 
 2026-10-14: koraljni detalji kao u BA uvodu, uz zadržanu paletu: --coral #e4572e, samo ukrasno. Crta ispod naslova (centrirana na slajdu evidencije prisutnosti, izostavljena na BPMN slajdu) i traka slijeva na karticama. Prijašnji CSS spremljen je u scratchpad BA sesije. Headless provjera (hr): PASS.
+
+## Hrvatsko poglavlje (PDF skripta), 2026-10-30
+
+Na nastavnikov zahtjev dodan je `chapter.hr.qmd`: pisani pratitelj uvoda, izveden iz hrvatskih slajdova (v1.6) i potvrda u `sources.md`. Nema novih pravila. Izvorni BPMN prikazan je uz opis triju promijenjenih pravila (3 radna dana, ukinuto pravilo od 7 dana, commitovi). Poglavlje nije u knjizi; `lecture.json` i dalje označava format samo sa slajdovima za knjigu i `verify_builds.py`. Engleskog poglavlja nema.
+
+- Build: `just lecture 00-course-introduction` → `output/hr/lectures/00-course-introduction.pdf` (10 stranica); sve stranice vizualno pregledane.
+- `scripts/build.py all` sada gradi samo jezik koji ima izvor, pa EN `just all` ne pokušava graditi ovo poglavlje.
+- [ ] Nastavnikov pregled teksta poglavlja.
