@@ -6,3 +6,9 @@ output/**
 
 .tools/
 .DS_Store
+
+# Publish final outputs (slides HTML, PDFs) via GitHub Pages; keep QA artifacts local.
+!output/**/*.html
+!output/**/*.pdf
+output/qa/
+output/hr/qa/
