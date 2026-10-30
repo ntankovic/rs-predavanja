@@ -1,0 +1,32 @@
+---
+title: "Partitioning and scalability"
+subtitle: "Distributed Systems · Lecture 11"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Identify how a partition key can create a hotspot.
+
+::: {.notes}
+Prerequisites: Lectures 04, 06, and 10. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+Registrations are partitioned by course identifier. One very popular course receives most requests during enrolment.
+
+::: {.notes}
+Partitioning assigns different data to different nodes. The chosen key affects both query routing and load distribution. Evenly dividing identifiers does not guarantee evenly dividing traffic.
+:::
+
+## Discussion and recap
+
+Why might adding nodes leave the popular course as a bottleneck?
+
+**Takeaway:** Evaluate the request distribution as well as the data distribution.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

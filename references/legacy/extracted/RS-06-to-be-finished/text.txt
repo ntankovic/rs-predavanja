@@ -1,0 +1,117 @@
+
+
+--- PDF PAGE 1 ---
+
+Distributed systems
+Lectures: doc. dr. sc. Nikola Tanković 
+Consensus
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 2 ---
+
+Fault-tolerant total order broadcast
+• Total order broadcast is very important for State 
+Machine Replication 
+– It can be implemented by marking one node as a leader 
+and sending all messages through the leader 
+– The leader then uses FIFO total-order broadcast to sync 
+with replicas 
+– Leader is SPOF 
+– Can we transfer leadership to another node 
+automatically? → consensus algorithms
+Distributed systems
+2
+2022/23
+
+
+--- PDF PAGE 3 ---
+
+Consensus problem
+• Several nodes want to come to an agreement 
+about a value 
+• One or more nodes can propose, and the 
+consensus algorithm will decide 
+• Consensus algorithm will ensure that a value is 
+chosen from proposed values, and that all nodes 
+agree on the same value
+Distributed systems
+3
+2022/23
+
+
+--- PDF PAGE 4 ---
+
+Consensus vs T.O.B
+• What is the relationship between consensus and 
+total-order broadcast? 
+– Interchangeable concepts, formally equivalent [Chandra 
+& Toueg, 1996] 
+– T.O. Broadcast → consensus: messages are proposed 
+values, and the ﬁrst message delivered is accepted 
+– Consensus → T. O. Broadcast: we use a consensus 
+protocol to agree on the ﬁrst, second, third, ... message 
+Distributed systems
+4
+2022/23
+
+
+--- PDF PAGE 5 ---
+
+Popular consensus algorithms
+• Paxos: single-value consensus 
+• Multi-Paxos: generalization to total-order 
+broadcast 
+• Raft (Ongaro&Ousterhout, Stanford), 
+Viewstamped Replication (B. Liskov&Cowling, 
+MIT), Zab (FIFO total-order by default)
+Distributed systems
+5
+2022/23
+
+
+--- PDF PAGE 6 ---
+
+Primitive: 2PC
+• Two-phase commit 
+– A necessary primitive to achieve any consensus 
+algorithm 
+– Used widely in distributed, fault-tolerant databases for 
+actual transaction commits 
+– Here will be described in general sense
+Distributed systems
+6
+2022/23
+
+
+--- PDF PAGE 7 ---
+
+2 Phase Commit
+time
+«component»
+Participant 1
+What do you think?
+Ready!
+Go for it
+Done!
+«component»
+Coordinator
+Go for it
+What do you think?
+Seems ok!
+Done
+«component»
+Participant 2
+Distributed systems
+7
+2022/23
+
+
+--- PDF PAGE 8 ---
+
+Self-assesment
+Why is consensus important?
+Distributed systems
+8
+2022/23

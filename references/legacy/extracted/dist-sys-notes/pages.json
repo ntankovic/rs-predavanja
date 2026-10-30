@@ -1,0 +1,639 @@
+[
+  {
+    "page": 1,
+    "characters": 3158,
+    "preview": "Distributed Systems\nUniversity of Cambridge\nComputer Science Tripos, Part IB\nMichaelmas term 2021/22\nCourse web page: https://www.cst.cam.ac.uk/teaching/2122/ConcDisSys\nLecture videos: https://www.youtube.com/playlist?list=PLeKd45zvjcDFUEv ohr HdUFe97RItdiB\nDr. Martin Kleppmann\nmk428@cst.cam.ac.uk\nContents\n1\nIntroduction\n2\n1.1\nAbout distributed systems . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .\n2\n1.2\nDistributed syste",
+    "image_count": 1,
+    "vector_paths": 2
+  },
+  {
+    "page": 2,
+    "characters": 3384,
+    "preview": "1\nIntroduction\nThis 8-lecture course on distributed systems forms the second half of Concurrent and Distributed Sys-\ntems.\nWhile the ﬁrst half focussed on concurrency among multiple processes or threads running on\nthe same computer, this second half takes things further by examining systems consisting of multiple\ncommunicating computers.\nConcurrency on a single computer is also known as shared-memory concurrency, since multiple threads\nrunning in",
+    "image_count": 1,
+    "vector_paths": 5
+  },
+  {
+    "page": 3,
+    "characters": 2837,
+    "preview": "• Martin Kleppmann. Designing Data-Intensive Applications, O’Reilly, 2017. ISBN 978-1449373320.\nThis book goes more in the direction of databases, but also covers a number of distributed systems\ntopics. It is designed for software engineers in industry working with distributed databases.\n• Jean Bacon and Tim Harris. Operating Systems: Concurrent and Distributed Software Design.\nAddison-Wesley, 2003. ISBN 978-0321117892.\nThis book provides a link ",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 4,
+    "characters": 2447,
+    "preview": "Some distributed systems do things that in principle a single computer could do, but they do it\nmore reliably. A single computer can fail and might need to be rebooted from time to time, but if you\nare using multiple nodes, then one node can continue serving users while another node is rebooting.\nThus, a distributed system has the potential to be more reliable than a single computer, at least if it is\nwell-designed (somewhat contradicting Lamport",
+    "image_count": 1,
+    "vector_paths": 10
+  },
+  {
+    "page": 5,
+    "characters": 2385,
+    "preview": "does not need to be written in a way that explicitly deals with faulty RAM. However, in a distributed\nsystem we often do want to tolerate some parts of the system being broken, and for the rest to continue\nworking. For example, if one node has crashed (a partial failure), the remaining nodes may still be able\nto continue providing the service.\nIf one component of a system stops working, we call that a fault, and many distributed systems strive\nto",
+    "image_count": 0,
+    "vector_paths": 14
+  },
+  {
+    "page": 6,
+    "characters": 1543,
+    "preview": "Hard drives in a van?!\nhttps://docs.aws.amazon.com/snowball/latest/ug/using-device.html\nHigh latency, high bandwidth!\nSlide 8\nIndeed, if you want to send a very large message (think tens of terabytes), it would be slow to send\nthat data over the Internet, and it is in fact faster to write that data to a bunch of hard drives, load them\ninto a van, and to drive them to their destination. But from a distributed systems point of view, the\nmethod of d",
+    "image_count": 1,
+    "vector_paths": 10
+  },
+  {
+    "page": 7,
+    "characters": 780,
+    "preview": "Slide 10\nClient-server example: the web\nTime ﬂows from top to bottom.\nclient\nserver www.cst.cam.ac.uk\nGET /teaching/2122/ConcDisSys\n<!DOCTYPE html><html>...\nSlide 11\nIn the web there are two main types of nodes: servers host websites, and clients (web browsers)\ndisplay them. When you load a web page, your web browser sends a HTTP request message to the\nappropriate server. On receiving that request, the web server sends a response message containi",
+    "image_count": 2,
+    "vector_paths": 27
+  },
+  {
+    "page": 8,
+    "characters": 2057,
+    "preview": "In a URL, the part between the // and the following / is the hostname of the server to which the client\nis going to send the request (e.g. www.cst.cam.ac.uk), and the rest (e.g. /teaching/2122/ConcDisSys)\nis the path that the client asks for in its request message. Besides the path, the request also contains\nsome extra information, such as the HTTP method (e.g. GET to load a page, or POST to submit a form),\nthe version of the client software (the",
+    "image_count": 1,
+    "vector_paths": 18
+  },
+  {
+    "page": 9,
+    "characters": 2814,
+    "preview": "Another example of an everyday distributed system is when you buy something online using a\ncredit/debit card. When you enter your card number in some online shop, that shop will send a payment\nrequest over the Internet to a service that specialises in processing card payments.\nThe payments service in turn communicates with a card network such as Visa or MasterCard, which\ncommunicates with the bank that issued your card in order to take the paymen",
+    "image_count": 0,
+    "vector_paths": 73
+  },
+  {
+    "page": 10,
+    "characters": 2669,
+    "preview": "The sending of the message from the RPC client to the RPC server may happen over HTTP (in which\ncase this is also called a web service), or one of a range of diﬀerent network protocols may be used. On\nthe server side, the RPC framework unmarshals (decodes) the message and calls the desired function\nwith the provided arguments. When the function returns, the same happens in reverse: the function’s\nreturn value is marshalled, sent as a message back",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 11,
+    "characters": 2606,
+    "preview": "• resources (objects that can be inspected and manipulated) are represented by URLs, and\n• the state of a resource is updated by making a HTTP request with a standard method type, such\nas POST or PUT, to the appropriate URL.\nThe popularity of REST is due to the fact that JavaScript code running in a web browser can easily\nmake this type of HTTP request, as shown on Slide 19. In modern websites it is very common to use\nJavaScript to make HTTP requ",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 12,
+    "characters": 2307,
+    "preview": "When diﬀerent programming languages are used, the RPC framework needs to convert datatypes\nsuch that the caller’s arguments are understood by the code being called, and likewise for the function’s\nreturn value. A typical solution is to use an Interface Deﬁnition Language (IDL) to provide language-\nindependent type signatures of the functions that are being made available over RPC. From the IDL,\nsoftware developers can then automatically generate ",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 13,
+    "characters": 3041,
+    "preview": "Thus, the two generals need to coordinate their attack plan. This is made diﬃcult by the fact that\nthe two armies are camped some distance apart, and they can only communicate by messenger. The\nmessengers must pass through territory controlled by the city, and so they are sometimes captured.\nThus, a message sent by one general may or may not be received by the other general, and the sender\ndoes not know whether their message got through, except b",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 14,
+    "characters": 2498,
+    "preview": "This thought experiment demonstrates that in a distributed system, there is no way for one node to\nhave certainty about the state of another node. The only way how a node can know something is by\nhaving that knowledge communicated in a message. On a philosophical note, this is perhaps similar to\ncommunication between humans: we have no telepathy, so the only way for someone else to know what\nyou are thinking is by communicating it (through speech",
+    "image_count": 0,
+    "vector_paths": 58
+  },
+  {
+    "page": 15,
+    "characters": 2743,
+    "preview": "The challenge in the Byzantine setting is that some generals might be “traitors”: that is, they might\ntry to deliberately and maliciously mislead and confuse the other generals. We call the traitors malicious,\nand the others honest. One example of such malicious behaviour is shown on Slide 27: here, general 3\nreceives two contradictory messages from generals 1 and 2. General 1 tells general 3 to attack, whereas\ngeneral 2 claims that general 1 ord",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 16,
+    "characters": 2683,
+    "preview": "Is the Byzantine generals problem of practical relevance? Real distributed systems do often involve\ncomplex trust relationships. For example, a customer needs to trust an online shop to actually deliver the\ngoods they ordered, although they can dispute the payment via their bank if the goods never arrive or\nif they get charged too much. But if an online shop somehow allowed customers to order goods without\npaying for them, this weakness would no ",
+    "image_count": 1,
+    "vector_paths": 31
+  },
+  {
+    "page": 17,
+    "characters": 2204,
+    "preview": "2.3\nDescribing nodes and network behaviour\nWhen designing a distributed algorithm, a system model is how we specify our assumptions about what\nfaults may occur.\nStart of video section 2.3\n(mp4 download)\nSystem models\nWe have seen two thought experiments:\n▶ Two generals problem: a model of networks\n▶ Byzantine generals problem: a model of node behaviour\nIn real systems, both nodes and networks may be faulty!\nCapture assumptions in a system model c",
+    "image_count": 2,
+    "vector_paths": 10
+  },
+  {
+    "page": 18,
+    "characters": 3591,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n▶ Reliable (perfect) links:\nA message is received if and only if it is sent.\nMessages may be reordered.\nretry +\ndedup\n▶ Fair-loss links:\nMessages may be lost, duplicated, or reordered.\nIf you keep retrying, a message eventually gets through.\nTLS\n▶ Arbitrary links (active adversary):\nA malicious adversary may interfere with messages\n(e",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 19,
+    "characters": 3449,
+    "preview": "System model: node behaviour\nEach node executes a speciﬁed algorithm,\nassuming one of the following:\n▶ Crash-stop (fail-stop):\nA node is faulty if it crashes (at any moment).\nAfter crashing, it stops executing forever.\n▶ Crash-recovery (fail-recovery):\nA node may crash at any moment, losing its in-memory\nstate. It may resume executing sometime later.\nData stored on disk survives the crash.\n▶ Byzantine (fail-arbitrary):\nA node is faulty if it devi",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 20,
+    "characters": 4276,
+    "preview": "Note: confusingly, these terms are also used with a diﬀerent meaning in other contexts. For example,\nin the context of RPC and I/O operations, “synchronous” often means “the caller blocks/waits for\nthe operation to complete”, and “asynchronous” means “the caller continues executing after issuing a\nrequest, without waiting for the result”. It’s unfortunate that the same words are used with diﬀerent\nmeanings, but since these terms are widely used i",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 21,
+    "characters": 2590,
+    "preview": "why a thread may get suspended, especially when there is not much free memory left.\nAs you know from the concurrent systems half of this course, threads can and will get preempted even\nat the most inconvenient moments, anywhere in a program. In a distributed system, this is particularly\nproblematic, because for one node, time appears to “stand still” while it is paused, and during this time\nall other nodes continue executing their algorithms norm",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 22,
+    "characters": 3731,
+    "preview": "From a business point of view, what usually matters most is the availability of a service, such as a\nwebsite. For example, an online shop wants to be able to sell products at any time of day or night: any\noutage of the website means a lost opportunity to make money. For other services, there may even be\ncontractual agreements with customers requiring the service to be available. If a service is unavailable,\nthis can also damage the reputation of ",
+    "image_count": 0,
+    "vector_paths": 5
+  },
+  {
+    "page": 23,
+    "characters": 3225,
+    "preview": "Failure detectors\nFailure detector:\nalgorithm that detects whether another node is faulty\nPerfect failure detector:\nlabels a node as faulty if and only if it has crashed\nTypical implementation for crash-stop/crash-recovery:\nsend message, await response, label node as crashed if no\nreply within some timeout\nProblem:\ncannot tell the diﬀerence between crashed node, temporarily\nunresponsive node, lost message, and delayed message\nSlide 40\nIn most cas",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 24,
+    "characters": 2461,
+    "preview": "point, the additional cost of achieving higher availability exceeds the cost of occasional downtime, so it\nis economically rational to accept a certain amount of downtime.\nExercise 4. Reliable network links allow messages to be reordered. Give pseudocode for an algorithm\nthat strengthens the properties of a reliable point-to-point link such that messages are received in the order\nthey were sent (this is called a FIFO link), assuming an asynchrono",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 25,
+    "characters": 1779,
+    "preview": "3.1\nPhysical clocks\nPhysical clocks measure the time in seconds. They include analogue/mechanical clocks based on pendu-\nlums or similar mechanisms, and digital clocks based e.g. on a vibrating quartz crystal. Quartz clocks\nare found in most wristwatches, in every computer and mobile phone, in microwave ovens that display\nthe time, and many other everyday objects. Physical clocks are sometimes also called wall clocks, even\nthough they need not be",
+    "image_count": 3,
+    "vector_paths": 10
+  },
+  {
+    "page": 26,
+    "characters": 3047,
+    "preview": "Atomic clocks\n▶ Caesium-133 has a\nresonance (“hyperﬁne\ntransition”) at ≈ 9 GHz\n▶ Tune an electronic\noscillator to that resonant\nfrequency\n▶ 1 second = 9,192,631,770\nperiods of that signal\n▶ Accuracy ≈ 1 in 10−14 (1\nsecond in 3 million years)\nhttps:\n//www.microsemi.com/product-directory/\ncesium-frequency-references/\n4115-5071a-cesium-primary-frequency-standard\n▶ Price ≈ £20,000 (?)\n(can get cheaper rubidium\nclocks for ≈ £1,000)\nSlide 46\nAnother hi",
+    "image_count": 2,
+    "vector_paths": 10
+  },
+  {
+    "page": 27,
+    "characters": 1874,
+    "preview": "Coordinated Universal Time (UTC)\nGreenwich Mean Time (GMT, solar\ntime): it’s noon when the sun is in the\nsouth, as seen from the Greenwich meridian\nInternational Atomic Time (TAI): 1 day\nis 24 × 60 × 60 × 9,192,631,770 periods of\ncaesium-133’s resonant frequency\nProblem: speed of Earth’s rotation is not\nconstant\nCompromise: UTC is TAI with corrections\nto account for Earth rotation\nTime zones and daylight savings time\nare oﬀsets to UTC\nSlide 48\nTh",
+    "image_count": 2,
+    "vector_paths": 15
+  },
+  {
+    "page": 28,
+    "characters": 3546,
+    "preview": "In computing, a timestamp is a representation of a particular point in time. Two representations\nof timestamps are commonly used: Unix time and ISO 8601. For Unix time, zero corresponds to the\narbitrarily chosen date of 1 January 1970, known as the epoch. There are minor variations: for example,\nJava’s System.currentTimeMillis() is like Unix time, but uses milliseconds rather than seconds.\nTo be correct, software that works with timestamps needs ",
+    "image_count": 1,
+    "vector_paths": 6
+  },
+  {
+    "page": 29,
+    "characters": 1432,
+    "preview": "3.2\nClock synchronisation and monotonic clocks\nStart of video section 3.2\n(mp4 download)\nClock synchronisation\nComputers track physical time/UTC with a quartz clock\n(with battery, continues running when power is oﬀ)\nDue to clock drift, clock error gradually increases\nClock skew: diﬀerence between two clocks at a point in time\nSolution: Periodically get the current time from a server that\nhas a more accurate time source (atomic clock or GPS\nreceiv",
+    "image_count": 1,
+    "vector_paths": 15
+  },
+  {
+    "page": 30,
+    "characters": 4077,
+    "preview": "Time synchronisation over a network is made diﬃcult by unpredictable latency.\nAs discussed on\nSlide 36, both network latency and nodes’ processing speed can vary considerably. To reduce the eﬀects\nof random variations, NTP takes several samples of time measurements and applies statistical ﬁlters to\neliminate outliers.\nSlide 55 shows how NTP estimates the clock skew between the client and the server. When the client\nsends a request message, it inc",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 31,
+    "characters": 2557,
+    "preview": "clock will be correct, since it could get stuck in a panic state in which it refuses to adjust the clock.\nCorrecting clock skew\nOnce the client has estimated the clock skew θ, it needs to\napply that correction to its clock.\n▶ If |θ| < 125 ms, slew the clock:\nslightly speed it up or slow it down by up to 500 ppm\n(brings clocks in sync within ≈ 5 minutes)\n▶ If 125 ms ≤ |θ| < 1,000 s, step the clock:\nsuddenly reset client clock to estimated server t",
+    "image_count": 1,
+    "vector_paths": 10
+  },
+  {
+    "page": 32,
+    "characters": 2461,
+    "preview": "Monotonic and time-of-day clocks\n// BAD:\nlong startTime = System.currentTimeMillis();\ndoSomething();\nlong endTime = System.currentTimeMillis();\nlong elapsedMillis = endTime - startTime;\n// elapsedMillis may be negative!\nNTP client steps the clock during this\n// GOOD:\nlong startTime = System.nanoTime();\ndoSomething();\nlong endTime = System.nanoTime();\nlong elapsedNanos = endTime - startTime;\n// elapsedNanos is always >= 0\nSlide 58\nMost operating s",
+    "image_count": 0,
+    "vector_paths": 12
+  },
+  {
+    "page": 33,
+    "characters": 2695,
+    "preview": "Start of video section 3.3\n(mp4 download)\nOrdering of messages\nuser A\nuser B\nuser C\nm1\nm1\nm2\nm2\nm1 = “A says: The moon is made of cheese!”\nm2 = “B says: Oh no it isn’t!”\nC sees m2 ﬁrst, m1 second,\neven though logically m1 happened before m2.\nSlide 60\nHow can C determine the correct order in which it should put the messages? A monotonic clock won’t\nwork since its timestamps are not comparable across nodes. A ﬁrst attempt might be to get a timestam",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 34,
+    "characters": 2556,
+    "preview": "Finally, we take the transitive closure, and the result is the happens-before relation. This is a partial\norder, which means that it is possible that for some events a and b, neither a happened before b, nor\nb happened before a. In that case, we call a and b concurrent. Note that here, “concurrent” does not\nmean literally “at the same time”, but rather that a and b are independent in the sense that there is no\nsequence of messages leading from on",
+    "image_count": 0,
+    "vector_paths": 26
+  },
+  {
+    "page": 35,
+    "characters": 2481,
+    "preview": "Causality\nTaken from physics (relativity).\n▶ When a → b, then a might have caused b.\n▶ When a ∥ b, we know that a cannot have caused b.\nHappens-before relation encodes potential causality.\ndistance in space\ntime\na\nb\nlight from a\nlight from b\nc\nLet ≺ be a strict total order on events.\nIf (a → b) =⇒ (a ≺ b) then ≺ is a causal order\n(or: ≺ is “consistent with causality”).\nNB. “causal” ̸= “casual”!\nSlide 64\nThe notion of causality is borrowed from ph",
+    "image_count": 0,
+    "vector_paths": 24
+  },
+  {
+    "page": 36,
+    "characters": 2921,
+    "preview": "sending message m, and if the happens-before relation indicates that send(m1) → send(m2), then it could\nnevertheless happen that the the physical timestamp of send(m1) (according to the clock of m1’s sender)\nis less than the physical timestamp of send(m2) (according to the clock of m2’s sender).\nIn contrast, logical clocks focus on correctly capturing the order of events in a distributed system.\nThe ﬁrst type of logical clock we will examine is t",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 37,
+    "characters": 2212,
+    "preview": "thus, assuming each node has a unique name, the combination of timestamp and node name is globally\nunique (across all nodes).\nLamport clocks example\nA\nB\nC\n(1, C)\n(2, m1)\n(1, A)\n(2, A)\n(3, B)\n(3, A)\n(4, B)\n(5, C)\n(4, m2)\nLet N(e) be the node at which event e occurred.\nThen the pair (L(e), N(e)) uniquely identiﬁes event e.\nDeﬁne a total order ≺ using Lamport timestamps:\n(a ≺ b) ⇐⇒ (L(a) < L(b) ∨ (L(a) = L(b) ∧ N(a) < N(b)))\nThis order is causal: (a",
+    "image_count": 0,
+    "vector_paths": 66
+  },
+  {
+    "page": 38,
+    "characters": 2107,
+    "preview": "Vector clocks\nGiven Lamport timestamps L(a) and L(b) with L(a) < L(b)\nwe can’t tell whether a → b or a ∥ b.\nIf we want to detect which events are concurrent, we need\nvector clocks:\n▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩\n▶ Vector timestamp of event a is V (a) = ⟨t1, t2, . . . , tn⟩\n▶ ti is number of events observed by node Ni\n▶ Each node has a current vector timestamp T\n▶ On event at node Ni, increment vector element T[i]\n▶ Attac",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 39,
+    "characters": 2318,
+    "preview": "Vector clocks example\nAssuming the vector of nodes is N = ⟨A, B, C⟩:\nA\nB\nC\n⟨0, 0, 1⟩\n(⟨2, 0, 0⟩, m1)\n⟨1, 0, 0⟩\n⟨2, 0, 0⟩\n⟨2, 1, 0⟩\n⟨3, 0, 0⟩\n⟨2, 2, 0⟩\n⟨2, 2, 2⟩\n(⟨2, 2, 0⟩, m2)\nThe vector timestamp of an event e represents a set of events,\ne and its causal dependencies: {e} ∪ {a | a → e}\nFor example, ⟨2, 2, 0⟩ represents the ﬁrst two events from A,\nthe ﬁrst two events from B, and no events from C.\nSlide 71\nVector clocks ordering\nDeﬁne the followi",
+    "image_count": 0,
+    "vector_paths": 49
+  },
+  {
+    "page": 40,
+    "characters": 2604,
+    "preview": "appropriate: process scheduling; I/O; distributed ﬁlesystem consistency; cryptographic certiﬁcate validity;\nconcurrent database updates.\nThis completes our discussion of logical time. We have seen two key algorithms: Lamport clocks and\nvector clocks, one providing a total order and the other capturing the partial order of happens-before.\nVarious other constructions have been proposed: for example, there are hybrid clocks that combine some\nof the ",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 41,
+    "characters": 2743,
+    "preview": "broadcast algorithm then sends some messages to other nodes over point-to-point links, and another node\nreceives such a message when it arrives over the point-to-point link. Finally, the broadcast algorithm\nmay deliver the message to the application. As we shall see shortly, there is sometimes a delay between\nthe time when a message is received and when it is delivered.\nWe will examine three diﬀerent forms of broadcast. All of these are reliable:",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 42,
+    "characters": 2534,
+    "preview": "In the example on Slide 76, if node C receives m2 before m1, the broadcast algorithm at C will have\nto hold back (delay or buﬀer) m2 until after m1 has been delivered, to ensure the messages are delivered\nin causal order. In the example on Slide 77, messages m2 and m3 are broadcast concurrently. Nodes A\nand C deliver messages in the order m1, m3, m2, while node B delivers them in the order m1, m2, m3.\nEither of these delivery orders is acceptable",
+    "image_count": 0,
+    "vector_paths": 58
+  },
+  {
+    "page": 43,
+    "characters": 1919,
+    "preview": "Total order broadcast (2)\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\nm2\nAll nodes must deliver messages in the same order\n(here: m1, m3, m2)\nThis includes a node’s deliveries to itself!\nSlide 79\nFinally, FIFO-total order broadcast is like total order broadcast, but with the additional FIFO re-\nquirement that any messages broadcast by the same node are delivered in the order they were sent. The\nexamples on Slide 78 and 79 are in fact valid FIFO-total order bro",
+    "image_count": 0,
+    "vector_paths": 54
+  },
+  {
+    "page": 44,
+    "characters": 2338,
+    "preview": "Start of video section 4.3\n(mp4 download)\nBroadcast algorithms\nBreak down into two layers:\n1. Make best-eﬀort broadcast reliable by retransmitting\ndropped messages\n2. Enforce delivery order on top of reliable broadcast\nFirst attempt: broadcasting node sends message directly\nto every other node\n▶ Use reliable links (retry + deduplicate)\n▶ Problem: node may crash before all messages delivered\nA\nB\nC\nm1\nm1\nSlide 81\nTo improve the reliability, we can ",
+    "image_count": 0,
+    "vector_paths": 41
+  },
+  {
+    "page": 45,
+    "characters": 2208,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\nEventually reaches all nodes (with high probability).\nSlide 83\nNow that we have reliable broadcast (using eager reliable broadcast or a gossip protocol), we can\nbuild FIFO, causal, or total order broadcast on top of it. Let’s start with FIFO broadcast.\nFIFO broadcast algorithm\n",
+    "image_count": 0,
+    "vector_paths": 280
+  },
+  {
+    "page": 46,
+    "characters": 3282,
+    "preview": "Causal broadcast algorithm\non initialisation do\nsendSeq := 0; delivered := ⟨0, 0, . . . , 0⟩; buﬀer := {}\nend on\non request to broadcast m at node Ni do\ndeps := delivered; deps[i] := sendSeq\nsend (i, deps, m) via reliable broadcast\nsendSeq := sendSeq + 1\nend on\non receiving msg from reliable broadcast at node Ni do\nbuﬀer := buﬀer ∪ {msg}\nwhile ∃(sender, deps, m) ∈ buﬀer. deps ≤ delivered do\ndeliver m to the application\nbuﬀer := buﬀer \\ {(sender, ",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 47,
+    "characters": 2430,
+    "preview": "5\nReplication\nWe will now turn to the problem of replication, which means to maintain a copy of the same data on\nmultiple nodes, each of which is called a replica. Replication is a standard feature of many distributed\ndatabases, ﬁlesystems, and other storage systems. It is one of the main mechanisms we have for achieving\nfault tolerance: if one replica becomes faulty, we can continue accessing the copies of the data on other\nreplicas.\nStart of vi",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 48,
+    "characters": 2629,
+    "preview": "Slide 89\nLest you think this is a purely hypothetical problem, consider Slide 89, a genuine (I promise!) screen-\nshot of Twitter that I made in 2014, which shows the proﬁle of a user who is apparently following a\nnegative number of people. I don’t have insight into Twitter’s internals to know exactly what happened\nhere, but my guess is that this person used to follow several people, then unfollowed them, and due\nto a network problem during the un",
+    "image_count": 1,
+    "vector_paths": 10
+  },
+  {
+    "page": 49,
+    "characters": 2513,
+    "preview": "progress. On Slide 91, client 1 adds a user ID to the set of likes for a post, but the acknowledgement\nis lost. Client 2 reads the set of likes from the database (including the user ID added by client 1), and\nthen makes a request to remove the user ID again. Meanwhile, client 1 retries its request, unaware of\nthe update made by client 2. The retry therefore has the eﬀect of adding the user ID to the set again.\nThis is unexpected since client 2 ob",
+    "image_count": 0,
+    "vector_paths": 76
+  },
+  {
+    "page": 50,
+    "characters": 1932,
+    "preview": "Timestamps and tombstones\nclient\nA\nB\n(t1, add(x))\nt1\n(t1, add(x))\n{x �→ (t1, true)}\n{x �→ (t1, true)}\n(t2, remove(x))\nt2\n(t2, remove(x))\n{x �→ (t2, false)}\n“remove(x)” doesn’t actually remove x: it labels x with\n“false” to indicate it is invisible (a tombstone)\nEvery record has logical timestamp of last write\nSlide 93\nIn many replicated systems, replicas run a protocol to detect and reconcile any diﬀerences (this is\ncalled anti-entropy), so that ",
+    "image_count": 0,
+    "vector_paths": 50
+  },
+  {
+    "page": 51,
+    "characters": 3680,
+    "preview": "Concurrent writes by diﬀerent clients\nclient 1\nA\nB\nclient 2\nt1\nt2\n(t1, set(x, v1))\n(t2, set(x, v2))\nTwo common approaches:\n▶ Last writer wins (LWW):\nUse timestamps with total order (e.g. Lamport clock)\nKeep v2 and discard v1 if t2 > t1. Note: data loss!\n▶ Multi-value register:\nUse timestamps with partial order (e.g. vector clock)\nv2 replaces v1 if t2 > t1; preserve both {v1, v2} if t1 ∥ t2\nSlide 95\nThe details of this approach depend on the type ",
+    "image_count": 0,
+    "vector_paths": 29
+  },
+  {
+    "page": 52,
+    "characters": 3178,
+    "preview": "Start of video section 5.2\n(mp4 download)\nProbability of faults\nA replica may be unavailable due to network partition or\nnode fault (e.g. crash, hardware problem).\nAssume each replica has probability p of being faulty or\nunavailable at any one time, and that faults are independent.\n(Not actually true! But okay approximation for now.)\nProbability of all n replicas being faulty: pn\nProbability of ≥ 1 out of n replicas being faulty: 1 − (1 − p)n\nExa",
+    "image_count": 0,
+    "vector_paths": 61
+  },
+  {
+    "page": 53,
+    "characters": 2895,
+    "preview": "Quorum (2 out of 3)\nclient\nA\nB\nC\n(t1, set(x, v1))\nt1\nok\nok\nget(x)\n(t0, v0)\n(t1, v1)\nWrite succeeds on B and C; read succeeds on A and B\nChoose between (t0, v0) and (t1, v1) based on timestamp\nSlide 98\nDiﬀerent replicas may return diﬀerent responses to the same read request: on Slide 98, the read at A\nreturns the initial value (t0, v0), while the read at B returns the value (t1, v1) previously written by this\nclient. Using the timestamps, the clie",
+    "image_count": 0,
+    "vector_paths": 76
+  },
+  {
+    "page": 54,
+    "characters": 2632,
+    "preview": "In this quorum approach to replication, some updates may be missing from some replicas at any given\nmoment: for example, on Slide 98, the (t1, v1) update is missing from replica A, since that write request\nwas dropped. To bring replicas back in sync with each other, one approach is to rely on an anti-entropy\nprocess, as discussed on Slide 94.\nRead repair\nclient\nA\nB\nC\nget(x)\n(t0, v0)\n(t1, v1)\n(t1, set(x, v1))\nUpdate (t1, v1) is more recent than (t",
+    "image_count": 0,
+    "vector_paths": 44
+  },
+  {
+    "page": 55,
+    "characters": 3073,
+    "preview": "Using FIFO-total order broadcast it is easy to build a replicated system: we broadcast every update\nrequest to the replicas, which update their state based on each message as it is delivered. This is called\nstate machine replication (SMR), because a replica acts as a state machine whose inputs are message\ndeliveries.\nWe only require that the update logic is deterministic: any two replicas that are in the\nsame state, and are given the same input, ",
+    "image_count": 0,
+    "vector_paths": 44
+  },
+  {
+    "page": 56,
+    "characters": 4082,
+    "preview": "Recall from Slide 86 that one way of implementing total order broadcast is to designate one node as the\nleader, and to route all broadcast messages through it in order to impose a delivery order. This principle\nis also widely used for database replication: many database systems designate one replica as leader,\nprimary, or master. Any transactions that wish to modify the database must be executed on the leader\nreplica. As shown on Slide 103, the l",
+    "image_count": 0,
+    "vector_paths": 17
+  },
+  {
+    "page": 57,
+    "characters": 2834,
+    "preview": "Start of video section 6.1\n(mp4 download)\nFault-tolerant total order broadcast\nTotal order broadcast is very useful for state machine\nreplication.\nCan implement total order broadcast by sending all messages\nvia a single leader.\nProblem: what if leader crashes/becomes unavailable?\n▶ Manual failover: a human operator chooses a new\nleader, and reconﬁgures each node to use new leader\nUsed in many databases! Fine for planned maintenance.\nUnplanned out",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 58,
+    "characters": 3243,
+    "preview": "Consensus system models\nPaxos, Raft, etc. assume a partially synchronous,\ncrash-recovery system model.\nWhy not asynchronous?\n▶ FLP result (Fischer, Lynch, Paterson):\nThere is no deterministic consensus algorithm that is\nguaranteed to terminate in an asynchronous crash-stop\nsystem model.\n▶ Paxos, Raft, etc. use clocks only used for timeouts/failure\ndetector to ensure progress. Safety (correctness) does not\ndepend on timing.\nThere are also consensu",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 59,
+    "characters": 2948,
+    "preview": "becomes unavailable for whatever reason. The details diﬀer between the algorithms; in this lecture we will\nconcentrate on the approach taken by Raft, but many of the lessons from Raft are equally relevant to other\nconsensus algorithms. Howard and Mortier [2020] give a detailed comparison of Raft and Multi-Paxos\n(however, Paxos/Multi-Paxos are not examinable).\nA leader election is initiated when the other nodes suspect the current leader to have f",
+    "image_count": 0,
+    "vector_paths": 50
+  },
+  {
+    "page": 60,
+    "characters": 3743,
+    "preview": "For this reason, even after a node has been elected leader, it must act carefully, since at any moment\nthe system might contain be another leader with a later term that it has not yet heard about. It is not\nsafe for a leader to act unilaterally. Instead, every time a leader wants to decide on the next message to\ndeliver, it must again request conﬁrmation from a quorum of nodes. This is illustrated on Slide 110:\n1. In the ﬁrst round-trip, the left",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 61,
+    "characters": 3584,
+    "preview": "Slide 112 shows the pseudocode for starting up, and for starting an election. The variables deﬁned\nin the initialisation block constitute the state of a node. Four of the variables (currentTerm, votedFor,\nlog, and commitLength) need to be maintained in stable storage (e.g. on disk), since their values must\nnot be lost in the case of a crash. The other variables can be in volatile memory, and the crash-recovery\nfunction resets their values. Each n",
+    "image_count": 0,
+    "vector_paths": 24
+  },
+  {
+    "page": 62,
+    "characters": 4550,
+    "preview": "Slide 113 shows what happens when a node receives a VoteRequest message from a candidate. If the\ncandidate’s term is greater than the recipient’s current term, the recipient becomes a follower in that\nterm (even if it was a leader in a previous term). It then checks whether the candidate’s log is at least as\nup-to-date as its own log; this prevents a candidate with an outdated log from becoming leader, which\ncould lead to the loss of committed lo",
+    "image_count": 0,
+    "vector_paths": 5
+  },
+  {
+    "page": 63,
+    "characters": 3409,
+    "preview": "it updates the follower about which messages can be committed, as explained below.\nRaft (4/9): broadcasting messages\non request to broadcast msg at node nodeId do\nif currentRole = leader then\nappend the record (msg : msg, term : currentTerm) to log\nackedLength[nodeId] := log.length\nfor each follower ∈ nodes \\ {nodeId} do\nReplicateLog(nodeId, follower)\nend for\nelse\nforward the request to currentLeader via a FIFO link\nend if\nend on\nperiodically at ",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 64,
+    "characters": 3285,
+    "preview": "and calls the AppendEntries function (deﬁned on Slide 118) to add suﬃx to its own log.\nIt then\nreplies to the leader with a LogResponse message containing the follower’s ID, the current term, an\nacknowledgement of the number of log entries received, and the value true indicating that the LogRequest\nwas successful. If the message is from an outdated term or logOk is false, the follower replies with a\nLogResponse containing false to indicate an err",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 65,
+    "characters": 3529,
+    "preview": "Raft (8/9): leader receiving log acknowledgements\non receiving (LogResponse, follower, term, ack, success) at nodeId do\nif term = currentTerm ∧ currentRole = leader then\nif success = true ∧ ack ≥ ackedLength[follower] then\nsentLength[follower] := ack\nackedLength[follower] := ack\nCommitLogEntries()\nelse if sentLength[follower] > 0 then\nsentLength[follower] := sentLength[follower] − 1\nReplicateLog(nodeId, follower)\nend if\nelse if term > currentTerm",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 66,
+    "characters": 3565,
+    "preview": "Exercise 18. Three nodes are executing the Raft algorithm. At one point in time, each node has the log\nshown below:\nmsg\nterm\nm2\n1\nlog at node A:\nm1\n1\nm1\n1\nm6\n2\nlog at node B:\nm1\n1\nm4\n2\nm5\n2\nm7\n3\nlog at node C:\nm4\n2\n(a) Explain what events may have occurred that caused the nodes to be in this state.\n(b) What are the possible values of the commitLength variable at each node?\n(c) Node A starts a leader election in term 4, while the nodes are in the ",
+    "image_count": 0,
+    "vector_paths": 18
+  },
+  {
+    "page": 67,
+    "characters": 1550,
+    "preview": "Distributed transactions\nRecall atomicity in the context of ACID transactions:\n▶ A transaction either commits or aborts\n▶ If it commits, its updates are durable\n▶ If it aborts, it has no visible side-eﬀects\n▶ ACID consistency (preserving invariants) relies on\natomicity\nIf the transaction updates data on multiple nodes, this implies:\n▶ Either all nodes must commit, or all must abort\n▶ If any node crashes, all must abort\nEnsuring this is the atomic",
+    "image_count": 0,
+    "vector_paths": 66
+  },
+  {
+    "page": 68,
+    "characters": 4315,
+    "preview": "When using two-phase commit, a client ﬁrst starts a regular single-node transaction on each replica\nthat is participating in the transaction, and performs the usual reads and writes within those transac-\ntions. When the client is ready to commit the transaction, it sends a commit request to the transaction\ncoordinator, a designated node that manages the 2PC protocol. (In some systems, the coordinator is part\nof the client.)\nThe coordinator ﬁrst s",
+    "image_count": 0,
+    "vector_paths": 5
+  },
+  {
+    "page": 69,
+    "characters": 2893,
+    "preview": "can immediately be aborted. Otherwise a node must wait until it has delivered at least one vote from\neach replica. Once these votes have been delivered, and none of the replicas vote to abort in their ﬁrst\ndelivered message, then the transaction can be committed. Thanks to total order broadcast, all nodes\nare guaranteed to make the same decision on whether to abort or to commit, which preserves atomicity.\nFault-tolerant two-phase commit (1/2)\non ",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 70,
+    "characters": 2992,
+    "preview": "is because each CPU core has its own caches, and an update made by one core is not immediately reﬂected\nin another core’s cache. Thus, even a single computer starts behaving a bit like a replicated system. The\nL304 unit in Part III goes into detail of multicore memory behaviour.\nDon’t confuse linearizability with serializability, even though both words seem to mean something\nlike “can be arranged into a sequential order”. Serializability means th",
+    "image_count": 0,
+    "vector_paths": 52
+  },
+  {
+    "page": 71,
+    "characters": 2776,
+    "preview": "Linearizability is independent of the system implementation and communication protocols: all that\nmatters is the timing of each operation’s start and ﬁnish, and the outcome of the operation. We can\ntherefore leave out all of the replicas and message-sending arrows, and look at the system’s behaviour\nonly from the client’s point of view.\nThe key thing that linearizability cares about is whether one operation ﬁnished before another op-\neration star",
+    "image_count": 0,
+    "vector_paths": 55
+  },
+  {
+    "page": 72,
+    "characters": 2696,
+    "preview": "Linearizability is not only about the relationship of a get operation to a prior set operation, but it\ncan also relate one get operation to another. Slide 132 shows an example of a system that uses quorum\nreads and writes, but is nevertheless non-linearizable. Here, client 1 sets x to v1, and due to a quirk of\nthe network the update to replica A happens quickly, while the updates to replicas B and C are delayed.\nClient 2 reads from a quorum of {A",
+    "image_count": 0,
+    "vector_paths": 76
+  },
+  {
+    "page": 73,
+    "characters": 2647,
+    "preview": "et al., 1995]. It ensures linearizable reads and writes, because whenever a get and set operation ﬁnishes,\nwe know that the value read or written is present on a quorum of replicas, and therefore any subsequent\nquorum read is guaranteed to observe that value (or a later value).\nExercise 19. Give pseudocode for the ABD algorithm.\nABD: Making quorum reads/writes linearizable\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x",
+    "image_count": 0,
+    "vector_paths": 69
+  },
+  {
+    "page": 74,
+    "characters": 2406,
+    "preview": "The set operation for which the ABD algorithm ensures linearizability is a so-called blind write (uncon-\nditional write): it simply overwrites the value of a data item, regardless of its previous value. If multiple\nclients concurrently write to the same item, it uses a last-writer-wins conﬂict resolution policy (Slide 95),\ni.e. one of those writes will end up as the “winner” and the other values will silently be discarded.\nIn some applications, w",
+    "image_count": 0,
+    "vector_paths": 5
+  },
+  {
+    "page": 75,
+    "characters": 1899,
+    "preview": "node A\nnode B\nnode C\nnode D\nset(x, 0)\ncas(x, 0, 3) → false\nset(x, 1)\nget(x) → 4\nget(x) → 1\nget(x) → 2\ncas(x, 2, 4) → true\nget(x) → 1\ncas(x, 1, 2) → true\nget(x) → 2\n7.3\nEventual consistency\nLinearizability is a very convenient consistency model for distributed systems, because it guarantees that\na system behaves as if there was only one copy of the data, even if it is in fact replicated. This allows\napplications to ignore some of the complexities ",
+    "image_count": 0,
+    "vector_paths": 23
+  },
+  {
+    "page": 76,
+    "characters": 2338,
+    "preview": "As an example, consider the calendar app that you can ﬁnd on most phones, tablets, and computers.\nWe would like the appointments and entries in this app to sync across all of our devices; in other words,\nwe want it to be replicated such that each device is a replica. Moreover, we would like to be able to\nview, modify, and add calendar events even while a device is oﬄine (e.g. due to poor mobile network\ncoverage). If the calendar app’s replication",
+    "image_count": 1,
+    "vector_paths": 5
+  },
+  {
+    "page": 77,
+    "characters": 3174,
+    "preview": "The CAP theorem\nA system can be either strongly Consistent (linearizable) or\nAvailable in the presence of a network Partition\nnode A\nnode B\nnode C\nnetwork partition\nset(x, v1)\nget(x) → v1\nget(x) → v1\nget(x) → v0\nC must either wait indeﬁnitely for the network to recover, or\nreturn a potentially stale value\nSlide 139\nThe calendar app chooses option 2: it forgoes linearizability in favour of allowing the user to continue\nperforming operations while ",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 78,
+    "characters": 3740,
+    "preview": "key properties of the models we have seen, in descending order of the minimum strength of assumptions\nthat they must make about the system model.\nSummary of minimum system model requirements\nProblem\nMust wait for\ncommunication\nRequires\nsynchrony\natomic commit\nall participating\nnodes\npartially\nsynchronous\nquorum\npartially\nsynchronous\nconsensus,\ntotal order broadcast,\nlinearizable CAS\nlinearizable get/set\nquorum\nasynchronous\nstrength of assumptions",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 79,
+    "characters": 3084,
+    "preview": "performance and better robustness to network interruptions, most collaboration software uses optimistic\nreplication that provides strong eventual consistency (Slide 140).\nStart of video section 8.1\n(mp4 download)\nCollaboration and conﬂict resolution\nNowadays we use a lot of collaboration software:\n▶ Examples: calendar sync (last lecture), Google Docs, . . .\n▶ Several users/devices working on a shared ﬁle/document\n▶ Each user device has local repl",
+    "image_count": 0,
+    "vector_paths": 24
+  },
+  {
+    "page": 80,
+    "characters": 3087,
+    "preview": "Operation-based map CRDT\non initialisation do\nvalues := {}\nend on\non request to read value for key k do\nif ∃t, v. (t, k, v) ∈ values then return v else return null\nend on\non request to set key k to value v do\nt := newTimestamp()\n▷ globally unique, e.g. Lamport timestamp\nbroadcast (set, t, k, v) by reliable broadcast (including to self)\nend on\non delivering (set, t, k, v) by reliable broadcast do\nprevious := {(t′, k′, v′) ∈ values | k′ = k}\nif pre",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 81,
+    "characters": 3153,
+    "preview": "An alternative CRDT algorithm for the same map datatype is shown on Slide 146. The deﬁnition of\nvalues and the function for reading the value for a key is the same as on Slide 144. However, updates are\nhandled diﬀerently: instead of broadcasting each operation, we directly update values and then broadcast\nthe whole of values. On delivering this message at another replica, we merge together the two replicas’\nstates using a merge function ⊔. This m",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 82,
+    "characters": 2088,
+    "preview": "converge to the same view of the document. The video of this lecture includes a demo of Google Docs\nshowing this conﬂict resolution process in action.\nSlide 148\nWe can think of a collaboratively editable text document as a list of characters, where each user can\ninsert or delete characters at any index in the list. Fonts, formatting, embedded images, tables, and so\non add further complexity, so we will just concentrate on plain text for now. When",
+    "image_count": 1,
+    "vector_paths": 45
+  },
+  {
+    "page": 83,
+    "characters": 3643,
+    "preview": "Operational transformation\nuser A\nuser B\ninsert(0, “A”)\ninsert(2, “D”)\nA\nB\nC\nB\nC\nD\n0\n1\n2\n0\n1\n2\n(insert, 0, “A”)\n(insert, 2, “D”)\nT((insert, 2, “D”),\n(insert, 0, “A”)) =\n(insert, 3, “D”)\nT((insert, 0, “A”),\n(insert, 2, “D”)) =\n(insert, 0, “A”)\nA\nB\nC\nD\nA\nB\nC\nD\n0\n1\n2\n3\n0\n1\n2\n3\nSlide 150\nA node keeps track of the history of operations it has performed. When a node receives another node’s\noperation that is concurrent to one or more of its own operatio",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 84,
+    "characters": 2246,
+    "preview": "Text editing CRDT\nuser A\nuser B\n⊢\nB\nC\n⊣\n⊢\nB\nC\n⊣\n0.0\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75\n1.0\ninsert(0.25, “A”)\ninsert(0.875, “D”)\n⊢\nA\nB\nC\n⊣\n⊢\nB\nC\nD\n⊣\n0.0\n0.25\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75 0.875 1.0\n(insert, 0.25, “A”)\n(insert, 0.875, “D”)\n⊢\nA\nB\nC\nD\n⊣\n⊢\nA\nB\nC\nD\n⊣\n0.0\n0.25\n0.5\n0.75 0.875 1.0\n0.0\n0.25\n0.5\n0.75 0.875 1.0\nSlide 151\nThis algorithm is shown on Slides 152 and 153. The state of a replica is the set chars, which contains\n(position, nodeId, character) tr",
+    "image_count": 0,
+    "vector_paths": 54
+  },
+  {
+    "page": 85,
+    "characters": 3132,
+    "preview": "Operation-based text CRDT (2/2)\non delivering (insert, p, n, v) by causal broadcast do\nchars := chars ∪ {(p, n, v)}\nend on\non request to delete character at index index do\nlet (p, n, v) := ElementAt(chars, index + 1)\nbroadcast (delete, p, n) by causal broadcast\nend on\non delivering (delete, p, n) by causal broadcast do\nchars := {(p′, n′, v′) ∈ chars | ¬(p′ = p ∧ n′ = n)}\nend on\n▶ Use causal broadcast so that insertion of a character is\ndelivered ",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 86,
+    "characters": 4459,
+    "preview": "Many of the techniques used by Spanner are very conventional, and we have seen them earlier in this\ncourse: it uses the Paxos consensus algorithm for state machine replication, two-phase locking to ensure\nserializable isolation between transactions, and two-phase commit to ensure atomic commitment. A lot\nof engineering eﬀort goes into making these algorithms work well in practice, but at an architectural level,\nthese well-established choices are ",
+    "image_count": 0,
+    "vector_paths": 5
+  },
+  {
+    "page": 87,
+    "characters": 2877,
+    "preview": "attaching a timestamp to every message that is communicated over the network, and taking the maximum\nevery time such a message is received. However, in the example on Slide 156, there might not be any\nmessage sent from replica A, where T1 is executed, to replica B, where T2 is executed. Instead, the\ncommunication goes via a user, and we cannot expect a human to include a properly formed timestamp\non every action they perform. Without a reliable m",
+    "image_count": 0,
+    "vector_paths": 78
+  },
+  {
+    "page": 88,
+    "characters": 4187,
+    "preview": "When transaction Ti wants to commit in Spanner, it gets a timestamp interval [ti,earliest, ti,latest] from\nTrueTime, and assigns ti,latest to be the commit timestamp of Ti. However, before the transaction actually\ncommits and releases its locks, it ﬁrst pauses and waits for a duration equal to the clock uncertainty period\nδi = ti,latest − ti,earliest. Only after this wait time has elapsed, the transaction is committed and its writes\nbecome visibl",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 89,
+    "characters": 3887,
+    "preview": "by using those timestamps for MVCC, Spanner provides serializable transactions without requiring any\nlocks for read-only transactions. This approach keeps transactions fast, without placing any requirement\non clients to propagate logical timestamps.\nThat’s all, folks!\nAny questions?\nEmail mk428@cst.cam.ac.uk!\nSummary:\n▶ Distributed systems are everywhere\n▶ You use them every day: e.g. web apps\n▶ Key goals: availability, scalability, performance\n▶",
+    "image_count": 0,
+    "vector_paths": 7
+  },
+  {
+    "page": 90,
+    "characters": 5225,
+    "preview": "Cynthia Dwork, Nancy A. Lynch, and Larry Stockmeyer. Consensus in the presence of partial synchrony. Journal of the\nACM, 35(2):288–323, April 1988. doi:10.1145/42282.42283. URL https://groups.csail.mit.edu/tds/papers/Lynch/jacm88.\npdf.\nRoy Thomas Fielding. Architectural Styles and the Design of Network-based Software Architectures. PhD thesis, University\nof California, Irvine, 2000. URL https://www.ics.uci.edu/∼ﬁelding/pubs/dissertation/top.htm.\n",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 91,
+    "characters": 719,
+    "preview": "Werner\nVogels.\nEventually\nconsistent.\nCommunications\nof\nthe\nACM,\n52(1):40–44,\nJanuary\n2009.\ndoi:10.1145/1435417.1435432. URL http://cacm.acm.org/magazines/2009/1/15666-eventually-consistent/fulltext.\nJim Waldo, Geoﬀ Wyant, Ann Wollrath, and Sam Kendall. A note on distributed computing. Technical Report TR-94-29,\nSun Microsystems Laboratories, 1994. URL http://m.mirror.facebook.net/kde/devel/smli tr-94-29.pdf.\nMichael Whittaker, Aleksey Charapko, ",
+    "image_count": 0,
+    "vector_paths": 1
+  }
+]

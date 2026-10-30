@@ -1,0 +1,27 @@
+---
+title: "Fault tolerance and recovery"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Describe a recovery plan for a crash during request processing.
+
+**Prerequisites:** Lectures 03 and 07.
+
+## Core idea
+
+Recovery depends on knowing which state survives a failure. A process restart removes volatile state but may preserve durable records. A correct recovery path must reconcile those records with requests that clients may retry.
+
+## Worked scenario
+
+A worker records that a registration task finished, then crashes before acknowledging the queue message. The task is delivered again.
+
+## Discussion
+
+How can the worker recognize that the repeated task was already completed?
+
+## Recap
+
+Design recovery and normal processing together.

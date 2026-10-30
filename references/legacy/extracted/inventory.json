@@ -1,0 +1,222 @@
+[
+  {
+    "file": "RS-01-Intro.pdf",
+    "pages": 67,
+    "metadata": {
+      "format": "PDF 1.4",
+      "title": "RS-01-Intro",
+      "author": "",
+      "subject": "",
+      "keywords": "",
+      "creator": "Keynote",
+      "producer": "macOS Version 12.2.1 (Build 21D62) Quartz PDFContext",
+      "creationDate": "D:20230905115231Z00'00'",
+      "modDate": "D:20230905115231Z00'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 17536,
+    "image_occurrences": 177,
+    "low_text_pages": [
+      2,
+      14,
+      56
+    ]
+  },
+  {
+    "file": "RS-02-RPC-Models.pdf",
+    "pages": 53,
+    "metadata": {
+      "format": "PDF 1.4",
+      "title": "RS-02-RPC-Models",
+      "author": "",
+      "subject": "",
+      "keywords": "",
+      "creator": "Keynote",
+      "producer": "macOS Version 12.2.1 (Build 21D62) Quartz PDFContext",
+      "creationDate": "D:20230905115252Z00'00'",
+      "modDate": "D:20230905115252Z00'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 10011,
+    "image_occurrences": 142,
+    "low_text_pages": [
+      1,
+      12,
+      13,
+      22,
+      35
+    ]
+  },
+  {
+    "file": "RS-03-Time-Clocks-Ordering.pdf",
+    "pages": 33,
+    "metadata": {
+      "format": "PDF 1.4",
+      "title": "RS-03-Time-Clocks-Ordering",
+      "author": "",
+      "subject": "",
+      "keywords": "",
+      "creator": "Keynote",
+      "producer": "macOS Version 12.2.1 (Build 21D62) Quartz PDFContext",
+      "creationDate": "D:20230905115307Z00'00'",
+      "modDate": "D:20230905115307Z00'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 8730,
+    "image_occurrences": 91,
+    "low_text_pages": [
+      1,
+      31
+    ]
+  },
+  {
+    "file": "RS-04-Broadcasting.pdf",
+    "pages": 19,
+    "metadata": {
+      "format": "PDF 1.4",
+      "title": "RS-04-Broadcasting",
+      "author": "",
+      "subject": "",
+      "keywords": "",
+      "creator": "Keynote",
+      "producer": "macOS Version 12.2.1 (Build 21D62) Quartz PDFContext",
+      "creationDate": "D:20230905115211Z00'00'",
+      "modDate": "D:20230905115211Z00'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 4284,
+    "image_occurrences": 52,
+    "low_text_pages": [
+      2
+    ]
+  },
+  {
+    "file": "RS-05-to-be-finished.pdf",
+    "pages": 30,
+    "metadata": {
+      "format": "PDF 1.4",
+      "title": "RS-05-to-be-finished",
+      "author": "",
+      "subject": "",
+      "keywords": "",
+      "creator": "Keynote",
+      "producer": "macOS Version 26.6.2 (Build 25G83) Quartz PDFContext",
+      "creationDate": "D:20260914095154Z00'00'",
+      "modDate": "D:20260914095154Z00'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 5143,
+    "image_occurrences": 82,
+    "low_text_pages": [
+      3,
+      20
+    ]
+  },
+  {
+    "file": "RS-06-to-be-finished.pdf",
+    "pages": 8,
+    "metadata": {
+      "format": "PDF 1.4",
+      "title": "RS-06-Consensus",
+      "author": "Nikola Tankovic",
+      "subject": "",
+      "keywords": "",
+      "creator": "Keynote",
+      "producer": "macOS Version 26.6.2 (Build 25G83) Quartz PDFContext",
+      "creationDate": "D:20260914095222Z00'00'",
+      "modDate": "D:20260914095222Z00'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 2051,
+    "image_occurrences": 18,
+    "low_text_pages": []
+  },
+  {
+    "file": "concurrent.pdf",
+    "pages": 238,
+    "metadata": {
+      "format": "PDF 1.7",
+      "title": "Concurrent Systems",
+      "author": "Steve Hand",
+      "subject": "",
+      "keywords": "",
+      "creator": "Impress",
+      "producer": "GPL Ghostscript 9.27",
+      "creationDate": "D:20211026112950+01'00'",
+      "modDate": "D:20211026112950+01'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 139244,
+    "image_occurrences": 22,
+    "low_text_pages": []
+  },
+  {
+    "file": "dist-sys-notes.pdf",
+    "pages": 91,
+    "metadata": {
+      "format": "PDF 1.5",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "keywords": "",
+      "creator": "LaTeX with hyperref package",
+      "producer": "pdfTeX-1.40.19",
+      "creationDate": "D:20220227124407Z",
+      "modDate": "D:20221215090312+01'00'",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 260117,
+    "image_occurrences": 23,
+    "low_text_pages": []
+  },
+  {
+    "file": "dist-sys-slides.pdf",
+    "pages": 516,
+    "metadata": {
+      "format": "PDF 1.5",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "keywords": "",
+      "creator": "LaTeX with Beamer class",
+      "producer": "pdfTeX-1.40.19",
+      "creationDate": "D:20220216141704Z",
+      "modDate": "D:20220216141704Z",
+      "trapped": "",
+      "encryption": null
+    },
+    "text_characters": 140110,
+    "image_occurrences": 31,
+    "low_text_pages": [
+      6,
+      11,
+      19,
+      23,
+      24,
+      25,
+      114,
+      195,
+      196,
+      201,
+      202,
+      236,
+      245,
+      280,
+      291,
+      292,
+      316,
+      366,
+      446,
+      457,
+      476
+    ]
+  }
+]

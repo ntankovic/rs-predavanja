@@ -1,0 +1,523 @@
+
+
+--- PDF PAGE 1 ---
+
+http://bit.ly/rs-tu-sam
+
+
+--- PDF PAGE 2 ---
+
+Distributed systems
+Lectures: doc. dr. sc. Nikola Tanković 
+Time, clocks and ordering
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 3 ---
+
+Time and clocks
+• Why do we need them? 
+– Timeouts and retries,  
+– Performance monitoring & modeling 
+– Event logs 
+– TTLs (time-to-live): cache, authentication tokens, record 
+expiry (e.g., DynamoDB)... 
+– Determining the order of events 
+• Types of clocks 
+– physical - number of (milli)seconds elapsed 
+– logical - number of events elapsed
+Distributed systems
+3
+2022/23
+
+
+--- PDF PAGE 4 ---
+
+Physical clocks
+• Quartz clock 
+– Speciﬁcally designed to resonate  
+at speciﬁc frequency  
+• e.g. 32768Hz or 2^15Hz 
+– Piezo-electric eﬀect 
+• "bending the voltage" 
+– Cheap to produce 
+– Imprecise (1ppm = 32s/year)
+Distributed systems
+4
+2022/23
+
+
+--- PDF PAGE 5 ---
+
+Physical clocks
+• Atomic clocks 
+– Greater precision 
+• 1 second in 3 million years 
+– The international system of Units 
+(SI) deﬁnition: 
+• 1 second = 9,192,631,770 
+periods of a particular resonant 
+frequency of the cesium-133 
+atom 
+– Price ~ 20.000$
+Distributed systems
+5
+2022/23
+
+
+--- PDF PAGE 6 ---
+
+Atomic clock
+Distributed systems
+6
+2022/23
+
+
+--- PDF PAGE 7 ---
+
+Leap seconds
+• Greenwich Mean Time (GMT, solar time): it’s noon when the 
+sun is in the south, as seen from the Greenwich meridian 
+• International Atomic Time (TAI): 1 day is 24 × 60 × 60 × 
+9,192,631,770 periods of caesium-133’s resonant frequency 
+• Problem: it works great (!) but is disconnected from our 
+feeling of time - the speed of Earth’s rotation is not constant! 
+• Compromise: UTC time is the TAI time, but with the 
+corrections applied to account for Earth's rotation
+Distributed systems
+7
+2022/23
+
+
+--- PDF PAGE 8 ---
+
+Leap seconds
+• Every year, on 30 June and 31 December at 
+23:59:59 UTC, one of three things happens: 
+– The clock immediately jumps forward to 00:00:00, 
+skipping one second (negative leap second)  
+– The clock moves to 00:00:00 after one second, as usual  
+– The clock moves to 23:59:60 after one second, and then 
+moves to 00:00:00 after one further second (positive 
+leap second) 
+• This is announced several months beforehand.
+Distributed systems
+8
+2022/23
+
+
+--- PDF PAGE 9 ---
+
+Yes, this is possible
+Distributed systems
+9
+2022/23
+
+
+--- PDF PAGE 10 ---
+
+In practice...
+Distributed systems
+10
+2022/23
+
+
+--- PDF PAGE 11 ---
+
+Representation of time
+• How to squeeze the time into bits 
+• Unix timestamp 
+– Number of seconds elapsed from 1 January 
+1970 00:00:00 UTC 
+– not dealing with leap seconds 
+• ISO 8601 
+– Taking time-zones into consideration 🤯
+Distributed systems
+11
+2022/23
+
+
+--- PDF PAGE 12 ---
+
+Timezones are a mess...
+h2ps://www.youtube.com/watch?v=-5wpm-gesOY
+Distributed systems
+12
+2022/23
+
+
+--- PDF PAGE 13 ---
+
+Dealing with those leap seconds
+• Most software ignores it 
+• But distributed systems and OS'es need 
+microsecond precisions 
+– Many failures due to leap seconds 
+• Pragmatic solution: smear that second 
+throughout the day 
+– Take or add a very small part every microsecond
+Distributed systems
+13
+2022/23
+
+
+--- PDF PAGE 14 ---
+
+Clock synchronization
+• Computers have a battery for the quartz clocks 
+– due to drift (temperature et al.), the clocks continually 
+depart from one another 
+• Clock skew: diﬀerence in clocks across systems 
+• Solution: get the time from an atomic clock or 
+GPS (which have atomic clocks) 
+• Protocol for sync: Network Time Protocol (NTP)
+Distributed systems
+14
+2022/23
+
+
+--- PDF PAGE 15 ---
+
+Network Time Protocol
+• Many vendors conﬁgure their OSes to sync time with 
+their institutional NTP servers 
+• National Institute of Standardization and Technology 
+has important NTP servers 
+– https://tf.nist.gov/tf-cgi/servers.cgi 
+• Hierarchy (organized in stratums) 
+– Stratum 0: atomic clock 
+– Stratum 1: synced with Stratum 0 
+– Stratum 2: ... 
+• But how to deal with latency? 
+Distributed systems
+15
+2022/23
+
+
+--- PDF PAGE 16 ---
+
+Time synchronization
+Distributed systems
+16
+2022/23
+
+
+--- PDF PAGE 17 ---
+
+Correcting the skew
+• Once the client has estimated the clock skew θ, it needs 
+to apply that correction to its clock. 
+– If | θ | < 125 ms, slew the clock: slightly speed it up or slow it 
+down by up to 500 ppm (brings clocks in sync within ≈ 5 
+minutes) 
+– If 125 ms ≤ | θ | < 1,000 s, step the clock: suddenly reset the 
+client clock to the estimated server timestamp 
+– If | θ | ≥ 1,000 s, panic and do nothing (leave the problem for a 
+human operator to resolve) 
+• Systems that rely on clock sync need to monitor clock 
+skew!
+Distributed systems
+17
+2022/23
+
+
+--- PDF PAGE 18 ---
+
+How to measure performance
+import time 
+# bad practice 
+start_time = time.time_ns() 
+call_some_rpc() 
+end_time = time.time_ns() 
+elapsed = end_time - start_time 
+print(f"The call took {elapsed} nanoseconds.") 
+Why can the measured 
+ Dme be negaDve?
+# good practice 
+start_time = time.monotonic_ns() 
+call_some_rpc() 
+end_time = time.monotonic_ns() 
+elapsed = end_time - start_time 
+print(f"The call took {elapsed} nanoseconds.") 
+Distributed systems
+18
+2022/23
+
+
+--- PDF PAGE 19 ---
+
+Distributed systems
+Ordering
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 20 ---
+
+Ordering the messages
+•
+"I was ﬁrst!" 
+m1 =
+•
+"I was ﬁrst!"
+m2 =
+Author: Dr. MarDn Kleppmann
+Distributed systems
+20
+2022/23
+
+
+--- PDF PAGE 21 ---
+
+Inconsistencies
+• Clocks are skewing 
+• Messages are arbitrarily 
+late 
+• What can be done?
+Distributed systems
+21
+2022/23
+
+
+--- PDF PAGE 22 ---
+
+DEF
+"Happens-before" partial order
+• An event is a unique moment in time at certain node 
+• We can say that a happens before b, noted with 
+ if 
+a → b
+and only if: 
+– Both  and  happened on the same node, and  before  
+a
+b
+a
+b
+– Event  is the event of sending some message, and event  is the 
+a
+b
+receiving it 
+– If  exists where 
+ (transitivity) 
+c
+a → c ∧ c → b
+ 
+∃c : a → c ∧ c → b ⟹ a → b
+– Otherwise we can note 
+  
+a ∥ b
+•
+ is concurrent with 
+a
+b
+Distributed systems
+22
+2022/23
+
+
+--- PDF PAGE 23 ---
+
+Author: Dr. MarDn Kleppmann
+Distributed systems
+2022/23
+23
+
+
+--- PDF PAGE 24 ---
+
+Causality
+• Borrowed from physics (relativity) - based on information ﬂow 
+– When 
+ then a might have caused  b 
+a → b
+– When 
+ then a did not have caused b
+a∥b
+Distributed systems
+24
+2022/23
+
+
+--- PDF PAGE 25 ---
+
+Finally: Logical clocks
+• Recap: 
+– Physical clock - count the number of seconds elapsed 
+– Logical clock - count the number of events occured 
+• Physical timestamps are inconsistent with 
+causality (remember why?) 
+• Logical clocks are designed to capture it
+e1 → e2 ⟹ T(e1) < T(e2)
+Distributed systems
+25
+2022/23
+
+
+--- PDF PAGE 26 ---
+
+Lamport clocks
+• Leslie Lamport (1941- ) 
+• Paxos (consensus), bakery algorithm 
+(concurrent safety) 
+• Famous papers: 
+– Byzantine Generals 
+– Time, Clocks, and the Ordering of Events in 
+a distributed system 
+• LaTeX, temporal logic (TLA) 
+– 2013 Turing award
+Distributed systems
+26
+2022/23
+
+
+--- PDF PAGE 27 ---
+
+Lamport clock example
+• Each node maintains a counter  (timestamp) and increments it 
+t
+on every event  
+e
+• After increment, that is the new Lamport timestamp 
+ of 
+L(e)
+that event 
+• If you send a message, attach the current  (timestamp) to it 
+t
+• If the recipient receives a larger timestamp, it will increment 
+its local timestamp 
+• Properties you get 
+ 
+ 
+ (but not vice-versa) 
+a → b ⟹ L(a) < L(b)
+possible that 
+L(a) = L(b) for a ≠ b
+Distributed systems
+27
+2022/23
+
+
+--- PDF PAGE 28 ---
+
+Example
+Let 
+ be the node label in which event  occured. Pair 
+ uniquely deﬁnes event .  
+N(e)
+e
+(L(e), N(e))
+e
+We can break Des with a lexicographic order to get a total order.
+a ≺ b
+def
+⟺ (L(a) < L(b)) ∨ (L(a) = L(b) ∧ (N(a) < N(b))
+This also is a causal order, whenever 
+a → b we also have 
+a ≺ b
+Distributed systems
+28
+2022/23
+
+
+--- PDF PAGE 29 ---
+
+Limitations
+• In general, it is not possible to tell if two events are concurrent or 
+if one happened before 
+• E.g. we cannot tell much about the relation between 
+ and 
+(2, A)
+(3, B)
+A
+B
+(1, A)
+(1, B)
+(2, B)
+(2, A)
+(3, B)
+(2, m)
+(4, B)
+Distributed systems
+29
+2022/23
+
+
+--- PDF PAGE 30 ---
+
+Vector clocks
+• Given two Lamport timestamps 
+ and 
+ we cannot say 
+L(a)
+L(b)
+whether 
+ or 
+ 
+a ∥ b
+a → b
+• For detecting concurrent events, we need vector clocks 
+– Assume  nodes in the system, 
+ 
+n
+N = {N1, N2, . . . , Nn}
+– Vector timestamp of event  is 
+ where  is 
+a
+V(A) = {t1, t2, . . . , tn}
+ti
+number of events observed by node 
+ (incremented on each local 
+Ni
+event) 
+– Each nodes maintains current vector timestamp  which it attaches to 
+T
+any message 
+– Recipient merges the incoming vector into its local vector with 
+element-wise max operation 
+T[j] := max(T[j], T′ [j])∀j ∈ {1,...,n}
+Distributed systems
+30
+2022/23
+
+
+--- PDF PAGE 31 ---
+
+Example
+Distributed systems
+31
+2022/23
+
+
+--- PDF PAGE 32 ---
+
+Vector clocks ordering
+⟨1,2,3⟩ = ⟨1,2,3⟩
+⟨1,2,2⟩ ≤ ⟨1,2,3⟩ ⟨1,2,3⟩ ≤ ⟨1,2,3⟩
+⟨1,2,2⟩ < ⟨1,2,3⟩
+⟨1,3,2⟩ ∥ ⟨1,2,3⟩
+a
+Event  together with its 
+own "happened-before" 
+events
+Distributed systems
+32
+2022/23
+
+
+--- PDF PAGE 33 ---
+
+Self-assesment
+Why do we need to keep track of the time between the 
+nodes? 
+What types of clocks are there? What is the main diﬀerence 
+between them? 
+What is the diﬀerence between quartz and an atomic 
+clock? Which costs much more? 
+What beneﬁts does the "smearing the leap second" bring?  
+Deﬁne a Lamport clock. What are its down-sides? 
+Deﬁne a Vector clock, and compare it to the characteristics 
+of the Lamport clock.
+Distributed systems
+33
+2022/23

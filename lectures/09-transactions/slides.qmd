@@ -1,0 +1,32 @@
+---
+title: "Distributed transactions and workflows"
+subtitle: "Distributed Systems · Lecture 09"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Identify an invariant that spans two services.
+
+::: {.notes}
+Prerequisites: Lectures 06–08. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+A paid course registration reserves a seat and then requests payment. Payment fails after the seat was reserved.
+
+::: {.notes}
+A workflow that changes multiple services can stop between steps. An application must decide whether it needs atomic commitment or can expose intermediate states with a recovery or compensation process. Compensation is an application action and is not always an exact undo.
+:::
+
+## Discussion and recap
+
+What state should the student see, and how should the reservation be released?
+
+**Takeaway:** Choose coordination mechanisms from the invariant the application must preserve.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

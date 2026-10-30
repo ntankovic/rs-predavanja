@@ -1,0 +1,32 @@
+---
+title: "Replication and consistency"
+subtitle: "Distributed Systems · Lecture 06"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Explain how replication lag can produce a stale read.
+
+::: {.notes}
+Prerequisites: Lectures 03 and 05. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+A registration is written to a leader. An immediate read from a lagging replica still shows the old course list.
+
+::: {.notes}
+Replication stores related state on multiple nodes. With asynchronous replication, an acknowledged update may not yet be visible on every replica. The promised read behaviour must therefore be stated explicitly.
+:::
+
+## Discussion and recap
+
+Which routing or synchronization choice could provide read-your-writes behaviour?
+
+**Takeaway:** More copies do not by themselves define what a read is allowed to return.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

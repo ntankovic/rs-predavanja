@@ -1,0 +1,27 @@
+---
+title: "Naming and service discovery"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Separate a logical service name from a changing network address.
+
+**Prerequisites:** Lectures 02–03.
+
+## Core idea
+
+A logical service name lets callers refer to a service without embedding the address of a particular process. Discovery maps that name to an address. Cached mappings may become stale when processes move or stop.
+
+## Worked scenario
+
+A client caches the address of the catalogue service. That instance is replaced before the cache entry expires.
+
+## Discussion
+
+How should the client react when its cached address no longer works?
+
+## Recap
+
+Naming hides location changes only when lookup and recovery behaviour are defined.

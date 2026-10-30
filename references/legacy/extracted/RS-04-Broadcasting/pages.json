@@ -1,0 +1,135 @@
+[
+  {
+    "page": 1,
+    "characters": 120,
+    "preview": "Distributed systems\nLectures: doc. dr. sc. Nikola Tanković \nBroadcasting and delivery order\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 2,
+    "characters": 24,
+    "preview": "http://bit.ly/rs-tu-sam\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 3,
+    "characters": 434,
+    "preview": "Broadcasting\n• Broadcast (multicast) is group communication \n– One sender, all in a group, deliver and receive \n– No. of members can be static (ﬁxed-size) or dynamic \n– If a node is faulty, group members carry on \n– Since the Internet (and many networks) support only \nunicast, broadcasting takes that into consideration \n• Can be best-eﬀort (messages can be dropped) \nor reliable (with re-transmitting)\nDistributed systems\n3\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 4,
+    "characters": 103,
+    "preview": "Receiving and delivering\nMay send to \nmany nodes if \non unicast \nnetwork\nDistributed systems\n4\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 2
+  },
+  {
+    "page": 5,
+    "characters": 555,
+    "preview": "Reliable broadcast types\n• FIFO broadcast \n– Given \n and \n are delivered from the same node, and \nm1\nm2\n then \n is to be delivered before \n \nbroadcast(m1) → broadcast(m2)\nm1\nm2\n• Causal broadcast \n– If \n  then \n is to be delivered before \n \nbroadcast(m1) → broadcast(m2)\nm1\nm2\n• Total order broadcast \n– Agreement on delivery order between the nodes \n– If \n is delivered before \n on one node, then \n must be \nm1\nm2\nm1\ndelivered before \n on all nodes ",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 6,
+    "characters": 111,
+    "preview": "FIFO broadcast\n• Valid delivery orders: (m2, m1, m3), (m1, m2, m3), (m1, m3, m2)\nDistributed systems\n6\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 6
+  },
+  {
+    "page": 7,
+    "characters": 178,
+    "preview": "Causal broadcast\n• We observe: \n and \nbroadcast(m1) → broadcast(m2)\n \nbroadcast(m1) → broadcast(m3)\n• Valid orders are: \n(m1, m2, m3), (m1, m3, m2)\nDistributed systems\n7\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 8,
+    "characters": 122,
+    "preview": "Total order broadcast\n• All nodes must get the messages in the same \norder, e.g. m1, m2, m3\nDistributed systems\n8\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 9,
+    "characters": 79,
+    "preview": "Total order broadcast\n• Alternatively m1, m3, m2\nDistributed systems\n9\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 10,
+    "characters": 45,
+    "preview": "Relationships\nDistributed systems\n10\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 11,
+    "characters": 265,
+    "preview": "How to broadcast reliable\n• Two goals: \n– Ensure that messages are delivered to all nodes' \nmiddleware (re-transmit etc.) \n– Deliver message to the app in the right node (by sorting \nin the middleware) \n• Challenge: node & link crash\nDistributed systems\n11\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 12,
+    "characters": 139,
+    "preview": "Eager reliable broadcast\n• The ﬁrst time you receive a message,  \nre-broadcast it to everyone\nO(n2)messages\nDistributed systems\n12\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 13,
+    "characters": 139,
+    "preview": "Gossip protocol\n• Choose 3 other random nodes to re-transmit \n• Eventually the message will reach all nodes\nDistributed systems\n13\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 14,
+    "characters": 88,
+    "preview": "FIFO broadcast algorithm\n• Try to implement it in Python\nDistributed systems\n14\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 2
+  },
+  {
+    "page": 15,
+    "characters": 759,
+    "preview": "NODES = 3 \nbuffer = {} \ndelivered = [0]*NODES \nasync def on_receive(reader, _): \n    \"\"\"  \n    Handle TCP message \n    \"\"\" \n    while data := await reader.read(100): \n        ldata = data.decode(\"utf8\").split(\",\", maxsplit=2) \n        sender, seq, msg = int(ldata[0]), int(ldata[1]), ldata[2].strip() \n        print(\"Received:\", sender, seq, msg) \nbuffer[sender, seq] = msg \n        def deliver_message(): \n            for n, x in enumerate(delivered",
+    "image_count": 1,
+    "vector_paths": 22
+  },
+  {
+    "page": 16,
+    "characters": 58,
+    "preview": "Causal broadcast\nHomework!\nDistributed systems\n16\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 2
+  },
+  {
+    "page": 17,
+    "characters": 652,
+    "preview": "Total order broadcast algorithm\n• Remember: all nodes receive the messages in the same order \n• Two usual approaches, but not fault-tolerant: \n• Single leader \n– Designate a leader (called sequencer) - \"leader election\" \n– To broadcast, send it to the leader, the leader will FIFO broadcast to the rest \n– Leader crash is fatal \n• Lamport clock implementation: \n– Attach Lamport timestamp to every message \n– Deliver in the total order of timestamps ",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 18,
+    "characters": 127,
+    "preview": "Issue (continued)\nC\nFIFO\nFIFO\ndelivered\nFIFO\nA\nB\npending\nwait!\nA\n(1, B)\nt\n(1, B)\n(12, B)\n(5, B)\nDistributed systems\n18\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 44
+  },
+  {
+    "page": 19,
+    "characters": 286,
+    "preview": "Self-assesment\nWhat is broadcasting? \nWhy do we need a middleware layer? \nCompare FIFO and causal broadcast. \nWhat is a total order broadcast? \nHow do we broadcast reliably? \nContrast FIFO and causal broadcast algorithms. \nWhy do we use gossip protocols?\nDistributed systems\n19\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  }
+]

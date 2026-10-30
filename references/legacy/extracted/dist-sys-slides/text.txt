@@ -1,0 +1,7673 @@
+
+
+--- PDF PAGE 1 ---
+
+Distributed Systems
+The second half of Concurrent and Distributed Systems
+https://www.cl.cam.ac.uk/teaching/current/ConcDisSys
+Dr. Martin Kleppmann (mk428@cam)
+University of Cambridge
+Computer Science Tripos, Part IB
+This work is published under a
+Creative Commons BY-SA license.
+
+
+--- PDF PAGE 2 ---
+
+A distributed system is. . .
+▶ “. . . a system in which the failure of a computer you
+didn’t even know existed can render your own computer
+unusable.” — Leslie Lamport
+
+
+--- PDF PAGE 3 ---
+
+A distributed system is. . .
+▶ “. . . a system in which the failure of a computer you
+didn’t even know existed can render your own computer
+unusable.” — Leslie Lamport
+▶ . . . multiple computers communicating via a network. . .
+▶ . . . trying to achieve some task together
+▶ Consists of “nodes” (computer, phone, car, robot, . . . )
+
+
+--- PDF PAGE 4 ---
+
+Recommended reading
+▶ van Steen & Tanenbaum.
+“Distributed Systems”
+(any ed), free ebook available
+▶ Cachin, Guerraoui & Rodrigues.
+“Introduction to Reliable and Secure Distributed
+Programming” (2nd ed), Springer 2011
+▶ Kleppmann.
+“Designing Data-Intensive Applications”,
+O’Reilly 2017
+▶ Bacon & Harris.
+“Operating Systems: Concurrent and Distributed
+Software Design”, Addison-Wesley 2003
+
+
+--- PDF PAGE 5 ---
+
+Relationships with other courses
+▶ Concurrent Systems – Part IB
+(every distributed system is also concurrent)
+▶ Operating Systems – Part IA
+(inter-process communication, scheduling)
+▶ Databases – Part IA
+(many modern databases are distributed)
+▶ Computer Networking – Part IB Lent term
+(distributed systems involve network communication)
+▶ Further Java – Part IB Michaelmas
+(distributed programming practical exercises)
+▶ Security – Part IB Easter term
+(network protocols with encryption & authentication)
+▶ Cloud Computing – Part II
+(distributed systems for processing large amounts of data)
+
+
+--- PDF PAGE 6 ---
+
+Why make a system distributed?
+
+
+--- PDF PAGE 7 ---
+
+Why make a system distributed?
+▶ It’s inherently distributed:
+e.g. sending a message from your mobile phone to your
+friend’s phone
+
+
+--- PDF PAGE 8 ---
+
+Why make a system distributed?
+▶ It’s inherently distributed:
+e.g. sending a message from your mobile phone to your
+friend’s phone
+▶ For better reliability:
+even if one node fails, the system as a whole keeps
+functioning
+
+
+--- PDF PAGE 9 ---
+
+Why make a system distributed?
+▶ It’s inherently distributed:
+e.g. sending a message from your mobile phone to your
+friend’s phone
+▶ For better reliability:
+even if one node fails, the system as a whole keeps
+functioning
+▶ For better performance:
+get data from a nearby node rather than one halfway
+round the world
+
+
+--- PDF PAGE 10 ---
+
+Why make a system distributed?
+▶ It’s inherently distributed:
+e.g. sending a message from your mobile phone to your
+friend’s phone
+▶ For better reliability:
+even if one node fails, the system as a whole keeps
+functioning
+▶ For better performance:
+get data from a nearby node rather than one halfway
+round the world
+▶ To solve bigger problems:
+e.g. huge amounts of data, can’t ﬁt on one machine
+
+
+--- PDF PAGE 11 ---
+
+
+
+--- PDF PAGE 12 ---
+
+Why NOT make a system distributed?
+The trouble with distributed systems:
+▶ Communication may fail (and we might not even know it
+has failed).
+▶ Processes may crash (and we might not know).
+▶ All of this may happen nondeterministically.
+
+
+--- PDF PAGE 13 ---
+
+Why NOT make a system distributed?
+The trouble with distributed systems:
+▶ Communication may fail (and we might not even know it
+has failed).
+▶ Processes may crash (and we might not know).
+▶ All of this may happen nondeterministically.
+Fault tolerance: we want the system as a whole to continue
+working, even when some parts are faulty.
+This is hard.
+Writing a program to run on a single computer is
+comparatively easy?!
+
+
+--- PDF PAGE 14 ---
+
+Distributed Systems and Computer Networking
+We use a simple abstraction of communication:
+message m
+node i
+node j
+
+
+--- PDF PAGE 15 ---
+
+Distributed Systems and Computer Networking
+We use a simple abstraction of communication:
+message m
+node i
+node j
+Reality is much more complex:
+▶ Various network operators:
+eduroam, home DSL, cellular data, coﬀee shop wiﬁ,
+submarine cable, satellite. . .
+▶ Physical communication:
+electric current, radio waves, laser, hard drives in a van. . .
+
+
+--- PDF PAGE 16 ---
+
+Hard drives in a van?!
+https://docs.aws.amazon.com/snowball/latest/ug/using-device.html
+High latency, high bandwidth!
+
+
+--- PDF PAGE 17 ---
+
+Latency and bandwidth
+Latency: time until message arrives
+▶ In the same building/datacenter: ≈ 1 ms
+▶ One continent to another: ≈ 100 ms
+▶ Hard drives in a van: ≈ 1 day
+
+
+--- PDF PAGE 18 ---
+
+Latency and bandwidth
+Latency: time until message arrives
+▶ In the same building/datacenter: ≈ 1 ms
+▶ One continent to another: ≈ 100 ms
+▶ Hard drives in a van: ≈ 1 day
+Bandwidth: data volume per unit time
+▶ 3G cellular data: ≈ 1 Mbit/s
+▶ Home broadband: ≈ 10 Mbit/s
+▶ Hard drives in a van: 50 TB/box ≈ 1 Gbit/s
+(Very rough numbers, vary hugely in practice!)
+
+
+--- PDF PAGE 19 ---
+
+
+
+--- PDF PAGE 20 ---
+
+Client-server example: the web
+Time ﬂows from top to bottom.
+client
+server www.cst.cam.ac.uk
+
+
+--- PDF PAGE 21 ---
+
+Client-server example: the web
+Time ﬂows from top to bottom.
+client
+server www.cst.cam.ac.uk
+GET /teaching/2122/ConcDisSys
+
+
+--- PDF PAGE 22 ---
+
+Client-server example: the web
+Time ﬂows from top to bottom.
+client
+server www.cst.cam.ac.uk
+GET /teaching/2122/ConcDisSys
+<!DOCTYPE html><html>...
+
+
+--- PDF PAGE 23 ---
+
+
+
+--- PDF PAGE 24 ---
+
+request message
+response message
+
+
+--- PDF PAGE 25 ---
+
+
+
+--- PDF PAGE 26 ---
+
+Client-server example: online payments
+online shop
+payments service
+
+
+--- PDF PAGE 27 ---
+
+Client-server example: online payments
+online shop
+payments service
+charge £3.99 to credit card 1234. . .
+
+
+--- PDF PAGE 28 ---
+
+Client-server example: online payments
+online shop
+payments service
+charge £3.99 to credit card 1234. . .
+success
+
+
+--- PDF PAGE 29 ---
+
+Remote Procedure Call (RPC) example
+// Online shop handling customer's card details
+Card card = new Card();
+card.setCardNumber("1234 5678 8765 4321");
+card.setExpiryDate("10/2024");
+card.setCVC("123");
+Result result = paymentsService.processPayment(card,
+3.99, Currency.GBP);
+if (result.isSuccess()) {
+fulfilOrder();
+}
+
+
+--- PDF PAGE 30 ---
+
+Remote Procedure Call (RPC) example
+// Online shop handling customer's card details
+Card card = new Card();
+card.setCardNumber("1234 5678 8765 4321");
+card.setExpiryDate("10/2024");
+card.setCVC("123");
+Result result = paymentsService.processPayment(card,
+3.99, Currency.GBP);
+if (result.isSuccess()) {
+fulfilOrder();
+}
+Implementation of this function is on another node!
+
+
+--- PDF PAGE 31 ---
+
+online shop
+RPC client
+RPC server
+payment service
+processPayment() stub
+waiting
+
+
+--- PDF PAGE 32 ---
+
+online shop
+RPC client
+RPC server
+payment service
+processPayment() stub
+m1
+marshal args
+unmarshal args
+waiting
+{
+"request": "processPayment",
+"card": {
+"number": "1234567887654321",
+"expiryDate": "10/2024",
+"CVC": "123"
+m1 =
+},
+"amount": 3.99,
+"currency": "GBP"
+}
+
+
+--- PDF PAGE 33 ---
+
+online shop
+RPC client
+RPC server
+payment service
+processPayment() stub
+m1
+marshal args
+unmarshal args
+processPayment()
+implementation
+waiting
+{
+"request": "processPayment",
+"card": {
+"number": "1234567887654321",
+"expiryDate": "10/2024",
+"CVC": "123"
+m1 =
+},
+"amount": 3.99,
+"currency": "GBP"
+}
+
+
+--- PDF PAGE 34 ---
+
+online shop
+RPC client
+RPC server
+payment service
+processPayment() stub
+m1
+marshal args
+unmarshal args
+processPayment()
+waiting
+implementation
+m2
+marshal result
+unmarshal result
+{
+"request": "processPayment",
+"card": {
+{
+"number": "1234567887654321",
+"expiryDate": "10/2024",
+"CVC": "123"
+"result": "success",
+"id": "XP61hHw2Rvo"
+m1 =
+m2 =
+}
+},
+"amount": 3.99,
+"currency": "GBP"
+}
+
+
+--- PDF PAGE 35 ---
+
+online shop
+RPC client
+RPC server
+payment service
+processPayment() stub
+m1
+marshal args
+unmarshal args
+processPayment()
+waiting
+implementation
+m2
+marshal result
+unmarshal result
+function returns
+{
+"request": "processPayment",
+"card": {
+{
+"number": "1234567887654321",
+"expiryDate": "10/2024",
+"CVC": "123"
+"result": "success",
+"id": "XP61hHw2Rvo"
+m1 =
+m2 =
+}
+},
+"amount": 3.99,
+"currency": "GBP"
+}
+
+
+--- PDF PAGE 36 ---
+
+Remote Procedure Call (RPC)
+Ideally, RPC makes a call to a remote function look the same
+as a local function call.
+“Location transparency”:
+system hides where a resource is located.
+
+
+--- PDF PAGE 37 ---
+
+Remote Procedure Call (RPC)
+Ideally, RPC makes a call to a remote function look the same
+as a local function call.
+“Location transparency”:
+system hides where a resource is located.
+In practice. . .
+▶ what if the service crashes during the function call?
+▶ what if a message is lost?
+▶ what if a message is delayed?
+▶ if something goes wrong, is it safe to retry?
+
+
+--- PDF PAGE 38 ---
+
+RPC history
+▶ SunRPC/ONC RPC (1980s, basis for NFS)
+▶ CORBA: object-oriented middleware, hot in the 1990s
+▶ Microsoft’s DCOM and Java RMI (similar to CORBA)
+▶ SOAP/XML-RPC: RPC using XML and HTTP (1998)
+▶ Thrift (Facebook, 2007)
+▶ gRPC (Google, 2015)
+▶ REST (often with JSON)
+▶ Ajax in web browsers
+
+
+--- PDF PAGE 39 ---
+
+RPC/REST in JavaScript
+let args = {amount: 3.99, currency: 'GBP', /*...*/ };
+let request = {
+method:
+'POST',
+body:
+JSON.stringify(args),
+headers: {'Content-Type': 'application/json'}
+};
+fetch('https://example.com/payments', request)
+.then((response) => {
+if (response.ok) success(response.json());
+else failure(response.status); // server error
+})
+.catch((error) => {
+failure(error); // network error
+});
+
+
+--- PDF PAGE 40 ---
+
+RPC in enterprise systems
+“Service-oriented architecture” (SOA) / “microservices”:
+splitting a large software application into multiple services
+(on multiple nodes) that communicate via RPC.
+
+
+--- PDF PAGE 41 ---
+
+RPC in enterprise systems
+“Service-oriented architecture” (SOA) / “microservices”:
+splitting a large software application into multiple services
+(on multiple nodes) that communicate via RPC.
+Diﬀerent services implemented in diﬀerent languages:
+▶ interoperability: datatype conversions
+▶ Interface Deﬁnition Language (IDL):
+language-independent API speciﬁcation
+
+
+--- PDF PAGE 42 ---
+
+gRPC IDL example
+message PaymentRequest {
+message Card {
+required string cardNumber
+= 1;
+optional int32
+expiryMonth = 2;
+optional int32
+expiryYear
+= 3;
+optional int32
+CVC
+= 4;
+}
+enum Currency { GBP = 1; USD = 2; }
+required Card
+card
+= 1;
+required int64
+amount
+= 2;
+required Currency currency = 3;
+}
+message PaymentStatus {
+required bool
+success
+= 1;
+optional string errorMessage = 2;
+}
+service PaymentService {
+rpc ProcessPayment(PaymentRequest) returns (PaymentStatus) {}
+}
+
+
+--- PDF PAGE 43 ---
+
+Lecture 2
+Models of distributed systems
+
+
+--- PDF PAGE 44 ---
+
+The two generals problem
+city
+attack?
+attack?
+army 1
+army 2
+messengers
+
+
+--- PDF PAGE 45 ---
+
+The two generals problem
+city
+attack?
+attack?
+army 1
+army 2
+messengers
+army 1
+army 2
+outcome
+does not attack
+does not attack
+nothing happens
+attacks
+does not attack
+army 1 defeated
+does not attack
+attacks
+army 2 defeated
+attacks
+attacks
+city captured
+Desired: army 1 attacks if and only if army 2 attacks
+
+
+--- PDF PAGE 46 ---
+
+The two generals problem
+general 1
+general 2
+attack 10 Nov, okay?
+10 Nov agreed!
+
+
+--- PDF PAGE 47 ---
+
+The two generals problem
+general 1
+general 2
+attack 10 Nov, okay?
+10 Nov agreed!
+From general 1’s point of view, this is indistinguishable from:
+general 1
+general 2
+attack 10 Nov, okay?
+
+
+--- PDF PAGE 48 ---
+
+How should the generals decide?
+1. General 1 always attacks, even if no response is received?
+▶ Send lots of messengers to increase probability that one
+will get through
+▶ If all are captured, general 2 does not know about the
+attack, so general 1 loses
+
+
+--- PDF PAGE 49 ---
+
+How should the generals decide?
+1. General 1 always attacks, even if no response is received?
+▶ Send lots of messengers to increase probability that one
+will get through
+▶ If all are captured, general 2 does not know about the
+attack, so general 1 loses
+2. General 1 only attacks if positive response from general 2
+is received?
+▶ Now general 1 is safe
+▶ But general 2 knows that general 1 will only attack if
+general 2’s response gets through
+▶ Now general 2 is in the same situation as general 1 in
+option 1
+
+
+--- PDF PAGE 50 ---
+
+How should the generals decide?
+1. General 1 always attacks, even if no response is received?
+▶ Send lots of messengers to increase probability that one
+will get through
+▶ If all are captured, general 2 does not know about the
+attack, so general 1 loses
+2. General 1 only attacks if positive response from general 2
+is received?
+▶ Now general 1 is safe
+▶ But general 2 knows that general 1 will only attack if
+general 2’s response gets through
+▶ Now general 2 is in the same situation as general 1 in
+option 1
+No common knowledge: the only way of knowing
+something is to communicate it
+
+
+--- PDF PAGE 51 ---
+
+The two generals problem applied
+customer
+dispatch goods
+charge credit card
+online shop
+payments service
+RPC
+
+
+--- PDF PAGE 52 ---
+
+The two generals problem applied
+customer
+dispatch goods
+charge credit card
+online shop
+payments service
+RPC
+online shop
+payments service
+outcome
+does not dispatch
+does not charge
+nothing happens
+dispatches
+does not charge
+shop loses money
+does not dispatch
+charges
+customer complaint
+dispatches
+charges
+everyone happy
+Desired: online shop dispatches if and only if payment made
+
+
+--- PDF PAGE 53 ---
+
+The Byzantine generals problem
+army 3
+attack?
+messengers
+messengers
+city
+attack?
+attack?
+army 1
+army 2
+messengers
+Problem: some of the generals might be traitors
+
+
+--- PDF PAGE 54 ---
+
+Generals who might lie
+general 1
+general 2
+general 3
+attack!
+attack!
+general 1 said retreat!
+
+
+--- PDF PAGE 55 ---
+
+Generals who might lie
+general 1
+general 2
+general 3
+attack!
+attack!
+general 1 said retreat!
+From general 3’s point of view, this is indistinguishable from:
+general 1
+general 2
+general 3
+attack!
+retreat!
+general 1 said retreat!
+
+
+--- PDF PAGE 56 ---
+
+The Byzantine generals problem
+▶ Each general is either malicious or honest
+▶ Up to f generals might be malicious
+▶ Honest generals don’t know who the malicious ones are
+▶ The malicious generals may collude
+▶ Nevertheless, honest generals must agree on plan
+
+
+--- PDF PAGE 57 ---
+
+The Byzantine generals problem
+▶ Each general is either malicious or honest
+▶ Up to f generals might be malicious
+▶ Honest generals don’t know who the malicious ones are
+▶ The malicious generals may collude
+▶ Nevertheless, honest generals must agree on plan
+▶ Theorem: need 3f + 1 generals in total to tolerate f
+malicious generals (i.e. < 1
+3 may be malicious)
+▶ Cryptography (digital signatures) helps – but problem
+remains hard
+
+
+--- PDF PAGE 58 ---
+
+Trust relationships and malicious behaviour
+customer
+agree?
+RPC
+RPC
+order
+agree?
+agree?
+online shop
+payments service
+RPC
+Who can trust whom?
+
+
+--- PDF PAGE 59 ---
+
+The Byzantine empire (650 CE)
+Byzantium/Constantinople/Istanbul
+Source: https://commons.wikimedia.org/wiki/File:Byzantiumby650AD.svg
+“Byzantine” has long been used for “excessively complicated,
+bureaucratic, devious” (e.g. “the Byzantine tax law”)
+
+
+--- PDF PAGE 60 ---
+
+System models
+We have seen two thought experiments:
+▶ Two generals problem: a model of networks
+▶ Byzantine generals problem: a model of node behaviour
+In real systems, both nodes and networks may be faulty!
+
+
+--- PDF PAGE 61 ---
+
+System models
+We have seen two thought experiments:
+▶ Two generals problem: a model of networks
+▶ Byzantine generals problem: a model of node behaviour
+In real systems, both nodes and networks may be faulty!
+Capture assumptions in a system model consisting of:
+▶ Network behaviour (e.g. message loss)
+▶ Node behaviour (e.g. crashes)
+▶ Timing behaviour (e.g. latency)
+Choice of models for each of these parts.
+
+
+--- PDF PAGE 62 ---
+
+Networks are unreliable
+In the sea, sharks bite ﬁbre optic cables
+https://slate.com/technology/2014/08/
+shark-attacks-threaten-google-s-undersea-internet-cables-video.html
+On land, cows step on the cables
+https://twitter.com/uhoelzle/status/1263333283107991558
+
+
+--- PDF PAGE 63 ---
+
+System model: network behaviour
+Assume bidirectional point-to-point communication between
+two nodes, with one of:
+
+
+--- PDF PAGE 64 ---
+
+System model: network behaviour
+Assume bidirectional point-to-point communication between
+two nodes, with one of:
+▶ Reliable (perfect) links:
+A message is received if and only if it is sent.
+Messages may be reordered.
+
+
+--- PDF PAGE 65 ---
+
+System model: network behaviour
+Assume bidirectional point-to-point communication between
+two nodes, with one of:
+▶ Reliable (perfect) links:
+A message is received if and only if it is sent.
+Messages may be reordered.
+▶ Fair-loss links:
+Messages may be lost, duplicated, or reordered.
+If you keep retrying, a message eventually gets through.
+
+
+--- PDF PAGE 66 ---
+
+System model: network behaviour
+Assume bidirectional point-to-point communication between
+two nodes, with one of:
+▶ Reliable (perfect) links:
+A message is received if and only if it is sent.
+Messages may be reordered.
+▶ Fair-loss links:
+Messages may be lost, duplicated, or reordered.
+If you keep retrying, a message eventually gets through.
+▶ Arbitrary links (active adversary):
+A malicious adversary may interfere with messages
+(eavesdrop, modify, drop, spoof, replay).
+
+
+--- PDF PAGE 67 ---
+
+System model: network behaviour
+Assume bidirectional point-to-point communication between
+two nodes, with one of:
+▶ Reliable (perfect) links:
+A message is received if and only if it is sent.
+Messages may be reordered.
+▶ Fair-loss links:
+Messages may be lost, duplicated, or reordered.
+If you keep retrying, a message eventually gets through.
+▶ Arbitrary links (active adversary):
+A malicious adversary may interfere with messages
+(eavesdrop, modify, drop, spoof, replay).
+Network partition: some links dropping/delaying all
+messages for extended period of time
+
+
+--- PDF PAGE 68 ---
+
+System model: network behaviour
+Assume bidirectional point-to-point communication between
+two nodes, with one of:
+▶ Reliable (perfect) links:
+A message is received if and only if it is sent.
+Messages may be reordered.
+retry +
+dedup
+▶ Fair-loss links:
+Messages may be lost, duplicated, or reordered.
+If you keep retrying, a message eventually gets through.
+▶ Arbitrary links (active adversary):
+A malicious adversary may interfere with messages
+(eavesdrop, modify, drop, spoof, replay).
+Network partition: some links dropping/delaying all
+messages for extended period of time
+
+
+--- PDF PAGE 69 ---
+
+System model: network behaviour
+Assume bidirectional point-to-point communication between
+two nodes, with one of:
+▶ Reliable (perfect) links:
+A message is received if and only if it is sent.
+Messages may be reordered.
+retry +
+dedup
+▶ Fair-loss links:
+Messages may be lost, duplicated, or reordered.
+If you keep retrying, a message eventually gets through.
+TLS
+▶ Arbitrary links (active adversary):
+A malicious adversary may interfere with messages
+(eavesdrop, modify, drop, spoof, replay).
+Network partition: some links dropping/delaying all
+messages for extended period of time
+
+
+--- PDF PAGE 70 ---
+
+System model: node behaviour
+Each node executes a speciﬁed algorithm,
+assuming one of the following:
+▶ Crash-stop (fail-stop):
+A node is faulty if it crashes (at any moment).
+After crashing, it stops executing forever.
+
+
+--- PDF PAGE 71 ---
+
+System model: node behaviour
+Each node executes a speciﬁed algorithm,
+assuming one of the following:
+▶ Crash-stop (fail-stop):
+A node is faulty if it crashes (at any moment).
+After crashing, it stops executing forever.
+▶ Crash-recovery (fail-recovery):
+A node may crash at any moment, losing its in-memory
+state. It may resume executing sometime later.
+Data stored on disk survives the crash.
+
+
+--- PDF PAGE 72 ---
+
+System model: node behaviour
+Each node executes a speciﬁed algorithm,
+assuming one of the following:
+▶ Crash-stop (fail-stop):
+A node is faulty if it crashes (at any moment).
+After crashing, it stops executing forever.
+▶ Crash-recovery (fail-recovery):
+A node may crash at any moment, losing its in-memory
+state. It may resume executing sometime later.
+Data stored on disk survives the crash.
+▶ Byzantine (fail-arbitrary):
+A node is faulty if it deviates from the algorithm.
+Faulty nodes may do anything, including crashing or
+malicious behaviour.
+A node that is not faulty is called “correct”
+
+
+--- PDF PAGE 73 ---
+
+System model: synchrony (timing) assumptions
+Assume one of the following for network and nodes:
+▶ Synchronous:
+Message latency no greater than a known upper bound.
+Nodes execute algorithm at a known speed.
+
+
+--- PDF PAGE 74 ---
+
+System model: synchrony (timing) assumptions
+Assume one of the following for network and nodes:
+▶ Synchronous:
+Message latency no greater than a known upper bound.
+Nodes execute algorithm at a known speed.
+▶ Partially synchronous:
+The system is asynchronous for some ﬁnite (but
+unknown) periods of time, synchronous otherwise.
+
+
+--- PDF PAGE 75 ---
+
+System model: synchrony (timing) assumptions
+Assume one of the following for network and nodes:
+▶ Synchronous:
+Message latency no greater than a known upper bound.
+Nodes execute algorithm at a known speed.
+▶ Partially synchronous:
+The system is asynchronous for some ﬁnite (but
+unknown) periods of time, synchronous otherwise.
+▶ Asynchronous:
+Messages can be delayed arbitrarily.
+Nodes can pause execution arbitrarily.
+No timing guarantees at all.
+Note: other parts of computer science use the terms
+“synchronous” and “asynchronous” diﬀerently.
+
+
+--- PDF PAGE 76 ---
+
+Violations of synchrony in practice
+Networks usually have quite predictable latency, which can
+occasionally increase:
+▶ Message loss requiring retry
+▶ Congestion/contention causing queueing
+▶ Network/route reconﬁguration
+
+
+--- PDF PAGE 77 ---
+
+Violations of synchrony in practice
+Networks usually have quite predictable latency, which can
+occasionally increase:
+▶ Message loss requiring retry
+▶ Congestion/contention causing queueing
+▶ Network/route reconﬁguration
+Nodes usually execute code at a predictable speed, with
+occasional pauses:
+▶ Operating system scheduling issues, e.g. priority inversion
+▶ Stop-the-world garbage collection pauses
+▶ Page faults, swap, thrashing
+Real-time operating systems (RTOS) provide scheduling
+guarantees, but most distributed systems do not use RTOS
+
+
+--- PDF PAGE 78 ---
+
+System models summary
+For each of the three parts, pick one:
+▶ Network:
+reliable, fair-loss, or arbitrary
+▶ Nodes:
+crash-stop, crash-recovery, or Byzantine
+▶ Timing:
+synchronous, partially synchronous, or asynchronous
+This is the basis for any distributed algorithm.
+If your assumptions are wrong, all bets are oﬀ!
+
+
+--- PDF PAGE 79 ---
+
+Availability
+Online shop wants to sell stuﬀ 24/7!
+Service unavailability = downtime = losing money
+Availability = uptime = fraction of time that a service is
+functioning correctly
+▶ “Two nines” = 99% up = down 3.7 days/year
+▶ “Three nines” = 99.9% up = down 8.8 hours/year
+▶ “Four nines” = 99.99% up = down 53 minutes/year
+▶ “Five nines” = 99.999% up = down 5.3 minutes/year
+
+
+--- PDF PAGE 80 ---
+
+Availability
+Online shop wants to sell stuﬀ 24/7!
+Service unavailability = downtime = losing money
+Availability = uptime = fraction of time that a service is
+functioning correctly
+▶ “Two nines” = 99% up = down 3.7 days/year
+▶ “Three nines” = 99.9% up = down 8.8 hours/year
+▶ “Four nines” = 99.99% up = down 53 minutes/year
+▶ “Five nines” = 99.999% up = down 5.3 minutes/year
+Service-Level Objective (SLO):
+e.g. “99.9% of requests in a day get a response in 200 ms”
+Service-Level Agreement (SLA):
+contract specifying some SLO, penalties for violation
+
+
+--- PDF PAGE 81 ---
+
+Achieving high availability: fault tolerance
+Failure: system as a whole isn’t working
+Fault: some part of the system isn’t working
+▶ Node fault: crash (crash-stop/crash-recovery),
+deviating from algorithm (Byzantine)
+▶ Network fault: dropping or signiﬁcantly delaying messages
+Fault tolerance:
+system as a whole continues working, despite faults
+(up to some maximum number of faults)
+Single point of failure (SPOF):
+node/network link whose fault leads to failure
+
+
+--- PDF PAGE 82 ---
+
+Failure detectors
+Failure detector:
+algorithm that detects whether another node is faulty
+Perfect failure detector:
+labels a node as faulty if and only if it has crashed
+
+
+--- PDF PAGE 83 ---
+
+Failure detectors
+Failure detector:
+algorithm that detects whether another node is faulty
+Perfect failure detector:
+labels a node as faulty if and only if it has crashed
+Typical implementation for crash-stop/crash-recovery:
+send message, await response, label node as crashed if no
+reply within some timeout
+
+
+--- PDF PAGE 84 ---
+
+Failure detectors
+Failure detector:
+algorithm that detects whether another node is faulty
+Perfect failure detector:
+labels a node as faulty if and only if it has crashed
+Typical implementation for crash-stop/crash-recovery:
+send message, await response, label node as crashed if no
+reply within some timeout
+Problem:
+cannot tell the diﬀerence between crashed node, temporarily
+unresponsive node, lost message, and delayed message
+
+
+--- PDF PAGE 85 ---
+
+Failure detection in partially synchronous systems
+Perfect timeout-based failure detector exists only in a
+synchronous crash-stop system with reliable links.
+Eventually perfect failure detector:
+▶ May temporarily label a node as crashed,
+even though it is correct
+▶ May temporarily label a node as correct,
+even though it has crashed
+▶ But eventually, labels a node as crashed
+if and only if it has crashed
+Reﬂects fact that detection is not instantaneous, and we may
+have spurious timeouts
+
+
+--- PDF PAGE 86 ---
+
+Lecture 3
+Time, clocks, and ordering of events
+
+
+--- PDF PAGE 87 ---
+
+A detective story
+In the night from 30 June to 1 July 2012 (UK time), many
+online services and systems around the world crashed
+simultaneously.
+Servers locked up and stopped responding.
+Some airlines could not process any reservations or check-ins
+for several hours.
+What happened?
+
+
+--- PDF PAGE 88 ---
+
+Clocks and time in distributed systems
+Distributed systems often need to measure time, e.g.:
+▶ Schedulers, timeouts, failure detectors, retry timers
+
+
+--- PDF PAGE 89 ---
+
+Clocks and time in distributed systems
+Distributed systems often need to measure time, e.g.:
+▶ Schedulers, timeouts, failure detectors, retry timers
+▶ Performance measurements, statistics, proﬁling
+
+
+--- PDF PAGE 90 ---
+
+Clocks and time in distributed systems
+Distributed systems often need to measure time, e.g.:
+▶ Schedulers, timeouts, failure detectors, retry timers
+▶ Performance measurements, statistics, proﬁling
+▶ Log ﬁles & databases: record when an event occurred
+
+
+--- PDF PAGE 91 ---
+
+Clocks and time in distributed systems
+Distributed systems often need to measure time, e.g.:
+▶ Schedulers, timeouts, failure detectors, retry timers
+▶ Performance measurements, statistics, proﬁling
+▶ Log ﬁles & databases: record when an event occurred
+▶ Data with time-limited validity (e.g. cache entries)
+
+
+--- PDF PAGE 92 ---
+
+Clocks and time in distributed systems
+Distributed systems often need to measure time, e.g.:
+▶ Schedulers, timeouts, failure detectors, retry timers
+▶ Performance measurements, statistics, proﬁling
+▶ Log ﬁles & databases: record when an event occurred
+▶ Data with time-limited validity (e.g. cache entries)
+▶ Determining order of events across several nodes
+
+
+--- PDF PAGE 93 ---
+
+Clocks and time in distributed systems
+Distributed systems often need to measure time, e.g.:
+▶ Schedulers, timeouts, failure detectors, retry timers
+▶ Performance measurements, statistics, proﬁling
+▶ Log ﬁles & databases: record when an event occurred
+▶ Data with time-limited validity (e.g. cache entries)
+▶ Determining order of events across several nodes
+We distinguish two types of clock:
+▶ physical clocks: count number of seconds elapsed
+▶ logical clocks: count events, e.g. messages sent
+
+
+--- PDF PAGE 94 ---
+
+Clocks and time in distributed systems
+Distributed systems often need to measure time, e.g.:
+▶ Schedulers, timeouts, failure detectors, retry timers
+▶ Performance measurements, statistics, proﬁling
+▶ Log ﬁles & databases: record when an event occurred
+▶ Data with time-limited validity (e.g. cache entries)
+▶ Determining order of events across several nodes
+We distinguish two types of clock:
+▶ physical clocks: count number of seconds elapsed
+▶ logical clocks: count events, e.g. messages sent
+NB. Clock in digital electronics (oscillator)
+̸= clock in distributed systems (source of timestamps)
+
+
+--- PDF PAGE 95 ---
+
+Quartz clocks
+▶ Quartz crystal
+laser-trimmed to
+mechanically resonate at a
+speciﬁc frequency
+▶ Piezoelectric eﬀect:
+mechanical force ⇔
+electric ﬁeld
+▶ Oscillator circuit produces
+signal at resonant
+frequency
+▶ Count number of cycles to
+measure elapsed time
+
+
+--- PDF PAGE 96 ---
+
+Quartz clock error: drift
+▶ One clock runs slightly fast, another slightly slow
+▶ Drift measured in parts per million (ppm)
+▶ 1 ppm = 1 microsecond/second = 86 ms/day = 32 s/year
+▶ Most computer clocks correct within ≈ 50 ppm
+Temperature
+signiﬁcantly
+aﬀects drift
+
+
+--- PDF PAGE 97 ---
+
+Atomic clocks
+▶ Caesium-133 has a
+resonance (“hyperﬁne
+transition”) at ≈ 9 GHz
+▶ Tune an electronic
+oscillator to that resonant
+frequency
+▶ 1 second = 9,192,631,770
+periods of that signal
+▶ Accuracy ≈ 1 in 10−14 (1
+second in 3 million years)
+https:
+//www.microsemi.com/product-directory/
+cesium-frequency-references/
+4115-5071a-cesium-primary-frequency-standard
+▶ Price ≈ £20,000 (?)
+(can get cheaper rubidium
+clocks for ≈ £1,000)
+
+
+--- PDF PAGE 98 ---
+
+GPS as time source
+▶ 31 satellites, each carrying
+an atomic clock
+▶ satellite broadcasts
+current time and location
+▶ calculate position from
+speed-of-light delay
+between satellite and
+receiver
+▶ corrections for
+atmospheric eﬀects,
+relativity, etc.
+https://commons.wikimedia.org/wiki/File:
+Gps-atmospheric-efects.png
+▶ in datacenters, need
+antenna on the roof
+
+
+--- PDF PAGE 99 ---
+
+Coordinated Universal Time (UTC)
+Greenwich Mean Time (GMT, solar
+time): it’s noon when the sun is in the
+south, as seen from the Greenwich meridian
+
+
+--- PDF PAGE 100 ---
+
+Coordinated Universal Time (UTC)
+Greenwich Mean Time (GMT, solar
+time): it’s noon when the sun is in the
+south, as seen from the Greenwich meridian
+International Atomic Time (TAI): 1 day
+is 24 × 60 × 60 × 9,192,631,770 periods of
+caesium-133’s resonant frequency
+
+
+--- PDF PAGE 101 ---
+
+Coordinated Universal Time (UTC)
+Greenwich Mean Time (GMT, solar
+time): it’s noon when the sun is in the
+south, as seen from the Greenwich meridian
+International Atomic Time (TAI): 1 day
+is 24 × 60 × 60 × 9,192,631,770 periods of
+caesium-133’s resonant frequency
+Problem: speed of Earth’s rotation is not
+constant
+
+
+--- PDF PAGE 102 ---
+
+Coordinated Universal Time (UTC)
+Greenwich Mean Time (GMT, solar
+time): it’s noon when the sun is in the
+south, as seen from the Greenwich meridian
+International Atomic Time (TAI): 1 day
+is 24 × 60 × 60 × 9,192,631,770 periods of
+caesium-133’s resonant frequency
+Problem: speed of Earth’s rotation is not
+constant
+Compromise: UTC is TAI with corrections
+to account for Earth rotation
+
+
+--- PDF PAGE 103 ---
+
+Coordinated Universal Time (UTC)
+Greenwich Mean Time (GMT, solar
+time): it’s noon when the sun is in the
+south, as seen from the Greenwich meridian
+International Atomic Time (TAI): 1 day
+is 24 × 60 × 60 × 9,192,631,770 periods of
+caesium-133’s resonant frequency
+Problem: speed of Earth’s rotation is not
+constant
+Compromise: UTC is TAI with corrections
+to account for Earth rotation
+Time zones and daylight savings time
+are oﬀsets to UTC
+
+
+--- PDF PAGE 104 ---
+
+Leap seconds
+Every year, on 30 June and 31 December at 23:59:59 UTC,
+one of three things happens:
+▶ The clock immediately jumps forward to 00:00:00,
+skipping one second (negative leap second)
+▶ The clock moves to 00:00:00 after one second, as usual
+▶ The clock moves to 23:59:60 after one second, and then
+moves to 00:00:00 after one further second
+(positive leap second)
+This is announced several months beforehand.
+http://leapsecond.com/notes/leap-watch.htm
+
+
+--- PDF PAGE 105 ---
+
+How computers represent timestamps
+Two most common representations:
+▶ Unix time: number of seconds since 1 January 1970
+00:00:00 UTC (the “epoch”), not counting leap seconds
+▶ ISO 8601: year, month, day, hour, minute, second, and
+timezone oﬀset relative to UTC
+example: 2021-11-09T09:50:17+00:00
+
+
+--- PDF PAGE 106 ---
+
+How computers represent timestamps
+Two most common representations:
+▶ Unix time: number of seconds since 1 January 1970
+00:00:00 UTC (the “epoch”), not counting leap seconds
+▶ ISO 8601: year, month, day, hour, minute, second, and
+timezone oﬀset relative to UTC
+example: 2021-11-09T09:50:17+00:00
+Conversion between the two requires:
+▶ Gregorian calendar: 365 days in a year, except leap years
+(year % 4 == 0 && (year % 100 != 0 ||
+year % 400 == 0))
+▶ Knowledge of past and future leap seconds. . . ?!
+
+
+--- PDF PAGE 107 ---
+
+How most software deals with leap seconds
+By ignoring them!
+https://www.ﬂickr.com/
+photos/ru boﬀ/
+37915499055/
+
+
+--- PDF PAGE 108 ---
+
+How most software deals with leap seconds
+By ignoring them!
+However, OS and DistSys often need
+timings with sub-second accuracy.
+https://www.ﬂickr.com/
+photos/ru boﬀ/
+37915499055/
+
+
+--- PDF PAGE 109 ---
+
+How most software deals with leap seconds
+By ignoring them!
+However, OS and DistSys often need
+timings with sub-second accuracy.
+30 June 2012: bug in Linux kernel caused
+livelock on leap second, causing many
+Internet services to go down
+https://www.ﬂickr.com/
+photos/ru boﬀ/
+37915499055/
+
+
+--- PDF PAGE 110 ---
+
+How most software deals with leap seconds
+By ignoring them!
+However, OS and DistSys often need
+timings with sub-second accuracy.
+30 June 2012: bug in Linux kernel caused
+livelock on leap second, causing many
+Internet services to go down
+Pragmatic solution: “smear” (spread out)
+the leap second over the course of a day
+https://www.ﬂickr.com/
+photos/ru boﬀ/
+37915499055/
+
+
+--- PDF PAGE 111 ---
+
+Clock synchronisation
+Computers track physical time/UTC with a quartz clock
+(with battery, continues running when power is oﬀ)
+Due to clock drift, clock error gradually increases
+
+
+--- PDF PAGE 112 ---
+
+Clock synchronisation
+Computers track physical time/UTC with a quartz clock
+(with battery, continues running when power is oﬀ)
+Due to clock drift, clock error gradually increases
+Clock skew: diﬀerence between two clocks at a point in time
+
+
+--- PDF PAGE 113 ---
+
+Clock synchronisation
+Computers track physical time/UTC with a quartz clock
+(with battery, continues running when power is oﬀ)
+Due to clock drift, clock error gradually increases
+Clock skew: diﬀerence between two clocks at a point in time
+Solution: Periodically get the current time from a server that
+has a more accurate time source (atomic clock or GPS
+receiver)
+Protocols: Network Time Protocol (NTP),
+Precision Time Protocol (PTP)
+
+
+--- PDF PAGE 114 ---
+
+
+
+--- PDF PAGE 115 ---
+
+Network Time Protocol (NTP)
+Many operating system vendors run NTP servers,
+conﬁgure OS to use them by default
+
+
+--- PDF PAGE 116 ---
+
+Network Time Protocol (NTP)
+Many operating system vendors run NTP servers,
+conﬁgure OS to use them by default
+Hierarchy of clock servers arranged into strata:
+▶ Stratum 0: atomic clock or GPS receiver
+▶ Stratum 1: synced directly with stratum 0 device
+▶ Stratum 2: servers that sync with stratum 1, etc.
+
+
+--- PDF PAGE 117 ---
+
+Network Time Protocol (NTP)
+Many operating system vendors run NTP servers,
+conﬁgure OS to use them by default
+Hierarchy of clock servers arranged into strata:
+▶ Stratum 0: atomic clock or GPS receiver
+▶ Stratum 1: synced directly with stratum 0 device
+▶ Stratum 2: servers that sync with stratum 1, etc.
+May contact multiple servers, discard outliers, average rest
+Makes multiple requests to the same server, use statistics to
+reduce random error due to variations in network latency
+Reduces clock skew to a few milliseconds in good network
+conditions, but can be much worse!
+
+
+--- PDF PAGE 118 ---
+
+Estimating time over a network
+NTP client
+NTP server
+
+
+--- PDF PAGE 119 ---
+
+Estimating time over a network
+NTP client
+NTP server
+request: t1
+t1
+t2
+
+
+--- PDF PAGE 120 ---
+
+Estimating time over a network
+NTP client
+NTP server
+request: t1
+t1
+response: (t1, t2, t3)
+t2
+t3
+t4
+
+
+--- PDF PAGE 121 ---
+
+Estimating time over a network
+NTP client
+NTP server
+request: t1
+t1
+response: (t1, t2, t3)
+t2
+t3
+t4
+Round-trip network delay: δ = (t4 − t1) − (t3 − t2)
+
+
+--- PDF PAGE 122 ---
+
+Estimating time over a network
+NTP client
+NTP server
+request: t1
+t1
+response: (t1, t2, t3)
+t2
+t3
+t4
+Round-trip network delay: δ = (t4 − t1) − (t3 − t2)
+Estimated server time when client receives response: t3 + δ
+2
+
+
+--- PDF PAGE 123 ---
+
+Estimating time over a network
+NTP client
+NTP server
+request: t1
+t1
+response: (t1, t2, t3)
+t2
+t3
+t4
+Round-trip network delay: δ = (t4 − t1) − (t3 − t2)
+Estimated server time when client receives response: t3 + δ
+2
+Estimated clock skew: θ = t3 + δ
+2
+2 − t4 = t2 − t1 + t3 − t4
+
+
+--- PDF PAGE 124 ---
+
+Correcting clock skew
+Once the client has estimated the clock skew θ, it needs to
+apply that correction to its clock.
+▶ If |θ| < 125 ms, slew the clock:
+slightly speed it up or slow it down by up to 500 ppm
+(brings clocks in sync within ≈ 5 minutes)
+
+
+--- PDF PAGE 125 ---
+
+Correcting clock skew
+Once the client has estimated the clock skew θ, it needs to
+apply that correction to its clock.
+▶ If |θ| < 125 ms, slew the clock:
+slightly speed it up or slow it down by up to 500 ppm
+(brings clocks in sync within ≈ 5 minutes)
+▶ If 125 ms ≤ |θ| < 1,000 s, step the clock:
+suddenly reset client clock to estimated server timestamp
+
+
+--- PDF PAGE 126 ---
+
+Correcting clock skew
+Once the client has estimated the clock skew θ, it needs to
+apply that correction to its clock.
+▶ If |θ| < 125 ms, slew the clock:
+slightly speed it up or slow it down by up to 500 ppm
+(brings clocks in sync within ≈ 5 minutes)
+▶ If 125 ms ≤ |θ| < 1,000 s, step the clock:
+suddenly reset client clock to estimated server timestamp
+▶ If |θ| ≥ 1,000 s, panic and do nothing
+(leave the problem for a human operator to resolve)
+Systems that rely on clock sync need to monitor clock skew!
+
+
+--- PDF PAGE 127 ---
+
+http://www.ntp.org/ntpfaq/NTP-s-algo.htm
+
+
+--- PDF PAGE 128 ---
+
+Monotonic and time-of-day clocks
+// BAD:
+long startTime = System.currentTimeMillis();
+doSomething();
+long endTime = System.currentTimeMillis();
+long elapsedMillis = endTime - startTime;
+// elapsedMillis may be negative!
+
+
+--- PDF PAGE 129 ---
+
+Monotonic and time-of-day clocks
+// BAD:
+long startTime = System.currentTimeMillis();
+doSomething();
+long endTime = System.currentTimeMillis();
+long elapsedMillis = endTime - startTime;
+// elapsedMillis may be negative!
+NTP client steps the clock during this
+
+
+--- PDF PAGE 130 ---
+
+Monotonic and time-of-day clocks
+// BAD:
+long startTime = System.currentTimeMillis();
+doSomething();
+long endTime = System.currentTimeMillis();
+long elapsedMillis = endTime - startTime;
+// elapsedMillis may be negative!
+NTP client steps the clock during this
+// GOOD:
+long startTime = System.nanoTime();
+doSomething();
+long endTime = System.nanoTime();
+long elapsedNanos = endTime - startTime;
+// elapsedNanos is always >= 0
+
+
+--- PDF PAGE 131 ---
+
+Monotonic and time-of-day clocks
+Time-of-day clock:
+▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)
+Monotonic clock:
+▶ Time since arbitrary point (e.g. when machine booted up)
+
+
+--- PDF PAGE 132 ---
+
+Monotonic and time-of-day clocks
+Time-of-day clock:
+▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)
+▶ May suddenly move forwards or backwards (NTP
+stepping), subject to leap second adjustments
+Monotonic clock:
+▶ Time since arbitrary point (e.g. when machine booted up)
+▶ Always moves forwards at near-constant rate
+
+
+--- PDF PAGE 133 ---
+
+Monotonic and time-of-day clocks
+Time-of-day clock:
+▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)
+▶ May suddenly move forwards or backwards (NTP
+stepping), subject to leap second adjustments
+▶ Timestamps can be compared across nodes (if synced)
+Monotonic clock:
+▶ Time since arbitrary point (e.g. when machine booted up)
+▶ Always moves forwards at near-constant rate
+▶ Good for measuring elapsed time on a single node
+
+
+--- PDF PAGE 134 ---
+
+Monotonic and time-of-day clocks
+Time-of-day clock:
+▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)
+▶ May suddenly move forwards or backwards (NTP
+stepping), subject to leap second adjustments
+▶ Timestamps can be compared across nodes (if synced)
+▶ Java: System.currentTimeMillis()
+▶ Linux: clock_gettime(CLOCK_REALTIME)
+Monotonic clock:
+▶ Time since arbitrary point (e.g. when machine booted up)
+▶ Always moves forwards at near-constant rate
+▶ Good for measuring elapsed time on a single node
+▶ Java: System.nanoTime()
+▶ Linux: clock_gettime(CLOCK_MONOTONIC)
+
+
+--- PDF PAGE 135 ---
+
+Ordering of messages
+user A
+user B
+user C
+m1
+m1
+m1 = “A says: The moon is made of cheese!”
+
+
+--- PDF PAGE 136 ---
+
+Ordering of messages
+user A
+user B
+user C
+m1
+m1
+m2
+m2
+m1 = “A says: The moon is made of cheese!”
+m2 = “B says: Oh no it isn’t!”
+
+
+--- PDF PAGE 137 ---
+
+Ordering of messages
+user A
+user B
+user C
+m1
+m1
+m2
+m2
+m1 = “A says: The moon is made of cheese!”
+m2 = “B says: Oh no it isn’t!”
+C sees m2 ﬁrst, m1 second,
+even though logically m1 happened before m2.
+
+
+--- PDF PAGE 138 ---
+
+Ordering of messages using timestamps?
+user A
+user B
+user C
+m1
+t1
+m1
+t2
+m2
+m2
+m1 = (t1, “A says: The moon is made of cheese!”)
+m2 = (t2, “B says: Oh no it isn’t!”)
+
+
+--- PDF PAGE 139 ---
+
+Ordering of messages using timestamps?
+user A
+user B
+user C
+m1
+t1
+m1
+t2
+m2
+m2
+m1 = (t1, “A says: The moon is made of cheese!”)
+m2 = (t2, “B says: Oh no it isn’t!”)
+Problem: even with synced clocks, t2 < t1 is possible.
+Timestamp order is inconsistent with expected order!
+
+
+--- PDF PAGE 140 ---
+
+The happens-before relation
+An event is something happening at one node (sending or
+receiving a message, or a local execution step).
+We say event a happens before event b (written a → b) iﬀ:
+
+
+--- PDF PAGE 141 ---
+
+The happens-before relation
+An event is something happening at one node (sending or
+receiving a message, or a local execution step).
+We say event a happens before event b (written a → b) iﬀ:
+▶ a and b occurred at the same node, and a occurred
+before b in that node’s local execution order; or
+
+
+--- PDF PAGE 142 ---
+
+The happens-before relation
+An event is something happening at one node (sending or
+receiving a message, or a local execution step).
+We say event a happens before event b (written a → b) iﬀ:
+▶ a and b occurred at the same node, and a occurred
+before b in that node’s local execution order; or
+▶ event a is the sending of some message m, and event b is
+the receipt of that same message m (assuming sent
+messages are unique); or
+
+
+--- PDF PAGE 143 ---
+
+The happens-before relation
+An event is something happening at one node (sending or
+receiving a message, or a local execution step).
+We say event a happens before event b (written a → b) iﬀ:
+▶ a and b occurred at the same node, and a occurred
+before b in that node’s local execution order; or
+▶ event a is the sending of some message m, and event b is
+the receipt of that same message m (assuming sent
+messages are unique); or
+▶ there exists an event c such that a → c and c → b.
+
+
+--- PDF PAGE 144 ---
+
+The happens-before relation
+An event is something happening at one node (sending or
+receiving a message, or a local execution step).
+We say event a happens before event b (written a → b) iﬀ:
+▶ a and b occurred at the same node, and a occurred
+before b in that node’s local execution order; or
+▶ event a is the sending of some message m, and event b is
+the receipt of that same message m (assuming sent
+messages are unique); or
+▶ there exists an event c such that a → c and c → b.
+The happens-before relation is a partial order: it is possible
+that neither a → b nor b → a. In that case, a and b are
+concurrent (written a ∥ b).
+
+
+--- PDF PAGE 145 ---
+
+Happens-before relation example
+A
+B
+C
+e
+m1
+a
+b
+c
+m2
+d
+f
+
+
+--- PDF PAGE 146 ---
+
+Happens-before relation example
+A
+B
+C
+e
+m1
+a
+b
+c
+m2
+d
+f
+▶ a → b, c → d, and e → f due to node execution order
+
+
+--- PDF PAGE 147 ---
+
+Happens-before relation example
+A
+B
+C
+e
+m1
+a
+b
+c
+m2
+d
+f
+▶ a → b, c → d, and e → f due to node execution order
+▶ b → c and d → f due to messages m1 and m2
+
+
+--- PDF PAGE 148 ---
+
+Happens-before relation example
+A
+B
+C
+e
+m1
+a
+b
+c
+m2
+d
+f
+▶ a → b, c → d, and e → f due to node execution order
+▶ b → c and d → f due to messages m1 and m2
+▶ a → c, a → d, a → f, b → d, b → f, and c → f due to
+transitivity
+
+
+--- PDF PAGE 149 ---
+
+Happens-before relation example
+A
+B
+C
+e
+m1
+a
+b
+c
+m2
+d
+f
+▶ a → b, c → d, and e → f due to node execution order
+▶ b → c and d → f due to messages m1 and m2
+▶ a → c, a → d, a → f, b → d, b → f, and c → f due to
+transitivity
+▶ a ∥ e, b ∥ e, c ∥ e, and d ∥ e
+
+
+--- PDF PAGE 150 ---
+
+Causality
+Taken from physics (relativity).
+▶ When a → b, then a might have caused b.
+▶ When a ∥ b, we know that a cannot have caused b.
+Happens-before relation encodes potential causality.
+
+
+--- PDF PAGE 151 ---
+
+Causality
+Taken from physics (relativity).
+▶ When a → b, then a might have caused b.
+▶ When a ∥ b, we know that a cannot have caused b.
+Happens-before relation encodes potential causality.
+distance in space
+time
+a
+b
+
+
+--- PDF PAGE 152 ---
+
+Causality
+Taken from physics (relativity).
+▶ When a → b, then a might have caused b.
+▶ When a ∥ b, we know that a cannot have caused b.
+Happens-before relation encodes potential causality.
+distance in space
+time
+a
+b
+light from a
+
+
+--- PDF PAGE 153 ---
+
+Causality
+Taken from physics (relativity).
+▶ When a → b, then a might have caused b.
+▶ When a ∥ b, we know that a cannot have caused b.
+Happens-before relation encodes potential causality.
+distance in space
+time
+a
+b
+light from a
+light from b
+
+
+--- PDF PAGE 154 ---
+
+Causality
+Taken from physics (relativity).
+▶ When a → b, then a might have caused b.
+▶ When a ∥ b, we know that a cannot have caused b.
+Happens-before relation encodes potential causality.
+distance in space
+time
+a
+b
+light from a
+light from b
+c
+
+
+--- PDF PAGE 155 ---
+
+Causality
+Taken from physics (relativity).
+▶ When a → b, then a might have caused b.
+▶ When a ∥ b, we know that a cannot have caused b.
+Happens-before relation encodes potential causality.
+distance in space
+time
+a
+b
+light from a
+light from b
+c
+Let ≺ be a strict total order on events.
+If (a → b) =⇒ (a ≺ b) then ≺ is a causal order
+(or: ≺ is “consistent with causality”).
+NB. “causal” ̸= “casual”!
+
+
+--- PDF PAGE 156 ---
+
+Lecture 4
+Broadcast protocols and logical time
+
+
+--- PDF PAGE 157 ---
+
+Physical timestamps inconsistent with causality
+user A
+user B
+user C
+m1
+t1
+m1
+t2
+m2
+m2
+m1 = (t1, “A says: The moon is made of cheese!”)
+m2 = (t2, “B says: Oh no it isn’t!”)
+Problem: even with synced clocks, t2 < t1 is possible.
+Timestamp order is inconsistent with expected order!
+
+
+--- PDF PAGE 158 ---
+
+Logical vs. physical clocks
+▶ Physical clock: count number of seconds elapsed
+▶ Logical clock: count number of events occurred
+Physical timestamps: useful for many things, but may be
+inconsistent with causality.
+
+
+--- PDF PAGE 159 ---
+
+Logical vs. physical clocks
+▶ Physical clock: count number of seconds elapsed
+▶ Logical clock: count number of events occurred
+Physical timestamps: useful for many things, but may be
+inconsistent with causality.
+Logical clocks: designed to capture causal dependencies.
+(e1 → e2) =⇒ (T(e1) < T(e2))
+
+
+--- PDF PAGE 160 ---
+
+Logical vs. physical clocks
+▶ Physical clock: count number of seconds elapsed
+▶ Logical clock: count number of events occurred
+Physical timestamps: useful for many things, but may be
+inconsistent with causality.
+Logical clocks: designed to capture causal dependencies.
+(e1 → e2) =⇒ (T(e1) < T(e2))
+We will look at two types of logical clocks:
+▶ Lamport clocks
+▶ Vector clocks
+
+
+--- PDF PAGE 161 ---
+
+Lamport clocks algorithm
+on initialisation do
+t := 0
+▷ each node has its own local variable t
+end on
+on any event occurring at the local node do
+t := t + 1
+end on
+on request to send message m do
+t := t + 1; send (t, m) via the underlying network link
+end on
+on receiving (t′, m) via the underlying network link do
+t := max(t, t′) + 1
+deliver m to the application
+end on
+
+
+--- PDF PAGE 162 ---
+
+Lamport clocks in words
+▶ Each node maintains a counter t,
+incremented on every local event e
+▶ Let L(e) be the value of t after that increment
+▶ Attach current t to messages sent over network
+▶ Recipient moves its clock forward to timestamp in the
+message (if greater than local counter), then increments
+
+
+--- PDF PAGE 163 ---
+
+Lamport clocks in words
+▶ Each node maintains a counter t,
+incremented on every local event e
+▶ Let L(e) be the value of t after that increment
+▶ Attach current t to messages sent over network
+▶ Recipient moves its clock forward to timestamp in the
+message (if greater than local counter), then increments
+Properties of this scheme:
+▶ If a → b then L(a) < L(b)
+
+
+--- PDF PAGE 164 ---
+
+Lamport clocks in words
+▶ Each node maintains a counter t,
+incremented on every local event e
+▶ Let L(e) be the value of t after that increment
+▶ Attach current t to messages sent over network
+▶ Recipient moves its clock forward to timestamp in the
+message (if greater than local counter), then increments
+Properties of this scheme:
+▶ If a → b then L(a) < L(b)
+▶ However, L(a) < L(b) does not imply a → b
+
+
+--- PDF PAGE 165 ---
+
+Lamport clocks in words
+▶ Each node maintains a counter t,
+incremented on every local event e
+▶ Let L(e) be the value of t after that increment
+▶ Attach current t to messages sent over network
+▶ Recipient moves its clock forward to timestamp in the
+message (if greater than local counter), then increments
+Properties of this scheme:
+▶ If a → b then L(a) < L(b)
+▶ However, L(a) < L(b) does not imply a → b
+▶ Possible that L(a) = L(b) for a ̸= b
+
+
+--- PDF PAGE 166 ---
+
+Lamport clocks example
+A
+B
+C
+1
+(2, m1)
+1
+2
+3
+3
+4
+5
+(4, m2)
+
+
+--- PDF PAGE 167 ---
+
+Lamport clocks example
+A
+B
+C
+1
+(2, m1)
+1
+2
+3
+3
+4
+5
+(4, m2)
+Let N(e) be the node at which event e occurred.
+Then the pair (L(e), N(e)) uniquely identiﬁes event e.
+
+
+--- PDF PAGE 168 ---
+
+Lamport clocks example
+A
+B
+C
+(1, C)
+(2, m1)
+(1, A)
+(2, A)
+(3, B)
+(3, A)
+(4, B)
+(5, C)
+(4, m2)
+Let N(e) be the node at which event e occurred.
+Then the pair (L(e), N(e)) uniquely identiﬁes event e.
+
+
+--- PDF PAGE 169 ---
+
+Lamport clocks example
+A
+B
+C
+(1, C)
+(2, m1)
+(1, A)
+(2, A)
+(3, B)
+(3, A)
+(4, B)
+(5, C)
+(4, m2)
+Let N(e) be the node at which event e occurred.
+Then the pair (L(e), N(e)) uniquely identiﬁes event e.
+Deﬁne a total order ≺ using Lamport timestamps:
+(a ≺ b) ⇐⇒ (L(a) < L(b) ∨ (L(a) = L(b) ∧ N(a) < N(b)))
+This order is causal: (a → b) =⇒ (a ≺ b)
+
+
+--- PDF PAGE 170 ---
+
+Vector clocks
+Given Lamport timestamps L(a) and L(b) with L(a) < L(b)
+we can’t tell whether a → b or a ∥ b.
+If we want to detect which events are concurrent, we need
+vector clocks:
+
+
+--- PDF PAGE 171 ---
+
+Vector clocks
+Given Lamport timestamps L(a) and L(b) with L(a) < L(b)
+we can’t tell whether a → b or a ∥ b.
+If we want to detect which events are concurrent, we need
+vector clocks:
+▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩
+
+
+--- PDF PAGE 172 ---
+
+Vector clocks
+Given Lamport timestamps L(a) and L(b) with L(a) < L(b)
+we can’t tell whether a → b or a ∥ b.
+If we want to detect which events are concurrent, we need
+vector clocks:
+▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩
+▶ Vector timestamp of event a is V (a) = ⟨t1, t2, . . . , tn⟩
+▶ ti is number of events observed by node Ni
+
+
+--- PDF PAGE 173 ---
+
+Vector clocks
+Given Lamport timestamps L(a) and L(b) with L(a) < L(b)
+we can’t tell whether a → b or a ∥ b.
+If we want to detect which events are concurrent, we need
+vector clocks:
+▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩
+▶ Vector timestamp of event a is V (a) = ⟨t1, t2, . . . , tn⟩
+▶ ti is number of events observed by node Ni
+▶ Each node has a current vector timestamp T
+▶ On event at node Ni, increment vector element T[i]
+
+
+--- PDF PAGE 174 ---
+
+Vector clocks
+Given Lamport timestamps L(a) and L(b) with L(a) < L(b)
+we can’t tell whether a → b or a ∥ b.
+If we want to detect which events are concurrent, we need
+vector clocks:
+▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩
+▶ Vector timestamp of event a is V (a) = ⟨t1, t2, . . . , tn⟩
+▶ ti is number of events observed by node Ni
+▶ Each node has a current vector timestamp T
+▶ On event at node Ni, increment vector element T[i]
+▶ Attach current vector timestamp to each message
+▶ Recipient merges message vector into its local vector
+
+
+--- PDF PAGE 175 ---
+
+Vector clocks algorithm
+on initialisation at node Ni do
+T := ⟨0, 0, . . . , 0⟩
+▷ local variable at node Ni
+end on
+on any event occurring at node Ni do
+T[i] := T[i] + 1
+end on
+on request to send message m at node Ni do
+T[i] := T[i] + 1; send (T, m) via network
+end on
+on receiving (T ′, m) at node Ni via the network do
+T[j] := max(T[j], T ′[j]) for every j ∈ {1, . . . , n}
+T[i] := T[i] + 1; deliver m to the application
+end on
+
+
+--- PDF PAGE 176 ---
+
+Vector clocks example
+Assuming the vector of nodes is N = ⟨A, B, C⟩:
+A
+B
+C
+⟨0, 0, 1⟩
+(⟨2, 0, 0⟩, m1)
+⟨1, 0, 0⟩
+⟨2, 0, 0⟩
+⟨2, 1, 0⟩
+⟨3, 0, 0⟩
+⟨2, 2, 0⟩
+⟨2, 2, 2⟩
+(⟨2, 2, 0⟩, m2)
+
+
+--- PDF PAGE 177 ---
+
+Vector clocks example
+Assuming the vector of nodes is N = ⟨A, B, C⟩:
+A
+B
+C
+⟨0, 0, 1⟩
+(⟨2, 0, 0⟩, m1)
+⟨1, 0, 0⟩
+⟨2, 0, 0⟩
+⟨2, 1, 0⟩
+⟨3, 0, 0⟩
+⟨2, 2, 0⟩
+⟨2, 2, 2⟩
+(⟨2, 2, 0⟩, m2)
+The vector timestamp of an event e represents a set of events,
+e and its causal dependencies: {e} ∪ {a | a → e}
+For example, ⟨2, 2, 0⟩ represents the ﬁrst two events from A,
+the ﬁrst two events from B, and no events from C.
+
+
+--- PDF PAGE 178 ---
+
+Vector clocks ordering
+Deﬁne the following order on vector timestamps
+(in a system with n nodes):
+▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}
+▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}
+▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′
+▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T
+
+
+--- PDF PAGE 179 ---
+
+Vector clocks ordering
+Deﬁne the following order on vector timestamps
+(in a system with n nodes):
+▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}
+▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}
+▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′
+▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T
+V (a) ≤ V (b) iﬀ ({a} ∪ {e | e → a}) ⊆ ({b} ∪ {e | e → b})
+
+
+--- PDF PAGE 180 ---
+
+Vector clocks ordering
+Deﬁne the following order on vector timestamps
+(in a system with n nodes):
+▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}
+▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}
+▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′
+▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T
+V (a) ≤ V (b) iﬀ ({a} ∪ {e | e → a}) ⊆ ({b} ∪ {e | e → b})
+Properties of this order:
+▶ (V (a) < V (b)) ⇐⇒ (a → b)
+▶ (V (a) = V (b)) ⇐⇒ (a = b)
+▶ (V (a) ∥ V (b)) ⇐⇒ (a ∥ b)
+
+
+--- PDF PAGE 181 ---
+
+Broadcast protocols
+Broadcast (multicast) is group communication:
+▶ One node sends message, all nodes in group deliver it
+
+
+--- PDF PAGE 182 ---
+
+Broadcast protocols
+Broadcast (multicast) is group communication:
+▶ One node sends message, all nodes in group deliver it
+▶ Set of group members may be ﬁxed (static) or dynamic
+
+
+--- PDF PAGE 183 ---
+
+Broadcast protocols
+Broadcast (multicast) is group communication:
+▶ One node sends message, all nodes in group deliver it
+▶ Set of group members may be ﬁxed (static) or dynamic
+▶ If one node is faulty, remaining group members carry on
+
+
+--- PDF PAGE 184 ---
+
+Broadcast protocols
+Broadcast (multicast) is group communication:
+▶ One node sends message, all nodes in group deliver it
+▶ Set of group members may be ﬁxed (static) or dynamic
+▶ If one node is faulty, remaining group members carry on
+▶ Note: concept is more general than IP multicast
+(we build upon point-to-point messaging)
+
+
+--- PDF PAGE 185 ---
+
+Broadcast protocols
+Broadcast (multicast) is group communication:
+▶ One node sends message, all nodes in group deliver it
+▶ Set of group members may be ﬁxed (static) or dynamic
+▶ If one node is faulty, remaining group members carry on
+▶ Note: concept is more general than IP multicast
+(we build upon point-to-point messaging)
+Build upon system models from lecture 2:
+▶ Can be best-eﬀort (may drop messages) or
+reliable (non-faulty nodes deliver every message,
+by retransmitting dropped messages)
+
+
+--- PDF PAGE 186 ---
+
+Broadcast protocols
+Broadcast (multicast) is group communication:
+▶ One node sends message, all nodes in group deliver it
+▶ Set of group members may be ﬁxed (static) or dynamic
+▶ If one node is faulty, remaining group members carry on
+▶ Note: concept is more general than IP multicast
+(we build upon point-to-point messaging)
+Build upon system models from lecture 2:
+▶ Can be best-eﬀort (may drop messages) or
+reliable (non-faulty nodes deliver every message,
+by retransmitting dropped messages)
+▶ Asynchronous/partially synchronous timing model
+=⇒ no upper bound on message latency
+
+
+--- PDF PAGE 187 ---
+
+Receiving versus delivering
+Node A:
+Node B:
+Application
+Application
+Broadcast algorithm
+(middleware)
+Broadcast algorithm
+(middleware)
+Network
+
+
+--- PDF PAGE 188 ---
+
+Receiving versus delivering
+Node A:
+Node B:
+Application
+Application
+broadcast
+Broadcast algorithm
+(middleware)
+Broadcast algorithm
+(middleware)
+Network
+
+
+--- PDF PAGE 189 ---
+
+Receiving versus delivering
+Node A:
+Node B:
+Application
+Application
+broadcast
+Broadcast algorithm
+(middleware)
+Broadcast algorithm
+(middleware)
+send
+receive
+send
+receive
+Network
+Assume network provides point-to-point send/receive
+
+
+--- PDF PAGE 190 ---
+
+Receiving versus delivering
+Node A:
+Node B:
+Application
+Application
+broadcast
+deliver
+Broadcast algorithm
+(middleware)
+Broadcast algorithm
+(middleware)
+send
+receive
+send
+receive
+Network
+Assume network provides point-to-point send/receive
+After broadcast algorithm receives message from network, it
+may buﬀer/queue it before delivering to the application
+
+
+--- PDF PAGE 191 ---
+
+Forms of reliable broadcast
+FIFO broadcast:
+If m1 and m2 are broadcast by the same node, and
+broadcast(m1) → broadcast(m2), then m1 must be delivered
+before m2
+
+
+--- PDF PAGE 192 ---
+
+Forms of reliable broadcast
+FIFO broadcast:
+If m1 and m2 are broadcast by the same node, and
+broadcast(m1) → broadcast(m2), then m1 must be delivered
+before m2
+Causal broadcast:
+If broadcast(m1) → broadcast(m2) then m1 must be delivered
+before m2
+
+
+--- PDF PAGE 193 ---
+
+Forms of reliable broadcast
+FIFO broadcast:
+If m1 and m2 are broadcast by the same node, and
+broadcast(m1) → broadcast(m2), then m1 must be delivered
+before m2
+Causal broadcast:
+If broadcast(m1) → broadcast(m2) then m1 must be delivered
+before m2
+Total order broadcast:
+If m1 is delivered before m2 on one node, then m1 must be
+delivered before m2 on all nodes
+
+
+--- PDF PAGE 194 ---
+
+Forms of reliable broadcast
+FIFO broadcast:
+If m1 and m2 are broadcast by the same node, and
+broadcast(m1) → broadcast(m2), then m1 must be delivered
+before m2
+Causal broadcast:
+If broadcast(m1) → broadcast(m2) then m1 must be delivered
+before m2
+Total order broadcast:
+If m1 is delivered before m2 on one node, then m1 must be
+delivered before m2 on all nodes
+FIFO-total order broadcast:
+Combination of FIFO broadcast and total order broadcast
+
+
+--- PDF PAGE 195 ---
+
+FIFO broadcast
+A
+B
+C
+m1
+m1
+m1
+
+
+--- PDF PAGE 196 ---
+
+FIFO broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m2
+
+
+--- PDF PAGE 197 ---
+
+FIFO broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m2
+m3
+m3
+m3
+
+
+--- PDF PAGE 198 ---
+
+FIFO broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m2
+m3
+m3
+m3
+Messages sent by the same node must be delivered in the
+order they were sent.
+Messages sent by diﬀerent nodes can be delivered in any order.
+
+
+--- PDF PAGE 199 ---
+
+FIFO broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m2
+m3
+m3
+m3
+Messages sent by the same node must be delivered in the
+order they were sent.
+Messages sent by diﬀerent nodes can be delivered in any order.
+Valid orders: (m2, m1, m3) or (m1, m2, m3) or (m1, m3, m2)
+
+
+--- PDF PAGE 200 ---
+
+FIFO broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m2
+m3
+m3
+m3
+Messages sent by the same node must be delivered in the
+order they were sent.
+Messages sent by diﬀerent nodes can be delivered in any order.
+Valid orders: (m2, m1, m3) or (m1, m2, m3) or (m1, m3, m2)
+
+
+--- PDF PAGE 201 ---
+
+Causal broadcast
+A
+B
+C
+m1
+m1
+m1
+
+
+--- PDF PAGE 202 ---
+
+Causal broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+
+
+--- PDF PAGE 203 ---
+
+Causal broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+
+
+--- PDF PAGE 204 ---
+
+Causal broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+Causally related messages must be delivered in causal order.
+Concurrent messages can be delivered in any order.
+
+
+--- PDF PAGE 205 ---
+
+Causal broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+Causally related messages must be delivered in causal order.
+Concurrent messages can be delivered in any order.
+Here: broadcast(m1) → broadcast(m2) and
+broadcast(m1) → broadcast(m3)
+=⇒ valid orders are: (m1, m2, m3) or (m1, m3, m2)
+
+
+--- PDF PAGE 206 ---
+
+Causal broadcast
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+Causally related messages must be delivered in causal order.
+Concurrent messages can be delivered in any order.
+Here: broadcast(m1) → broadcast(m2) and
+broadcast(m1) → broadcast(m3)
+=⇒ valid orders are: (m1, m2, m3) or (m1, m3, m2)
+
+
+--- PDF PAGE 207 ---
+
+Total order broadcast (1)
+A
+B
+C
+m1
+m1
+m1
+
+
+--- PDF PAGE 208 ---
+
+Total order broadcast (1)
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+
+
+--- PDF PAGE 209 ---
+
+Total order broadcast (1)
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+
+
+--- PDF PAGE 210 ---
+
+Total order broadcast (1)
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+All nodes must deliver messages in the same order
+(here: m1, m2, m3)
+
+
+--- PDF PAGE 211 ---
+
+Total order broadcast (1)
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+All nodes must deliver messages in the same order
+(here: m1, m2, m3)
+This includes a node’s deliveries to itself!
+
+
+--- PDF PAGE 212 ---
+
+Total order broadcast (2)
+A
+B
+C
+m1
+m1
+m1
+m2
+m2
+m3
+m3
+m3
+m2
+All nodes must deliver messages in the same order
+(here: m1, m3, m2)
+This includes a node’s deliveries to itself!
+
+
+--- PDF PAGE 213 ---
+
+Relationships between broadcast models
+FIFO-total order broadcast
+Total order
+broadcast
+Causal broadcast
+FIFO broadcast
+Reliable broadcast
+Best-eﬀort
+broadcast
+= stronger than
+
+
+--- PDF PAGE 214 ---
+
+Broadcast algorithms
+Break down into two layers:
+1. Make best-eﬀort broadcast reliable by retransmitting
+dropped messages
+2. Enforce delivery order on top of reliable broadcast
+
+
+--- PDF PAGE 215 ---
+
+Broadcast algorithms
+Break down into two layers:
+1. Make best-eﬀort broadcast reliable by retransmitting
+dropped messages
+2. Enforce delivery order on top of reliable broadcast
+First attempt: broadcasting node sends message directly
+to every other node
+▶ Use reliable links (retry + deduplicate)
+
+
+--- PDF PAGE 216 ---
+
+Broadcast algorithms
+Break down into two layers:
+1. Make best-eﬀort broadcast reliable by retransmitting
+dropped messages
+2. Enforce delivery order on top of reliable broadcast
+First attempt: broadcasting node sends message directly
+to every other node
+▶ Use reliable links (retry + deduplicate)
+▶ Problem: node may crash before all messages delivered
+A
+B
+C
+m1
+m1
+
+
+--- PDF PAGE 217 ---
+
+Eager reliable broadcast
+Idea: the ﬁrst time a node receives a particular message, it
+re-broadcasts to each other node (via reliable links).
+A
+B
+C
+
+
+--- PDF PAGE 218 ---
+
+Eager reliable broadcast
+Idea: the ﬁrst time a node receives a particular message, it
+re-broadcasts to each other node (via reliable links).
+A
+B
+C
+m1
+m1
+
+
+--- PDF PAGE 219 ---
+
+Eager reliable broadcast
+Idea: the ﬁrst time a node receives a particular message, it
+re-broadcasts to each other node (via reliable links).
+A
+B
+C
+m1
+m1
+m1
+m1
+
+
+--- PDF PAGE 220 ---
+
+Eager reliable broadcast
+Idea: the ﬁrst time a node receives a particular message, it
+re-broadcasts to each other node (via reliable links).
+A
+B
+C
+m1
+m1
+m1
+m1
+m1
+m1
+
+
+--- PDF PAGE 221 ---
+
+Eager reliable broadcast
+Idea: the ﬁrst time a node receives a particular message, it
+re-broadcasts to each other node (via reliable links).
+A
+B
+C
+m1
+m1
+m1
+m1
+m1
+m1
+Reliable, but. . . up to O(n2) messages for n nodes!
+
+
+--- PDF PAGE 222 ---
+
+Gossip protocols
+Useful when broadcasting to a large number of nodes.
+Idea: when a node receives a message for the ﬁrst time,
+forward it to 3 other nodes, chosen randomly.
+
+
+--- PDF PAGE 223 ---
+
+Gossip protocols
+Useful when broadcasting to a large number of nodes.
+Idea: when a node receives a message for the ﬁrst time,
+forward it to 3 other nodes, chosen randomly.
+
+
+--- PDF PAGE 224 ---
+
+Gossip protocols
+Useful when broadcasting to a large number of nodes.
+Idea: when a node receives a message for the ﬁrst time,
+forward it to 3 other nodes, chosen randomly.
+
+
+--- PDF PAGE 225 ---
+
+Gossip protocols
+Useful when broadcasting to a large number of nodes.
+Idea: when a node receives a message for the ﬁrst time,
+forward it to 3 other nodes, chosen randomly.
+
+
+--- PDF PAGE 226 ---
+
+Gossip protocols
+Useful when broadcasting to a large number of nodes.
+Idea: when a node receives a message for the ﬁrst time,
+forward it to 3 other nodes, chosen randomly.
+
+
+--- PDF PAGE 227 ---
+
+Gossip protocols
+Useful when broadcasting to a large number of nodes.
+Idea: when a node receives a message for the ﬁrst time,
+forward it to 3 other nodes, chosen randomly.
+
+
+--- PDF PAGE 228 ---
+
+Gossip protocols
+Useful when broadcasting to a large number of nodes.
+Idea: when a node receives a message for the ﬁrst time,
+forward it to 3 other nodes, chosen randomly.
+Eventually reaches all nodes (with high probability).
+
+
+--- PDF PAGE 229 ---
+
+FIFO broadcast algorithm
+on initialisation do
+sendSeq := 0; delivered := ⟨0, 0, . . . , 0⟩; buﬀer := {}
+end on
+on request to broadcast m at node Ni do
+send (i, sendSeq, m) via reliable broadcast
+sendSeq := sendSeq + 1
+end on
+on receiving msg from reliable broadcast at node Ni do
+buﬀer := buﬀer ∪ {msg}
+while ∃sender, m. (sender, delivered[sender], m) ∈ buﬀer do
+deliver m to the application
+delivered[sender] := delivered[sender] + 1
+end while
+end on
+
+
+--- PDF PAGE 230 ---
+
+Causal broadcast algorithm
+on initialisation do
+sendSeq := 0; delivered := ⟨0, 0, . . . , 0⟩; buﬀer := {}
+end on
+on request to broadcast m at node Ni do
+deps := delivered; deps[i] := sendSeq
+send (i, deps, m) via reliable broadcast
+sendSeq := sendSeq + 1
+end on
+on receiving msg from reliable broadcast at node Ni do
+buﬀer := buﬀer ∪ {msg}
+while ∃(sender, deps, m) ∈ buﬀer. deps ≤ delivered do
+deliver m to the application
+buﬀer := buﬀer \ {(sender, deps, m)}
+delivered[sender] := delivered[sender] + 1
+end while
+end on
+
+
+--- PDF PAGE 231 ---
+
+Vector clocks ordering
+Deﬁne the following order on vector timestamps
+(in a system with n nodes):
+▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}
+▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}
+▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′
+▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T
+
+
+--- PDF PAGE 232 ---
+
+Total order broadcast algorithms
+Single leader approach:
+▶ One node is designated as leader (sequencer)
+▶ To broadcast message, send it to the leader;
+leader broadcasts it via FIFO broadcast.
+
+
+--- PDF PAGE 233 ---
+
+Total order broadcast algorithms
+Single leader approach:
+▶ One node is designated as leader (sequencer)
+▶ To broadcast message, send it to the leader;
+leader broadcasts it via FIFO broadcast.
+▶ Problem: leader crashes =⇒ no more messages delivered
+▶ Changing the leader safely is diﬃcult
+
+
+--- PDF PAGE 234 ---
+
+Total order broadcast algorithms
+Single leader approach:
+▶ One node is designated as leader (sequencer)
+▶ To broadcast message, send it to the leader;
+leader broadcasts it via FIFO broadcast.
+▶ Problem: leader crashes =⇒ no more messages delivered
+▶ Changing the leader safely is diﬃcult
+Lamport clocks approach:
+▶ Attach Lamport timestamp to every message
+▶ Deliver messages in total order of timestamps
+
+
+--- PDF PAGE 235 ---
+
+Total order broadcast algorithms
+Single leader approach:
+▶ One node is designated as leader (sequencer)
+▶ To broadcast message, send it to the leader;
+leader broadcasts it via FIFO broadcast.
+▶ Problem: leader crashes =⇒ no more messages delivered
+▶ Changing the leader safely is diﬃcult
+Lamport clocks approach:
+▶ Attach Lamport timestamp to every message
+▶ Deliver messages in total order of timestamps
+▶ Problem: how do you know if you have seen all messages
+with timestamp < T? Need to use FIFO links and wait
+for message with timestamp ≥ T from every node
+
+
+--- PDF PAGE 236 ---
+
+Lecture 5
+Replication
+
+
+--- PDF PAGE 237 ---
+
+Replication
+▶ Keeping a copy of the same data on multiple nodes
+▶ Databases, ﬁlesystems, caches, . . .
+▶ A node that has a copy of the data is called a replica
+
+
+--- PDF PAGE 238 ---
+
+Replication
+▶ Keeping a copy of the same data on multiple nodes
+▶ Databases, ﬁlesystems, caches, . . .
+▶ A node that has a copy of the data is called a replica
+▶ If some replicas are faulty, others are still accessible
+▶ Spread load across many replicas
+
+
+--- PDF PAGE 239 ---
+
+Replication
+▶ Keeping a copy of the same data on multiple nodes
+▶ Databases, ﬁlesystems, caches, . . .
+▶ A node that has a copy of the data is called a replica
+▶ If some replicas are faulty, others are still accessible
+▶ Spread load across many replicas
+▶ Easy if the data doesn’t change: just copy it
+▶ We will focus on data changes
+
+
+--- PDF PAGE 240 ---
+
+Replication
+▶ Keeping a copy of the same data on multiple nodes
+▶ Databases, ﬁlesystems, caches, . . .
+▶ A node that has a copy of the data is called a replica
+▶ If some replicas are faulty, others are still accessible
+▶ Spread load across many replicas
+▶ Easy if the data doesn’t change: just copy it
+▶ We will focus on data changes
+Compare to RAID (Redundant Array of Independent Disks):
+replication within a single computer
+▶ RAID has single controller; in distributed system, each
+node acts independently
+▶ Replicas can be distributed around the world, near users
+
+
+--- PDF PAGE 241 ---
+
+Retrying state updates
+User A: The moon is not actually made of cheese!
+Like
+12,300 people like this.
+client
+
+
+--- PDF PAGE 242 ---
+
+Retrying state updates
+User A: The moon is not actually made of cheese!
+Like
+12,300 people like this.
+client
+increment post.likes
+12,301
+ack
+
+
+--- PDF PAGE 243 ---
+
+Retrying state updates
+User A: The moon is not actually made of cheese!
+Like
+12,300 people like this.
+client
+increment post.likes
+12,301
+ack
+increment post.likes
+12,302
+ack
+
+
+--- PDF PAGE 244 ---
+
+Retrying state updates
+User A: The moon is not actually made of cheese!
+Like
+12,300 people like this.
+client
+increment post.likes
+12,301
+ack
+increment post.likes
+12,302
+ack
+Deduplicating requests requires that the database tracks which
+requests it has already seen (in stable storage)
+
+
+--- PDF PAGE 245 ---
+
+
+
+--- PDF PAGE 246 ---
+
+Idempotence
+A function f is idempotent if f(x) = f(f(x)).
+▶ Not idempotent: f(likeCount) = likeCount + 1
+▶ Idempotent: f(likeSet) = likeSet ∪ {userID}
+Idempotent requests can be retried without deduplication.
+
+
+--- PDF PAGE 247 ---
+
+Idempotence
+A function f is idempotent if f(x) = f(f(x)).
+▶ Not idempotent: f(likeCount) = likeCount + 1
+▶ Idempotent: f(likeSet) = likeSet ∪ {userID}
+Idempotent requests can be retried without deduplication.
+Choice of retry behaviour:
+▶ At-most-once semantics:
+send request, don’t retry, update may not happen
+▶ At-least-once semantics:
+retry request until acknowledged, may repeat update
+▶ Exactly-once semantics:
+retry + idempotence or deduplication
+
+
+--- PDF PAGE 248 ---
+
+Adding and then removing again
+client 1
+client 2
+
+
+--- PDF PAGE 249 ---
+
+Adding and then removing again
+client 1
+client 2
+f: add like
+ack
+f(likes) = likes ∪ {userID}
+
+
+--- PDF PAGE 250 ---
+
+Adding and then removing again
+client 1
+client 2
+f: add like
+ack
+set of likes
+f(likes) = likes ∪ {userID}
+
+
+--- PDF PAGE 251 ---
+
+Adding and then removing again
+client 1
+client 2
+f: add like
+ack
+set of likes
+g: unlike
+ack
+f(likes) = likes ∪ {userID}
+g(likes) = likes \ {userID}
+
+
+--- PDF PAGE 252 ---
+
+Adding and then removing again
+client 1
+client 2
+f: add like
+ack
+set of likes
+g: unlike
+ack
+f: add like
+ack
+f(likes) = likes ∪ {userID}
+g(likes) = likes \ {userID}
+
+
+--- PDF PAGE 253 ---
+
+Adding and then removing again
+client 1
+client 2
+f: add like
+ack
+set of likes
+g: unlike
+ack
+f: add like
+ack
+f(likes) = likes ∪ {userID}
+g(likes) = likes \ {userID}
+Idempotent? f(f(x)) = f(x) but f(g(f(x)) ̸= g(f(x))
+
+
+--- PDF PAGE 254 ---
+
+Another problem with adding and removing
+client
+A
+B
+
+
+--- PDF PAGE 255 ---
+
+Another problem with adding and removing
+client
+A
+B
+add(x)
+add(x)
+
+
+--- PDF PAGE 256 ---
+
+Another problem with adding and removing
+client
+A
+B
+add(x)
+add(x)
+remove(x)
+remove(x)
+
+
+--- PDF PAGE 257 ---
+
+Another problem with adding and removing
+client
+A
+B
+add(x)
+add(x)
+remove(x)
+remove(x)
+Final state (x /∈ A, x ∈ B) is the same as in this case:
+
+
+--- PDF PAGE 258 ---
+
+Another problem with adding and removing
+client
+A
+B
+add(x)
+add(x)
+remove(x)
+remove(x)
+Final state (x /∈ A, x ∈ B) is the same as in this case:
+client
+A
+B
+add(x)
+add(x)
+
+
+--- PDF PAGE 259 ---
+
+Timestamps and tombstones
+client
+A
+B
+(t1, add(x))
+t1
+(t1, add(x))
+{x �→ (t1, true)}
+{x �→ (t1, true)}
+
+
+--- PDF PAGE 260 ---
+
+Timestamps and tombstones
+client
+A
+B
+(t1, add(x))
+t1
+(t1, add(x))
+{x �→ (t1, true)}
+{x �→ (t1, true)}
+(t2, remove(x))
+t2
+(t2, remove(x))
+{x �→ (t2, false)}
+
+
+--- PDF PAGE 261 ---
+
+Timestamps and tombstones
+client
+A
+B
+(t1, add(x))
+t1
+(t1, add(x))
+{x �→ (t1, true)}
+{x �→ (t1, true)}
+(t2, remove(x))
+t2
+(t2, remove(x))
+{x �→ (t2, false)}
+“remove(x)” doesn’t actually remove x: it labels x with
+“false” to indicate it is invisible (a tombstone)
+
+
+--- PDF PAGE 262 ---
+
+Timestamps and tombstones
+client
+A
+B
+(t1, add(x))
+t1
+(t1, add(x))
+{x �→ (t1, true)}
+{x �→ (t1, true)}
+(t2, remove(x))
+t2
+(t2, remove(x))
+{x �→ (t2, false)}
+“remove(x)” doesn’t actually remove x: it labels x with
+“false” to indicate it is invisible (a tombstone)
+Every record has logical timestamp of last write
+
+
+--- PDF PAGE 263 ---
+
+Reconciling replicas
+Replicas periodically communicate among themselves
+to check for any inconsistencies.
+A
+B
+{x �→ (t2, false)}
+{x �→ (t1, true)}
+
+
+--- PDF PAGE 264 ---
+
+Reconciling replicas
+Replicas periodically communicate among themselves
+to check for any inconsistencies.
+A
+B
+{x �→ (t2, false)}
+{x �→ (t1, true)}
+reconcile state
+(anti-entropy)
+
+
+--- PDF PAGE 265 ---
+
+Reconciling replicas
+Replicas periodically communicate among themselves
+to check for any inconsistencies.
+A
+B
+reconcile state
+{x �→ (t2, false)}
+{x �→ (t1, true)}
+(anti-entropy)
+t1 < t2
+{x �→ (t2, false)}
+{x �→ (t2, false)}
+
+
+--- PDF PAGE 266 ---
+
+Reconciling replicas
+Replicas periodically communicate among themselves
+to check for any inconsistencies.
+A
+B
+reconcile state
+{x �→ (t2, false)}
+{x �→ (t1, true)}
+(anti-entropy)
+t1 < t2
+{x �→ (t2, false)}
+{x �→ (t2, false)}
+Propagate the record with the latest timestamp,
+discard the records with earlier timestamps
+(for a given key).
+
+
+--- PDF PAGE 267 ---
+
+Concurrent writes by diﬀerent clients
+client 1
+A
+B
+client 2
+
+
+--- PDF PAGE 268 ---
+
+Concurrent writes by diﬀerent clients
+client 1
+A
+B
+client 2
+t1
+(t1, set(x, v1))
+
+
+--- PDF PAGE 269 ---
+
+Concurrent writes by diﬀerent clients
+client 1
+A
+B
+client 2
+t1
+t2
+(t1, set(x, v1))
+(t2, set(x, v2))
+
+
+--- PDF PAGE 270 ---
+
+Concurrent writes by diﬀerent clients
+client 1
+A
+B
+client 2
+t1
+t2
+(t1, set(x, v1))
+(t2, set(x, v2))
+Two common approaches:
+▶ Last writer wins (LWW):
+Use timestamps with total order (e.g. Lamport clock)
+Keep v2 and discard v1 if t2 > t1. Note: data loss!
+
+
+--- PDF PAGE 271 ---
+
+Concurrent writes by diﬀerent clients
+client 1
+A
+B
+client 2
+t1
+t2
+(t1, set(x, v1))
+(t2, set(x, v2))
+Two common approaches:
+▶ Last writer wins (LWW):
+Use timestamps with total order (e.g. Lamport clock)
+Keep v2 and discard v1 if t2 > t1. Note: data loss!
+▶ Multi-value register:
+Use timestamps with partial order (e.g. vector clock)
+v2 replaces v1 if t2 > t1; preserve both {v1, v2} if t1 ∥ t2
+
+
+--- PDF PAGE 272 ---
+
+Probability of faults
+A replica may be unavailable due to network partition or
+node fault (e.g. crash, hardware problem).
+
+
+--- PDF PAGE 273 ---
+
+Probability of faults
+A replica may be unavailable due to network partition or
+node fault (e.g. crash, hardware problem).
+Assume each replica has probability p of being faulty or
+unavailable at any one time, and that faults are independent.
+(Not actually true! But okay approximation for now.)
+
+
+--- PDF PAGE 274 ---
+
+Probability of faults
+A replica may be unavailable due to network partition or
+node fault (e.g. crash, hardware problem).
+Assume each replica has probability p of being faulty or
+unavailable at any one time, and that faults are independent.
+(Not actually true! But okay approximation for now.)
+Probability of all n replicas being faulty: pn
+Probability of ≥ 1 out of n replicas being faulty: 1 − (1 − p)n
+
+
+--- PDF PAGE 275 ---
+
+Probability of faults
+A replica may be unavailable due to network partition or
+node fault (e.g. crash, hardware problem).
+Assume each replica has probability p of being faulty or
+unavailable at any one time, and that faults are independent.
+(Not actually true! But okay approximation for now.)
+Probability of all n replicas being faulty: pn
+Probability of ≥ 1 out of n replicas being faulty: 1 − (1 − p)n
+Example with p = 0.01:
+2
+faulty)
+P(all n faulty)
+replicas n
+P(≥ 1 faulty)
+P(≥ n+1
+1
+0.01
+0.01
+0.01
+3
+0.03
+3 · 10−4
+10−6
+5
+0.049
+1 · 10−5
+10−10
+100
+0.63
+6 · 10−74
+10−200
+
+
+--- PDF PAGE 276 ---
+
+Read-after-write consistency
+client
+A
+B
+(t1, set(x, v1))
+t1
+
+
+--- PDF PAGE 277 ---
+
+Read-after-write consistency
+client
+A
+B
+(t1, set(x, v1))
+t1
+get(x)
+(t0, v0)
+
+
+--- PDF PAGE 278 ---
+
+Read-after-write consistency
+client
+A
+B
+(t1, set(x, v1))
+t1
+get(x)
+(t0, v0)
+Writing to one replica, reading from another: client does not
+read back the value it has written
+
+
+--- PDF PAGE 279 ---
+
+Read-after-write consistency
+client
+A
+B
+(t1, set(x, v1))
+t1
+get(x)
+(t0, v0)
+Writing to one replica, reading from another: client does not
+read back the value it has written
+Require writing to/reading from both replicas =⇒ cannot
+write/read if one replica is unavailable
+
+
+--- PDF PAGE 280 ---
+
+Quorum (2 out of 3)
+client
+A
+B
+C
+
+
+--- PDF PAGE 281 ---
+
+Quorum (2 out of 3)
+client
+A
+B
+C
+(t1, set(x, v1))
+t1
+
+
+--- PDF PAGE 282 ---
+
+Quorum (2 out of 3)
+client
+A
+B
+C
+(t1, set(x, v1))
+t1
+ok
+ok
+Write succeeds on B and C
+
+
+--- PDF PAGE 283 ---
+
+Quorum (2 out of 3)
+client
+A
+B
+C
+(t1, set(x, v1))
+t1
+ok
+ok
+get(x)
+Write succeeds on B and C
+
+
+--- PDF PAGE 284 ---
+
+Quorum (2 out of 3)
+client
+A
+B
+C
+(t1, set(x, v1))
+t1
+ok
+ok
+get(x)
+(t0, v0)
+(t1, v1)
+Write succeeds on B and C; read succeeds on A and B
+
+
+--- PDF PAGE 285 ---
+
+Quorum (2 out of 3)
+client
+A
+B
+C
+(t1, set(x, v1))
+t1
+ok
+ok
+get(x)
+(t0, v0)
+(t1, v1)
+Write succeeds on B and C; read succeeds on A and B
+Choose between (t0, v0) and (t1, v1) based on timestamp
+
+
+--- PDF PAGE 286 ---
+
+Read and write quorums
+In a system with n replicas:
+▶ If a write is acknowledged by w replicas (write quorum),
+
+
+--- PDF PAGE 287 ---
+
+Read and write quorums
+In a system with n replicas:
+▶ If a write is acknowledged by w replicas (write quorum),
+▶ and we subsequently read from r replicas (read quorum),
+▶ and r + w > n,
+
+
+--- PDF PAGE 288 ---
+
+Read and write quorums
+In a system with n replicas:
+▶ If a write is acknowledged by w replicas (write quorum),
+▶ and we subsequently read from r replicas (read quorum),
+▶ and r + w > n,
+▶ . . . then the read will see the previously written value
+(or a value that subsequently overwrote it)
+
+
+--- PDF PAGE 289 ---
+
+Read and write quorums
+In a system with n replicas:
+▶ If a write is acknowledged by w replicas (write quorum),
+▶ and we subsequently read from r replicas (read quorum),
+▶ and r + w > n,
+▶ . . . then the read will see the previously written value
+(or a value that subsequently overwrote it)
+▶ Read quorum and write quorum share ≥ 1 replica
+A
+B
+C
+D
+E
+read quorum
+write quorum
+
+
+--- PDF PAGE 290 ---
+
+Read and write quorums
+In a system with n replicas:
+▶ If a write is acknowledged by w replicas (write quorum),
+▶ and we subsequently read from r replicas (read quorum),
+▶ and r + w > n,
+▶ . . . then the read will see the previously written value
+(or a value that subsequently overwrote it)
+▶ Read quorum and write quorum share ≥ 1 replica
+▶ Typical: r = w = n+1
+2
+for n = 3, 5, 7, . . . (majority)
+▶ Reads can tolerate n − r unavailable replicas, writes n − w
+A
+B
+C
+D
+E
+read quorum
+write quorum
+
+
+--- PDF PAGE 291 ---
+
+Read repair
+client
+A
+B
+C
+
+
+--- PDF PAGE 292 ---
+
+Read repair
+client
+A
+B
+C
+get(x)
+
+
+--- PDF PAGE 293 ---
+
+Read repair
+client
+A
+B
+C
+get(x)
+(t0, v0)
+(t1, v1)
+Update (t1, v1) is more recent than (t0, v0) since t0 < t1.
+
+
+--- PDF PAGE 294 ---
+
+Read repair
+client
+A
+B
+C
+get(x)
+(t0, v0)
+(t1, v1)
+(t1, set(x, v1))
+Update (t1, v1) is more recent than (t0, v0) since t0 < t1.
+Client helps propagate (t1, v1) to other replicas.
+
+
+--- PDF PAGE 295 ---
+
+State machine replication
+So far we have used best-eﬀort broadcast for replication.
+What about stronger broadcast models?
+
+
+--- PDF PAGE 296 ---
+
+State machine replication
+So far we have used best-eﬀort broadcast for replication.
+What about stronger broadcast models?
+Total order broadcast: every node delivers the same
+messages in the same order
+
+
+--- PDF PAGE 297 ---
+
+State machine replication
+So far we have used best-eﬀort broadcast for replication.
+What about stronger broadcast models?
+Total order broadcast: every node delivers the same
+messages in the same order
+State machine replication (SMR):
+▶ FIFO-total order broadcast every update to all replicas
+▶ Replica delivers update message: apply it to own state
+
+
+--- PDF PAGE 298 ---
+
+State machine replication
+So far we have used best-eﬀort broadcast for replication.
+What about stronger broadcast models?
+Total order broadcast: every node delivers the same
+messages in the same order
+State machine replication (SMR):
+▶ FIFO-total order broadcast every update to all replicas
+▶ Replica delivers update message: apply it to own state
+▶ Applying an update is deterministic
+
+
+--- PDF PAGE 299 ---
+
+State machine replication
+So far we have used best-eﬀort broadcast for replication.
+What about stronger broadcast models?
+Total order broadcast: every node delivers the same
+messages in the same order
+State machine replication (SMR):
+▶ FIFO-total order broadcast every update to all replicas
+▶ Replica delivers update message: apply it to own state
+▶ Applying an update is deterministic
+▶ Replica is a state machine: starts in ﬁxed initial state,
+goes through same sequence of state transitions in the
+same order =⇒ all replicas end up in the same state
+
+
+--- PDF PAGE 300 ---
+
+State machine replication
+on request to perform update u do
+send u via FIFO-total order broadcast
+end on
+on delivering u through FIFO-total order broadcast do
+update state using arbitrary deterministic logic!
+end on
+
+
+--- PDF PAGE 301 ---
+
+State machine replication
+on request to perform update u do
+send u via FIFO-total order broadcast
+end on
+on delivering u through FIFO-total order broadcast do
+update state using arbitrary deterministic logic!
+end on
+Closely related ideas:
+▶ Serializable transactions (execute in delivery order)
+
+
+--- PDF PAGE 302 ---
+
+State machine replication
+on request to perform update u do
+send u via FIFO-total order broadcast
+end on
+on delivering u through FIFO-total order broadcast do
+update state using arbitrary deterministic logic!
+end on
+Closely related ideas:
+▶ Serializable transactions (execute in delivery order)
+▶ Blockchains, distributed ledgers, smart contracts
+
+
+--- PDF PAGE 303 ---
+
+State machine replication
+on request to perform update u do
+send u via FIFO-total order broadcast
+end on
+on delivering u through FIFO-total order broadcast do
+update state using arbitrary deterministic logic!
+end on
+Closely related ideas:
+▶ Serializable transactions (execute in delivery order)
+▶ Blockchains, distributed ledgers, smart contracts
+Limitations:
+▶ Cannot update state immediately, have to wait for
+delivery through broadcast
+
+
+--- PDF PAGE 304 ---
+
+State machine replication
+on request to perform update u do
+send u via FIFO-total order broadcast
+end on
+on delivering u through FIFO-total order broadcast do
+update state using arbitrary deterministic logic!
+end on
+Closely related ideas:
+▶ Serializable transactions (execute in delivery order)
+▶ Blockchains, distributed ledgers, smart contracts
+Limitations:
+▶ Cannot update state immediately, have to wait for
+delivery through broadcast
+▶ Need fault-tolerant total order broadcast: see lecture 6
+
+
+--- PDF PAGE 305 ---
+
+Database leader replica
+Leader database replica L ensures total order broadcast
+client 1
+client 2
+L
+F
+
+
+--- PDF PAGE 306 ---
+
+Database leader replica
+Leader database replica L ensures total order broadcast
+client 1
+client 2
+L
+F
+T1
+T1
+
+
+--- PDF PAGE 307 ---
+
+Database leader replica
+Leader database replica L ensures total order broadcast
+client 1
+client 2
+L
+F
+T1
+T1
+T2
+T2
+
+
+--- PDF PAGE 308 ---
+
+Database leader replica
+Leader database replica L ensures total order broadcast
+client 1
+client 2
+L
+F
+T1
+T1
+T2
+T2
+ok
+commit
+Follower F applies transaction log in commit order
+
+
+--- PDF PAGE 309 ---
+
+Database leader replica
+Leader database replica L ensures total order broadcast
+client 1
+client 2
+L
+F
+T1
+T1
+T2
+T2
+ok
+commit
+ok
+commit
+Follower F applies transaction log in commit order
+
+
+--- PDF PAGE 310 ---
+
+Replication using causal (and weaker) broadcast
+State machine replication uses (FIFO-)total order broadcast.
+Can we use weaker forms of broadcast too?
+
+
+--- PDF PAGE 311 ---
+
+Replication using causal (and weaker) broadcast
+State machine replication uses (FIFO-)total order broadcast.
+Can we use weaker forms of broadcast too?
+If replica state updates are commutative, replicas can process
+updates in diﬀerent orders and still end up in the same state.
+Updates f and g are commutative if f(g(x)) = g(f(x))
+
+
+--- PDF PAGE 312 ---
+
+Replication using causal (and weaker) broadcast
+State machine replication uses (FIFO-)total order broadcast.
+Can we use weaker forms of broadcast too?
+If replica state updates are commutative, replicas can process
+updates in diﬀerent orders and still end up in the same state.
+Updates f and g are commutative if f(g(x)) = g(f(x))
+broadcast
+assumptions about state update function
+total order
+deterministic (SMR)
+
+
+--- PDF PAGE 313 ---
+
+Replication using causal (and weaker) broadcast
+State machine replication uses (FIFO-)total order broadcast.
+Can we use weaker forms of broadcast too?
+If replica state updates are commutative, replicas can process
+updates in diﬀerent orders and still end up in the same state.
+Updates f and g are commutative if f(g(x)) = g(f(x))
+broadcast
+assumptions about state update function
+total order
+deterministic (SMR)
+causal
+deterministic, concurrent updates commute
+
+
+--- PDF PAGE 314 ---
+
+Replication using causal (and weaker) broadcast
+State machine replication uses (FIFO-)total order broadcast.
+Can we use weaker forms of broadcast too?
+If replica state updates are commutative, replicas can process
+updates in diﬀerent orders and still end up in the same state.
+Updates f and g are commutative if f(g(x)) = g(f(x))
+broadcast
+assumptions about state update function
+total order
+deterministic (SMR)
+causal
+deterministic, concurrent updates commute
+reliable
+deterministic, all updates commute
+
+
+--- PDF PAGE 315 ---
+
+Replication using causal (and weaker) broadcast
+State machine replication uses (FIFO-)total order broadcast.
+Can we use weaker forms of broadcast too?
+If replica state updates are commutative, replicas can process
+updates in diﬀerent orders and still end up in the same state.
+Updates f and g are commutative if f(g(x)) = g(f(x))
+broadcast
+assumptions about state update function
+total order
+deterministic (SMR)
+causal
+deterministic, concurrent updates commute
+reliable
+deterministic, all updates commute
+best-eﬀort
+deterministic, commutative, idempotent,
+tolerates message loss
+
+
+--- PDF PAGE 316 ---
+
+Lecture 6
+Consensus
+
+
+--- PDF PAGE 317 ---
+
+Fault-tolerant total order broadcast
+Total order broadcast is very useful for state machine
+replication.
+Can implement total order broadcast by sending all messages
+via a single leader.
+Problem: what if leader crashes/becomes unavailable?
+
+
+--- PDF PAGE 318 ---
+
+Fault-tolerant total order broadcast
+Total order broadcast is very useful for state machine
+replication.
+Can implement total order broadcast by sending all messages
+via a single leader.
+Problem: what if leader crashes/becomes unavailable?
+▶ Manual failover: a human operator chooses a new
+leader, and reconﬁgures each node to use new leader
+Used in many databases! Fine for planned maintenance.
+
+
+--- PDF PAGE 319 ---
+
+Fault-tolerant total order broadcast
+Total order broadcast is very useful for state machine
+replication.
+Can implement total order broadcast by sending all messages
+via a single leader.
+Problem: what if leader crashes/becomes unavailable?
+▶ Manual failover: a human operator chooses a new
+leader, and reconﬁgures each node to use new leader
+Used in many databases! Fine for planned maintenance.
+Unplanned outage? Humans are slow, may take a long
+time until system recovers. . .
+
+
+--- PDF PAGE 320 ---
+
+Fault-tolerant total order broadcast
+Total order broadcast is very useful for state machine
+replication.
+Can implement total order broadcast by sending all messages
+via a single leader.
+Problem: what if leader crashes/becomes unavailable?
+▶ Manual failover: a human operator chooses a new
+leader, and reconﬁgures each node to use new leader
+Used in many databases! Fine for planned maintenance.
+Unplanned outage? Humans are slow, may take a long
+time until system recovers. . .
+▶ Can we automatically choose a new leader?
+
+
+--- PDF PAGE 321 ---
+
+Consensus and total order broadcast
+▶ Traditional formulation of consensus: several nodes want
+to come to agreement about a single value
+
+
+--- PDF PAGE 322 ---
+
+Consensus and total order broadcast
+▶ Traditional formulation of consensus: several nodes want
+to come to agreement about a single value
+▶ In context of total order broadcast: this value is the next
+message to deliver
+
+
+--- PDF PAGE 323 ---
+
+Consensus and total order broadcast
+▶ Traditional formulation of consensus: several nodes want
+to come to agreement about a single value
+▶ In context of total order broadcast: this value is the next
+message to deliver
+▶ Once one node decides on a certain message order, all
+nodes will decide the same order
+
+
+--- PDF PAGE 324 ---
+
+Consensus and total order broadcast
+▶ Traditional formulation of consensus: several nodes want
+to come to agreement about a single value
+▶ In context of total order broadcast: this value is the next
+message to deliver
+▶ Once one node decides on a certain message order, all
+nodes will decide the same order
+▶ Consensus and total order broadcast are formally
+equivalent
+
+
+--- PDF PAGE 325 ---
+
+Consensus and total order broadcast
+▶ Traditional formulation of consensus: several nodes want
+to come to agreement about a single value
+▶ In context of total order broadcast: this value is the next
+message to deliver
+▶ Once one node decides on a certain message order, all
+nodes will decide the same order
+▶ Consensus and total order broadcast are formally
+equivalent
+Common consensus algorithms:
+▶ Paxos: single-value consensus
+Multi-Paxos: generalisation to total order broadcast
+
+
+--- PDF PAGE 326 ---
+
+Consensus and total order broadcast
+▶ Traditional formulation of consensus: several nodes want
+to come to agreement about a single value
+▶ In context of total order broadcast: this value is the next
+message to deliver
+▶ Once one node decides on a certain message order, all
+nodes will decide the same order
+▶ Consensus and total order broadcast are formally
+equivalent
+Common consensus algorithms:
+▶ Paxos: single-value consensus
+Multi-Paxos: generalisation to total order broadcast
+▶ Raft, Viewstamped Replication, Zab:
+FIFO-total order broadcast by default
+
+
+--- PDF PAGE 327 ---
+
+Consensus system models
+Paxos, Raft, etc. assume a partially synchronous,
+crash-recovery system model.
+
+
+--- PDF PAGE 328 ---
+
+Consensus system models
+Paxos, Raft, etc. assume a partially synchronous,
+crash-recovery system model.
+Why not asynchronous?
+▶ FLP result (Fischer, Lynch, Paterson):
+There is no deterministic consensus algorithm that is
+guaranteed to terminate in an asynchronous crash-stop
+system model.
+
+
+--- PDF PAGE 329 ---
+
+Consensus system models
+Paxos, Raft, etc. assume a partially synchronous,
+crash-recovery system model.
+Why not asynchronous?
+▶ FLP result (Fischer, Lynch, Paterson):
+There is no deterministic consensus algorithm that is
+guaranteed to terminate in an asynchronous crash-stop
+system model.
+▶ Paxos, Raft, etc. use clocks only used for timeouts/failure
+detector to ensure progress. Safety (correctness) does not
+depend on timing.
+
+
+--- PDF PAGE 330 ---
+
+Consensus system models
+Paxos, Raft, etc. assume a partially synchronous,
+crash-recovery system model.
+Why not asynchronous?
+▶ FLP result (Fischer, Lynch, Paterson):
+There is no deterministic consensus algorithm that is
+guaranteed to terminate in an asynchronous crash-stop
+system model.
+▶ Paxos, Raft, etc. use clocks only used for timeouts/failure
+detector to ensure progress. Safety (correctness) does not
+depend on timing.
+There are also consensus algorithms for a partially synchronous
+Byzantine system model (used in blockchains)
+
+
+--- PDF PAGE 331 ---
+
+Leader election
+Multi-Paxos, Raft, etc. use a leader to sequence messages.
+
+
+--- PDF PAGE 332 ---
+
+Leader election
+Multi-Paxos, Raft, etc. use a leader to sequence messages.
+▶ Use a failure detector (timeout) to determine suspected
+crash or unavailability of leader.
+▶ On suspected leader crash, elect a new one.
+
+
+--- PDF PAGE 333 ---
+
+Leader election
+Multi-Paxos, Raft, etc. use a leader to sequence messages.
+▶ Use a failure detector (timeout) to determine suspected
+crash or unavailability of leader.
+▶ On suspected leader crash, elect a new one.
+▶ Prevent two leaders at the same time (“split-brain”)!
+
+
+--- PDF PAGE 334 ---
+
+Leader election
+Multi-Paxos, Raft, etc. use a leader to sequence messages.
+▶ Use a failure detector (timeout) to determine suspected
+crash or unavailability of leader.
+▶ On suspected leader crash, elect a new one.
+▶ Prevent two leaders at the same time (“split-brain”)!
+Ensure ≤ 1 leader per term:
+▶ Term is incremented every time a leader election is started
+
+
+--- PDF PAGE 335 ---
+
+Leader election
+Multi-Paxos, Raft, etc. use a leader to sequence messages.
+▶ Use a failure detector (timeout) to determine suspected
+crash or unavailability of leader.
+▶ On suspected leader crash, elect a new one.
+▶ Prevent two leaders at the same time (“split-brain”)!
+Ensure ≤ 1 leader per term:
+▶ Term is incremented every time a leader election is started
+▶ A node can only vote once per term
+▶ Require a quorum of nodes to elect a leader in a term
+A
+B
+C
+D
+E
+
+
+--- PDF PAGE 336 ---
+
+Leader election
+Multi-Paxos, Raft, etc. use a leader to sequence messages.
+▶ Use a failure detector (timeout) to determine suspected
+crash or unavailability of leader.
+▶ On suspected leader crash, elect a new one.
+▶ Prevent two leaders at the same time (“split-brain”)!
+Ensure ≤ 1 leader per term:
+▶ Term is incremented every time a leader election is started
+▶ A node can only vote once per term
+▶ Require a quorum of nodes to elect a leader in a term
+A
+B
+C
+D
+E
+elects a leader
+
+
+--- PDF PAGE 337 ---
+
+Leader election
+Multi-Paxos, Raft, etc. use a leader to sequence messages.
+▶ Use a failure detector (timeout) to determine suspected
+crash or unavailability of leader.
+▶ On suspected leader crash, elect a new one.
+▶ Prevent two leaders at the same time (“split-brain”)!
+Ensure ≤ 1 leader per term:
+▶ Term is incremented every time a leader election is started
+▶ A node can only vote once per term
+▶ Require a quorum of nodes to elect a leader in a term
+A
+B
+C
+D
+E
+elects a leader
+cannot elect a diﬀerent leader
+because C already voted
+
+
+--- PDF PAGE 338 ---
+
+Can we guarantee there is only one leader?
+Can guarantee unique leader per term.
+
+
+--- PDF PAGE 339 ---
+
+Can we guarantee there is only one leader?
+Can guarantee unique leader per term.
+Cannot prevent having multiple leaders from diﬀerent terms.
+
+
+--- PDF PAGE 340 ---
+
+Can we guarantee there is only one leader?
+Can guarantee unique leader per term.
+Cannot prevent having multiple leaders from diﬀerent terms.
+Example: node 1 is leader in term t, but due to a network
+partition it can no longer communicate with nodes 2 and 3:
+node 1
+node 2
+node 3
+Nodes 2 and 3 may elect a new leader in term t + 1.
+
+
+--- PDF PAGE 341 ---
+
+Can we guarantee there is only one leader?
+Can guarantee unique leader per term.
+Cannot prevent having multiple leaders from diﬀerent terms.
+Example: node 1 is leader in term t, but due to a network
+partition it can no longer communicate with nodes 2 and 3:
+node 1
+node 2
+node 3
+Nodes 2 and 3 may elect a new leader in term t + 1.
+Node 1 may not even know that a new leader has been elected!
+
+
+--- PDF PAGE 342 ---
+
+Checking if a leader has been voted out
+For every decision (message to deliver), the leader must ﬁrst
+get acknowledgements from a quorum.
+leader
+follower 1
+follower 2
+
+
+--- PDF PAGE 343 ---
+
+Checking if a leader has been voted out
+For every decision (message to deliver), the leader must ﬁrst
+get acknowledgements from a quorum.
+leader
+follower 1
+follower 2
+Shall I be your leader in term t?
+
+
+--- PDF PAGE 344 ---
+
+Checking if a leader has been voted out
+For every decision (message to deliver), the leader must ﬁrst
+get acknowledgements from a quorum.
+leader
+follower 1
+follower 2
+Shall I be your leader in term t?
+yes
+yes
+
+
+--- PDF PAGE 345 ---
+
+Checking if a leader has been voted out
+For every decision (message to deliver), the leader must ﬁrst
+get acknowledgements from a quorum.
+leader
+follower 1
+follower 2
+Shall I be your leader in term t?
+yes
+yes
+Can we deliver message m next in term t?
+
+
+--- PDF PAGE 346 ---
+
+Checking if a leader has been voted out
+For every decision (message to deliver), the leader must ﬁrst
+get acknowledgements from a quorum.
+leader
+follower 1
+follower 2
+Shall I be your leader in term t?
+yes
+yes
+Can we deliver message m next in term t?
+okay
+okay
+
+
+--- PDF PAGE 347 ---
+
+Checking if a leader has been voted out
+For every decision (message to deliver), the leader must ﬁrst
+get acknowledgements from a quorum.
+leader
+follower 1
+follower 2
+Shall I be your leader in term t?
+yes
+yes
+Can we deliver message m next in term t?
+okay
+okay
+Right, now deliver m please
+
+
+--- PDF PAGE 348 ---
+
+Node state transitions in Raft
+Follower
+Candidate
+Leader
+
+
+--- PDF PAGE 349 ---
+
+Node state transitions in Raft
+starts up
+or recovers
+from crash
+Follower
+Candidate
+Leader
+
+
+--- PDF PAGE 350 ---
+
+Node state transitions in Raft
+starts up
+or recovers
+from crash
+suspects
+leader failure
+Follower
+Candidate
+Leader
+
+
+--- PDF PAGE 351 ---
+
+Node state transitions in Raft
+starts up
+or recovers
+from crash
+suspects
+leader failure
+receives votes
+from quorum
+Follower
+Candidate
+Leader
+
+
+--- PDF PAGE 352 ---
+
+Node state transitions in Raft
+starts up
+or recovers
+from crash
+suspects
+leader failure
+receives votes
+from quorum
+Follower
+Candidate
+Leader
+discovers
+new term
+
+
+--- PDF PAGE 353 ---
+
+Node state transitions in Raft
+election
+times out
+starts up
+or recovers
+from crash
+suspects
+leader failure
+receives votes
+from quorum
+Follower
+Candidate
+Leader
+discovers
+new term
+
+
+--- PDF PAGE 354 ---
+
+Node state transitions in Raft
+election
+times out
+starts up
+or recovers
+from crash
+suspects
+leader failure
+receives votes
+from quorum
+Follower
+Candidate
+Leader
+discovers
+new term
+discovers new term
+
+
+--- PDF PAGE 355 ---
+
+Raft (1/9): initialisation
+on initialisation do
+currentTerm := 0; votedFor := null
+log := ⟨⟩; commitLength := 0
+currentRole := follower; currentLeader := null
+votesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩
+end on
+on recovery from crash do
+currentRole := follower; currentLeader := null
+votesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩
+end on
+on node nodeId suspects leader has failed, or on election timeout do
+currentTerm := currentTerm + 1; currentRole := candidate
+votedFor := nodeId; votesReceived := {nodeId}; lastTerm := 0
+if log.length > 0 then lastTerm := log[log.length − 1].term; end if
+msg := (VoteRequest, nodeId, currentTerm, log.length, lastTerm)
+for each node ∈ nodes: send msg to node
+start election timer
+end on
+
+
+--- PDF PAGE 356 ---
+
+Raft (1/9): initialisation
+msg
+term
+log =
+m1
+1
+m2
+1
+m3
+1
+on initialisation do
+log[0] log[1] log[2]
+currentTerm := 0; votedFor := null
+log := ⟨⟩; commitLength := 0
+currentRole := follower; currentLeader := null
+votesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩
+end on
+on recovery from crash do
+currentRole := follower; currentLeader := null
+votesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩
+end on
+on node nodeId suspects leader has failed, or on election timeout do
+currentTerm := currentTerm + 1; currentRole := candidate
+votedFor := nodeId; votesReceived := {nodeId}; lastTerm := 0
+if log.length > 0 then lastTerm := log[log.length − 1].term; end if
+msg := (VoteRequest, nodeId, currentTerm, log.length, lastTerm)
+for each node ∈ nodes: send msg to node
+start election timer
+end on
+
+
+--- PDF PAGE 357 ---
+
+Raft (2/9): voting on a new leader
+on receiving (VoteRequest, cId, cTerm, cLogLength, cLogTerm)
+at node nodeId do
+if cTerm > currentTerm then
+currentTerm := cTerm; currentRole := follower
+votedFor := null
+end if
+lastTerm := 0
+if log.length > 0 then lastTerm := log[log.length − 1].term; end if
+logOk := (cLogTerm > lastTerm) ∨
+(cLogTerm = lastTerm ∧ cLogLength ≥ log.length)
+if cTerm = currentTerm ∧ logOk ∧ votedFor ∈ {cId, null} then
+votedFor := cId
+send (VoteResponse, nodeId, currentTerm, true) to node cId
+else
+send (VoteResponse, nodeId, currentTerm, false) to node cId
+end if
+end on
+
+
+--- PDF PAGE 358 ---
+
+c for candidate
+Raft (2/9): voting on a new leader
+on receiving (VoteRequest, cId, cTerm, cLogLength, cLogTerm)
+at node nodeId do
+if cTerm > currentTerm then
+currentTerm := cTerm; currentRole := follower
+votedFor := null
+end if
+lastTerm := 0
+if log.length > 0 then lastTerm := log[log.length − 1].term; end if
+logOk := (cLogTerm > lastTerm) ∨
+(cLogTerm = lastTerm ∧ cLogLength ≥ log.length)
+if cTerm = currentTerm ∧ logOk ∧ votedFor ∈ {cId, null} then
+votedFor := cId
+send (VoteResponse, nodeId, currentTerm, true) to node cId
+else
+send (VoteResponse, nodeId, currentTerm, false) to node cId
+end if
+end on
+
+
+--- PDF PAGE 359 ---
+
+Raft (3/9): collecting votes
+on receiving (VoteResponse, voterId, term, granted) at nodeId do
+if currentRole = candidate ∧ term = currentTerm ∧ granted then
+votesReceived := votesReceived ∪ {voterId}
+if |votesReceived| ≥ ⌈(|nodes| + 1)/2⌉ then
+currentRole := leader; currentLeader := nodeId
+cancel election timer
+for each follower ∈ nodes \ {nodeId} do
+sentLength[follower] := log.length
+ackedLength[follower] := 0
+ReplicateLog(nodeId, follower)
+end for
+end if
+else if term > currentTerm then
+currentTerm := term
+currentRole := follower
+votedFor := null
+cancel election timer
+end if
+end on
+
+
+--- PDF PAGE 360 ---
+
+Raft (4/9): broadcasting messages
+on request to broadcast msg at node nodeId do
+if currentRole = leader then
+append the record (msg : msg, term : currentTerm) to log
+ackedLength[nodeId] := log.length
+for each follower ∈ nodes \ {nodeId} do
+ReplicateLog(nodeId, follower)
+end for
+else
+forward the request to currentLeader via a FIFO link
+end if
+end on
+periodically at node nodeId do
+if currentRole = leader then
+for each follower ∈ nodes \ {nodeId} do
+ReplicateLog(nodeId, follower)
+end for
+end if
+end do
+
+
+--- PDF PAGE 361 ---
+
+Raft (5/9): replicating from leader to followers
+Called on the leader whenever there is a new message in the log, and also
+periodically. If there are no new messages, suﬃx is the empty list.
+LogRequest messages with suﬃx = ⟨⟩ serve as heartbeats, letting
+followers know that the leader is still alive.
+function ReplicateLog(leaderId, followerId)
+preﬁxLen := sentLength[followerId]
+suﬃx := ⟨log[preﬁxLen], log[preﬁxLen + 1], . . . ,
+log[log.length − 1]⟩
+preﬁxTerm := 0
+if preﬁxLen > 0 then
+preﬁxTerm := log[preﬁxLen − 1].term
+end if
+send (LogRequest, leaderId, currentTerm, preﬁxLen,
+preﬁxTerm, commitLength, suﬃx) to followerId
+end function
+
+
+--- PDF PAGE 362 ---
+
+Raft (6/9): followers receiving messages
+on receiving (LogRequest, leaderId, term, preﬁxLen, preﬁxTerm,
+leaderCommit, suﬃx) at node nodeId do
+if term > currentTerm then
+currentTerm := term; votedFor := null
+cancel election timer
+end if
+if term = currentTerm then
+currentRole := follower; currentLeader := leaderId
+end if
+logOk := (log.length ≥ preﬁxLen) ∧
+(preﬁxLen = 0 ∨ log[preﬁxLen − 1].term = preﬁxTerm)
+if term = currentTerm ∧ logOk then
+AppendEntries(preﬁxLen, leaderCommit, suﬃx)
+ack := preﬁxLen + suﬃx.length
+send (LogResponse, nodeId, currentTerm, ack, true) to leaderId
+else
+send (LogResponse, nodeId, currentTerm, 0, false) to leaderId
+end if
+end on
+
+
+--- PDF PAGE 363 ---
+
+Raft (7/9): updating followers’ logs
+function AppendEntries(preﬁxLen, leaderCommit, suﬃx)
+if suﬃx.length > 0 ∧ log.length > preﬁxLen then
+index := min(log.length, preﬁxLen + suﬃx.length) − 1
+if log[index].term ̸= suﬃx[index − preﬁxLen].term then
+log := ⟨log[0], log[1], . . . , log[preﬁxLen − 1]⟩
+end if
+end if
+if preﬁxLen + suﬃx.length > log.length then
+for i := log.length − preﬁxLen to suﬃx.length − 1 do
+append suﬃx[i] to log
+end for
+end if
+if leaderCommit > commitLength then
+for i := commitLength to leaderCommit − 1 do
+deliver log[i].msg to the application
+end for
+commitLength := leaderCommit
+end if
+end function
+
+
+--- PDF PAGE 364 ---
+
+Raft (8/9): leader receiving log acknowledgements
+on receiving (LogResponse, follower, term, ack, success) at nodeId do
+if term = currentTerm ∧ currentRole = leader then
+if success = true ∧ ack ≥ ackedLength[follower] then
+sentLength[follower] := ack
+ackedLength[follower] := ack
+CommitLogEntries()
+else if sentLength[follower] > 0 then
+sentLength[follower] := sentLength[follower] − 1
+ReplicateLog(nodeId, follower)
+end if
+else if term > currentTerm then
+currentTerm := term
+currentRole := follower
+votedFor := null
+cancel election timer
+end if
+end on
+
+
+--- PDF PAGE 365 ---
+
+Raft (9/9): leader committing log entries
+Any log entries that have been acknowledged by a quorum of nodes are
+ready to be committed by the leader. When a log entry is committed, its
+message is delivered to the application.
+deﬁne acks(length) = |{n ∈ nodes | ackedLength[n] ≥ length}|
+function CommitLogEntries
+minAcks := ⌈(|nodes| + 1)/2⌉
+ready := {len ∈ {1, . . . , log.length} | acks(len) ≥ minAcks}
+if ready ̸= {} ∧ max(ready) > commitLength ∧
+log[max(ready) − 1].term = currentTerm then
+for i := commitLength to max(ready) − 1 do
+deliver log[i].msg to the application
+end for
+commitLength := max(ready)
+end if
+end function
+
+
+--- PDF PAGE 366 ---
+
+Lecture 7
+Replica consistency
+
+
+--- PDF PAGE 367 ---
+
+“Consistency”
+A word that means many diﬀerent things in diﬀerent contexts!
+
+
+--- PDF PAGE 368 ---
+
+“Consistency”
+A word that means many diﬀerent things in diﬀerent contexts!
+▶ ACID: a transaction transforms the database from one
+“consistent” state to another
+
+
+--- PDF PAGE 369 ---
+
+“Consistency”
+A word that means many diﬀerent things in diﬀerent contexts!
+▶ ACID: a transaction transforms the database from one
+“consistent” state to another
+Here, “consistent” = satisfying application-speciﬁc
+invariants
+e.g. “every course with students enrolled must have at
+least one lecturer”
+
+
+--- PDF PAGE 370 ---
+
+“Consistency”
+A word that means many diﬀerent things in diﬀerent contexts!
+▶ ACID: a transaction transforms the database from one
+“consistent” state to another
+Here, “consistent” = satisfying application-speciﬁc
+invariants
+e.g. “every course with students enrolled must have at
+least one lecturer”
+▶ Read-after-write consistency (lecture 5)
+
+
+--- PDF PAGE 371 ---
+
+“Consistency”
+A word that means many diﬀerent things in diﬀerent contexts!
+▶ ACID: a transaction transforms the database from one
+“consistent” state to another
+Here, “consistent” = satisfying application-speciﬁc
+invariants
+e.g. “every course with students enrolled must have at
+least one lecturer”
+▶ Read-after-write consistency (lecture 5)
+▶ Replication: replica should be “consistent” with other
+replicas
+
+
+--- PDF PAGE 372 ---
+
+“Consistency”
+A word that means many diﬀerent things in diﬀerent contexts!
+▶ ACID: a transaction transforms the database from one
+“consistent” state to another
+Here, “consistent” = satisfying application-speciﬁc
+invariants
+e.g. “every course with students enrolled must have at
+least one lecturer”
+▶ Read-after-write consistency (lecture 5)
+▶ Replication: replica should be “consistent” with other
+replicas
+“consistent” = in the same state? (when exactly?)
+“consistent” = read operations return same result?
+▶ Consistency model: many to choose from
+
+
+--- PDF PAGE 373 ---
+
+Distributed transactions
+Recall atomicity in the context of ACID transactions:
+▶ A transaction either commits or aborts
+
+
+--- PDF PAGE 374 ---
+
+Distributed transactions
+Recall atomicity in the context of ACID transactions:
+▶ A transaction either commits or aborts
+▶ If it commits, its updates are durable
+▶ If it aborts, it has no visible side-eﬀects
+
+
+--- PDF PAGE 375 ---
+
+Distributed transactions
+Recall atomicity in the context of ACID transactions:
+▶ A transaction either commits or aborts
+▶ If it commits, its updates are durable
+▶ If it aborts, it has no visible side-eﬀects
+▶ ACID consistency (preserving invariants) relies on
+atomicity
+
+
+--- PDF PAGE 376 ---
+
+Distributed transactions
+Recall atomicity in the context of ACID transactions:
+▶ A transaction either commits or aborts
+▶ If it commits, its updates are durable
+▶ If it aborts, it has no visible side-eﬀects
+▶ ACID consistency (preserving invariants) relies on
+atomicity
+If the transaction updates data on multiple nodes, this implies:
+▶ Either all nodes must commit, or all must abort
+
+
+--- PDF PAGE 377 ---
+
+Distributed transactions
+Recall atomicity in the context of ACID transactions:
+▶ A transaction either commits or aborts
+▶ If it commits, its updates are durable
+▶ If it aborts, it has no visible side-eﬀects
+▶ ACID consistency (preserving invariants) relies on
+atomicity
+If the transaction updates data on multiple nodes, this implies:
+▶ Either all nodes must commit, or all must abort
+▶ If any node crashes, all must abort
+Ensuring this is the atomic commitment problem.
+Looks a bit similar to consensus?
+
+
+--- PDF PAGE 378 ---
+
+Atomic commit versus consensus
+Consensus
+Atomic commit
+One or more nodes propose
+a value
+Every node votes whether to
+commit or abort
+
+
+--- PDF PAGE 379 ---
+
+Atomic commit versus consensus
+Consensus
+Atomic commit
+One or more nodes propose
+a value
+Every node votes whether to
+commit or abort
+Any one of the proposed
+values is decided
+Must commit if all nodes
+vote to commit; must abort
+if ≥ 1 nodes vote to abort
+
+
+--- PDF PAGE 380 ---
+
+Atomic commit versus consensus
+Consensus
+Atomic commit
+One or more nodes propose
+a value
+Every node votes whether to
+commit or abort
+Any one of the proposed
+values is decided
+Must commit if all nodes
+vote to commit; must abort
+if ≥ 1 nodes vote to abort
+Must abort if a participating
+node crashes
+Crashed nodes can be
+tolerated, as long as a
+quorum is working
+
+
+--- PDF PAGE 381 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+
+
+--- PDF PAGE 382 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+begin T1
+T1
+T1
+
+
+--- PDF PAGE 383 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+begin T1
+T1
+. . . usual transaction execution. . .
+T1
+
+
+--- PDF PAGE 384 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+begin T1
+T1
+. . . usual transaction execution. . .
+T1
+commit T1
+
+
+--- PDF PAGE 385 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+begin T1
+T1
+. . . usual transaction execution. . .
+T1
+commit T1
+prepare
+
+
+--- PDF PAGE 386 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+begin T1
+T1
+. . . usual transaction execution. . .
+T1
+commit T1
+prepare
+ok
+ok
+
+
+--- PDF PAGE 387 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+begin T1
+T1
+. . . usual transaction execution. . .
+T1
+commit T1
+prepare
+ok
+ok
+commit
+
+
+--- PDF PAGE 388 ---
+
+Two-phase commit (2PC)
+client
+coordinator
+A
+B
+begin T1
+T1
+. . . usual transaction execution. . .
+T1
+commit T1
+prepare
+ok
+ok
+decision whether
+to commit or abort
+commit
+
+
+--- PDF PAGE 389 ---
+
+The coordinator in two-phase commit
+What if the coordinator crashes?
+
+
+--- PDF PAGE 390 ---
+
+The coordinator in two-phase commit
+What if the coordinator crashes?
+▶ Coordinator writes its decision to disk
+▶ When it recovers, read decision from disk and send it to
+replicas (or abort if no decision was made before crash)
+
+
+--- PDF PAGE 391 ---
+
+The coordinator in two-phase commit
+What if the coordinator crashes?
+▶ Coordinator writes its decision to disk
+▶ When it recovers, read decision from disk and send it to
+replicas (or abort if no decision was made before crash)
+▶ Problem: if coordinator crashes after prepare, but before
+broadcasting decision, other nodes do not know how it
+has decided
+
+
+--- PDF PAGE 392 ---
+
+The coordinator in two-phase commit
+What if the coordinator crashes?
+▶ Coordinator writes its decision to disk
+▶ When it recovers, read decision from disk and send it to
+replicas (or abort if no decision was made before crash)
+▶ Problem: if coordinator crashes after prepare, but before
+broadcasting decision, other nodes do not know how it
+has decided
+▶ Replicas participating in transaction cannot commit or
+abort after responding “ok” to the prepare request
+(otherwise we risk violating atomicity)
+
+
+--- PDF PAGE 393 ---
+
+The coordinator in two-phase commit
+What if the coordinator crashes?
+▶ Coordinator writes its decision to disk
+▶ When it recovers, read decision from disk and send it to
+replicas (or abort if no decision was made before crash)
+▶ Problem: if coordinator crashes after prepare, but before
+broadcasting decision, other nodes do not know how it
+has decided
+▶ Replicas participating in transaction cannot commit or
+abort after responding “ok” to the prepare request
+(otherwise we risk violating atomicity)
+▶ Algorithm is blocked until coordinator recovers
+
+
+--- PDF PAGE 394 ---
+
+Fault-tolerant two-phase commit (1/2)
+on initialisation for transaction T do
+commitVotes[T] := {}; replicas[T] := {}; decided[T] := false
+end on
+on request to commit transaction T with participating nodes R do
+for each r ∈ R do send (Prepare, T, R) to r
+end on
+on receiving (Prepare, T, R) at node replicaId do
+replicas[T] := R
+ok = “is transaction T able to commit on this replica?”
+total order broadcast (Vote, T, replicaId, ok) to replicas[T]
+end on
+on a node suspects node replicaId to have crashed do
+for each transaction T in which replicaId participated do
+total order broadcast (Vote, T, replicaId, false) to replicas[T]
+end for
+end on
+
+
+--- PDF PAGE 395 ---
+
+Fault-tolerant two-phase commit (2/2)
+on delivering (Vote, T, replicaId, ok) by total order broadcast do
+if replicaId /∈ commitVotes[T] ∧ replicaId ∈ replicas[T] ∧
+¬decided[T] then
+if ok = true then
+commitVotes[T] := commitVotes[T] ∪ {replicaId}
+if commitVotes[T] = replicas[T] then
+decided[T] := true
+commit transaction T at this node
+end if
+else
+decided[T] := true
+abort transaction T at this node
+end if
+end if
+end on
+
+
+--- PDF PAGE 396 ---
+
+Linearizability
+Multiple nodes concurrently accessing replicated data.
+How do we deﬁne “consistency” here?
+
+
+--- PDF PAGE 397 ---
+
+Linearizability
+Multiple nodes concurrently accessing replicated data.
+How do we deﬁne “consistency” here?
+The strongest option: linearizability
+
+
+--- PDF PAGE 398 ---
+
+Linearizability
+Multiple nodes concurrently accessing replicated data.
+How do we deﬁne “consistency” here?
+The strongest option: linearizability
+▶ Informally: every operation takes eﬀect atomically
+sometime after it started and before it ﬁnished
+
+
+--- PDF PAGE 399 ---
+
+Linearizability
+Multiple nodes concurrently accessing replicated data.
+How do we deﬁne “consistency” here?
+The strongest option: linearizability
+▶ Informally: every operation takes eﬀect atomically
+sometime after it started and before it ﬁnished
+▶ All operations behave as if executed on a single copy of
+the data (even if there are in fact multiple replicas)
+
+
+--- PDF PAGE 400 ---
+
+Linearizability
+Multiple nodes concurrently accessing replicated data.
+How do we deﬁne “consistency” here?
+The strongest option: linearizability
+▶ Informally: every operation takes eﬀect atomically
+sometime after it started and before it ﬁnished
+▶ All operations behave as if executed on a single copy of
+the data (even if there are in fact multiple replicas)
+▶ Consequence: every operation returns an “up-to-date”
+value, a.k.a. “strong consistency”
+
+
+--- PDF PAGE 401 ---
+
+Linearizability
+Multiple nodes concurrently accessing replicated data.
+How do we deﬁne “consistency” here?
+The strongest option: linearizability
+▶ Informally: every operation takes eﬀect atomically
+sometime after it started and before it ﬁnished
+▶ All operations behave as if executed on a single copy of
+the data (even if there are in fact multiple replicas)
+▶ Consequence: every operation returns an “up-to-date”
+value, a.k.a. “strong consistency”
+▶ Not just in distributed systems, also in shared-memory
+concurrency (memory on multi-core CPUs is not
+linearizable by default!)
+
+
+--- PDF PAGE 402 ---
+
+Linearizability
+Multiple nodes concurrently accessing replicated data.
+How do we deﬁne “consistency” here?
+The strongest option: linearizability
+▶ Informally: every operation takes eﬀect atomically
+sometime after it started and before it ﬁnished
+▶ All operations behave as if executed on a single copy of
+the data (even if there are in fact multiple replicas)
+▶ Consequence: every operation returns an “up-to-date”
+value, a.k.a. “strong consistency”
+▶ Not just in distributed systems, also in shared-memory
+concurrency (memory on multi-core CPUs is not
+linearizable by default!)
+Note: linearizability ̸= serializability!
+
+
+--- PDF PAGE 403 ---
+
+Read-after-write consistency revisited
+client
+A
+B
+C
+
+
+--- PDF PAGE 404 ---
+
+Read-after-write consistency revisited
+client
+A
+B
+C
+(t1, set(x, v1))
+set(x, v1)
+
+
+--- PDF PAGE 405 ---
+
+Read-after-write consistency revisited
+client
+A
+B
+C
+(t1, set(x, v1))
+set(x, v1)
+ok
+ok
+
+
+--- PDF PAGE 406 ---
+
+Read-after-write consistency revisited
+client
+A
+B
+C
+(t1, set(x, v1))
+set(x, v1)
+ok
+ok
+get(x)
+get(x) → v1
+
+
+--- PDF PAGE 407 ---
+
+Read-after-write consistency revisited
+client
+A
+B
+C
+(t1, set(x, v1))
+set(x, v1)
+ok
+ok
+get(x)
+(t0, v0)
+(t1, v1)
+get(x) → v1
+
+
+--- PDF PAGE 408 ---
+
+From the client’s point of view
+client 1
+▶ Focus on client-observable
+behaviour: when and what an
+operation returns
+set(x, v1)
+get(x) → v1
+
+
+--- PDF PAGE 409 ---
+
+From the client’s point of view
+client 1
+?
+▶ Focus on client-observable
+behaviour: when and what an
+operation returns
+set(x, v1)
+▶ Ignore how the replication
+system is implemented internally
+?
+?
+get(x) → v1
+?
+
+
+--- PDF PAGE 410 ---
+
+From the client’s point of view
+client 1
+?
+▶ Focus on client-observable
+behaviour: when and what an
+operation returns
+set(x, v1)
+▶ Ignore how the replication
+system is implemented internally
+?
+▶ Did operation A ﬁnish before
+operation B started?
+real time
+?
+get(x) → v1
+?
+
+
+--- PDF PAGE 411 ---
+
+From the client’s point of view
+client 1
+client 2
+?
+▶ Focus on client-observable
+behaviour: when and what an
+operation returns
+set(x, v1)
+▶ Ignore how the replication
+system is implemented internally
+?
+real time
+▶ Did operation A ﬁnish before
+operation B started?
+?
+▶ Even if the operations are on
+diﬀerent nodes?
+get(x) → v1
+?
+
+
+--- PDF PAGE 412 ---
+
+From the client’s point of view
+client 1
+client 2
+?
+▶ Focus on client-observable
+behaviour: when and what an
+operation returns
+set(x, v1)
+▶ Ignore how the replication
+system is implemented internally
+?
+real time
+▶ Did operation A ﬁnish before
+operation B started?
+?
+▶ Even if the operations are on
+diﬀerent nodes?
+get(x) → v1
+?
+▶ This is not happens-before:
+we want client 2 to read value
+written by client 1, even if the
+clients have not communicated!
+
+
+--- PDF PAGE 413 ---
+
+Operations overlapping in time
+client 1
+client 2
+▶ Client 2’s get operation
+overlaps in time with
+client 1’s set operation
+set(x, v1)
+get(x) → v1
+
+
+--- PDF PAGE 414 ---
+
+Operations overlapping in time
+client 1
+client 2
+▶ Client 2’s get operation
+overlaps in time with
+client 1’s set operation
+▶ Maybe the set operation
+takes eﬀect ﬁrst?
+set(x, v1)
+get(x) → v1
+
+
+--- PDF PAGE 415 ---
+
+Operations overlapping in time
+client 1
+client 2
+▶ Client 2’s get operation
+overlaps in time with
+client 1’s set operation
+▶ Maybe the set operation
+takes eﬀect ﬁrst?
+set(x, v1)
+get(x) → v0
+▶ Just as likely, the get
+operation may be
+executed ﬁrst
+
+
+--- PDF PAGE 416 ---
+
+Operations overlapping in time
+client 1
+client 2
+▶ Client 2’s get operation
+overlaps in time with
+client 1’s set operation
+▶ Maybe the set operation
+takes eﬀect ﬁrst?
+set(x, v1)
+get(x) → v0
+▶ Just as likely, the get
+operation may be
+executed ﬁrst
+▶ Either outcome is ﬁne in
+this case
+
+
+--- PDF PAGE 417 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+
+
+--- PDF PAGE 418 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+ok
+set(x, v1)
+
+
+--- PDF PAGE 419 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+set(x, v1)
+get(x) → v1
+
+
+--- PDF PAGE 420 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+
+
+--- PDF PAGE 421 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+get(x)
+get(x) → v0
+
+
+--- PDF PAGE 422 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+get(x)
+(t0, v0)
+get(x) → v0
+(t0, v0)
+
+
+--- PDF PAGE 423 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+get(x)
+(t0, v0)
+get(x) → v0
+(t0, v0)
+
+
+--- PDF PAGE 424 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+get(x)
+(t0, v0)
+get(x) → v0
+ok
+(t0, v0)
+ok
+
+
+--- PDF PAGE 425 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+client 2
+client 3
+set(x, v1)
+get(x) → v1
+get(x) → v0
+
+
+--- PDF PAGE 426 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+client 2
+client 3
+set(x, v1)
+get(x) → v1
+real time
+get(x) → v0
+
+
+--- PDF PAGE 427 ---
+
+Not linearizable, despite quorum reads/writes
+client 1
+client 2
+client 3
+▶ Client 2’s operation ﬁnishes
+before client 3’s operation
+starts
+set(x, v1)
+get(x) → v1
+real time
+▶ Linearizability therefore
+requires client 3’s operation
+to observe a state no older
+than client 2’s operation
+get(x) → v0
+▶ This example violates
+linearizability because v0 is
+older than v1
+
+
+--- PDF PAGE 428 ---
+
+ABD: Making quorum reads/writes linearizable
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+ok
+set(x, v1)
+get(x) → v1
+. . .
+get(x) → v1
+. . .
+
+
+--- PDF PAGE 429 ---
+
+ABD: Making quorum reads/writes linearizable
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+set(x, v1)
+get(x) → v1
+. . .
+get(x) → v1
+. . .
+
+
+--- PDF PAGE 430 ---
+
+ABD: Making quorum reads/writes linearizable
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+. . .
+get(x) → v1
+. . .
+
+
+--- PDF PAGE 431 ---
+
+ABD: Making quorum reads/writes linearizable
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+(t1, set(x, v1))
+. . .
+get(x) → v1
+. . .
+
+
+--- PDF PAGE 432 ---
+
+ABD: Making quorum reads/writes linearizable
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+(t1, set(x, v1))
+. . .
+ok
+ok
+get(x) → v1
+. . .
+
+
+--- PDF PAGE 433 ---
+
+ABD: Making quorum reads/writes linearizable
+client 1
+A
+B
+C
+client 2
+client 3
+(t1, set(x, v1))
+get(x)
+ok
+(t1, v1)
+set(x, v1)
+get(x) → v1
+(t0, v0)
+(t1, set(x, v1))
+. . .
+ok
+ok
+get(x) → v1
+. . .
+ok
+ok
+
+
+--- PDF PAGE 434 ---
+
+Linearizability for diﬀerent types of operation
+This ensures linearizability of get (quorum read) and
+set (blind write to quorum)
+
+
+--- PDF PAGE 435 ---
+
+Linearizability for diﬀerent types of operation
+This ensures linearizability of get (quorum read) and
+set (blind write to quorum)
+▶ When an operation ﬁnishes, the value read/written is
+stored on a quorum of replicas
+▶ Every subsequent quorum operation will see that value
+
+
+--- PDF PAGE 436 ---
+
+Linearizability for diﬀerent types of operation
+This ensures linearizability of get (quorum read) and
+set (blind write to quorum)
+▶ When an operation ﬁnishes, the value read/written is
+stored on a quorum of replicas
+▶ Every subsequent quorum operation will see that value
+▶ Multiple concurrent writes may overwrite each other
+
+
+--- PDF PAGE 437 ---
+
+Linearizability for diﬀerent types of operation
+This ensures linearizability of get (quorum read) and
+set (blind write to quorum)
+▶ When an operation ﬁnishes, the value read/written is
+stored on a quorum of replicas
+▶ Every subsequent quorum operation will see that value
+▶ Multiple concurrent writes may overwrite each other
+What about an atomic compare-and-swap operation?
+▶ CAS(x, oldValue, newValue) sets x to newValue iﬀ
+current value of x is oldValue
+▶ Previously discussed in shared memory concurrency
+
+
+--- PDF PAGE 438 ---
+
+Linearizability for diﬀerent types of operation
+This ensures linearizability of get (quorum read) and
+set (blind write to quorum)
+▶ When an operation ﬁnishes, the value read/written is
+stored on a quorum of replicas
+▶ Every subsequent quorum operation will see that value
+▶ Multiple concurrent writes may overwrite each other
+What about an atomic compare-and-swap operation?
+▶ CAS(x, oldValue, newValue) sets x to newValue iﬀ
+current value of x is oldValue
+▶ Previously discussed in shared memory concurrency
+▶ Can we implement linearizable compare-and-swap in a
+distributed system?
+
+
+--- PDF PAGE 439 ---
+
+Linearizability for diﬀerent types of operation
+This ensures linearizability of get (quorum read) and
+set (blind write to quorum)
+▶ When an operation ﬁnishes, the value read/written is
+stored on a quorum of replicas
+▶ Every subsequent quorum operation will see that value
+▶ Multiple concurrent writes may overwrite each other
+What about an atomic compare-and-swap operation?
+▶ CAS(x, oldValue, newValue) sets x to newValue iﬀ
+current value of x is oldValue
+▶ Previously discussed in shared memory concurrency
+▶ Can we implement linearizable compare-and-swap in a
+distributed system?
+▶ Yes: total order broadcast to the rescue again!
+
+
+--- PDF PAGE 440 ---
+
+Linearizable compare-and-swap (CAS)
+on request to perform get(x) do
+total order broadcast (get, x) and wait for delivery
+end on
+on request to perform CAS(x, old, new) do
+total order broadcast (CAS, x, old, new) and wait for delivery
+end on
+on delivering (get, x) by total order broadcast do
+return localState[x] as result of operation get(x)
+end on
+on delivering (CAS, x, old, new) by total order broadcast do
+success := false
+if localState[x] = old then
+localState[x] := new; success := true
+end if
+return success as result of operation CAS(x, old, new)
+end on
+
+
+--- PDF PAGE 441 ---
+
+Eventual consistency
+Linearizability advantages:
+▶ Makes a distributed system behave as if it were
+non-distributed
+▶ Simple for applications to use
+
+
+--- PDF PAGE 442 ---
+
+Eventual consistency
+Linearizability advantages:
+▶ Makes a distributed system behave as if it were
+non-distributed
+▶ Simple for applications to use
+Downsides:
+▶ Performance cost: lots of messages and waiting for
+responses
+
+
+--- PDF PAGE 443 ---
+
+Eventual consistency
+Linearizability advantages:
+▶ Makes a distributed system behave as if it were
+non-distributed
+▶ Simple for applications to use
+Downsides:
+▶ Performance cost: lots of messages and waiting for
+responses
+▶ Scalability limits: leader can be a bottleneck
+
+
+--- PDF PAGE 444 ---
+
+Eventual consistency
+Linearizability advantages:
+▶ Makes a distributed system behave as if it were
+non-distributed
+▶ Simple for applications to use
+Downsides:
+▶ Performance cost: lots of messages and waiting for
+responses
+▶ Scalability limits: leader can be a bottleneck
+▶ Availability problems: if you can’t contact a quorum of
+nodes, you can’t process any operations
+
+
+--- PDF PAGE 445 ---
+
+Eventual consistency
+Linearizability advantages:
+▶ Makes a distributed system behave as if it were
+non-distributed
+▶ Simple for applications to use
+Downsides:
+▶ Performance cost: lots of messages and waiting for
+responses
+▶ Scalability limits: leader can be a bottleneck
+▶ Availability problems: if you can’t contact a quorum of
+nodes, you can’t process any operations
+Eventual consistency: a weaker model than linearizability.
+Diﬀerent trade-oﬀ choices.
+
+
+--- PDF PAGE 446 ---
+
+
+
+--- PDF PAGE 447 ---
+
+The CAP theorem
+A system can be either strongly Consistent (linearizable) or
+Available in the presence of a network Partition
+node A
+node B
+node C
+network partition
+set(x, v1)
+get(x) → v1
+get(x) → v1
+get(x) → v0
+C must either wait indeﬁnitely for the network to recover, or
+return a potentially stale value
+
+
+--- PDF PAGE 448 ---
+
+Eventual consistency
+Replicas process operations based only on their local state.
+If there are no more updates, eventually all replicas will be in
+the same state. (No guarantees how long it might take.)
+
+
+--- PDF PAGE 449 ---
+
+Eventual consistency
+Replicas process operations based only on their local state.
+If there are no more updates, eventually all replicas will be in
+the same state. (No guarantees how long it might take.)
+Strong eventual consistency:
+▶ Eventual delivery: every update made to one non-faulty
+replica is eventually processed by every non-faulty replica.
+
+
+--- PDF PAGE 450 ---
+
+Eventual consistency
+Replicas process operations based only on their local state.
+If there are no more updates, eventually all replicas will be in
+the same state. (No guarantees how long it might take.)
+Strong eventual consistency:
+▶ Eventual delivery: every update made to one non-faulty
+replica is eventually processed by every non-faulty replica.
+▶ Convergence: any two replicas that have processed the
+same set of updates are in the same state
+(even if updates were processed in a diﬀerent order).
+
+
+--- PDF PAGE 451 ---
+
+Eventual consistency
+Replicas process operations based only on their local state.
+If there are no more updates, eventually all replicas will be in
+the same state. (No guarantees how long it might take.)
+Strong eventual consistency:
+▶ Eventual delivery: every update made to one non-faulty
+replica is eventually processed by every non-faulty replica.
+▶ Convergence: any two replicas that have processed the
+same set of updates are in the same state
+(even if updates were processed in a diﬀerent order).
+Properties:
+▶ Does not require waiting for network communication
+▶ Causal broadcast (or weaker) can disseminate updates
+
+
+--- PDF PAGE 452 ---
+
+Eventual consistency
+Replicas process operations based only on their local state.
+If there are no more updates, eventually all replicas will be in
+the same state. (No guarantees how long it might take.)
+Strong eventual consistency:
+▶ Eventual delivery: every update made to one non-faulty
+replica is eventually processed by every non-faulty replica.
+▶ Convergence: any two replicas that have processed the
+same set of updates are in the same state
+(even if updates were processed in a diﬀerent order).
+Properties:
+▶ Does not require waiting for network communication
+▶ Causal broadcast (or weaker) can disseminate updates
+▶ Concurrent updates =⇒ conﬂicts need to be resolved
+
+
+--- PDF PAGE 453 ---
+
+Summary of minimum system model requirements
+Problem
+Must wait for
+communication
+Requires
+synchrony
+atomic commit
+all participating
+nodes
+partially
+synchronous
+strength of assumptions
+
+
+--- PDF PAGE 454 ---
+
+Summary of minimum system model requirements
+Problem
+Must wait for
+communication
+Requires
+synchrony
+atomic commit
+all participating
+nodes
+partially
+synchronous
+quorum
+partially
+synchronous
+consensus,
+total order broadcast,
+linearizable CAS
+strength of assumptions
+
+
+--- PDF PAGE 455 ---
+
+Summary of minimum system model requirements
+Problem
+Must wait for
+communication
+Requires
+synchrony
+atomic commit
+all participating
+nodes
+partially
+synchronous
+quorum
+partially
+synchronous
+consensus,
+total order broadcast,
+linearizable CAS
+linearizable get/set
+quorum
+asynchronous
+strength of assumptions
+
+
+--- PDF PAGE 456 ---
+
+Summary of minimum system model requirements
+Problem
+Must wait for
+communication
+Requires
+synchrony
+atomic commit
+all participating
+nodes
+partially
+synchronous
+quorum
+partially
+synchronous
+consensus,
+total order broadcast,
+linearizable CAS
+linearizable get/set
+quorum
+asynchronous
+strength of assumptions
+local replica only
+asynchronous
+eventual consistency,
+causal broadcast,
+FIFO broadcast
+
+
+--- PDF PAGE 457 ---
+
+Lecture 8
+Case studies
+
+
+--- PDF PAGE 458 ---
+
+Collaboration and conﬂict resolution
+Nowadays we use a lot of collaboration software:
+▶ Examples: calendar sync (last lecture), Google Docs, . . .
+
+
+--- PDF PAGE 459 ---
+
+Collaboration and conﬂict resolution
+Nowadays we use a lot of collaboration software:
+▶ Examples: calendar sync (last lecture), Google Docs, . . .
+▶ Several users/devices working on a shared ﬁle/document
+▶ Each user device has local replica of the data
+
+
+--- PDF PAGE 460 ---
+
+Collaboration and conﬂict resolution
+Nowadays we use a lot of collaboration software:
+▶ Examples: calendar sync (last lecture), Google Docs, . . .
+▶ Several users/devices working on a shared ﬁle/document
+▶ Each user device has local replica of the data
+▶ Update local replica anytime (even while oﬄine),
+sync with others when network available
+
+
+--- PDF PAGE 461 ---
+
+Collaboration and conﬂict resolution
+Nowadays we use a lot of collaboration software:
+▶ Examples: calendar sync (last lecture), Google Docs, . . .
+▶ Several users/devices working on a shared ﬁle/document
+▶ Each user device has local replica of the data
+▶ Update local replica anytime (even while oﬄine),
+sync with others when network available
+▶ Challenge: how to reconcile concurrent updates?
+
+
+--- PDF PAGE 462 ---
+
+Collaboration and conﬂict resolution
+Nowadays we use a lot of collaboration software:
+▶ Examples: calendar sync (last lecture), Google Docs, . . .
+▶ Several users/devices working on a shared ﬁle/document
+▶ Each user device has local replica of the data
+▶ Update local replica anytime (even while oﬄine),
+sync with others when network available
+▶ Challenge: how to reconcile concurrent updates?
+Families of algorithms:
+▶ Conﬂict-free Replicated Data Types (CRDTs)
+▶ Operation-based
+▶ State-based
+▶ Operational Transformation (OT)
+
+
+--- PDF PAGE 463 ---
+
+Conﬂicts due to concurrent updates
+node A
+node B
+{
+{
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+}
+}
+network partition
+
+
+--- PDF PAGE 464 ---
+
+Conﬂicts due to concurrent updates
+node A
+node B
+{
+{
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+}
+}
+title = "Lecture 1"
+{
+network partition
+"title": "Lecture 1",
+"date": "2020-11-05",
+"time": "12:00"
+}
+
+
+--- PDF PAGE 465 ---
+
+Conﬂicts due to concurrent updates
+node A
+node B
+{
+{
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+}
+}
+title = "Lecture 1"
+time = "10:00"
+{
+{
+network partition
+"title": "Lecture 1",
+"date": "2020-11-05",
+"time": "12:00"
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "10:00"
+}
+}
+
+
+--- PDF PAGE 466 ---
+
+Conﬂicts due to concurrent updates
+node A
+node B
+{
+{
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "12:00"
+}
+}
+title = "Lecture 1"
+time = "10:00"
+{
+{
+network partition
+"title": "Lecture 1",
+"date": "2020-11-05",
+"time": "12:00"
+"title": "Lecture",
+"date": "2020-11-05",
+"time": "10:00"
+}
+}
+sync
+{
+{
+"title": "Lecture 1",
+"date": "2020-11-05",
+"time": "10:00"
+"title": "Lecture 1",
+"date": "2020-11-05",
+"time": "10:00"
+}
+}
+
+
+--- PDF PAGE 467 ---
+
+Operation-based map CRDT
+on initialisation do
+values := {}
+end on
+on request to read value for key k do
+if ∃t, v. (t, k, v) ∈ values then return v else return null
+end on
+on request to set key k to value v do
+t := newTimestamp()
+▷ globally unique, e.g. Lamport timestamp
+broadcast (set, t, k, v) by reliable broadcast (including to self)
+end on
+on delivering (set, t, k, v) by reliable broadcast do
+previous := {(t′, k′, v′) ∈ values | k′ = k}
+if previous = {} ∨ ∀(t′, k′, v′) ∈ previous. t′ < t then
+values := (values \ previous) ∪ {(t, k, v)}
+end if
+end on
+
+
+--- PDF PAGE 468 ---
+
+Operation-based CRDTs
+Reliable broadcast may deliver updates in any order:
+▶ broadcast (set, t1, “title”, “Lecture 1”)
+▶ broadcast (set, t2, “time”, “10:00”)
+
+
+--- PDF PAGE 469 ---
+
+Operation-based CRDTs
+Reliable broadcast may deliver updates in any order:
+▶ broadcast (set, t1, “title”, “Lecture 1”)
+▶ broadcast (set, t2, “time”, “10:00”)
+Recall strong eventual consistency:
+▶ Eventual delivery: every update made to one non-faulty
+replica is eventually processed by every non-faulty replica.
+▶ Convergence: any two replicas that have processed the
+same set of updates are in the same state
+
+
+--- PDF PAGE 470 ---
+
+Operation-based CRDTs
+Reliable broadcast may deliver updates in any order:
+▶ broadcast (set, t1, “title”, “Lecture 1”)
+▶ broadcast (set, t2, “time”, “10:00”)
+Recall strong eventual consistency:
+▶ Eventual delivery: every update made to one non-faulty
+replica is eventually processed by every non-faulty replica.
+▶ Convergence: any two replicas that have processed the
+same set of updates are in the same state
+CRDT algorithm implements this:
+▶ Reliable broadcast ensures every operation is eventually
+delivered to every (non-crashed) replica
+
+
+--- PDF PAGE 471 ---
+
+Operation-based CRDTs
+Reliable broadcast may deliver updates in any order:
+▶ broadcast (set, t1, “title”, “Lecture 1”)
+▶ broadcast (set, t2, “time”, “10:00”)
+Recall strong eventual consistency:
+▶ Eventual delivery: every update made to one non-faulty
+replica is eventually processed by every non-faulty replica.
+▶ Convergence: any two replicas that have processed the
+same set of updates are in the same state
+CRDT algorithm implements this:
+▶ Reliable broadcast ensures every operation is eventually
+delivered to every (non-crashed) replica
+▶ Applying an operation is commutative: order of delivery
+doesn’t matter
+
+
+--- PDF PAGE 472 ---
+
+State-based map CRDT
+The operator ⊔ merges two states s1 and s2 as follows:
+s1 ⊔ s2 = {(t, k, v) ∈ (s1 ∪ s2) | ∄(t′, k′, v′) ∈ (s1 ∪ s2). k′ = k ∧ t′ > t}
+on initialisation do
+values := {}
+end on
+on request to read value for key k do
+if ∃t, v. (t, k, v) ∈ values then return v else return null
+end on
+on request to set key k to value v do
+t := newTimestamp()
+▷ globally unique, e.g. Lamport timestamp
+values := {(t′, k′, v′) ∈ values | k′ ̸= k} ∪ {(t, k, v)}
+broadcast values by best-eﬀort broadcast
+end on
+on delivering V by best-eﬀort broadcast do
+values := values ⊔ V
+end on
+
+
+--- PDF PAGE 473 ---
+
+State-based CRDTs
+Merge operator ⊔ must satisfy: ∀s1, s2, s3. . .
+▶ Commutative: s1 ⊔ s2 = s2 ⊔ s1.
+▶ Associative: (s1 ⊔ s2) ⊔ s3 = s1 ⊔ (s2 ⊔ s3).
+▶ Idempotent: s1 ⊔ s1 = s1.
+
+
+--- PDF PAGE 474 ---
+
+State-based CRDTs
+Merge operator ⊔ must satisfy: ∀s1, s2, s3. . .
+▶ Commutative: s1 ⊔ s2 = s2 ⊔ s1.
+▶ Associative: (s1 ⊔ s2) ⊔ s3 = s1 ⊔ (s2 ⊔ s3).
+▶ Idempotent: s1 ⊔ s1 = s1.
+State-based versus operation-based:
+▶ Op-based CRDT typically has smaller messages
+▶ State-based CRDT can tolerate message loss/duplication
+
+
+--- PDF PAGE 475 ---
+
+State-based CRDTs
+Merge operator ⊔ must satisfy: ∀s1, s2, s3. . .
+▶ Commutative: s1 ⊔ s2 = s2 ⊔ s1.
+▶ Associative: (s1 ⊔ s2) ⊔ s3 = s1 ⊔ (s2 ⊔ s3).
+▶ Idempotent: s1 ⊔ s1 = s1.
+State-based versus operation-based:
+▶ Op-based CRDT typically has smaller messages
+▶ State-based CRDT can tolerate message loss/duplication
+Not necessarily uses broadcast:
+▶ Can also merge concurrent updates to replicas e.g. in
+quorum replication, anti-entropy, . . .
+
+
+--- PDF PAGE 476 ---
+
+
+
+--- PDF PAGE 477 ---
+
+Collaborative text editing: the problem
+user A
+user B
+B
+C
+B
+C
+0
+1
+0
+1
+network partition
+
+
+--- PDF PAGE 478 ---
+
+Collaborative text editing: the problem
+user A
+user B
+B
+C
+B
+C
+0
+1
+0
+1
+insert(0, “A”)
+A
+B
+C
+network partition
+0
+1
+2
+
+
+--- PDF PAGE 479 ---
+
+Collaborative text editing: the problem
+user A
+user B
+B
+C
+B
+C
+0
+1
+0
+1
+insert(0, “A”)
+insert(2, “D”)
+A
+B
+C
+B
+C
+D
+network partition
+0
+1
+2
+0
+1
+2
+
+
+--- PDF PAGE 480 ---
+
+Collaborative text editing: the problem
+user A
+user B
+B
+C
+B
+C
+0
+1
+0
+1
+insert(0, “A”)
+insert(2, “D”)
+A
+B
+C
+B
+C
+D
+network partition
+0
+1
+2
+0
+1
+2
+(insert, 0, “A”)
+A
+B
+C
+D
+0
+1
+2
+3
+
+
+--- PDF PAGE 481 ---
+
+Collaborative text editing: the problem
+user A
+user B
+B
+C
+B
+C
+0
+1
+0
+1
+insert(0, “A”)
+insert(2, “D”)
+A
+B
+C
+B
+C
+D
+network partition
+0
+1
+2
+0
+1
+2
+(insert, 0, “A”)
+(insert, 2, “D”)
+A
+B
+D
+C
+A
+B
+C
+D
+0
+1
+2
+3
+0
+1
+2
+3
+
+
+--- PDF PAGE 482 ---
+
+Operational transformation
+user A
+user B
+insert(0, “A”)
+insert(2, “D”)
+A
+B
+C
+B
+C
+D
+0
+1
+2
+0
+1
+2
+
+
+--- PDF PAGE 483 ---
+
+Operational transformation
+user A
+user B
+insert(0, “A”)
+insert(2, “D”)
+A
+B
+C
+B
+C
+D
+0
+1
+2
+0
+1
+2
+(insert, 2, “D”)
+T((insert, 2, “D”),
+(insert, 0, “A”)) =
+(insert, 3, “D”)
+A
+B
+C
+D
+0
+1
+2
+3
+
+
+--- PDF PAGE 484 ---
+
+Operational transformation
+user A
+user B
+insert(0, “A”)
+insert(2, “D”)
+A
+B
+C
+B
+C
+D
+0
+1
+2
+0
+1
+2
+(insert, 0, “A”)
+(insert, 2, “D”)
+T((insert, 2, “D”),
+(insert, 0, “A”)) =
+(insert, 3, “D”)
+T((insert, 0, “A”),
+(insert, 2, “D”)) =
+(insert, 0, “A”)
+A
+B
+C
+D
+A
+B
+C
+D
+0
+1
+2
+3
+0
+1
+2
+3
+
+
+--- PDF PAGE 485 ---
+
+Text editing CRDT
+user A
+user B
+⊢
+B
+C
+⊣
+⊢
+B
+C
+⊣
+0.0
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75
+1.0
+
+
+--- PDF PAGE 486 ---
+
+Text editing CRDT
+user A
+user B
+⊢
+B
+C
+⊣
+⊢
+B
+C
+⊣
+0.0
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75
+1.0
+insert(0.25, “A”)
+⊢
+A
+B
+C
+⊣
+0.0
+0.25
+0.5
+0.75
+1.0
+
+
+--- PDF PAGE 487 ---
+
+Text editing CRDT
+user A
+user B
+⊢
+B
+C
+⊣
+⊢
+B
+C
+⊣
+0.0
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75
+1.0
+insert(0.25, “A”)
+insert(0.875, “D”)
+⊢
+A
+B
+C
+⊣
+⊢
+B
+C
+D
+⊣
+0.0
+0.25
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75 0.875 1.0
+
+
+--- PDF PAGE 488 ---
+
+Text editing CRDT
+user A
+user B
+⊢
+B
+C
+⊣
+⊢
+B
+C
+⊣
+0.0
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75
+1.0
+insert(0.25, “A”)
+insert(0.875, “D”)
+⊢
+A
+B
+C
+⊣
+⊢
+B
+C
+D
+⊣
+0.0
+0.25
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75 0.875 1.0
+(insert, 0.875, “D”)
+⊢
+A
+B
+C
+D
+⊣
+0.0
+0.25
+0.5
+0.75 0.875 1.0
+
+
+--- PDF PAGE 489 ---
+
+Text editing CRDT
+user A
+user B
+⊢
+B
+C
+⊣
+⊢
+B
+C
+⊣
+0.0
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75
+1.0
+insert(0.25, “A”)
+insert(0.875, “D”)
+⊢
+A
+B
+C
+⊣
+⊢
+B
+C
+D
+⊣
+0.0
+0.25
+0.5
+0.75
+1.0
+0.0
+0.5
+0.75 0.875 1.0
+(insert, 0.25, “A”)
+(insert, 0.875, “D”)
+⊢
+A
+B
+C
+D
+⊣
+⊢
+A
+B
+C
+D
+⊣
+0.0
+0.25
+0.5
+0.75 0.875 1.0
+0.0
+0.25
+0.5
+0.75 0.875 1.0
+
+
+--- PDF PAGE 490 ---
+
+Operation-based text CRDT (1/2)
+function ElementAt(chars, index)
+min = the unique triple (p, n, v) ∈ chars such that
+∄(p′, n′, v′) ∈ chars. p′ < p ∨ (p′ = p ∧ n′ < n)}
+if index = 0 then return min
+else return ElementAt(chars \ {min}, index − 1)
+end function
+on initialisation do
+chars := {(0, null, ⊢), (1, null, ⊣)}
+end on
+on request to read character at index index do
+let (p, n, v) := ElementAt(chars, index + 1); return v
+end on
+on request to insert character v at index index at node nodeId do
+let (p1, n1, v1) := ElementAt(chars, index)
+let (p2, n2, v2) := ElementAt(chars, index + 1)
+broadcast (insert, (p1 + p2)/2, nodeId, v) by causal broadcast
+end on
+
+
+--- PDF PAGE 491 ---
+
+Operation-based text CRDT (2/2)
+on delivering (insert, p, n, v) by causal broadcast do
+chars := chars ∪ {(p, n, v)}
+end on
+on request to delete character at index index do
+let (p, n, v) := ElementAt(chars, index + 1)
+broadcast (delete, p, n) by causal broadcast
+end on
+on delivering (delete, p, n) by causal broadcast do
+chars := {(p′, n′, v′) ∈ chars | ¬(p′ = p ∧ n′ = n)}
+end on
+▶ Use causal broadcast so that insertion of a character is
+delivered before its deletion
+▶ Insertion and deletion of diﬀerent characters commute
+
+
+--- PDF PAGE 492 ---
+
+Google’s Spanner
+A database system with millions of nodes, petabytes of data,
+distributed across datacenters worldwide
+
+
+--- PDF PAGE 493 ---
+
+Google’s Spanner
+A database system with millions of nodes, petabytes of data,
+distributed across datacenters worldwide
+Consistency properties:
+▶ Serializable transaction isolation
+▶ Linearizable reads and writes
+
+
+--- PDF PAGE 494 ---
+
+Google’s Spanner
+A database system with millions of nodes, petabytes of data,
+distributed across datacenters worldwide
+Consistency properties:
+▶ Serializable transaction isolation
+▶ Linearizable reads and writes
+▶ Many shards, each holding a subset of the data;
+atomic commit of transactions across shards
+
+
+--- PDF PAGE 495 ---
+
+Google’s Spanner
+A database system with millions of nodes, petabytes of data,
+distributed across datacenters worldwide
+Consistency properties:
+▶ Serializable transaction isolation
+▶ Linearizable reads and writes
+▶ Many shards, each holding a subset of the data;
+atomic commit of transactions across shards
+Many standard techniques:
+▶ State machine replication (Paxos) within a shard
+▶ Two-phase locking for serializability
+▶ Two-phase commit for cross-shard atomicity
+
+
+--- PDF PAGE 496 ---
+
+Google’s Spanner
+A database system with millions of nodes, petabytes of data,
+distributed across datacenters worldwide
+Consistency properties:
+▶ Serializable transaction isolation
+▶ Linearizable reads and writes
+▶ Many shards, each holding a subset of the data;
+atomic commit of transactions across shards
+Many standard techniques:
+▶ State machine replication (Paxos) within a shard
+▶ Two-phase locking for serializability
+▶ Two-phase commit for cross-shard atomicity
+The interesting bit: read-only transactions require no locks!
+
+
+--- PDF PAGE 497 ---
+
+Consistent snapshots
+A read-only transaction observes a consistent snapshot:
+If T1 → T2 (e.g. T2 reads data written by T1). . .
+▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1
+▶ Snapshot that does not reﬂect writes by T1 does not
+reﬂect writes by T2 either
+
+
+--- PDF PAGE 498 ---
+
+Consistent snapshots
+A read-only transaction observes a consistent snapshot:
+If T1 → T2 (e.g. T2 reads data written by T1). . .
+▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1
+▶ Snapshot that does not reﬂect writes by T1 does not
+reﬂect writes by T2 either
+▶ In other words, snapshot is consistent with causality
+▶ Even if read-only transaction runs for a long time
+
+
+--- PDF PAGE 499 ---
+
+Consistent snapshots
+A read-only transaction observes a consistent snapshot:
+If T1 → T2 (e.g. T2 reads data written by T1). . .
+▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1
+▶ Snapshot that does not reﬂect writes by T1 does not
+reﬂect writes by T2 either
+▶ In other words, snapshot is consistent with causality
+▶ Even if read-only transaction runs for a long time
+Approach: multi-version concurrency control (MVCC)
+▶ Each read-write transaction Tw has commit timestamp tw
+▶ Every value is tagged with timestamp tw of transaction
+that wrote it (not overwriting previous value)
+
+
+--- PDF PAGE 500 ---
+
+Consistent snapshots
+A read-only transaction observes a consistent snapshot:
+If T1 → T2 (e.g. T2 reads data written by T1). . .
+▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1
+▶ Snapshot that does not reﬂect writes by T1 does not
+reﬂect writes by T2 either
+▶ In other words, snapshot is consistent with causality
+▶ Even if read-only transaction runs for a long time
+Approach: multi-version concurrency control (MVCC)
+▶ Each read-write transaction Tw has commit timestamp tw
+▶ Every value is tagged with timestamp tw of transaction
+that wrote it (not overwriting previous value)
+▶ Read-only transaction Tr has snapshot timestamp tr
+▶ Tr ignores values with tw > tr; observes most recent
+value with tw ≤ tr
+
+
+--- PDF PAGE 501 ---
+
+Obtaining commit timestamps
+Must ensure that whenever T1 → T2 we have t1 < t2.
+▶ Physical clocks may be inconsistent with causality
+
+
+--- PDF PAGE 502 ---
+
+Obtaining commit timestamps
+Must ensure that whenever T1 → T2 we have t1 < t2.
+▶ Physical clocks may be inconsistent with causality
+▶ Can we use Lamport clocks instead?
+▶ Problem: linearizability depends on real-time order, and
+logical clocks may not reﬂect this!
+
+
+--- PDF PAGE 503 ---
+
+Obtaining commit timestamps
+Must ensure that whenever T1 → T2 we have t1 < t2.
+▶ Physical clocks may be inconsistent with causality
+▶ Can we use Lamport clocks instead?
+▶ Problem: linearizability depends on real-time order, and
+logical clocks may not reﬂect this!
+A
+B
+
+
+--- PDF PAGE 504 ---
+
+Obtaining commit timestamps
+Must ensure that whenever T1 → T2 we have t1 < t2.
+▶ Physical clocks may be inconsistent with causality
+▶ Can we use Lamport clocks instead?
+▶ Problem: linearizability depends on real-time order, and
+logical clocks may not reﬂect this!
+A
+B
+T1
+results
+
+
+--- PDF PAGE 505 ---
+
+Obtaining commit timestamps
+Must ensure that whenever T1 → T2 we have t1 < t2.
+▶ Physical clocks may be inconsistent with causality
+▶ Can we use Lamport clocks instead?
+▶ Problem: linearizability depends on real-time order, and
+logical clocks may not reﬂect this!
+A
+B
+T1
+results
+action
+T2
+
+
+--- PDF PAGE 506 ---
+
+TrueTime: explicit physical clock uncertainty
+A
+physical
+time
+B
+T1
+
+
+--- PDF PAGE 507 ---
+
+TrueTime: explicit physical clock uncertainty
+Spanner’s TrueTime clock returns [tearliest, tlatest].
+True physical timestamp must lie within that range.
+A
+physical
+time
+B
+t1,earliest
+T1
+commit req
+t1,latest
+
+
+--- PDF PAGE 508 ---
+
+TrueTime: explicit physical clock uncertainty
+Spanner’s TrueTime clock returns [tearliest, tlatest].
+True physical timestamp must lie within that range.
+On commit, wait for uncertainty δi = ti,latest − ti,earliest.
+A
+physical
+time
+B
+t1,earliest
+T1
+commit req
+δ1
+δ1
+wait
+t1,latest
+commit done
+
+
+--- PDF PAGE 509 ---
+
+TrueTime: explicit physical clock uncertainty
+Spanner’s TrueTime clock returns [tearliest, tlatest].
+True physical timestamp must lie within that range.
+On commit, wait for uncertainty δi = ti,latest − ti,earliest.
+A
+physical
+time
+B
+t1,earliest
+T1
+commit req
+δ1
+δ1
+wait
+t1,latest
+commit done
+t2,earliest
+T2
+commit req
+t2,latest
+
+
+--- PDF PAGE 510 ---
+
+TrueTime: explicit physical clock uncertainty
+Spanner’s TrueTime clock returns [tearliest, tlatest].
+True physical timestamp must lie within that range.
+On commit, wait for uncertainty δi = ti,latest − ti,earliest.
+A
+physical
+time
+B
+t1,earliest
+T1
+commit req
+δ1
+δ1
+wait
+t1,latest
+commit done
+t2,earliest
+T2
+commit req
+δ2
+δ2
+wait
+t2,latest
+commit done
+
+
+--- PDF PAGE 511 ---
+
+TrueTime: explicit physical clock uncertainty
+Spanner’s TrueTime clock returns [tearliest, tlatest].
+True physical timestamp must lie within that range.
+On commit, wait for uncertainty δi = ti,latest − ti,earliest.
+A
+physical
+time
+B
+t1,earliest
+T1
+commit req
+δ1
+δ1
+wait
+t1,latest
+commit done
+real time
+t2,earliest
+T2
+commit req
+δ2
+δ2
+wait
+t2,latest
+commit done
+
+
+--- PDF PAGE 512 ---
+
+Determining clock uncertainty in TrueTime
+Clock servers with atomic clock or GPS receiver in each
+datacenter; servers report their clock uncertainty.
+local clock uncertainty [ms]
+6
+4
+2
+time [s]
+0
+0
+10
+20
+30
+40
+50
+60
+70
+80
+90
+
+
+--- PDF PAGE 513 ---
+
+Determining clock uncertainty in TrueTime
+Clock servers with atomic clock or GPS receiver in each
+datacenter; servers report their clock uncertainty.
+Each node syncs its quartz clock with a server every 30 sec.
+local clock uncertainty [ms]
+6
+4
+2
+time [s]
+0
+0
+10
+20
+30
+40
+50
+60
+70
+80
+90
+sync with clock server
+
+
+--- PDF PAGE 514 ---
+
+Determining clock uncertainty in TrueTime
+Clock servers with atomic clock or GPS receiver in each
+datacenter; servers report their clock uncertainty.
+Each node syncs its quartz clock with a server every 30 sec.
+Between syncs, assume worst-case drift of 200ppm.
+local clock uncertainty [ms]
+6
+4
+2
+time [s]
+0
+0
+10
+20
+30
+40
+50
+60
+70
+80
+90
+sync with clock server
+
+
+--- PDF PAGE 515 ---
+
+Determining clock uncertainty in TrueTime
+Clock servers with atomic clock or GPS receiver in each
+datacenter; servers report their clock uncertainty.
+Each node syncs its quartz clock with a server every 30 sec.
+Between syncs, assume worst-case drift of 200ppm.
+local clock uncertainty [ms]
+6
+4
+2
+time [s]
+server uncertainty + round trip time to clock server
+0
+0
+10
+20
+30
+40
+50
+60
+70
+80
+90
+sync with clock server
+
+
+--- PDF PAGE 516 ---
+
+That’s all, folks!
+Any questions?
+Email mk428@cst.cam.ac.uk!
+Summary:
+▶ Distributed systems are everywhere
+▶ You use them every day: e.g. web apps
+▶ Key goals: availability, scalability, performance
+▶ Key problems: concurrency, faults, unbounded latency
+▶ Key abstractions: replication, broadcast, consensus
+▶ No one right way, just trade-oﬀs

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="345" viewBox="0 0 1120 345">
+<title>Uloge klijenta i poslužitelja</title>
+<desc>Preglednik poziva uslugu predaje, koja poziva uslugu zadataka. Usluga predaje istodobno je poslužitelj pregledniku i klijent usluge zadataka. Svaki pozivatelj postavlja vlastiti rok čekanja.</desc>
+<defs><marker id="arrow-blue" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="14" refY="9" orient="auto"><path d="M2,2 L18,9 L2,16 Z" fill="#3886ad"/></marker></defs>
+<rect width="1120" height="345" fill="white"/>
+<rect x="11" y="45" width="238" height="120" rx="16" fill="#24445c" opacity=".035"/><rect x="10" y="42" width="240" height="120" rx="16" fill="#24445c" opacity=".025"/><rect x="10" y="40" width="240" height="120" rx="16" fill="#f8fbfd" stroke="#c6dbe8" stroke-width="1.2"/><rect x="22" y="76" width="7" height="48" rx="3.5" fill="#3886ad"/>
+<rect x="416" y="45" width="288" height="120" rx="16" fill="#24445c" opacity=".035"/><rect x="415" y="42" width="290" height="120" rx="16" fill="#24445c" opacity=".025"/><rect x="415" y="40" width="290" height="120" rx="16" fill="#f8fbfd" stroke="#c6dbe8" stroke-width="1.2"/><rect x="427" y="76" width="7" height="48" rx="3.5" fill="#3886ad"/>
+<rect x="871" y="45" width="238" height="120" rx="16" fill="#24445c" opacity=".035"/><rect x="870" y="42" width="240" height="120" rx="16" fill="#24445c" opacity=".025"/><rect x="870" y="40" width="240" height="120" rx="16" fill="#f8fbfd" stroke="#c6dbe8" stroke-width="1.2"/><rect x="882" y="76" width="7" height="48" rx="3.5" fill="#3886ad"/>
+<g font-family="Arial, sans-serif" text-anchor="middle">
+<text x="138" y="92" font-size="23" font-weight="600" fill="#18344b">Preglednik</text>
+<text x="138" y="124" font-size="19" fill="#546573">klijent</text>
+<text x="568" y="84" font-size="23" font-weight="600" fill="#18344b">Usluga predaje</text>
+<text x="568" y="114" font-size="19" fill="#546573">poslužitelj pregledniku</text>
+<text x="568" y="139" font-size="19" fill="#546573">klijent sljedeće usluge</text>
+<text x="998" y="92" font-size="23" font-weight="600" fill="#18344b">Usluga zadataka</text>
+<text x="998" y="124" font-size="19" fill="#546573">poslužitelj</text>
+<text x="332" y="84" font-size="18" fill="#18344b">predaj projekt</text>
+<text x="787" y="84" font-size="18" fill="#18344b">provjeri pravila</text>
+<text x="345" y="226" font-size="19" fill="#976023">rok čekanja preglednika</text>
+<text x="775" y="286" font-size="19" fill="#976023">rok čekanja usluge predaje</text>
+<text x="560" y="330" font-size="18" fill="#546573">Strelica: zahtjev. Odgovori su izostavljeni. Rokovi nisu automatski usklađeni.</text>
+</g>
+<path d="M 254 100 L 411 100" fill="none" stroke="#3886ad" stroke-width="3.2" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<path d="M 709 100 L 866 100" fill="none" stroke="#3886ad" stroke-width="3.2" stroke-linecap="round" marker-end="url(#arrow-blue)"/>
+<path d="M130 178V198H560V178 M560 238V258H990V238" fill="none" stroke="#bc8439" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

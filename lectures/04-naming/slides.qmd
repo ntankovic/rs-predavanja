@@ -1,0 +1,32 @@
+---
+title: "Naming and service discovery"
+subtitle: "Distributed Systems · Lecture 04"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Separate a logical service name from a changing network address.
+
+::: {.notes}
+Prerequisites: Lectures 02–03. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+A client caches the address of the catalogue service. That instance is replaced before the cache entry expires.
+
+::: {.notes}
+A logical service name lets callers refer to a service without embedding the address of a particular process. Discovery maps that name to an address. Cached mappings may become stale when processes move or stop.
+:::
+
+## Discussion and recap
+
+How should the client react when its cached address no longer works?
+
+**Takeaway:** Naming hides location changes only when lookup and recovery behaviour are defined.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

@@ -1,0 +1,9 @@
+# About this book {.unnumbered}
+
+This learning book accompanies the proposed Distributed Systems syllabus at the Faculty of Informatics, Juraj Dobrila University of Pula.
+
+Lecturer: assoc. prof. Nikola Tankovic, PhD
+
+Chapter 1 develops the foundations of distributed systems through a university submission example, illustrated explanations, and exercises with suggested reasoning. It accompanies a 60-minute lecture in English.
+
+Chapters 2–12 are short sample placeholders for the planned course sequence. They demonstrate the publishing structure and will be expanded lecture by lecture. They are not yet complete teaching materials.

@@ -1,0 +1,32 @@
+---
+title: "Architectures and service boundaries"
+subtitle: "Distributed Systems · Lecture 02"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Identify a service boundary and its communication costs.
+
+::: {.notes}
+Prerequisites: Lecture 01. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+The registration service asks a separate catalogue service whether a course exists. Catalogue unavailability can now affect registration.
+
+::: {.notes}
+Splitting an application into services introduces communication between independently running components. A useful boundary groups related responsibilities, but calls across that boundary add latency and new failure cases.
+:::
+
+## Discussion and recap
+
+Which information could registration cache, and when would that cache become unsafe?
+
+**Takeaway:** Service boundaries should be evaluated against both responsibilities and failure behaviour.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

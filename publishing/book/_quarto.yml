@@ -1,0 +1,38 @@
+project:
+  type: book
+
+book:
+  title: Distributed Systems
+  author: assoc. prof. Nikola Tankovic, PhD
+  subtitle: Faculty of Informatics, Juraj Dobrila University of Pula
+  output-file: distributed-systems
+  chapters:
+    - index.qmd
+    - lectures/01-foundations/chapter.qmd
+    - lectures/02-architectures/chapter.qmd
+    - lectures/03-communication/chapter.qmd
+    - lectures/04-naming/chapter.qmd
+    - lectures/05-time/chapter.qmd
+    - lectures/06-replication/chapter.qmd
+    - lectures/07-consensus/chapter.qmd
+    - lectures/08-fault-tolerance/chapter.qmd
+    - lectures/09-transactions/chapter.qmd
+    - lectures/10-messaging/chapter.qmd
+    - lectures/11-scaling/chapter.qmd
+    - lectures/12-design-review/chapter.qmd
+
+format:
+  pdf:
+    documentclass: scrreprt
+    pdf-engine: xelatex
+    papersize: a4
+    toc: true
+    colorlinks: true
+    keep-tex: false
+    include-in-header:
+      text: |
+        \usepackage{needspace}
+        \titlehead{\centering\includegraphics[width=25mm]{assets/shared/fipu-logo.pdf}}
+
+execute:
+  enabled: false

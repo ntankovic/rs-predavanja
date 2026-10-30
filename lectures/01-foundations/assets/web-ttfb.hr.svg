@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="300" viewBox="0 0 1120 300">
+<title>Web request timing and time to first byte</title>
+<desc>Navigation-start TTFB includes DNS, TCP, TLS and waiting for the first response byte. Download follows.</desc>
+<rect width="1120" height="300" fill="white"/>
+<g font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" fill="#18344b">
+<text x="90" y="40">DNS</text><text x="210" y="40">TCP</text><text x="330" y="40">TLS</text>
+<text x="595" y="28">Put zahtjeva, čekanje,</text><text x="595" y="57">obrada, put odgovora</text><text x="945" y="40">Preuzimanje</text>
+<rect x="30" y="80" width="120" height="45" rx="8" fill="#58ab76"/><rect x="150" y="80" width="120" height="45" fill="#deb25b"/><rect x="270" y="80" width="120" height="45" fill="#aa83ce"/><rect x="390" y="80" width="410" height="45" fill="#438caf"/><rect x="800" y="80" width="290" height="45" rx="8" fill="#54b4b6"/>
+<path d="M800 65V150" stroke="#18344b" stroke-width="2" stroke-dasharray="5 5"/><text x="800" y="177" font-size="21">Prvi bajt odgovora</text>
+<path d="M30 153V205H800V191" fill="none" stroke="#1585b4" stroke-width="2.5"/>
+<text x="410" y="238" font-weight="bold">TTFB od početka navigacije</text><text x="945" y="238" font-size="21">Cijeli odgovor stiže poslije</text>
+<text x="560" y="285" font-size="20" fill="#607582">Nova HTTPS veza preko TCP-a; shematska trajanja. DNS i veze mogu se ponovno koristiti.</text>
+</g></svg>

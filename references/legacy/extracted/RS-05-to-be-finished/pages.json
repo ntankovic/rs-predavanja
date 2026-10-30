@@ -1,0 +1,212 @@
+[
+  {
+    "page": 1,
+    "characters": 100,
+    "preview": "Distributed systems\nLectures: doc. dr. sc. Nikola Tanković \nReplication\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 2,
+    "characters": 55,
+    "preview": "https://bit.ly/rs-blic-2\nDistributed systems\n2\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 3,
+    "characters": 24,
+    "preview": "http://bit.ly/rs-tu-sam\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 4,
+    "characters": 274,
+    "preview": "Replication\n• Copy of the same data on multiple nodes \n– Databases \n• Apache Cassandra (Netﬂix, eBay, Uber, ...) \n• MongoDB (primary/replica) \n• Some of the SQL databases (*) \n– Filesystems \n• HDFS, NFS (Sun, 1984), ... \n– Caches \n• Redis, ...\nDistributed systems\n4\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 5,
+    "characters": 164,
+    "preview": "Replica\n• A copy of the data is called a replica  \n• If one replica is not available, others could still \nbe available \n• Challenges?\nDistributed systems\n5\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 6,
+    "characters": 120,
+    "preview": "time\nClient A\nSET \"A\"\nOK\n«component»\nLeader 1\n\"A\"\n«component»\nLeader 2\nGET\n\"A\"\nClient B\n\nDistributed systems\n2022/23\n6\n",
+    "image_count": 2,
+    "vector_paths": 73
+  },
+  {
+    "page": 7,
+    "characters": 116,
+    "preview": "time\nClient A\nSET \"A\"\nOK\n«component»\nLeader 1\n\"A\"\n«component»\nLeader 2\nGET\n???\nClient B\nDistributed systems\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 70
+  },
+  {
+    "page": 8,
+    "characters": 95,
+    "preview": "Synchronization\n• ... usual problems\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n8\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 9,
+    "characters": 303,
+    "preview": "Retry behavior semantics\n• At-most-once: \n– Send a message, no retries, hope for the best... \n• At-least-once: \n– Retry until acknowledged, update can happen \nmany times \n• Exactly-once: \n– Retry but be careful not to have any side eﬀects (!) \n– Deduplicate or Idempotency\nDistributed systems\n9\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 10,
+    "characters": 191,
+    "preview": "Idempotency\n• A function  is idempotent if \nf\n \nf(x) = f(f(x))\n–Not ok: \n \nf1(like) = like + 1\n–Idempotent version: \n🤔\nf2(likeSet, userId) = likeSet ∪ {userId}\nDistributed systems\n10\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 11,
+    "characters": 85,
+    "preview": "What about now?\nPC\nMobile\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n11\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 4
+  },
+  {
+    "page": 12,
+    "characters": 75,
+    "preview": "Similar problem\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n12\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 13,
+    "characters": 85,
+    "preview": "Logical clock + Tombstone\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n13\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 14,
+    "characters": 82,
+    "preview": "Synchronizing replicas\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n14\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 15,
+    "characters": 77,
+    "preview": "Concurrent writes\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n15\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 16,
+    "characters": 158,
+    "preview": "Last Writer Wins\ntime\nClient A\nSET \"A\"\nOK\nGET\n\"A\"\n«component»\nLeader 1\n\"A\"\n\"B\"\n«component»\nLeader 2\n\"A\"\nGET\nSET \"B\"\nClient B\n\nDistributed systems\n16\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 102
+  },
+  {
+    "page": 17,
+    "characters": 172,
+    "preview": "Multi-Value Register\ntime\nClient A\nSET \"A\"\nOK\nGET\n\"A\", \"B\"\n«component»\nLeader 1\n\"A\"\n\"B\"\n«component»\nLeader 2\n\"A\", \"B\"\nGET\nSET \"B\"\nClient B\n\nDistributed systems\n17\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 103
+  },
+  {
+    "page": 18,
+    "characters": 292,
+    "preview": "Challenges\n• Vector clocks are expensive for a large number \nof clients \n– Can be larger than the data itself \n• Alternatives exist \n– Dotted version vectors (2010)  - used in Riak DB \n• Apache Cassandra uses Physical clocks! 😳 \n• AWS Dynamo uses vector clocks\nDistributed systems\n18\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 19,
+    "characters": 313,
+    "preview": "Fault probabilities\n• A replica could be unavailable (network, hardware, \n...) \n• Assume  as the probability of the node being \np\nunavailable (  is not constant in time, but for \nexample) as  replicas \np\nn\n•\n \nP(all down) = pn\n•\n \nP(all up) = (1 − p)n\n•\nP( ≥ 1 down) = 1 − (1 − p)n\nDistributed systems\n19\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 20,
+    "characters": 39,
+    "preview": "Example\nDistributed systems\n20\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 21,
+    "characters": 91,
+    "preview": "Replication fault tolerance\n• Quorum, if 2 out 3 successful\nDistributed systems\n21\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 22,
+    "characters": 332,
+    "preview": "Quorum properties\n• Typical: Majority quorum \nat most \n failed nodes among  nodes \n⌊ n − 1\n2\n⌋\nn\n• Used widely: replication, consensus, distributed \ndatabases, shared memory, abstract data types \n• Can consider: heterogeneity, workload skew, \nload, ... \n• Quorum is used for both for reads and writes\nDistributed systems\n22\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 1
+  },
+  {
+    "page": 23,
+    "characters": 212,
+    "preview": "Read and write quorums\n• writes acknowledged by  replicas \nw\n• reads acknowledged by  replicas \nr\n• ensure that \n \nw + r > n\n• result: every read will see at least one latest write\nDistributed systems\n23\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 24,
+    "characters": 60,
+    "preview": "A better \"Read-write\" quorum\nDistributed systems\n24\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 25,
+    "characters": 44,
+    "preview": "Read repairs\nDistributed systems\n25\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 26,
+    "characters": 288,
+    "preview": "Using broadcast\n• So far, we have used best-eﬀort broadcast \n– it is ok to fail on some links, and re-ordering is possible \n• What if we use FIFO total-order broadcast \n– Messages will be delivered in-order based on \nhappened-before relation between events\nDistributed systems\n26\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 27,
+    "characters": 330,
+    "preview": "State Machine Replication (SMR)\n• (1) Using FIFO total order broadcast to broadcast \nevery update to all replicas \n– Replicas will get the update messages in order \n• (2) Updates are applied in a deterministic order \non all replicas  \n– e.g. according to some predetermined rules \n• (1) + (2) = SMR\nDistributed systems\n27\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 28,
+    "characters": 291,
+    "preview": "State Machine Replication (SMR)\n• Close ideas: \n– Distributed ledgers (cryptocurrencies) \n– Smart contracts \n– Serializable transactions \n• Limitations: \n– Has some update latency waiting for broadcast delivery \n– Requires fault-tolerant total order broadcast\nDistributed systems\n28\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 29,
+    "characters": 237,
+    "preview": "Replication using weaker broadcasts\n• SMR uses FIFO total order broadcast \n• We can use weaker broadcasts if the updates are \ncommutative \n– e.g. two updates  and  are commutative if \nf\ng\nf(g(x)) = g(f(x))\nDistributed systems\n29\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 30,
+    "characters": 438,
+    "preview": "Self-assesment\nWhy do we need replication? \nWhat is a replica and what are the challenges in replica \nsynchronization? \nWhat are the diﬀerences between retry semantics? \nWhat do we use logical clocks in replication? \nWhat is a data tombstone? \nDiﬀerence between LWW and MVR? \nContrast probabilities of all nodes being down or all nodes being up. \nWhat is a quorum? \nWhy is state-machine replication useful?\nDistributed systems\n30\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  }
+]

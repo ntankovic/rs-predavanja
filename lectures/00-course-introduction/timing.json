@@ -1,0 +1,100 @@
+[
+  {
+    "slide": 1,
+    "title": "Course introduction and assessment",
+    "start": 0,
+    "end": 0.5,
+    "minutes": 0.5
+  },
+  {
+    "slide": 2,
+    "title": "Attendance and participation",
+    "start": 0.5,
+    "end": 1.5,
+    "minutes": 1
+  },
+  {
+    "slide": 3,
+    "title": "Mark your presence (shared slide)",
+    "start": 1.5,
+    "end": 2.0,
+    "minutes": 0.5
+  },
+  {
+    "title": "Teaching staff and course obligations",
+    "start": 2.0,
+    "end": 3.0,
+    "minutes": 1,
+    "slide": 4
+  },
+  {
+    "slide": 5,
+    "title": "What this course is about",
+    "start": 3.0,
+    "end": 4.0,
+    "minutes": 1
+  },
+  {
+    "slide": 6,
+    "title": "The route through the course",
+    "start": 4.0,
+    "end": 6.0,
+    "minutes": 2
+  },
+  {
+    "slide": 7,
+    "title": "From lectures to practical work",
+    "start": 6.0,
+    "end": 7.0,
+    "minutes": 1
+  },
+  {
+    "title": "Programming preparation",
+    "start": 7.0,
+    "end": 8.0,
+    "minutes": 1,
+    "slide": 8
+  },
+  {
+    "slide": 9,
+    "title": "Course information and help",
+    "start": 8.0,
+    "end": 9.0,
+    "minutes": 1
+  },
+  {
+    "title": "How to pass the course (BPMN)",
+    "start": 9,
+    "end": 12.0,
+    "minutes": 3,
+    "slide": 10
+  },
+  {
+    "slide": 11,
+    "title": "Submission, exemption, and defence",
+    "start": 12.0,
+    "end": 13.0,
+    "minutes": 1
+  },
+  {
+    "slide": 12,
+    "title": "Prepare to explain your project",
+    "start": 13.0,
+    "end": 16.0,
+    "minutes": 3
+  },
+  {
+    "title": "AI use and your responsibility",
+    "start": 16.0,
+    "end": 18.0,
+    "minutes": 2,
+    "slide": 13
+  },
+  {
+    "slide": 14,
+    "title": "Before the first technical lecture",
+    "start": 18.0,
+    "end": 20.0,
+    "minutes": 2
+  }
+]

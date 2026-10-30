@@ -1,0 +1,21 @@
+---
+title: "[Lecture title]"
+---
+
+## Learning outcomes
+
+## Prerequisites
+
+## Motivation and running example
+
+## Concepts and explanations
+
+## Worked examples
+
+## Assumptions, failures, and tradeoffs
+
+## Exercises and discussion
+
+## Recap
+
+## Further reading

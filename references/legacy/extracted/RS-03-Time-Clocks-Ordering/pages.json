@@ -1,0 +1,233 @@
+[
+  {
+    "page": 1,
+    "characters": 24,
+    "preview": "http://bit.ly/rs-tu-sam\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 2,
+    "characters": 114,
+    "preview": "Distributed systems\nLectures: doc. dr. sc. Nikola Tanković \nTime, clocks and ordering\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 3,
+    "characters": 374,
+    "preview": "Time and clocks\n• Why do we need them? \n– Timeouts and retries,  \n– Performance monitoring & modeling \n– Event logs \n– TTLs (time-to-live): cache, authentication tokens, record \nexpiry (e.g., DynamoDB)... \n– Determining the order of events \n• Types of clocks \n– physical - number of (milli)seconds elapsed \n– logical - number of events elapsed\nDistributed systems\n3\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 4,
+    "characters": 247,
+    "preview": "Physical clocks\n• Quartz clock \n– Speciﬁcally designed to resonate  \nat speciﬁc frequency  \n• e.g. 32768Hz or 2^15Hz \n– Piezo-electric eﬀect \n• \"bending the voltage\" \n– Cheap to produce \n– Imprecise (1ppm = 32s/year)\nDistributed systems\n4\n2022/23\n",
+    "image_count": 6,
+    "vector_paths": 0
+  },
+  {
+    "page": 5,
+    "characters": 284,
+    "preview": "Physical clocks\n• Atomic clocks \n– Greater precision \n• 1 second in 3 million years \n– The international system of Units \n(SI) deﬁnition: \n• 1 second = 9,192,631,770 \nperiods of a particular resonant \nfrequency of the cesium-133 \natom \n– Price ~ 20.000$\nDistributed systems\n5\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 6,
+    "characters": 43,
+    "preview": "Atomic clock\nDistributed systems\n6\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 7,
+    "characters": 513,
+    "preview": "Leap seconds\n• Greenwich Mean Time (GMT, solar time): it’s noon when the \nsun is in the south, as seen from the Greenwich meridian \n• International Atomic Time (TAI): 1 day is 24 × 60 × 60 × \n9,192,631,770 periods of caesium-133’s resonant frequency \n• Problem: it works great (!) but is disconnected from our \nfeeling of time - the speed of Earth’s rotation is not constant! \n• Compromise: UTC time is the TAI time, but with the \ncorrections applied",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 8,
+    "characters": 461,
+    "preview": "Leap seconds\n• Every year, on 30 June and 31 December at \n23:59:59 UTC, one of three things happens: \n– The clock immediately jumps forward to 00:00:00, \nskipping one second (negative leap second)  \n– The clock moves to 00:00:00 after one second, as usual  \n– The clock moves to 23:59:60 after one second, and then \nmoves to 00:00:00 after one further second (positive \nleap second) \n• This is announced several months beforehand.\nDistributed systems",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 9,
+    "characters": 52,
+    "preview": "Yes, this is possible\nDistributed systems\n9\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 10,
+    "characters": 46,
+    "preview": "In practice...\nDistributed systems\n10\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 11,
+    "characters": 258,
+    "preview": "Representation of time\n• How to squeeze the time into bits \n• Unix timestamp \n– Number of seconds elapsed from 1 January \n1970 00:00:00 UTC \n– not dealing with leap seconds \n• ISO 8601 \n– Taking time-zones into consideration 🤯\nDistributed systems\n11\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 12,
+    "characters": 98,
+    "preview": "Timezones are a mess...\nh2ps://www.youtube.com/watch?v=-5wpm-gesOY\nDistributed systems\n12\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 13,
+    "characters": 305,
+    "preview": "Dealing with those leap seconds\n• Most software ignores it \n• But distributed systems and OS'es need \nmicrosecond precisions \n– Many failures due to leap seconds \n• Pragmatic solution: smear that second \nthroughout the day \n– Take or add a very small part every microsecond\nDistributed systems\n13\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 14,
+    "characters": 370,
+    "preview": "Clock synchronization\n• Computers have a battery for the quartz clocks \n– due to drift (temperature et al.), the clocks continually \ndepart from one another \n• Clock skew: diﬀerence in clocks across systems \n• Solution: get the time from an atomic clock or \nGPS (which have atomic clocks) \n• Protocol for sync: Network Time Protocol (NTP)\nDistributed systems\n14\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 15,
+    "characters": 416,
+    "preview": "Network Time Protocol\n• Many vendors conﬁgure their OSes to sync time with \ntheir institutional NTP servers \n• National Institute of Standardization and Technology \nhas important NTP servers \n– https://tf.nist.gov/tf-cgi/servers.cgi \n• Hierarchy (organized in stratums) \n– Stratum 0: atomic clock \n– Stratum 1: synced with Stratum 0 \n– Stratum 2: ... \n• But how to deal with latency? \nDistributed systems\n15\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 16,
+    "characters": 52,
+    "preview": "Time synchronization\nDistributed systems\n16\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 17,
+    "characters": 563,
+    "preview": "Correcting the skew\n• Once the client has estimated the clock skew θ, it needs \nto apply that correction to its clock. \n– If | θ | < 125 ms, slew the clock: slightly speed it up or slow it \ndown by up to 500 ppm (brings clocks in sync within ≈ 5 \nminutes) \n– If 125 ms ≤ | θ | < 1,000 s, step the clock: suddenly reset the \nclient clock to the estimated server timestamp \n– If | θ | ≥ 1,000 s, panic and do nothing (leave the problem for a \nhuman ope",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 18,
+    "characters": 461,
+    "preview": "How to measure performance\nimport time \n# bad practice \nstart_time = time.time_ns() \ncall_some_rpc() \nend_time = time.time_ns() \nelapsed = end_time - start_time \nprint(f\"The call took {elapsed} nanoseconds.\") \nWhy can the measured \n Dme be negaDve?\n# good practice \nstart_time = time.monotonic_ns() \ncall_some_rpc() \nend_time = time.monotonic_ns() \nelapsed = end_time - start_time \nprint(f\"The call took {elapsed} nanoseconds.\") \nDistributed systems\n",
+    "image_count": 2,
+    "vector_paths": 19
+  },
+  {
+    "page": 19,
+    "characters": 57,
+    "preview": "Distributed systems\nOrdering\nDistributed systems\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 20,
+    "characters": 124,
+    "preview": "Ordering the messages\n•\n\"I was ﬁrst!\" \nm1 =\n•\n\"I was ﬁrst!\"\nm2 =\nAuthor: Dr. MarDn Kleppmann\nDistributed systems\n20\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 21,
+    "characters": 123,
+    "preview": "Inconsistencies\n• Clocks are skewing \n• Messages are arbitrarily \nlate \n• What can be done?\nDistributed systems\n21\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 22,
+    "characters": 485,
+    "preview": "DEF\n\"Happens-before\" partial order\n• An event is a unique moment in time at certain node \n• We can say that a happens before b, noted with \n if \na → b\nand only if: \n– Both  and  happened on the same node, and  before  \na\nb\na\nb\n– Event  is the event of sending some message, and event  is the \na\nb\nreceiving it \n– If  exists where \n (transitivity) \nc\na → c ∧ c → b\n \n∃c : a → c ∧ c → b ⟹ a → b\n– Otherwise we can note \n  \na ∥ b\n•\n is concurrent with \n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 23,
+    "characters": 59,
+    "preview": "Author: Dr. MarDn Kleppmann\nDistributed systems\n2022/23\n23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 24,
+    "characters": 192,
+    "preview": "Causality\n• Borrowed from physics (relativity) - based on information ﬂow \n– When \n then a might have caused  b \na → b\n– When \n then a did not have caused b\na∥b\nDistributed systems\n24\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 25,
+    "characters": 315,
+    "preview": "Finally: Logical clocks\n• Recap: \n– Physical clock - count the number of seconds elapsed \n– Logical clock - count the number of events occured \n• Physical timestamps are inconsistent with \ncausality (remember why?) \n• Logical clocks are designed to capture it\ne1 → e2 ⟹ T(e1) < T(e2)\nDistributed systems\n25\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 26,
+    "characters": 293,
+    "preview": "Lamport clocks\n• Leslie Lamport (1941- ) \n• Paxos (consensus), bakery algorithm \n(concurrent safety) \n• Famous papers: \n– Byzantine Generals \n– Time, Clocks, and the Ordering of Events in \na distributed system \n• LaTeX, temporal logic (TLA) \n– 2013 Turing award\nDistributed systems\n26\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 27,
+    "characters": 474,
+    "preview": "Lamport clock example\n• Each node maintains a counter  (timestamp) and increments it \nt\non every event  \ne\n• After increment, that is the new Lamport timestamp \n of \nL(e)\nthat event \n• If you send a message, attach the current  (timestamp) to it \nt\n• If the recipient receives a larger timestamp, it will increment \nits local timestamp \n• Properties you get \n \n \n (but not vice-versa) \na → b ⟹ L(a) < L(b)\npossible that \nL(a) = L(b) for a ≠ b\nDistrib",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 28,
+    "characters": 331,
+    "preview": "Example\nLet \n be the node label in which event  occured. Pair \n uniquely deﬁnes event .  \nN(e)\ne\n(L(e), N(e))\ne\nWe can break Des with a lexicographic order to get a total order.\na ≺ b\ndef\n⟺ (L(a) < L(b)) ∨ (L(a) = L(b) ∧ (N(a) < N(b))\nThis also is a causal order, whenever \na → b we also have \na ≺ b\nDistributed systems\n28\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 4
+  },
+  {
+    "page": 29,
+    "characters": 269,
+    "preview": "Limitations\n• In general, it is not possible to tell if two events are concurrent or \nif one happened before \n• E.g. we cannot tell much about the relation between \n and \n(2, A)\n(3, B)\nA\nB\n(1, A)\n(1, B)\n(2, B)\n(2, A)\n(3, B)\n(2, m)\n(4, B)\nDistributed systems\n29\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 20
+  },
+  {
+    "page": 30,
+    "characters": 630,
+    "preview": "Vector clocks\n• Given two Lamport timestamps \n and \n we cannot say \nL(a)\nL(b)\nwhether \n or \n \na ∥ b\na → b\n• For detecting concurrent events, we need vector clocks \n– Assume  nodes in the system, \n \nn\nN = {N1, N2, . . . , Nn}\n– Vector timestamp of event  is \n where  is \na\nV(A) = {t1, t2, . . . , tn}\nti\nnumber of events observed by node \n (incremented on each local \nNi\nevent) \n– Each nodes maintains current vector timestamp  which it attaches to \nT",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 31,
+    "characters": 39,
+    "preview": "Example\nDistributed systems\n31\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 32,
+    "characters": 202,
+    "preview": "Vector clocks ordering\n⟨1,2,3⟩ = ⟨1,2,3⟩\n⟨1,2,2⟩ ≤ ⟨1,2,3⟩ ⟨1,2,3⟩ ≤ ⟨1,2,3⟩\n⟨1,2,2⟩ < ⟨1,2,3⟩\n⟨1,3,2⟩ ∥ ⟨1,2,3⟩\na\nEvent  together with its \nown \"happened-before\" \nevents\nDistributed systems\n32\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 16
+  },
+  {
+    "page": 33,
+    "characters": 456,
+    "preview": "Self-assesment\nWhy do we need to keep track of the time between the \nnodes? \nWhat types of clocks are there? What is the main diﬀerence \nbetween them? \nWhat is the diﬀerence between quartz and an atomic \nclock? Which costs much more? \nWhat beneﬁts does the \"smearing the leap second\" bring?  \nDeﬁne a Lamport clock. What are its down-sides? \nDeﬁne a Vector clock, and compare it to the characteristics \nof the Lamport clock.\nDistributed systems\n33\n20",
+    "image_count": 2,
+    "vector_paths": 0
+  }
+]

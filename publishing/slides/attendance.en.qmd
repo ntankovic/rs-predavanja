@@ -1,0 +1,14 @@
+## Mark your presence {#attendance .attendance-slide}
+
+::: {.attendance-content}
+
+![](../../assets/shared/attendance-qr.svg){width=455.4 height=455.4 fig-alt="QR code for marking your presence"}
+
+[https://bit.ly/rs-tu-sam](https://bit.ly/rs-tu-sam)
+
+:::
+
+::: {.notes}
+Timing: 00:30–01 min (30 seconds, within the opening minute). Ask students to mark their presence. This check-in does not by itself establish an attendance requirement.
+:::
+

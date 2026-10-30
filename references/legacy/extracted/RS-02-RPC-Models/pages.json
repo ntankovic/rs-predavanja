@@ -1,0 +1,373 @@
+[
+  {
+    "page": 1,
+    "characters": 24,
+    "preview": "http://bit.ly/rs-tu-sam\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 2,
+    "characters": 102,
+    "preview": "Distributed systems\nLectures: doc. dr. sc. Nikola Tanković \nCommunication\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 3,
+    "characters": 189,
+    "preview": "Networking\n• Simple abstraction of communication \nAuthor: Dr. Mar8n Kleppmann\n• Meanwhile (reality): eduroam, home DSL, \ncellular, public Wi-Fi, satellites...\nDistributed systems\n3\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 4,
+    "characters": 276,
+    "preview": "Latency & bandwidth\n• Latency: time until (ﬁrst part of) a message \narrives \n– CPU to CPU via RAM: ~50 ns \n– Computer to computer (direct connection): ~1µs  \n– Same building: ~1 ms \n– CPU to (spinning) disk: ~10 ms \n– Diﬀerent continent: ~100 ms\nDistributed systems\n4\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 5,
+    "characters": 234,
+    "preview": "Latency & bandwidth\n• Bandwidth: max. data volume per unit of time \n– 3G cellular: ~ 1Mbit/s \n– 4G cellular: ~50Mbit/s \n– DSL: ~10Mbit/s \n– Hard drive in a van on 2 hour drive \n• 100TB drive → ~100Gbit/s\nDistributed systems\n5\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 6,
+    "characters": 50,
+    "preview": "Latency & bandwidth\nDistributed systems\n6\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 7,
+    "characters": 50,
+    "preview": "Latency & bandwidth\nDistributed systems\n2022/23\n7\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 8,
+    "characters": 407,
+    "preview": "Theoretical minimum\nTime, light in \nRound-trip time (RTT) \nRoute\nDistance\nTime, light in \nvacuum\nﬁber\nin ﬁber\nNew York to San \nFrancisco\n4,148 km\n14 ms\n21 ms\n42 ms\nNew York to London\n5,585 km\n19 ms\n28 ms\n56 ms\nNew York to Sydney\n15,993 km\n53 ms\n80 ms\n160 ms\nEquatorial \ncircumference\n40,075 km\n133.7 ms\n200 ms\n200 ms\nHumans perceive 100-200ms as slight \"lag\", > 300 \"sluggish\"\nDistributed systems\n8\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 22
+  },
+  {
+    "page": 9,
+    "characters": 833,
+    "preview": "traceroute\ntraceroute to google.com (142.250.180.238), 64 hops max, 52 byte packets \n 1  192.168.1.1 (192.168.1.1)  1.138 ms  0.562 ms  0.273 ms \n 2  10.42.0.1 (10.42.0.1)  2.202 ms  2.288 ms  1.988 ms \n 3  45.142.10.1 (45.142.10.1)  2.093 ms  6.959 ms  2.269 ms \n 4  dh70-161.xnet.hr (83.139.70.161)  13.086 ms  10.774 ms  7.745 ms \n 5  * 195.3.114.229 (195.3.114.229)  16.006 ms  17.697 ms \n 6  * * * \n 7  * * * \n 8  lg59-9071.as8447.a1.net (80.120",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 10,
+    "characters": 67,
+    "preview": "High-bandwidth high-latency example\nDistributed systems\n10\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 11,
+    "characters": 129,
+    "preview": "A familiar message protocol\n• Can you remember one? \n• Where have we seen requests and replies?\n🔥\nDistributed systems\n11\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 12,
+    "characters": 31,
+    "preview": "Distributed systems\n2022/23\n12\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 13,
+    "characters": 39,
+    "preview": "Example\nDistributed systems\n13\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 14,
+    "characters": 72,
+    "preview": "Much simpler\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n14\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 15,
+    "characters": 87,
+    "preview": "RPC - remote procedure call\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n15\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 16,
+    "characters": 293,
+    "preview": "RPC - remote procedure call\nlet card = { \n    \"number\": \"4312-5678-1234-1234\", \n    \"expiryDate\": \"10/2024\", \n    \"cvc\": \"123\" \n} \nlet response = await Service.processPayment(card, 3.99, \"GBP\"); \nif (response.result == \"success\") { \n    showSuccessScreen(); \n} \nDistributed systems\n2022/23\n16\n",
+    "image_count": 2,
+    "vector_paths": 9
+  },
+  {
+    "page": 17,
+    "characters": 81,
+    "preview": "Many steps in-between\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n17\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 18,
+    "characters": 172,
+    "preview": "RPC\n• Remember location transparency? \n• What can go wrong? \n– Lost? \n– Delayed? \n– Server crash? \n– Safe to retry? \n• Remember idempotency?\nDistributed systems\n18\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 19,
+    "characters": 218,
+    "preview": "RPC examples\n• SOAP/XML-RPC: RPC using XML and HTTP (1998) \n• Thrift (Facebook, 2007) \n• gRPC (Google, 2015) \n• REST (often with JSON) \n• Ajax in web browsers (fetch/axios and others...)\nDistributed systems\n19\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 20,
+    "characters": 175,
+    "preview": "Enterprise RPC\n• Usually has a strict schema for each P in RPC \n• Interface Deﬁnition Language (IDL) \n– A language independent API speciﬁcation\nDistributed systems\n20\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 21,
+    "characters": 44,
+    "preview": "gRPC example\nDistributed systems\n21\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 22,
+    "characters": 36,
+    "preview": "Demo\nDistributed systems\n22\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 23,
+    "characters": 118,
+    "preview": "Distributed systems\nLectures: doc. dr. sc. Nikola Tanković \nModels of distributed systems\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 24,
+    "characters": 277,
+    "preview": "System model\n• A system model captures our assumptions \nabout how nodes and the network behave \n• An abstract description of their properties, \nwhich can be implemented by various \ntechnologies in practice \n• Let see some motivating examples ...\nDistributed systems\n24\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 25,
+    "characters": 112,
+    "preview": "Remember...\n• Still using simple communication model\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n25\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 26,
+    "characters": 95,
+    "preview": "Example 1: The two generals problem\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n26\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 27,
+    "characters": 131,
+    "preview": "Outcomes\nAuthor: Dr. Mar8n Kleppmann\nNote: Coordina8on is the only way for the generals to succeed.\nDistributed systems\n27\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 28,
+    "characters": 77,
+    "preview": "... the challenge\nAuthor: Dr. Mar8n Kleppmann\nDistributed systems\n28\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 29,
+    "characters": 304,
+    "preview": "\"No common knowledge\"\n• The only way to know something is by \ncommunicating \n• Whenever there is a possibility (no matter how \nsmall) that a message will get lost, there can be \nno 100% conﬁdence in the outcome \n• No node can know the state of another node \nwith certainty\nDistributed systems\n29\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 30,
+    "characters": 72,
+    "preview": "Impossible to diﬀerentiate\nNode A\nNode B\nDistributed systems\n30\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 31,
+    "characters": 111,
+    "preview": "Web-shop analogy\nAuthor: Dr. Mar8n Kleppmann\nQues(on: Why can this be resolved?\nDistributed systems\n31\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 32,
+    "characters": 147,
+    "preview": "Example 2: The Byzantine generals problem\nAuthor: Dr. Mar8n Kleppmann\nProblem: some of the generals can be traitors\nDistributed systems\n32\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 33,
+    "characters": 98,
+    "preview": "Generals can cheat\nLamport et al. 1982\nFigure: Dr. Mar8n Kleppmann\nDistributed systems\n33\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 2
+  },
+  {
+    "page": 34,
+    "characters": 279,
+    "preview": "Problem summary\n• Each general is either honest or malicious \n• Generals do not know which ones are malicious  \n• Theorem: If some  generals are malicious, we \nn\nneed \n generals in total \n3n + 1\n→  requirement:\n of generals can be \n< 1\n3\nmalicious\nDistributed systems\n34\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 1
+  },
+  {
+    "page": 35,
+    "characters": 37,
+    "preview": "Proof\nDistributed systems\n35\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 36,
+    "characters": 84,
+    "preview": "How does this translate?\nFigure: Dr. Mar8n Kleppmann\nDistributed systems\n36\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 37,
+    "characters": 54,
+    "preview": "A more formal approach\nDistributed systems\n2022/23\n37\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 38,
+    "characters": 332,
+    "preview": "System model\n• Two generals problem → a model of networks \n(messages get lost) \n• Byzantine generals problem → a model of node \nbehavior \n– A node can be faulty (e.g. down or have a bug) \n– The node operator can be malicious \n• In practice: both situations: both network and \nthe nodes are unreliable\nDistributed systems\n38\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 39,
+    "characters": 55,
+    "preview": "Networks are unreliable\nDistributed systems\n39\n2022/23\n",
+    "image_count": 5,
+    "vector_paths": 0
+  },
+  {
+    "page": 40,
+    "characters": 73,
+    "preview": "Distributed systems\n2022/23\n40\nSource: hPps://www.submarinecablemap.com/\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 41,
+    "characters": 461,
+    "preview": "M1\nNetwork model\n• Most algorithms assume one of three possibilities: \n– Perfect link - message, when sent, will get through \n(ordering is not preserved) 😰 \n– Fail-loss links - some messages will get lost, duplicated \nor reordered (retries help) but eventually get there \n• Solutions: idempotency, delivery guarantees \n– Arbitrary links (with an active adversary) \n• Eavesdropping, modifying, replaying, ... \n• Solutions: SSL/TLS\nDistributed systems\n",
+    "image_count": 3,
+    "vector_paths": 2
+  },
+  {
+    "page": 42,
+    "characters": 430,
+    "preview": "M2\nNode model\n• Each node executes an algorithm, and may: \n– Fail-Stop (crash-stop) \n• Upon failure, it stops executing and potentially loses memory \nfor good (think drones?) \n– Fail-Recovery (crash-recovery) \n• Nodes can resume operation (think servers?) \n– Byzantine (fail-arbitrary) \n• Deviation from the algorithm (on purpose on not)  \n• Hard to change the algorithms between these \nassumptions\nDistributed systems\n42\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 43,
+    "characters": 363,
+    "preview": "M3\nTiming model\n• Applicable to both network and nodes: \n– Synchronous \n• Known upper bound for network latency \n• Nodes operate at a known speed \n– Asynchronous \n• Arbitrary delays and/or pauses in execution \n• No timing guarantees \n– Partially synchronous \n• Sometimes synchronous, but can go async for an \nunknown amount of time\nDistributed systems\n43\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 44,
+    "characters": 323,
+    "preview": "Reality on timings\n• A synchronous model is a dream, which we have \nmost of the time \n• Algorithms designed with that dream in mind \nwill fail \n– Latency and speed can vary wildly \n• The asynchronous model is another extreme \n– Algorithms are very robust, but not all problems can be \nsolved\nDistributed systems\n44\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 45,
+    "characters": 286,
+    "preview": "Usual violations of synchronicity\n• Networks \n– Message loss (wireless networks, routers fail) \n– Congestion (queueing, increased latency) \n– Network reconﬁgurations \n• Nodes \n– OS scheduling issues \n– \"Garbage collection\" \n– Page faults, memory swapping\nDistributed systems\n45\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 46,
+    "characters": 244,
+    "preview": "Distributed model summary\n• When designing an algorithm, pick your \nassumptions \n– Network: reliable, fail-loss, arbitrary \n– Nodes: crash-stop, crash-recovery, or Byzantine \n– Timing: sync, async, partially sync\nDistributed systems\n46\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 47,
+    "characters": 54,
+    "preview": "The story of ﬁve nines\nDistributed systems\n2022/23\n47\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 48,
+    "characters": 358,
+    "preview": "High-availability\n• The holy grail of any system and the most \ncommon reason to build a distributed system \n• Amazon wants to be up 24/7 \n– Downtime means losing money (about $300K/min) \n• Availability: fraction of the time that the system \nis up \n– \"Two nines\" 99% up ~ 4 days/year \n– \"Five nines\" 99.999% up ~ 5 minutes/year\nDistributed systems\n48\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 49,
+    "characters": 344,
+    "preview": "Service-level agreements\n• SLO - service-level objectives \n– A well-deﬁned metric that is combining several \nattributes (usual latency with availability) \n• e.g. 99.9% of all requests in a day will be served under \n200ms \n• SLA - service-level agreement \n– A contract consisting of 1+ SLO's \n– Penalties involved\nDistributed systems\n49\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 50,
+    "characters": 442,
+    "preview": "Fault tolerance\n• Failure: the system is not working \n– I can not order on Amazon \n• Fault: a part of the system is not working \n– Node or network crash \n– I can use the system with some level of degradation \n• Fault tolerance: the ability of the system to keep working \ndespite the faults or up-to-some number of faults \n• SPOF - single point of failure - a network link or a node \nwhose fault lead to failure\nDistributed systems\n50\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 51,
+    "characters": 130,
+    "preview": "Detecting failures\n• Failure detector: algorithm that detects another \nnode is faulty \n• Classiﬁer\nDistributed systems\n51\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 52,
+    "characters": 212,
+    "preview": "Usual approach & challenge\n• Send a message, wait for X seconds, mark as \nfailed/ok \n• Problem: no diﬀerence between node crash/\nfault, message delay, or lost message\nNode A\nNode B\nDistributed systems\n52\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 53,
+    "characters": 299,
+    "preview": "Self-assesment\nWhat is RPC? \nWhat is the diﬀerence between latency and \nbandwidth? \nDescribe the two general problem. \nDescribe the Byzantine generals' problem. \nWhat can go wrong with the distributed system? \nWhat is the diﬀerence between SLA and SLO? \nWhat is SPOF?\nDistributed systems\n53\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  }
+]

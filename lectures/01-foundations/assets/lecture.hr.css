@@ -1,0 +1,4 @@
+.reveal .example-slide > h2::before { content: "💡 Primjer"; }
+.reveal .use-case-slide > h2::before { content: "🎓 Primjena"; }
+.reveal .exercise-slide > h2::before { content: "✏️ Vježba"; }
+.reveal .timing-comparison > p { font-size: 0.82em; line-height: 1.3; }

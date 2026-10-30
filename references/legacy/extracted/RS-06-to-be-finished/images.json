@@ -1,0 +1,60 @@
+[
+  {
+    "file": "images/image-5.png",
+    "xref": 5,
+    "pages": [
+      1
+    ],
+    "width": 1024,
+    "height": 768
+  },
+  {
+    "file": "images/image-7.png",
+    "xref": 7,
+    "pages": [
+      1
+    ],
+    "width": 162,
+    "height": 162
+  },
+  {
+    "file": "images/image-10.png",
+    "xref": 10,
+    "pages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "width": 179,
+    "height": 178
+  },
+  {
+    "file": "images/image-16.png",
+    "xref": 16,
+    "pages": [
+      1
+    ],
+    "width": 2560,
+    "height": 759
+  },
+  {
+    "file": "images/image-28.png",
+    "xref": 28,
+    "pages": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "width": 1024,
+    "height": 768
+  }
+]

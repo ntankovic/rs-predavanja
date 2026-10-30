@@ -1,0 +1,659 @@
+
+
+--- PDF PAGE 1 ---
+
+http://bit.ly/rs-tu-sam
+
+
+--- PDF PAGE 2 ---
+
+Distributed systems
+Lectures: doc. dr. sc. Nikola Tanković 
+Communication
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 3 ---
+
+Networking
+• Simple abstraction of communication 
+Author: Dr. Mar8n Kleppmann
+• Meanwhile (reality): eduroam, home DSL, 
+cellular, public Wi-Fi, satellites...
+Distributed systems
+3
+2022/23
+
+
+--- PDF PAGE 4 ---
+
+Latency & bandwidth
+• Latency: time until (ﬁrst part of) a message 
+arrives 
+– CPU to CPU via RAM: ~50 ns 
+– Computer to computer (direct connection): ~1µs  
+– Same building: ~1 ms 
+– CPU to (spinning) disk: ~10 ms 
+– Diﬀerent continent: ~100 ms
+Distributed systems
+4
+2022/23
+
+
+--- PDF PAGE 5 ---
+
+Latency & bandwidth
+• Bandwidth: max. data volume per unit of time 
+– 3G cellular: ~ 1Mbit/s 
+– 4G cellular: ~50Mbit/s 
+– DSL: ~10Mbit/s 
+– Hard drive in a van on 2 hour drive 
+• 100TB drive → ~100Gbit/s
+Distributed systems
+5
+2022/23
+
+
+--- PDF PAGE 6 ---
+
+Latency & bandwidth
+Distributed systems
+6
+2022/23
+
+
+--- PDF PAGE 7 ---
+
+Latency & bandwidth
+Distributed systems
+2022/23
+7
+
+
+--- PDF PAGE 8 ---
+
+Theoretical minimum
+Time, light in 
+Round-trip time (RTT) 
+Route
+Distance
+Time, light in 
+vacuum
+ﬁber
+in ﬁber
+New York to San 
+Francisco
+4,148 km
+14 ms
+21 ms
+42 ms
+New York to London
+5,585 km
+19 ms
+28 ms
+56 ms
+New York to Sydney
+15,993 km
+53 ms
+80 ms
+160 ms
+Equatorial 
+circumference
+40,075 km
+133.7 ms
+200 ms
+200 ms
+Humans perceive 100-200ms as slight "lag", > 300 "sluggish"
+Distributed systems
+8
+2022/23
+
+
+--- PDF PAGE 9 ---
+
+traceroute
+traceroute to google.com (142.250.180.238), 64 hops max, 52 byte packets 
+ 1  192.168.1.1 (192.168.1.1)  1.138 ms  0.562 ms  0.273 ms 
+ 2  10.42.0.1 (10.42.0.1)  2.202 ms  2.288 ms  1.988 ms 
+ 3  45.142.10.1 (45.142.10.1)  2.093 ms  6.959 ms  2.269 ms 
+ 4  dh70-161.xnet.hr (83.139.70.161)  13.086 ms  10.774 ms  7.745 ms 
+ 5  * 195.3.114.229 (195.3.114.229)  16.006 ms  17.697 ms 
+ 6  * * * 
+ 7  * * * 
+ 8  lg59-9071.as8447.a1.net (80.120.167.46)  22.983 ms  21.049 ms  19.706 ms 
+ 9  * * * 
+10  216.239.35.250 (216.239.35.250)  20.686 ms 
+    142.251.228.26 (142.251.228.26)  25.162 ms 
+    142.251.228.28 (142.251.228.28)  23.280 ms 
+11  bud02s34-in-f14.1e100.net (142.250.180.238)  20.741 ms 
+    142.251.65.217 (142.251.65.217)  31.523 ms 
+    142.251.65.219 (142.251.65.219)  20.150 ms
+Distributed systems
+9
+2022/23
+
+
+--- PDF PAGE 10 ---
+
+High-bandwidth high-latency example
+Distributed systems
+10
+2022/23
+
+
+--- PDF PAGE 11 ---
+
+A familiar message protocol
+• Can you remember one? 
+• Where have we seen requests and replies?
+🔥
+Distributed systems
+11
+2022/23
+
+
+--- PDF PAGE 12 ---
+
+Distributed systems
+2022/23
+12
+
+
+--- PDF PAGE 13 ---
+
+Example
+Distributed systems
+13
+2022/23
+
+
+--- PDF PAGE 14 ---
+
+Much simpler
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+14
+2022/23
+
+
+--- PDF PAGE 15 ---
+
+RPC - remote procedure call
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+15
+2022/23
+
+
+--- PDF PAGE 16 ---
+
+RPC - remote procedure call
+let card = { 
+    "number": "4312-5678-1234-1234", 
+    "expiryDate": "10/2024", 
+    "cvc": "123" 
+} 
+let response = await Service.processPayment(card, 3.99, "GBP"); 
+if (response.result == "success") { 
+    showSuccessScreen(); 
+} 
+Distributed systems
+2022/23
+16
+
+
+--- PDF PAGE 17 ---
+
+Many steps in-between
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+17
+2022/23
+
+
+--- PDF PAGE 18 ---
+
+RPC
+• Remember location transparency? 
+• What can go wrong? 
+– Lost? 
+– Delayed? 
+– Server crash? 
+– Safe to retry? 
+• Remember idempotency?
+Distributed systems
+18
+2022/23
+
+
+--- PDF PAGE 19 ---
+
+RPC examples
+• SOAP/XML-RPC: RPC using XML and HTTP (1998) 
+• Thrift (Facebook, 2007) 
+• gRPC (Google, 2015) 
+• REST (often with JSON) 
+• Ajax in web browsers (fetch/axios and others...)
+Distributed systems
+19
+2022/23
+
+
+--- PDF PAGE 20 ---
+
+Enterprise RPC
+• Usually has a strict schema for each P in RPC 
+• Interface Deﬁnition Language (IDL) 
+– A language independent API speciﬁcation
+Distributed systems
+20
+2022/23
+
+
+--- PDF PAGE 21 ---
+
+gRPC example
+Distributed systems
+21
+2022/23
+
+
+--- PDF PAGE 22 ---
+
+Demo
+Distributed systems
+22
+2022/23
+
+
+--- PDF PAGE 23 ---
+
+Distributed systems
+Lectures: doc. dr. sc. Nikola Tanković 
+Models of distributed systems
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 24 ---
+
+System model
+• A system model captures our assumptions 
+about how nodes and the network behave 
+• An abstract description of their properties, 
+which can be implemented by various 
+technologies in practice 
+• Let see some motivating examples ...
+Distributed systems
+24
+2022/23
+
+
+--- PDF PAGE 25 ---
+
+Remember...
+• Still using simple communication model
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+25
+2022/23
+
+
+--- PDF PAGE 26 ---
+
+Example 1: The two generals problem
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+26
+2022/23
+
+
+--- PDF PAGE 27 ---
+
+Outcomes
+Author: Dr. Mar8n Kleppmann
+Note: Coordina8on is the only way for the generals to succeed.
+Distributed systems
+27
+2022/23
+
+
+--- PDF PAGE 28 ---
+
+... the challenge
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+28
+2022/23
+
+
+--- PDF PAGE 29 ---
+
+"No common knowledge"
+• The only way to know something is by 
+communicating 
+• Whenever there is a possibility (no matter how 
+small) that a message will get lost, there can be 
+no 100% conﬁdence in the outcome 
+• No node can know the state of another node 
+with certainty
+Distributed systems
+29
+2022/23
+
+
+--- PDF PAGE 30 ---
+
+Impossible to diﬀerentiate
+Node A
+Node B
+Distributed systems
+30
+2022/23
+
+
+--- PDF PAGE 31 ---
+
+Web-shop analogy
+Author: Dr. Mar8n Kleppmann
+Ques(on: Why can this be resolved?
+Distributed systems
+31
+2022/23
+
+
+--- PDF PAGE 32 ---
+
+Example 2: The Byzantine generals problem
+Author: Dr. Mar8n Kleppmann
+Problem: some of the generals can be traitors
+Distributed systems
+32
+2022/23
+
+
+--- PDF PAGE 33 ---
+
+Generals can cheat
+Lamport et al. 1982
+Figure: Dr. Mar8n Kleppmann
+Distributed systems
+33
+2022/23
+
+
+--- PDF PAGE 34 ---
+
+Problem summary
+• Each general is either honest or malicious 
+• Generals do not know which ones are malicious  
+• Theorem: If some  generals are malicious, we 
+n
+need 
+ generals in total 
+3n + 1
+→  requirement:
+ of generals can be 
+< 1
+3
+malicious
+Distributed systems
+34
+2022/23
+
+
+--- PDF PAGE 35 ---
+
+Proof
+Distributed systems
+35
+2022/23
+
+
+--- PDF PAGE 36 ---
+
+How does this translate?
+Figure: Dr. Mar8n Kleppmann
+Distributed systems
+36
+2022/23
+
+
+--- PDF PAGE 37 ---
+
+A more formal approach
+Distributed systems
+2022/23
+37
+
+
+--- PDF PAGE 38 ---
+
+System model
+• Two generals problem → a model of networks 
+(messages get lost) 
+• Byzantine generals problem → a model of node 
+behavior 
+– A node can be faulty (e.g. down or have a bug) 
+– The node operator can be malicious 
+• In practice: both situations: both network and 
+the nodes are unreliable
+Distributed systems
+38
+2022/23
+
+
+--- PDF PAGE 39 ---
+
+Networks are unreliable
+Distributed systems
+39
+2022/23
+
+
+--- PDF PAGE 40 ---
+
+Distributed systems
+2022/23
+40
+Source: hPps://www.submarinecablemap.com/
+
+
+--- PDF PAGE 41 ---
+
+M1
+Network model
+• Most algorithms assume one of three possibilities: 
+– Perfect link - message, when sent, will get through 
+(ordering is not preserved) 😰 
+– Fail-loss links - some messages will get lost, duplicated 
+or reordered (retries help) but eventually get there 
+• Solutions: idempotency, delivery guarantees 
+– Arbitrary links (with an active adversary) 
+• Eavesdropping, modifying, replaying, ... 
+• Solutions: SSL/TLS
+Distributed systems
+41
+2022/23
+
+
+--- PDF PAGE 42 ---
+
+M2
+Node model
+• Each node executes an algorithm, and may: 
+– Fail-Stop (crash-stop) 
+• Upon failure, it stops executing and potentially loses memory 
+for good (think drones?) 
+– Fail-Recovery (crash-recovery) 
+• Nodes can resume operation (think servers?) 
+– Byzantine (fail-arbitrary) 
+• Deviation from the algorithm (on purpose on not)  
+• Hard to change the algorithms between these 
+assumptions
+Distributed systems
+42
+2022/23
+
+
+--- PDF PAGE 43 ---
+
+M3
+Timing model
+• Applicable to both network and nodes: 
+– Synchronous 
+• Known upper bound for network latency 
+• Nodes operate at a known speed 
+– Asynchronous 
+• Arbitrary delays and/or pauses in execution 
+• No timing guarantees 
+– Partially synchronous 
+• Sometimes synchronous, but can go async for an 
+unknown amount of time
+Distributed systems
+43
+2022/23
+
+
+--- PDF PAGE 44 ---
+
+Reality on timings
+• A synchronous model is a dream, which we have 
+most of the time 
+• Algorithms designed with that dream in mind 
+will fail 
+– Latency and speed can vary wildly 
+• The asynchronous model is another extreme 
+– Algorithms are very robust, but not all problems can be 
+solved
+Distributed systems
+44
+2022/23
+
+
+--- PDF PAGE 45 ---
+
+Usual violations of synchronicity
+• Networks 
+– Message loss (wireless networks, routers fail) 
+– Congestion (queueing, increased latency) 
+– Network reconﬁgurations 
+• Nodes 
+– OS scheduling issues 
+– "Garbage collection" 
+– Page faults, memory swapping
+Distributed systems
+45
+2022/23
+
+
+--- PDF PAGE 46 ---
+
+Distributed model summary
+• When designing an algorithm, pick your 
+assumptions 
+– Network: reliable, fail-loss, arbitrary 
+– Nodes: crash-stop, crash-recovery, or Byzantine 
+– Timing: sync, async, partially sync
+Distributed systems
+46
+2022/23
+
+
+--- PDF PAGE 47 ---
+
+The story of ﬁve nines
+Distributed systems
+2022/23
+47
+
+
+--- PDF PAGE 48 ---
+
+High-availability
+• The holy grail of any system and the most 
+common reason to build a distributed system 
+• Amazon wants to be up 24/7 
+– Downtime means losing money (about $300K/min) 
+• Availability: fraction of the time that the system 
+is up 
+– "Two nines" 99% up ~ 4 days/year 
+– "Five nines" 99.999% up ~ 5 minutes/year
+Distributed systems
+48
+2022/23
+
+
+--- PDF PAGE 49 ---
+
+Service-level agreements
+• SLO - service-level objectives 
+– A well-deﬁned metric that is combining several 
+attributes (usual latency with availability) 
+• e.g. 99.9% of all requests in a day will be served under 
+200ms 
+• SLA - service-level agreement 
+– A contract consisting of 1+ SLO's 
+– Penalties involved
+Distributed systems
+49
+2022/23
+
+
+--- PDF PAGE 50 ---
+
+Fault tolerance
+• Failure: the system is not working 
+– I can not order on Amazon 
+• Fault: a part of the system is not working 
+– Node or network crash 
+– I can use the system with some level of degradation 
+• Fault tolerance: the ability of the system to keep working 
+despite the faults or up-to-some number of faults 
+• SPOF - single point of failure - a network link or a node 
+whose fault lead to failure
+Distributed systems
+50
+2022/23
+
+
+--- PDF PAGE 51 ---
+
+Detecting failures
+• Failure detector: algorithm that detects another 
+node is faulty 
+• Classiﬁer
+Distributed systems
+51
+2022/23
+
+
+--- PDF PAGE 52 ---
+
+Usual approach & challenge
+• Send a message, wait for X seconds, mark as 
+failed/ok 
+• Problem: no diﬀerence between node crash/
+fault, message delay, or lost message
+Node A
+Node B
+Distributed systems
+52
+2022/23
+
+
+--- PDF PAGE 53 ---
+
+Self-assesment
+What is RPC? 
+What is the diﬀerence between latency and 
+bandwidth? 
+Describe the two general problem. 
+Describe the Byzantine generals' problem. 
+What can go wrong with the distributed system? 
+What is the diﬀerence between SLA and SLO? 
+What is SPOF?
+Distributed systems
+53
+2022/23

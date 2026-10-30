@@ -1,0 +1,22 @@
+---
+title: "[Naslov predavanja]"
+lang: hr
+author: "izv. prof. dr. sc. Nikola Tanković"
+subtitle: "Fakultet informatike, Sveučilište Jurja Dobrile u Puli"
+---
+
+## Ishodi učenja
+
+<!-- Sažeti ishode iz chapter.hr.qmd. -->
+
+::: {.notes}
+<!-- Dodati vremenski plan. Ukupno 60 minuta, uključujući raspravu i sažetak. -->
+:::
+
+## Motivacija
+
+## Pojmovi i primjeri
+
+## Provjera razumijevanja
+
+## Sažetak i dodatna literatura

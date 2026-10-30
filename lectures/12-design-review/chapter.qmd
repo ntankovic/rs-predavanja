@@ -1,0 +1,27 @@
+---
+title: "Security, observability, and system design"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Justify a design using an invariant, failure scenario, and observable evidence.
+
+**Prerequisites:** Lectures 01–11.
+
+## Core idea
+
+A system design should state who can perform an action, what must remain true, and how failures will be investigated. Logs and traces help connect operations across service boundaries, but sensitive information should not be copied into diagnostic output unnecessarily.
+
+## Worked scenario
+
+A student reports a missing registration. A request identifier links the API request, durable registration record, and notification event without logging the student password.
+
+## Discussion
+
+Which evidence distinguishes a failed registration from a delayed confirmation?
+
+## Recap
+
+A defensible design connects correctness, access control, and operational evidence.

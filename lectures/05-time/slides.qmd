@@ -1,0 +1,32 @@
+---
+title: "Time and event ordering"
+subtitle: "Distributed Systems · Lecture 05"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Distinguish causal order from wall-clock timestamp order.
+
+::: {.notes}
+Prerequisites: Lectures 01 and 03. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+The registration service sends a confirmation event. A notification worker receives it and sends an email. The worker clock happens to be behind the service clock.
+
+::: {.notes}
+Different machines can report different wall-clock times for related events. Message exchange gives another ordering rule: a message must be sent before that same message is received. This helps reason about causality without assuming perfectly synchronized clocks.
+:::
+
+## Discussion and recap
+
+Can the email have an earlier timestamp without having caused the registration?
+
+**Takeaway:** Reason about causal dependencies before interpreting timestamps.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

@@ -1,0 +1,3614 @@
+[
+  {
+    "page": 1,
+    "characters": 280,
+    "preview": "Distributed Systems\nThe second half of Concurrent and Distributed Systems\nhttps://www.cl.cam.ac.uk/teaching/current/ConcDisSys\nDr. Martin Kleppmann (mk428@cam)\nUniversity of Cambridge\nComputer Science Tripos, Part IB\nThis work is published under a\nCreative Commons BY-SA license.\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 2,
+    "characters": 168,
+    "preview": "A distributed system is. . .\n▶ “. . . a system in which the failure of a computer you\ndidn’t even know existed can render your own computer\nunusable.” — Leslie Lamport\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 3,
+    "characters": 333,
+    "preview": "A distributed system is. . .\n▶ “. . . a system in which the failure of a computer you\ndidn’t even know existed can render your own computer\nunusable.” — Leslie Lamport\n▶ . . . multiple computers communicating via a network. . .\n▶ . . . trying to achieve some task together\n▶ Consists of “nodes” (computer, phone, car, robot, . . . )\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 4,
+    "characters": 388,
+    "preview": "Recommended reading\n▶ van Steen & Tanenbaum.\n“Distributed Systems”\n(any ed), free ebook available\n▶ Cachin, Guerraoui & Rodrigues.\n“Introduction to Reliable and Secure Distributed\nProgramming” (2nd ed), Springer 2011\n▶ Kleppmann.\n“Designing Data-Intensive Applications”,\nO’Reilly 2017\n▶ Bacon & Harris.\n“Operating Systems: Concurrent and Distributed\nSoftware Design”, Addison-Wesley 2003\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 5,
+    "characters": 593,
+    "preview": "Relationships with other courses\n▶ Concurrent Systems – Part IB\n(every distributed system is also concurrent)\n▶ Operating Systems – Part IA\n(inter-process communication, scheduling)\n▶ Databases – Part IA\n(many modern databases are distributed)\n▶ Computer Networking – Part IB Lent term\n(distributed systems involve network communication)\n▶ Further Java – Part IB Michaelmas\n(distributed programming practical exercises)\n▶ Security – Part IB Easter te",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 6,
+    "characters": 31,
+    "preview": "Why make a system distributed?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 7,
+    "characters": 131,
+    "preview": "Why make a system distributed?\n▶ It’s inherently distributed:\ne.g. sending a message from your mobile phone to your\nfriend’s phone\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 8,
+    "characters": 221,
+    "preview": "Why make a system distributed?\n▶ It’s inherently distributed:\ne.g. sending a message from your mobile phone to your\nfriend’s phone\n▶ For better reliability:\neven if one node fails, the system as a whole keeps\nfunctioning\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 9,
+    "characters": 315,
+    "preview": "Why make a system distributed?\n▶ It’s inherently distributed:\ne.g. sending a message from your mobile phone to your\nfriend’s phone\n▶ For better reliability:\neven if one node fails, the system as a whole keeps\nfunctioning\n▶ For better performance:\nget data from a nearby node rather than one halfway\nround the world\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 10,
+    "characters": 394,
+    "preview": "Why make a system distributed?\n▶ It’s inherently distributed:\ne.g. sending a message from your mobile phone to your\nfriend’s phone\n▶ For better reliability:\neven if one node fails, the system as a whole keeps\nfunctioning\n▶ For better performance:\nget data from a nearby node rather than one halfway\nround the world\n▶ To solve bigger problems:\ne.g. huge amounts of data, can’t ﬁt on one machine\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 11,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 12,
+    "characters": 236,
+    "preview": "Why NOT make a system distributed?\nThe trouble with distributed systems:\n▶ Communication may fail (and we might not even know it\nhas failed).\n▶ Processes may crash (and we might not know).\n▶ All of this may happen nondeterministically.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 13,
+    "characters": 421,
+    "preview": "Why NOT make a system distributed?\nThe trouble with distributed systems:\n▶ Communication may fail (and we might not even know it\nhas failed).\n▶ Processes may crash (and we might not know).\n▶ All of this may happen nondeterministically.\nFault tolerance: we want the system as a whole to continue\nworking, even when some parts are faulty.\nThis is hard.\nWriting a program to run on a single computer is\ncomparatively easy?!\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 14,
+    "characters": 114,
+    "preview": "Distributed Systems and Computer Networking\nWe use a simple abstraction of communication:\nmessage m\nnode i\nnode j\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 15,
+    "characters": 345,
+    "preview": "Distributed Systems and Computer Networking\nWe use a simple abstraction of communication:\nmessage m\nnode i\nnode j\nReality is much more complex:\n▶ Various network operators:\neduroam, home DSL, cellular data, coﬀee shop wiﬁ,\nsubmarine cable, satellite. . .\n▶ Physical communication:\nelectric current, radio waves, laser, hard drives in a van. . .\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 16,
+    "characters": 118,
+    "preview": "Hard drives in a van?!\nhttps://docs.aws.amazon.com/snowball/latest/ug/using-device.html\nHigh latency, high bandwidth!\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 17,
+    "characters": 169,
+    "preview": "Latency and bandwidth\nLatency: time until message arrives\n▶ In the same building/datacenter: ≈ 1 ms\n▶ One continent to another: ≈ 100 ms\n▶ Hard drives in a van: ≈ 1 day\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 18,
+    "characters": 359,
+    "preview": "Latency and bandwidth\nLatency: time until message arrives\n▶ In the same building/datacenter: ≈ 1 ms\n▶ One continent to another: ≈ 100 ms\n▶ Hard drives in a van: ≈ 1 day\nBandwidth: data volume per unit time\n▶ 3G cellular data: ≈ 1 Mbit/s\n▶ Home broadband: ≈ 10 Mbit/s\n▶ Hard drives in a van: 50 TB/box ≈ 1 Gbit/s\n(Very rough numbers, vary hugely in practice!)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 19,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 20,
+    "characters": 93,
+    "preview": "Client-server example: the web\nTime ﬂows from top to bottom.\nclient\nserver www.cst.cam.ac.uk\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 21,
+    "characters": 123,
+    "preview": "Client-server example: the web\nTime ﬂows from top to bottom.\nclient\nserver www.cst.cam.ac.uk\nGET /teaching/2122/ConcDisSys\n",
+    "image_count": 0,
+    "vector_paths": 22
+  },
+  {
+    "page": 22,
+    "characters": 148,
+    "preview": "Client-server example: the web\nTime ﬂows from top to bottom.\nclient\nserver www.cst.cam.ac.uk\nGET /teaching/2122/ConcDisSys\n<!DOCTYPE html><html>...\n",
+    "image_count": 0,
+    "vector_paths": 24
+  },
+  {
+    "page": 23,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 24,
+    "characters": 33,
+    "preview": "request message\nresponse message\n",
+    "image_count": 1,
+    "vector_paths": 20
+  },
+  {
+    "page": 25,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 26,
+    "characters": 68,
+    "preview": "Client-server example: online payments\nonline shop\npayments service\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 27,
+    "characters": 106,
+    "preview": "Client-server example: online payments\nonline shop\npayments service\ncharge £3.99 to credit card 1234. . .\n",
+    "image_count": 0,
+    "vector_paths": 22
+  },
+  {
+    "page": 28,
+    "characters": 114,
+    "preview": "Client-server example: online payments\nonline shop\npayments service\ncharge £3.99 to credit card 1234. . .\nsuccess\n",
+    "image_count": 0,
+    "vector_paths": 24
+  },
+  {
+    "page": 29,
+    "characters": 319,
+    "preview": "Remote Procedure Call (RPC) example\n// Online shop handling customer's card details\nCard card = new Card();\ncard.setCardNumber(\"1234 5678 8765 4321\");\ncard.setExpiryDate(\"10/2024\");\ncard.setCVC(\"123\");\nResult result = paymentsService.processPayment(card,\n3.99, Currency.GBP);\nif (result.isSuccess()) {\nfulfilOrder();\n}\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 30,
+    "characters": 371,
+    "preview": "Remote Procedure Call (RPC) example\n// Online shop handling customer's card details\nCard card = new Card();\ncard.setCardNumber(\"1234 5678 8765 4321\");\ncard.setExpiryDate(\"10/2024\");\ncard.setCVC(\"123\");\nResult result = paymentsService.processPayment(card,\n3.99, Currency.GBP);\nif (result.isSuccess()) {\nfulfilOrder();\n}\nImplementation of this function is on another node!\n",
+    "image_count": 0,
+    "vector_paths": 18
+  },
+  {
+    "page": 31,
+    "characters": 80,
+    "preview": "online shop\nRPC client\nRPC server\npayment service\nprocessPayment() stub\nwaiting\n",
+    "image_count": 0,
+    "vector_paths": 65
+  },
+  {
+    "page": 32,
+    "characters": 264,
+    "preview": "online shop\nRPC client\nRPC server\npayment service\nprocessPayment() stub\nm1\nmarshal args\nunmarshal args\nwaiting\n{\n\"request\": \"processPayment\",\n\"card\": {\n\"number\": \"1234567887654321\",\n\"expiryDate\": \"10/2024\",\n\"CVC\": \"123\"\nm1 =\n},\n\"amount\": 3.99,\n\"currency\": \"GBP\"\n}\n",
+    "image_count": 0,
+    "vector_paths": 69
+  },
+  {
+    "page": 33,
+    "characters": 296,
+    "preview": "online shop\nRPC client\nRPC server\npayment service\nprocessPayment() stub\nm1\nmarshal args\nunmarshal args\nprocessPayment()\nimplementation\nwaiting\n{\n\"request\": \"processPayment\",\n\"card\": {\n\"number\": \"1234567887654321\",\n\"expiryDate\": \"10/2024\",\n\"CVC\": \"123\"\nm1 =\n},\n\"amount\": 3.99,\n\"currency\": \"GBP\"\n}\n",
+    "image_count": 0,
+    "vector_paths": 71
+  },
+  {
+    "page": 34,
+    "characters": 381,
+    "preview": "online shop\nRPC client\nRPC server\npayment service\nprocessPayment() stub\nm1\nmarshal args\nunmarshal args\nprocessPayment()\nwaiting\nimplementation\nm2\nmarshal result\nunmarshal result\n{\n\"request\": \"processPayment\",\n\"card\": {\n{\n\"number\": \"1234567887654321\",\n\"expiryDate\": \"10/2024\",\n\"CVC\": \"123\"\n\"result\": \"success\",\n\"id\": \"XP61hHw2Rvo\"\nm1 =\nm2 =\n}\n},\n\"amount\": 3.99,\n\"currency\": \"GBP\"\n}\n",
+    "image_count": 0,
+    "vector_paths": 75
+  },
+  {
+    "page": 35,
+    "characters": 398,
+    "preview": "online shop\nRPC client\nRPC server\npayment service\nprocessPayment() stub\nm1\nmarshal args\nunmarshal args\nprocessPayment()\nwaiting\nimplementation\nm2\nmarshal result\nunmarshal result\nfunction returns\n{\n\"request\": \"processPayment\",\n\"card\": {\n{\n\"number\": \"1234567887654321\",\n\"expiryDate\": \"10/2024\",\n\"CVC\": \"123\"\n\"result\": \"success\",\n\"id\": \"XP61hHw2Rvo\"\nm1 =\nm2 =\n}\n},\n\"amount\": 3.99,\n\"currency\": \"GBP\"\n}\n",
+    "image_count": 0,
+    "vector_paths": 77
+  },
+  {
+    "page": 36,
+    "characters": 182,
+    "preview": "Remote Procedure Call (RPC)\nIdeally, RPC makes a call to a remote function look the same\nas a local function call.\n“Location transparency”:\nsystem hides where a resource is located.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 37,
+    "characters": 364,
+    "preview": "Remote Procedure Call (RPC)\nIdeally, RPC makes a call to a remote function look the same\nas a local function call.\n“Location transparency”:\nsystem hides where a resource is located.\nIn practice. . .\n▶ what if the service crashes during the function call?\n▶ what if a message is lost?\n▶ what if a message is delayed?\n▶ if something goes wrong, is it safe to retry?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 38,
+    "characters": 299,
+    "preview": "RPC history\n▶ SunRPC/ONC RPC (1980s, basis for NFS)\n▶ CORBA: object-oriented middleware, hot in the 1990s\n▶ Microsoft’s DCOM and Java RMI (similar to CORBA)\n▶ SOAP/XML-RPC: RPC using XML and HTTP (1998)\n▶ Thrift (Facebook, 2007)\n▶ gRPC (Google, 2015)\n▶ REST (often with JSON)\n▶ Ajax in web browsers\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 39,
+    "characters": 405,
+    "preview": "RPC/REST in JavaScript\nlet args = {amount: 3.99, currency: 'GBP', /*...*/ };\nlet request = {\nmethod:\n'POST',\nbody:\nJSON.stringify(args),\nheaders: {'Content-Type': 'application/json'}\n};\nfetch('https://example.com/payments', request)\n.then((response) => {\nif (response.ok) success(response.json());\nelse failure(response.status); // server error\n})\n.catch((error) => {\nfailure(error); // network error\n});\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 40,
+    "characters": 191,
+    "preview": "RPC in enterprise systems\n“Service-oriented architecture” (SOA) / “microservices”:\nsplitting a large software application into multiple services\n(on multiple nodes) that communicate via RPC.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 41,
+    "characters": 361,
+    "preview": "RPC in enterprise systems\n“Service-oriented architecture” (SOA) / “microservices”:\nsplitting a large software application into multiple services\n(on multiple nodes) that communicate via RPC.\nDiﬀerent services implemented in diﬀerent languages:\n▶ interoperability: datatype conversions\n▶ Interface Deﬁnition Language (IDL):\nlanguage-independent API speciﬁcation\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 42,
+    "characters": 475,
+    "preview": "gRPC IDL example\nmessage PaymentRequest {\nmessage Card {\nrequired string cardNumber\n= 1;\noptional int32\nexpiryMonth = 2;\noptional int32\nexpiryYear\n= 3;\noptional int32\nCVC\n= 4;\n}\nenum Currency { GBP = 1; USD = 2; }\nrequired Card\ncard\n= 1;\nrequired int64\namount\n= 2;\nrequired Currency currency = 3;\n}\nmessage PaymentStatus {\nrequired bool\nsuccess\n= 1;\noptional string errorMessage = 2;\n}\nservice PaymentService {\nrpc ProcessPayment(PaymentRequest) retu",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 43,
+    "characters": 40,
+    "preview": "Lecture 2\nModels of distributed systems\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 44,
+    "characters": 71,
+    "preview": "The two generals problem\ncity\nattack?\nattack?\narmy 1\narmy 2\nmessengers\n",
+    "image_count": 0,
+    "vector_paths": 45
+  },
+  {
+    "page": 45,
+    "characters": 305,
+    "preview": "The two generals problem\ncity\nattack?\nattack?\narmy 1\narmy 2\nmessengers\narmy 1\narmy 2\noutcome\ndoes not attack\ndoes not attack\nnothing happens\nattacks\ndoes not attack\narmy 1 defeated\ndoes not attack\nattacks\narmy 2 defeated\nattacks\nattacks\ncity captured\nDesired: army 1 attacks if and only if army 2 attacks\n",
+    "image_count": 0,
+    "vector_paths": 45
+  },
+  {
+    "page": 46,
+    "characters": 81,
+    "preview": "The two generals problem\ngeneral 1\ngeneral 2\nattack 10 Nov, okay?\n10 Nov agreed!\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 47,
+    "characters": 186,
+    "preview": "The two generals problem\ngeneral 1\ngeneral 2\nattack 10 Nov, okay?\n10 Nov agreed!\nFrom general 1’s point of view, this is indistinguishable from:\ngeneral 1\ngeneral 2\nattack 10 Nov, okay?\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 48,
+    "characters": 254,
+    "preview": "How should the generals decide?\n1. General 1 always attacks, even if no response is received?\n▶ Send lots of messengers to increase probability that one\nwill get through\n▶ If all are captured, general 2 does not know about the\nattack, so general 1 loses\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 49,
+    "characters": 510,
+    "preview": "How should the generals decide?\n1. General 1 always attacks, even if no response is received?\n▶ Send lots of messengers to increase probability that one\nwill get through\n▶ If all are captured, general 2 does not know about the\nattack, so general 1 loses\n2. General 1 only attacks if positive response from general 2\nis received?\n▶ Now general 1 is safe\n▶ But general 2 knows that general 1 will only attack if\ngeneral 2’s response gets through\n▶ Now ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 50,
+    "characters": 586,
+    "preview": "How should the generals decide?\n1. General 1 always attacks, even if no response is received?\n▶ Send lots of messengers to increase probability that one\nwill get through\n▶ If all are captured, general 2 does not know about the\nattack, so general 1 loses\n2. General 1 only attacks if positive response from general 2\nis received?\n▶ Now general 1 is safe\n▶ But general 2 knows that general 1 will only attack if\ngeneral 2’s response gets through\n▶ Now ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 51,
+    "characters": 109,
+    "preview": "The two generals problem applied\ncustomer\ndispatch goods\ncharge credit card\nonline shop\npayments service\nRPC\n",
+    "image_count": 0,
+    "vector_paths": 45
+  },
+  {
+    "page": 52,
+    "characters": 379,
+    "preview": "The two generals problem applied\ncustomer\ndispatch goods\ncharge credit card\nonline shop\npayments service\nRPC\nonline shop\npayments service\noutcome\ndoes not dispatch\ndoes not charge\nnothing happens\ndispatches\ndoes not charge\nshop loses money\ndoes not dispatch\ncharges\ncustomer complaint\ndispatches\ncharges\neveryone happy\nDesired: online shop dispatches if and only if payment made\n",
+    "image_count": 0,
+    "vector_paths": 45
+  },
+  {
+    "page": 53,
+    "characters": 162,
+    "preview": "The Byzantine generals problem\narmy 3\nattack?\nmessengers\nmessengers\ncity\nattack?\nattack?\narmy 1\narmy 2\nmessengers\nProblem: some of the generals might be traitors\n",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 54,
+    "characters": 93,
+    "preview": "Generals who might lie\ngeneral 1\ngeneral 2\ngeneral 3\nattack!\nattack!\ngeneral 1 said retreat!\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 55,
+    "characters": 228,
+    "preview": "Generals who might lie\ngeneral 1\ngeneral 2\ngeneral 3\nattack!\nattack!\ngeneral 1 said retreat!\nFrom general 3’s point of view, this is indistinguishable from:\ngeneral 1\ngeneral 2\ngeneral 3\nattack!\nretreat!\ngeneral 1 said retreat!\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 56,
+    "characters": 258,
+    "preview": "The Byzantine generals problem\n▶ Each general is either malicious or honest\n▶ Up to f generals might be malicious\n▶ Honest generals don’t know who the malicious ones are\n▶ The malicious generals may collude\n▶ Nevertheless, honest generals must agree on plan\n",
+    "image_count": 0,
+    "vector_paths": 17
+  },
+  {
+    "page": 57,
+    "characters": 431,
+    "preview": "The Byzantine generals problem\n▶ Each general is either malicious or honest\n▶ Up to f generals might be malicious\n▶ Honest generals don’t know who the malicious ones are\n▶ The malicious generals may collude\n▶ Nevertheless, honest generals must agree on plan\n▶ Theorem: need 3f + 1 generals in total to tolerate f\nmalicious generals (i.e. < 1\n3 may be malicious)\n▶ Cryptography (digital signatures) helps – but problem\nremains hard\n",
+    "image_count": 0,
+    "vector_paths": 17
+  },
+  {
+    "page": 58,
+    "characters": 141,
+    "preview": "Trust relationships and malicious behaviour\ncustomer\nagree?\nRPC\nRPC\norder\nagree?\nagree?\nonline shop\npayments service\nRPC\nWho can trust whom?\n",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 59,
+    "characters": 248,
+    "preview": "The Byzantine empire (650 CE)\nByzantium/Constantinople/Istanbul\nSource: https://commons.wikimedia.org/wiki/File:Byzantiumby650AD.svg\n“Byzantine” has long been used for “excessively complicated,\nbureaucratic, devious” (e.g. “the Byzantine tax law”)\n",
+    "image_count": 1,
+    "vector_paths": 18
+  },
+  {
+    "page": 60,
+    "characters": 208,
+    "preview": "System models\nWe have seen two thought experiments:\n▶ Two generals problem: a model of networks\n▶ Byzantine generals problem: a model of node behaviour\nIn real systems, both nodes and networks may be faulty!\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 61,
+    "characters": 409,
+    "preview": "System models\nWe have seen two thought experiments:\n▶ Two generals problem: a model of networks\n▶ Byzantine generals problem: a model of node behaviour\nIn real systems, both nodes and networks may be faulty!\nCapture assumptions in a system model consisting of:\n▶ Network behaviour (e.g. message loss)\n▶ Node behaviour (e.g. crashes)\n▶ Timing behaviour (e.g. latency)\nChoice of models for each of these parts.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 62,
+    "characters": 261,
+    "preview": "Networks are unreliable\nIn the sea, sharks bite ﬁbre optic cables\nhttps://slate.com/technology/2014/08/\nshark-attacks-threaten-google-s-undersea-internet-cables-video.html\nOn land, cows step on the cables\nhttps://twitter.com/uhoelzle/status/1263333283107991558\n",
+    "image_count": 2,
+    "vector_paths": 16
+  },
+  {
+    "page": 63,
+    "characters": 114,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 64,
+    "characters": 218,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n▶ Reliable (perfect) links:\nA message is received if and only if it is sent.\nMessages may be reordered.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 65,
+    "characters": 342,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n▶ Reliable (perfect) links:\nA message is received if and only if it is sent.\nMessages may be reordered.\n▶ Fair-loss links:\nMessages may be lost, duplicated, or reordered.\nIf you keep retrying, a message eventually gets through.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 66,
+    "characters": 472,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n▶ Reliable (perfect) links:\nA message is received if and only if it is sent.\nMessages may be reordered.\n▶ Fair-loss links:\nMessages may be lost, duplicated, or reordered.\nIf you keep retrying, a message eventually gets through.\n▶ Arbitrary links (active adversary):\nA malicious adversary may interfere with messages\n(eavesdrop, modify, ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 67,
+    "characters": 561,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n▶ Reliable (perfect) links:\nA message is received if and only if it is sent.\nMessages may be reordered.\n▶ Fair-loss links:\nMessages may be lost, duplicated, or reordered.\nIf you keep retrying, a message eventually gets through.\n▶ Arbitrary links (active adversary):\nA malicious adversary may interfere with messages\n(eavesdrop, modify, ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 68,
+    "characters": 575,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n▶ Reliable (perfect) links:\nA message is received if and only if it is sent.\nMessages may be reordered.\nretry +\ndedup\n▶ Fair-loss links:\nMessages may be lost, duplicated, or reordered.\nIf you keep retrying, a message eventually gets through.\n▶ Arbitrary links (active adversary):\nA malicious adversary may interfere with messages\n(eaves",
+    "image_count": 0,
+    "vector_paths": 18
+  },
+  {
+    "page": 69,
+    "characters": 579,
+    "preview": "System model: network behaviour\nAssume bidirectional point-to-point communication between\ntwo nodes, with one of:\n▶ Reliable (perfect) links:\nA message is received if and only if it is sent.\nMessages may be reordered.\nretry +\ndedup\n▶ Fair-loss links:\nMessages may be lost, duplicated, or reordered.\nIf you keep retrying, a message eventually gets through.\nTLS\n▶ Arbitrary links (active adversary):\nA malicious adversary may interfere with messages\n(e",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 70,
+    "characters": 219,
+    "preview": "System model: node behaviour\nEach node executes a speciﬁed algorithm,\nassuming one of the following:\n▶ Crash-stop (fail-stop):\nA node is faulty if it crashes (at any moment).\nAfter crashing, it stops executing forever.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 71,
+    "characters": 393,
+    "preview": "System model: node behaviour\nEach node executes a speciﬁed algorithm,\nassuming one of the following:\n▶ Crash-stop (fail-stop):\nA node is faulty if it crashes (at any moment).\nAfter crashing, it stops executing forever.\n▶ Crash-recovery (fail-recovery):\nA node may crash at any moment, losing its in-memory\nstate. It may resume executing sometime later.\nData stored on disk survives the crash.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 72,
+    "characters": 594,
+    "preview": "System model: node behaviour\nEach node executes a speciﬁed algorithm,\nassuming one of the following:\n▶ Crash-stop (fail-stop):\nA node is faulty if it crashes (at any moment).\nAfter crashing, it stops executing forever.\n▶ Crash-recovery (fail-recovery):\nA node may crash at any moment, losing its in-memory\nstate. It may resume executing sometime later.\nData stored on disk survives the crash.\n▶ Byzantine (fail-arbitrary):\nA node is faulty if it devi",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 73,
+    "characters": 206,
+    "preview": "System model: synchrony (timing) assumptions\nAssume one of the following for network and nodes:\n▶ Synchronous:\nMessage latency no greater than a known upper bound.\nNodes execute algorithm at a known speed.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 74,
+    "characters": 327,
+    "preview": "System model: synchrony (timing) assumptions\nAssume one of the following for network and nodes:\n▶ Synchronous:\nMessage latency no greater than a known upper bound.\nNodes execute algorithm at a known speed.\n▶ Partially synchronous:\nThe system is asynchronous for some ﬁnite (but\nunknown) periods of time, synchronous otherwise.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 75,
+    "characters": 545,
+    "preview": "System model: synchrony (timing) assumptions\nAssume one of the following for network and nodes:\n▶ Synchronous:\nMessage latency no greater than a known upper bound.\nNodes execute algorithm at a known speed.\n▶ Partially synchronous:\nThe system is asynchronous for some ﬁnite (but\nunknown) periods of time, synchronous otherwise.\n▶ Asynchronous:\nMessages can be delayed arbitrarily.\nNodes can pause execution arbitrarily.\nNo timing guarantees at all.\nNo",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 76,
+    "characters": 221,
+    "preview": "Violations of synchrony in practice\nNetworks usually have quite predictable latency, which can\noccasionally increase:\n▶ Message loss requiring retry\n▶ Congestion/contention causing queueing\n▶ Network/route reconﬁguration\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 77,
+    "characters": 543,
+    "preview": "Violations of synchrony in practice\nNetworks usually have quite predictable latency, which can\noccasionally increase:\n▶ Message loss requiring retry\n▶ Congestion/contention causing queueing\n▶ Network/route reconﬁguration\nNodes usually execute code at a predictable speed, with\noccasional pauses:\n▶ Operating system scheduling issues, e.g. priority inversion\n▶ Stop-the-world garbage collection pauses\n▶ Page faults, swap, thrashing\nReal-time operatin",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 78,
+    "characters": 315,
+    "preview": "System models summary\nFor each of the three parts, pick one:\n▶ Network:\nreliable, fair-loss, or arbitrary\n▶ Nodes:\ncrash-stop, crash-recovery, or Byzantine\n▶ Timing:\nsynchronous, partially synchronous, or asynchronous\nThis is the basis for any distributed algorithm.\nIf your assumptions are wrong, all bets are oﬀ!\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 79,
+    "characters": 375,
+    "preview": "Availability\nOnline shop wants to sell stuﬀ 24/7!\nService unavailability = downtime = losing money\nAvailability = uptime = fraction of time that a service is\nfunctioning correctly\n▶ “Two nines” = 99% up = down 3.7 days/year\n▶ “Three nines” = 99.9% up = down 8.8 hours/year\n▶ “Four nines” = 99.99% up = down 53 minutes/year\n▶ “Five nines” = 99.999% up = down 5.3 minutes/year\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 80,
+    "characters": 550,
+    "preview": "Availability\nOnline shop wants to sell stuﬀ 24/7!\nService unavailability = downtime = losing money\nAvailability = uptime = fraction of time that a service is\nfunctioning correctly\n▶ “Two nines” = 99% up = down 3.7 days/year\n▶ “Three nines” = 99.9% up = down 8.8 hours/year\n▶ “Four nines” = 99.99% up = down 53 minutes/year\n▶ “Five nines” = 99.999% up = down 5.3 minutes/year\nService-Level Objective (SLO):\ne.g. “99.9% of requests in a day get a respo",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 81,
+    "characters": 463,
+    "preview": "Achieving high availability: fault tolerance\nFailure: system as a whole isn’t working\nFault: some part of the system isn’t working\n▶ Node fault: crash (crash-stop/crash-recovery),\ndeviating from algorithm (Byzantine)\n▶ Network fault: dropping or signiﬁcantly delaying messages\nFault tolerance:\nsystem as a whole continues working, despite faults\n(up to some maximum number of faults)\nSingle point of failure (SPOF):\nnode/network link whose fault lead",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 82,
+    "characters": 170,
+    "preview": "Failure detectors\nFailure detector:\nalgorithm that detects whether another node is faulty\nPerfect failure detector:\nlabels a node as faulty if and only if it has crashed\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 83,
+    "characters": 308,
+    "preview": "Failure detectors\nFailure detector:\nalgorithm that detects whether another node is faulty\nPerfect failure detector:\nlabels a node as faulty if and only if it has crashed\nTypical implementation for crash-stop/crash-recovery:\nsend message, await response, label node as crashed if no\nreply within some timeout\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 84,
+    "characters": 430,
+    "preview": "Failure detectors\nFailure detector:\nalgorithm that detects whether another node is faulty\nPerfect failure detector:\nlabels a node as faulty if and only if it has crashed\nTypical implementation for crash-stop/crash-recovery:\nsend message, await response, label node as crashed if no\nreply within some timeout\nProblem:\ncannot tell the diﬀerence between crashed node, temporarily\nunresponsive node, lost message, and delayed message\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 85,
+    "characters": 491,
+    "preview": "Failure detection in partially synchronous systems\nPerfect timeout-based failure detector exists only in a\nsynchronous crash-stop system with reliable links.\nEventually perfect failure detector:\n▶ May temporarily label a node as crashed,\neven though it is correct\n▶ May temporarily label a node as correct,\neven though it has crashed\n▶ But eventually, labels a node as crashed\nif and only if it has crashed\nReﬂects fact that detection is not instanta",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 86,
+    "characters": 47,
+    "preview": "Lecture 3\nTime, clocks, and ordering of events\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 87,
+    "characters": 282,
+    "preview": "A detective story\nIn the night from 30 June to 1 July 2012 (UK time), many\nonline services and systems around the world crashed\nsimultaneously.\nServers locked up and stopped responding.\nSome airlines could not process any reservations or check-ins\nfor several hours.\nWhat happened?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 88,
+    "characters": 149,
+    "preview": "Clocks and time in distributed systems\nDistributed systems often need to measure time, e.g.:\n▶ Schedulers, timeouts, failure detectors, retry timers\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 89,
+    "characters": 198,
+    "preview": "Clocks and time in distributed systems\nDistributed systems often need to measure time, e.g.:\n▶ Schedulers, timeouts, failure detectors, retry timers\n▶ Performance measurements, statistics, proﬁling\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 90,
+    "characters": 252,
+    "preview": "Clocks and time in distributed systems\nDistributed systems often need to measure time, e.g.:\n▶ Schedulers, timeouts, failure detectors, retry timers\n▶ Performance measurements, statistics, proﬁling\n▶ Log ﬁles & databases: record when an event occurred\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 91,
+    "characters": 307,
+    "preview": "Clocks and time in distributed systems\nDistributed systems often need to measure time, e.g.:\n▶ Schedulers, timeouts, failure detectors, retry timers\n▶ Performance measurements, statistics, proﬁling\n▶ Log ﬁles & databases: record when an event occurred\n▶ Data with time-limited validity (e.g. cache entries)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 92,
+    "characters": 358,
+    "preview": "Clocks and time in distributed systems\nDistributed systems often need to measure time, e.g.:\n▶ Schedulers, timeouts, failure detectors, retry timers\n▶ Performance measurements, statistics, proﬁling\n▶ Log ﬁles & databases: record when an event occurred\n▶ Data with time-limited validity (e.g. cache entries)\n▶ Determining order of events across several nodes\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 93,
+    "characters": 495,
+    "preview": "Clocks and time in distributed systems\nDistributed systems often need to measure time, e.g.:\n▶ Schedulers, timeouts, failure detectors, retry timers\n▶ Performance measurements, statistics, proﬁling\n▶ Log ﬁles & databases: record when an event occurred\n▶ Data with time-limited validity (e.g. cache entries)\n▶ Determining order of events across several nodes\nWe distinguish two types of clock:\n▶ physical clocks: count number of seconds elapsed\n▶ logi",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 94,
+    "characters": 596,
+    "preview": "Clocks and time in distributed systems\nDistributed systems often need to measure time, e.g.:\n▶ Schedulers, timeouts, failure detectors, retry timers\n▶ Performance measurements, statistics, proﬁling\n▶ Log ﬁles & databases: record when an event occurred\n▶ Data with time-limited validity (e.g. cache entries)\n▶ Determining order of events across several nodes\nWe distinguish two types of clock:\n▶ physical clocks: count number of seconds elapsed\n▶ logi",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 95,
+    "characters": 257,
+    "preview": "Quartz clocks\n▶ Quartz crystal\nlaser-trimmed to\nmechanically resonate at a\nspeciﬁc frequency\n▶ Piezoelectric eﬀect:\nmechanical force ⇔\nelectric ﬁeld\n▶ Oscillator circuit produces\nsignal at resonant\nfrequency\n▶ Count number of cycles to\nmeasure elapsed time\n",
+    "image_count": 2,
+    "vector_paths": 16
+  },
+  {
+    "page": 96,
+    "characters": 264,
+    "preview": "Quartz clock error: drift\n▶ One clock runs slightly fast, another slightly slow\n▶ Drift measured in parts per million (ppm)\n▶ 1 ppm = 1 microsecond/second = 86 ms/day = 32 s/year\n▶ Most computer clocks correct within ≈ 50 ppm\nTemperature\nsigniﬁcantly\naﬀects drift\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 97,
+    "characters": 431,
+    "preview": "Atomic clocks\n▶ Caesium-133 has a\nresonance (“hyperﬁne\ntransition”) at ≈ 9 GHz\n▶ Tune an electronic\noscillator to that resonant\nfrequency\n▶ 1 second = 9,192,631,770\nperiods of that signal\n▶ Accuracy ≈ 1 in 10−14 (1\nsecond in 3 million years)\nhttps:\n//www.microsemi.com/product-directory/\ncesium-frequency-references/\n4115-5071a-cesium-primary-frequency-standard\n▶ Price ≈ £20,000 (?)\n(can get cheaper rubidium\nclocks for ≈ £1,000)\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 98,
+    "characters": 359,
+    "preview": "GPS as time source\n▶ 31 satellites, each carrying\nan atomic clock\n▶ satellite broadcasts\ncurrent time and location\n▶ calculate position from\nspeed-of-light delay\nbetween satellite and\nreceiver\n▶ corrections for\natmospheric eﬀects,\nrelativity, etc.\nhttps://commons.wikimedia.org/wiki/File:\nGps-atmospheric-efects.png\n▶ in datacenters, need\nantenna on the roof\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 99,
+    "characters": 148,
+    "preview": "Coordinated Universal Time (UTC)\nGreenwich Mean Time (GMT, solar\ntime): it’s noon when the sun is in the\nsouth, as seen from the Greenwich meridian\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 100,
+    "characters": 263,
+    "preview": "Coordinated Universal Time (UTC)\nGreenwich Mean Time (GMT, solar\ntime): it’s noon when the sun is in the\nsouth, as seen from the Greenwich meridian\nInternational Atomic Time (TAI): 1 day\nis 24 × 60 × 60 × 9,192,631,770 periods of\ncaesium-133’s resonant frequency\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 101,
+    "characters": 314,
+    "preview": "Coordinated Universal Time (UTC)\nGreenwich Mean Time (GMT, solar\ntime): it’s noon when the sun is in the\nsouth, as seen from the Greenwich meridian\nInternational Atomic Time (TAI): 1 day\nis 24 × 60 × 60 × 9,192,631,770 periods of\ncaesium-133’s resonant frequency\nProblem: speed of Earth’s rotation is not\nconstant\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 102,
+    "characters": 384,
+    "preview": "Coordinated Universal Time (UTC)\nGreenwich Mean Time (GMT, solar\ntime): it’s noon when the sun is in the\nsouth, as seen from the Greenwich meridian\nInternational Atomic Time (TAI): 1 day\nis 24 × 60 × 60 × 9,192,631,770 periods of\ncaesium-133’s resonant frequency\nProblem: speed of Earth’s rotation is not\nconstant\nCompromise: UTC is TAI with corrections\nto account for Earth rotation\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 103,
+    "characters": 439,
+    "preview": "Coordinated Universal Time (UTC)\nGreenwich Mean Time (GMT, solar\ntime): it’s noon when the sun is in the\nsouth, as seen from the Greenwich meridian\nInternational Atomic Time (TAI): 1 day\nis 24 × 60 × 60 × 9,192,631,770 periods of\ncaesium-133’s resonant frequency\nProblem: speed of Earth’s rotation is not\nconstant\nCompromise: UTC is TAI with corrections\nto account for Earth rotation\nTime zones and daylight savings time\nare oﬀsets to UTC\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 104,
+    "characters": 460,
+    "preview": "Leap seconds\nEvery year, on 30 June and 31 December at 23:59:59 UTC,\none of three things happens:\n▶ The clock immediately jumps forward to 00:00:00,\nskipping one second (negative leap second)\n▶ The clock moves to 00:00:00 after one second, as usual\n▶ The clock moves to 23:59:60 after one second, and then\nmoves to 00:00:00 after one further second\n(positive leap second)\nThis is announced several months beforehand.\nhttp://leapsecond.com/notes/leap-",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 105,
+    "characters": 296,
+    "preview": "How computers represent timestamps\nTwo most common representations:\n▶ Unix time: number of seconds since 1 January 1970\n00:00:00 UTC (the “epoch”), not counting leap seconds\n▶ ISO 8601: year, month, day, hour, minute, second, and\ntimezone oﬀset relative to UTC\nexample: 2021-11-09T09:50:17+00:00\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 106,
+    "characters": 501,
+    "preview": "How computers represent timestamps\nTwo most common representations:\n▶ Unix time: number of seconds since 1 January 1970\n00:00:00 UTC (the “epoch”), not counting leap seconds\n▶ ISO 8601: year, month, day, hour, minute, second, and\ntimezone oﬀset relative to UTC\nexample: 2021-11-09T09:50:17+00:00\nConversion between the two requires:\n▶ Gregorian calendar: 365 days in a year, except leap years\n(year % 4 == 0 && (year % 100 != 0 ||\nyear % 400 == 0))\n▶",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 107,
+    "characters": 111,
+    "preview": "How most software deals with leap seconds\nBy ignoring them!\nhttps://www.ﬂickr.com/\nphotos/ru boﬀ/\n37915499055/\n",
+    "image_count": 1,
+    "vector_paths": 17
+  },
+  {
+    "page": 108,
+    "characters": 180,
+    "preview": "How most software deals with leap seconds\nBy ignoring them!\nHowever, OS and DistSys often need\ntimings with sub-second accuracy.\nhttps://www.ﬂickr.com/\nphotos/ru boﬀ/\n37915499055/\n",
+    "image_count": 1,
+    "vector_paths": 17
+  },
+  {
+    "page": 109,
+    "characters": 288,
+    "preview": "How most software deals with leap seconds\nBy ignoring them!\nHowever, OS and DistSys often need\ntimings with sub-second accuracy.\n30 June 2012: bug in Linux kernel caused\nlivelock on leap second, causing many\nInternet services to go down\nhttps://www.ﬂickr.com/\nphotos/ru boﬀ/\n37915499055/\n",
+    "image_count": 1,
+    "vector_paths": 17
+  },
+  {
+    "page": 110,
+    "characters": 370,
+    "preview": "How most software deals with leap seconds\nBy ignoring them!\nHowever, OS and DistSys often need\ntimings with sub-second accuracy.\n30 June 2012: bug in Linux kernel caused\nlivelock on leap second, causing many\nInternet services to go down\nPragmatic solution: “smear” (spread out)\nthe leap second over the course of a day\nhttps://www.ﬂickr.com/\nphotos/ru boﬀ/\n37915499055/\n",
+    "image_count": 1,
+    "vector_paths": 17
+  },
+  {
+    "page": 111,
+    "characters": 179,
+    "preview": "Clock synchronisation\nComputers track physical time/UTC with a quartz clock\n(with battery, continues running when power is oﬀ)\nDue to clock drift, clock error gradually increases\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 112,
+    "characters": 239,
+    "preview": "Clock synchronisation\nComputers track physical time/UTC with a quartz clock\n(with battery, continues running when power is oﬀ)\nDue to clock drift, clock error gradually increases\nClock skew: diﬀerence between two clocks at a point in time\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 113,
+    "characters": 435,
+    "preview": "Clock synchronisation\nComputers track physical time/UTC with a quartz clock\n(with battery, continues running when power is oﬀ)\nDue to clock drift, clock error gradually increases\nClock skew: diﬀerence between two clocks at a point in time\nSolution: Periodically get the current time from a server that\nhas a more accurate time source (atomic clock or GPS\nreceiver)\nProtocols: Network Time Protocol (NTP),\nPrecision Time Protocol (PTP)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 114,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 115,
+    "characters": 110,
+    "preview": "Network Time Protocol (NTP)\nMany operating system vendors run NTP servers,\nconﬁgure OS to use them by default\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 116,
+    "characters": 304,
+    "preview": "Network Time Protocol (NTP)\nMany operating system vendors run NTP servers,\nconﬁgure OS to use them by default\nHierarchy of clock servers arranged into strata:\n▶ Stratum 0: atomic clock or GPS receiver\n▶ Stratum 1: synced directly with stratum 0 device\n▶ Stratum 2: servers that sync with stratum 1, etc.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 117,
+    "characters": 576,
+    "preview": "Network Time Protocol (NTP)\nMany operating system vendors run NTP servers,\nconﬁgure OS to use them by default\nHierarchy of clock servers arranged into strata:\n▶ Stratum 0: atomic clock or GPS receiver\n▶ Stratum 1: synced directly with stratum 0 device\n▶ Stratum 2: servers that sync with stratum 1, etc.\nMay contact multiple servers, discard outliers, average rest\nMakes multiple requests to the same server, use statistics to\nreduce random error due",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 118,
+    "characters": 53,
+    "preview": "Estimating time over a network\nNTP client\nNTP server\n",
+    "image_count": 0,
+    "vector_paths": 23
+  },
+  {
+    "page": 119,
+    "characters": 71,
+    "preview": "Estimating time over a network\nNTP client\nNTP server\nrequest: t1\nt1\nt2\n",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 120,
+    "characters": 100,
+    "preview": "Estimating time over a network\nNTP client\nNTP server\nrequest: t1\nt1\nresponse: (t1, t2, t3)\nt2\nt3\nt4\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 121,
+    "characters": 152,
+    "preview": "Estimating time over a network\nNTP client\nNTP server\nrequest: t1\nt1\nresponse: (t1, t2, t3)\nt2\nt3\nt4\nRound-trip network delay: δ = (t4 − t1) − (t3 − t2)\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 122,
+    "characters": 214,
+    "preview": "Estimating time over a network\nNTP client\nNTP server\nrequest: t1\nt1\nresponse: (t1, t2, t3)\nt2\nt3\nt4\nRound-trip network delay: δ = (t4 − t1) − (t3 − t2)\nEstimated server time when client receives response: t3 + δ\n2\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 123,
+    "characters": 276,
+    "preview": "Estimating time over a network\nNTP client\nNTP server\nrequest: t1\nt1\nresponse: (t1, t2, t3)\nt2\nt3\nt4\nRound-trip network delay: δ = (t4 − t1) − (t3 − t2)\nEstimated server time when client receives response: t3 + δ\n2\nEstimated clock skew: θ = t3 + δ\n2\n2 − t4 = t2 − t1 + t3 − t4\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 124,
+    "characters": 250,
+    "preview": "Correcting clock skew\nOnce the client has estimated the clock skew θ, it needs to\napply that correction to its clock.\n▶ If |θ| < 125 ms, slew the clock:\nslightly speed it up or slow it down by up to 500 ppm\n(brings clocks in sync within ≈ 5 minutes)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 125,
+    "characters": 353,
+    "preview": "Correcting clock skew\nOnce the client has estimated the clock skew θ, it needs to\napply that correction to its clock.\n▶ If |θ| < 125 ms, slew the clock:\nslightly speed it up or slow it down by up to 500 ppm\n(brings clocks in sync within ≈ 5 minutes)\n▶ If 125 ms ≤ |θ| < 1,000 s, step the clock:\nsuddenly reset client clock to estimated server timestamp\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 126,
+    "characters": 506,
+    "preview": "Correcting clock skew\nOnce the client has estimated the clock skew θ, it needs to\napply that correction to its clock.\n▶ If |θ| < 125 ms, slew the clock:\nslightly speed it up or slow it down by up to 500 ppm\n(brings clocks in sync within ≈ 5 minutes)\n▶ If 125 ms ≤ |θ| < 1,000 s, step the clock:\nsuddenly reset client clock to estimated server timestamp\n▶ If |θ| ≥ 1,000 s, panic and do nothing\n(leave the problem for a human operator to resolve)\nSyst",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 127,
+    "characters": 41,
+    "preview": "http://www.ntp.org/ntpfaq/NTP-s-algo.htm\n",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 128,
+    "characters": 220,
+    "preview": "Monotonic and time-of-day clocks\n// BAD:\nlong startTime = System.currentTimeMillis();\ndoSomething();\nlong endTime = System.currentTimeMillis();\nlong elapsedMillis = endTime - startTime;\n// elapsedMillis may be negative!\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 129,
+    "characters": 259,
+    "preview": "Monotonic and time-of-day clocks\n// BAD:\nlong startTime = System.currentTimeMillis();\ndoSomething();\nlong endTime = System.currentTimeMillis();\nlong elapsedMillis = endTime - startTime;\n// elapsedMillis may be negative!\nNTP client steps the clock during this\n",
+    "image_count": 0,
+    "vector_paths": 18
+  },
+  {
+    "page": 130,
+    "characters": 425,
+    "preview": "Monotonic and time-of-day clocks\n// BAD:\nlong startTime = System.currentTimeMillis();\ndoSomething();\nlong endTime = System.currentTimeMillis();\nlong elapsedMillis = endTime - startTime;\n// elapsedMillis may be negative!\nNTP client steps the clock during this\n// GOOD:\nlong startTime = System.nanoTime();\ndoSomething();\nlong endTime = System.nanoTime();\nlong elapsedNanos = endTime - startTime;\n// elapsedNanos is always >= 0\n",
+    "image_count": 0,
+    "vector_paths": 18
+  },
+  {
+    "page": 131,
+    "characters": 181,
+    "preview": "Monotonic and time-of-day clocks\nTime-of-day clock:\n▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)\nMonotonic clock:\n▶ Time since arbitrary point (e.g. when machine booted up)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 132,
+    "characters": 320,
+    "preview": "Monotonic and time-of-day clocks\nTime-of-day clock:\n▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)\n▶ May suddenly move forwards or backwards (NTP\nstepping), subject to leap second adjustments\nMonotonic clock:\n▶ Time since arbitrary point (e.g. when machine booted up)\n▶ Always moves forwards at near-constant rate\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 133,
+    "characters": 425,
+    "preview": "Monotonic and time-of-day clocks\nTime-of-day clock:\n▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)\n▶ May suddenly move forwards or backwards (NTP\nstepping), subject to leap second adjustments\n▶ Timestamps can be compared across nodes (if synced)\nMonotonic clock:\n▶ Time since arbitrary point (e.g. when machine booted up)\n▶ Always moves forwards at near-constant rate\n▶ Good for measuring elapsed time on a single node\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 134,
+    "characters": 565,
+    "preview": "Monotonic and time-of-day clocks\nTime-of-day clock:\n▶ Time since a ﬁxed date (e.g. 1 January 1970 epoch)\n▶ May suddenly move forwards or backwards (NTP\nstepping), subject to leap second adjustments\n▶ Timestamps can be compared across nodes (if synced)\n▶ Java: System.currentTimeMillis()\n▶ Linux: clock_gettime(CLOCK_REALTIME)\nMonotonic clock:\n▶ Time since arbitrary point (e.g. when machine booted up)\n▶ Always moves forwards at near-constant rate\n▶ ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 135,
+    "characters": 91,
+    "preview": "Ordering of messages\nuser A\nuser B\nuser C\nm1\nm1\nm1 = “A says: The moon is made of cheese!”\n",
+    "image_count": 0,
+    "vector_paths": 26
+  },
+  {
+    "page": 136,
+    "characters": 128,
+    "preview": "Ordering of messages\nuser A\nuser B\nuser C\nm1\nm1\nm2\nm2\nm1 = “A says: The moon is made of cheese!”\nm2 = “B says: Oh no it isn’t!”\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 137,
+    "characters": 200,
+    "preview": "Ordering of messages\nuser A\nuser B\nuser C\nm1\nm1\nm2\nm2\nm1 = “A says: The moon is made of cheese!”\nm2 = “B says: Oh no it isn’t!”\nC sees m2 ﬁrst, m1 second,\neven though logically m1 happened before m2.\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 138,
+    "characters": 164,
+    "preview": "Ordering of messages using timestamps?\nuser A\nuser B\nuser C\nm1\nt1\nm1\nt2\nm2\nm2\nm1 = (t1, “A says: The moon is made of cheese!”)\nm2 = (t2, “B says: Oh no it isn’t!”)\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 139,
+    "characters": 272,
+    "preview": "Ordering of messages using timestamps?\nuser A\nuser B\nuser C\nm1\nt1\nm1\nt2\nm2\nm2\nm1 = (t1, “A says: The moon is made of cheese!”)\nm2 = (t2, “B says: Oh no it isn’t!”)\nProblem: even with synced clocks, t2 < t1 is possible.\nTimestamp order is inconsistent with expected order!\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 140,
+    "characters": 191,
+    "preview": "The happens-before relation\nAn event is something happening at one node (sending or\nreceiving a message, or a local execution step).\nWe say event a happens before event b (written a → b) iﬀ:\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 141,
+    "characters": 293,
+    "preview": "The happens-before relation\nAn event is something happening at one node (sending or\nreceiving a message, or a local execution step).\nWe say event a happens before event b (written a → b) iﬀ:\n▶ a and b occurred at the same node, and a occurred\nbefore b in that node’s local execution order; or\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 142,
+    "characters": 427,
+    "preview": "The happens-before relation\nAn event is something happening at one node (sending or\nreceiving a message, or a local execution step).\nWe say event a happens before event b (written a → b) iﬀ:\n▶ a and b occurred at the same node, and a occurred\nbefore b in that node’s local execution order; or\n▶ event a is the sending of some message m, and event b is\nthe receipt of that same message m (assuming sent\nmessages are unique); or\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 143,
+    "characters": 480,
+    "preview": "The happens-before relation\nAn event is something happening at one node (sending or\nreceiving a message, or a local execution step).\nWe say event a happens before event b (written a → b) iﬀ:\n▶ a and b occurred at the same node, and a occurred\nbefore b in that node’s local execution order; or\n▶ event a is the sending of some message m, and event b is\nthe receipt of that same message m (assuming sent\nmessages are unique); or\n▶ there exists an event",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 144,
+    "characters": 627,
+    "preview": "The happens-before relation\nAn event is something happening at one node (sending or\nreceiving a message, or a local execution step).\nWe say event a happens before event b (written a → b) iﬀ:\n▶ a and b occurred at the same node, and a occurred\nbefore b in that node’s local execution order; or\n▶ event a is the sending of some message m, and event b is\nthe receipt of that same message m (assuming sent\nmessages are unique); or\n▶ there exists an event",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 145,
+    "characters": 56,
+    "preview": "Happens-before relation example\nA\nB\nC\ne\nm1\na\nb\nc\nm2\nd\nf\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 146,
+    "characters": 110,
+    "preview": "Happens-before relation example\nA\nB\nC\ne\nm1\na\nb\nc\nm2\nd\nf\n▶ a → b, c → d, and e → f due to node execution order\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 147,
+    "characters": 154,
+    "preview": "Happens-before relation example\nA\nB\nC\ne\nm1\na\nb\nc\nm2\nd\nf\n▶ a → b, c → d, and e → f due to node execution order\n▶ b → c and d → f due to messages m1 and m2\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 148,
+    "characters": 221,
+    "preview": "Happens-before relation example\nA\nB\nC\ne\nm1\na\nb\nc\nm2\nd\nf\n▶ a → b, c → d, and e → f due to node execution order\n▶ b → c and d → f due to messages m1 and m2\n▶ a → c, a → d, a → f, b → d, b → f, and c → f due to\ntransitivity\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 149,
+    "characters": 254,
+    "preview": "Happens-before relation example\nA\nB\nC\ne\nm1\na\nb\nc\nm2\nd\nf\n▶ a → b, c → d, and e → f due to node execution order\n▶ b → c and d → f due to messages m1 and m2\n▶ a → c, a → d, a → f, b → d, b → f, and c → f due to\ntransitivity\n▶ a ∥ e, b ∥ e, c ∥ e, and d ∥ e\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 150,
+    "characters": 189,
+    "preview": "Causality\nTaken from physics (relativity).\n▶ When a → b, then a might have caused b.\n▶ When a ∥ b, we know that a cannot have caused b.\nHappens-before relation encodes potential causality.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 151,
+    "characters": 216,
+    "preview": "Causality\nTaken from physics (relativity).\n▶ When a → b, then a might have caused b.\n▶ When a ∥ b, we know that a cannot have caused b.\nHappens-before relation encodes potential causality.\ndistance in space\ntime\na\nb\n",
+    "image_count": 0,
+    "vector_paths": 23
+  },
+  {
+    "page": 152,
+    "characters": 229,
+    "preview": "Causality\nTaken from physics (relativity).\n▶ When a → b, then a might have caused b.\n▶ When a ∥ b, we know that a cannot have caused b.\nHappens-before relation encodes potential causality.\ndistance in space\ntime\na\nb\nlight from a\n",
+    "image_count": 0,
+    "vector_paths": 26
+  },
+  {
+    "page": 153,
+    "characters": 242,
+    "preview": "Causality\nTaken from physics (relativity).\n▶ When a → b, then a might have caused b.\n▶ When a ∥ b, we know that a cannot have caused b.\nHappens-before relation encodes potential causality.\ndistance in space\ntime\na\nb\nlight from a\nlight from b\n",
+    "image_count": 0,
+    "vector_paths": 29
+  },
+  {
+    "page": 154,
+    "characters": 244,
+    "preview": "Causality\nTaken from physics (relativity).\n▶ When a → b, then a might have caused b.\n▶ When a ∥ b, we know that a cannot have caused b.\nHappens-before relation encodes potential causality.\ndistance in space\ntime\na\nb\nlight from a\nlight from b\nc\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 155,
+    "characters": 398,
+    "preview": "Causality\nTaken from physics (relativity).\n▶ When a → b, then a might have caused b.\n▶ When a ∥ b, we know that a cannot have caused b.\nHappens-before relation encodes potential causality.\ndistance in space\ntime\na\nb\nlight from a\nlight from b\nc\nLet ≺ be a strict total order on events.\nIf (a → b) =⇒ (a ≺ b) then ≺ is a causal order\n(or: ≺ is “consistent with causality”).\nNB. “causal” ̸= “casual”!\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 156,
+    "characters": 47,
+    "preview": "Lecture 4\nBroadcast protocols and logical time\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 157,
+    "characters": 281,
+    "preview": "Physical timestamps inconsistent with causality\nuser A\nuser B\nuser C\nm1\nt1\nm1\nt2\nm2\nm2\nm1 = (t1, “A says: The moon is made of cheese!”)\nm2 = (t2, “B says: Oh no it isn’t!”)\nProblem: even with synced clocks, t2 < t1 is possible.\nTimestamp order is inconsistent with expected order!\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 158,
+    "characters": 212,
+    "preview": "Logical vs. physical clocks\n▶ Physical clock: count number of seconds elapsed\n▶ Logical clock: count number of events occurred\nPhysical timestamps: useful for many things, but may be\ninconsistent with causality.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 159,
+    "characters": 298,
+    "preview": "Logical vs. physical clocks\n▶ Physical clock: count number of seconds elapsed\n▶ Logical clock: count number of events occurred\nPhysical timestamps: useful for many things, but may be\ninconsistent with causality.\nLogical clocks: designed to capture causal dependencies.\n(e1 → e2) =⇒ (T(e1) < T(e2))\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 160,
+    "characters": 376,
+    "preview": "Logical vs. physical clocks\n▶ Physical clock: count number of seconds elapsed\n▶ Logical clock: count number of events occurred\nPhysical timestamps: useful for many things, but may be\ninconsistent with causality.\nLogical clocks: designed to capture causal dependencies.\n(e1 → e2) =⇒ (T(e1) < T(e2))\nWe will look at two types of logical clocks:\n▶ Lamport clocks\n▶ Vector clocks\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 161,
+    "characters": 370,
+    "preview": "Lamport clocks algorithm\non initialisation do\nt := 0\n▷ each node has its own local variable t\nend on\non any event occurring at the local node do\nt := t + 1\nend on\non request to send message m do\nt := t + 1; send (t, m) via the underlying network link\nend on\non receiving (t′, m) via the underlying network link do\nt := max(t, t′) + 1\ndeliver m to the application\nend on\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 162,
+    "characters": 306,
+    "preview": "Lamport clocks in words\n▶ Each node maintains a counter t,\nincremented on every local event e\n▶ Let L(e) be the value of t after that increment\n▶ Attach current t to messages sent over network\n▶ Recipient moves its clock forward to timestamp in the\nmessage (if greater than local counter), then increments\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 163,
+    "characters": 361,
+    "preview": "Lamport clocks in words\n▶ Each node maintains a counter t,\nincremented on every local event e\n▶ Let L(e) be the value of t after that increment\n▶ Attach current t to messages sent over network\n▶ Recipient moves its clock forward to timestamp in the\nmessage (if greater than local counter), then increments\nProperties of this scheme:\n▶ If a → b then L(a) < L(b)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 164,
+    "characters": 405,
+    "preview": "Lamport clocks in words\n▶ Each node maintains a counter t,\nincremented on every local event e\n▶ Let L(e) be the value of t after that increment\n▶ Attach current t to messages sent over network\n▶ Recipient moves its clock forward to timestamp in the\nmessage (if greater than local counter), then increments\nProperties of this scheme:\n▶ If a → b then L(a) < L(b)\n▶ However, L(a) < L(b) does not imply a → b\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 165,
+    "characters": 444,
+    "preview": "Lamport clocks in words\n▶ Each node maintains a counter t,\nincremented on every local event e\n▶ Let L(e) be the value of t after that increment\n▶ Attach current t to messages sent over network\n▶ Recipient moves its clock forward to timestamp in the\nmessage (if greater than local counter), then increments\nProperties of this scheme:\n▶ If a → b then L(a) < L(b)\n▶ However, L(a) < L(b) does not imply a → b\n▶ Possible that L(a) = L(b) for a ̸= b\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 166,
+    "characters": 59,
+    "preview": "Lamport clocks example\nA\nB\nC\n1\n(2, m1)\n1\n2\n3\n3\n4\n5\n(4, m2)\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 167,
+    "characters": 162,
+    "preview": "Lamport clocks example\nA\nB\nC\n1\n(2, m1)\n1\n2\n3\n3\n4\n5\n(4, m2)\nLet N(e) be the node at which event e occurred.\nThen the pair (L(e), N(e)) uniquely identiﬁes event e.\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 168,
+    "characters": 197,
+    "preview": "Lamport clocks example\nA\nB\nC\n(1, C)\n(2, m1)\n(1, A)\n(2, A)\n(3, B)\n(3, A)\n(4, B)\n(5, C)\n(4, m2)\nLet N(e) be the node at which event e occurred.\nThen the pair (L(e), N(e)) uniquely identiﬁes event e.\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 169,
+    "characters": 341,
+    "preview": "Lamport clocks example\nA\nB\nC\n(1, C)\n(2, m1)\n(1, A)\n(2, A)\n(3, B)\n(3, A)\n(4, B)\n(5, C)\n(4, m2)\nLet N(e) be the node at which event e occurred.\nThen the pair (L(e), N(e)) uniquely identiﬁes event e.\nDeﬁne a total order ≺ using Lamport timestamps:\n(a ≺ b) ⇐⇒ (L(a) < L(b) ∨ (L(a) = L(b) ∧ N(a) < N(b)))\nThis order is causal: (a → b) =⇒ (a ≺ b)\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 170,
+    "characters": 181,
+    "preview": "Vector clocks\nGiven Lamport timestamps L(a) and L(b) with L(a) < L(b)\nwe can’t tell whether a → b or a ∥ b.\nIf we want to detect which events are concurrent, we need\nvector clocks:\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 171,
+    "characters": 238,
+    "preview": "Vector clocks\nGiven Lamport timestamps L(a) and L(b) with L(a) < L(b)\nwe can’t tell whether a → b or a ∥ b.\nIf we want to detect which events are concurrent, we need\nvector clocks:\n▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 172,
+    "characters": 345,
+    "preview": "Vector clocks\nGiven Lamport timestamps L(a) and L(b) with L(a) < L(b)\nwe can’t tell whether a → b or a ∥ b.\nIf we want to detect which events are concurrent, we need\nvector clocks:\n▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩\n▶ Vector timestamp of event a is V (a) = ⟨t1, t2, . . . , tn⟩\n▶ ti is number of events observed by node Ni\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 173,
+    "characters": 443,
+    "preview": "Vector clocks\nGiven Lamport timestamps L(a) and L(b) with L(a) < L(b)\nwe can’t tell whether a → b or a ∥ b.\nIf we want to detect which events are concurrent, we need\nvector clocks:\n▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩\n▶ Vector timestamp of event a is V (a) = ⟨t1, t2, . . . , tn⟩\n▶ ti is number of events observed by node Ni\n▶ Each node has a current vector timestamp T\n▶ On event at node Ni, increment vector element T[i]\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 174,
+    "characters": 549,
+    "preview": "Vector clocks\nGiven Lamport timestamps L(a) and L(b) with L(a) < L(b)\nwe can’t tell whether a → b or a ∥ b.\nIf we want to detect which events are concurrent, we need\nvector clocks:\n▶ Assume n nodes in the system, N = ⟨N1, N2, . . . , Nn⟩\n▶ Vector timestamp of event a is V (a) = ⟨t1, t2, . . . , tn⟩\n▶ ti is number of events observed by node Ni\n▶ Each node has a current vector timestamp T\n▶ On event at node Ni, increment vector element T[i]\n▶ Attac",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 175,
+    "characters": 428,
+    "preview": "Vector clocks algorithm\non initialisation at node Ni do\nT := ⟨0, 0, . . . , 0⟩\n▷ local variable at node Ni\nend on\non any event occurring at node Ni do\nT[i] := T[i] + 1\nend on\non request to send message m at node Ni do\nT[i] := T[i] + 1; send (T, m) via network\nend on\non receiving (T ′, m) at node Ni via the network do\nT[j] := max(T[j], T ′[j]) for every j ∈ {1, . . . , n}\nT[i] := T[i] + 1; deliver m to the application\nend on\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 176,
+    "characters": 177,
+    "preview": "Vector clocks example\nAssuming the vector of nodes is N = ⟨A, B, C⟩:\nA\nB\nC\n⟨0, 0, 1⟩\n(⟨2, 0, 0⟩, m1)\n⟨1, 0, 0⟩\n⟨2, 0, 0⟩\n⟨2, 1, 0⟩\n⟨3, 0, 0⟩\n⟨2, 2, 0⟩\n⟨2, 2, 2⟩\n(⟨2, 2, 0⟩, m2)\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 177,
+    "characters": 401,
+    "preview": "Vector clocks example\nAssuming the vector of nodes is N = ⟨A, B, C⟩:\nA\nB\nC\n⟨0, 0, 1⟩\n(⟨2, 0, 0⟩, m1)\n⟨1, 0, 0⟩\n⟨2, 0, 0⟩\n⟨2, 1, 0⟩\n⟨3, 0, 0⟩\n⟨2, 2, 0⟩\n⟨2, 2, 2⟩\n(⟨2, 2, 0⟩, m2)\nThe vector timestamp of an event e represents a set of events,\ne and its causal dependencies: {e} ∪ {a | a → e}\nFor example, ⟨2, 2, 0⟩ represents the ﬁrst two events from A,\nthe ﬁrst two events from B, and no events from C.\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 178,
+    "characters": 275,
+    "preview": "Vector clocks ordering\nDeﬁne the following order on vector timestamps\n(in a system with n nodes):\n▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}\n▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}\n▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′\n▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 179,
+    "characters": 334,
+    "preview": "Vector clocks ordering\nDeﬁne the following order on vector timestamps\n(in a system with n nodes):\n▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}\n▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}\n▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′\n▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T\nV (a) ≤ V (b) iﬀ ({a} ∪ {e | e → a}) ⊆ ({b} ∪ {e | e → b})\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 180,
+    "characters": 447,
+    "preview": "Vector clocks ordering\nDeﬁne the following order on vector timestamps\n(in a system with n nodes):\n▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}\n▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}\n▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′\n▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T\nV (a) ≤ V (b) iﬀ ({a} ∪ {e | e → a}) ⊆ ({b} ∪ {e | e → b})\nProperties of this order:\n▶ (V (a) < V (b)) ⇐⇒ (a → b)\n▶ (V (a) = V (b)) ⇐⇒ (a = b)\n▶ (V (a) ∥ V (b)) ⇐⇒ (a ∥ b)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 181,
+    "characters": 122,
+    "preview": "Broadcast protocols\nBroadcast (multicast) is group communication:\n▶ One node sends message, all nodes in group deliver it\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 182,
+    "characters": 177,
+    "preview": "Broadcast protocols\nBroadcast (multicast) is group communication:\n▶ One node sends message, all nodes in group deliver it\n▶ Set of group members may be ﬁxed (static) or dynamic\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 183,
+    "characters": 235,
+    "preview": "Broadcast protocols\nBroadcast (multicast) is group communication:\n▶ One node sends message, all nodes in group deliver it\n▶ Set of group members may be ﬁxed (static) or dynamic\n▶ If one node is faulty, remaining group members carry on\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 184,
+    "characters": 326,
+    "preview": "Broadcast protocols\nBroadcast (multicast) is group communication:\n▶ One node sends message, all nodes in group deliver it\n▶ Set of group members may be ﬁxed (static) or dynamic\n▶ If one node is faulty, remaining group members carry on\n▶ Note: concept is more general than IP multicast\n(we build upon point-to-point messaging)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 185,
+    "characters": 496,
+    "preview": "Broadcast protocols\nBroadcast (multicast) is group communication:\n▶ One node sends message, all nodes in group deliver it\n▶ Set of group members may be ﬁxed (static) or dynamic\n▶ If one node is faulty, remaining group members carry on\n▶ Note: concept is more general than IP multicast\n(we build upon point-to-point messaging)\nBuild upon system models from lecture 2:\n▶ Can be best-eﬀort (may drop messages) or\nreliable (non-faulty nodes deliver every",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 186,
+    "characters": 583,
+    "preview": "Broadcast protocols\nBroadcast (multicast) is group communication:\n▶ One node sends message, all nodes in group deliver it\n▶ Set of group members may be ﬁxed (static) or dynamic\n▶ If one node is faulty, remaining group members carry on\n▶ Note: concept is more general than IP multicast\n(we build upon point-to-point messaging)\nBuild upon system models from lecture 2:\n▶ Can be best-eﬀort (may drop messages) or\nreliable (non-faulty nodes deliver every",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 187,
+    "characters": 142,
+    "preview": "Receiving versus delivering\nNode A:\nNode B:\nApplication\nApplication\nBroadcast algorithm\n(middleware)\nBroadcast algorithm\n(middleware)\nNetwork\n",
+    "image_count": 0,
+    "vector_paths": 21
+  },
+  {
+    "page": 188,
+    "characters": 152,
+    "preview": "Receiving versus delivering\nNode A:\nNode B:\nApplication\nApplication\nbroadcast\nBroadcast algorithm\n(middleware)\nBroadcast algorithm\n(middleware)\nNetwork\n",
+    "image_count": 0,
+    "vector_paths": 23
+  },
+  {
+    "page": 189,
+    "characters": 230,
+    "preview": "Receiving versus delivering\nNode A:\nNode B:\nApplication\nApplication\nbroadcast\nBroadcast algorithm\n(middleware)\nBroadcast algorithm\n(middleware)\nsend\nreceive\nsend\nreceive\nNetwork\nAssume network provides point-to-point send/receive\n",
+    "image_count": 0,
+    "vector_paths": 31
+  },
+  {
+    "page": 190,
+    "characters": 354,
+    "preview": "Receiving versus delivering\nNode A:\nNode B:\nApplication\nApplication\nbroadcast\ndeliver\nBroadcast algorithm\n(middleware)\nBroadcast algorithm\n(middleware)\nsend\nreceive\nsend\nreceive\nNetwork\nAssume network provides point-to-point send/receive\nAfter broadcast algorithm receives message from network, it\nmay buﬀer/queue it before delivering to the application\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 191,
+    "characters": 160,
+    "preview": "Forms of reliable broadcast\nFIFO broadcast:\nIf m1 and m2 are broadcast by the same node, and\nbroadcast(m1) → broadcast(m2), then m1 must be delivered\nbefore m2\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 192,
+    "characters": 247,
+    "preview": "Forms of reliable broadcast\nFIFO broadcast:\nIf m1 and m2 are broadcast by the same node, and\nbroadcast(m1) → broadcast(m2), then m1 must be delivered\nbefore m2\nCausal broadcast:\nIf broadcast(m1) → broadcast(m2) then m1 must be delivered\nbefore m2\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 193,
+    "characters": 361,
+    "preview": "Forms of reliable broadcast\nFIFO broadcast:\nIf m1 and m2 are broadcast by the same node, and\nbroadcast(m1) → broadcast(m2), then m1 must be delivered\nbefore m2\nCausal broadcast:\nIf broadcast(m1) → broadcast(m2) then m1 must be delivered\nbefore m2\nTotal order broadcast:\nIf m1 is delivered before m2 on one node, then m1 must be\ndelivered before m2 on all nodes\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 194,
+    "characters": 445,
+    "preview": "Forms of reliable broadcast\nFIFO broadcast:\nIf m1 and m2 are broadcast by the same node, and\nbroadcast(m1) → broadcast(m2), then m1 must be delivered\nbefore m2\nCausal broadcast:\nIf broadcast(m1) → broadcast(m2) then m1 must be delivered\nbefore m2\nTotal order broadcast:\nIf m1 is delivered before m2 on one node, then m1 must be\ndelivered before m2 on all nodes\nFIFO-total order broadcast:\nCombination of FIFO broadcast and total order broadcast\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 195,
+    "characters": 30,
+    "preview": "FIFO broadcast\nA\nB\nC\nm1\nm1\nm1\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 196,
+    "characters": 39,
+    "preview": "FIFO broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm2\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 197,
+    "characters": 48,
+    "preview": "FIFO broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm2\nm3\nm3\nm3\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 198,
+    "characters": 189,
+    "preview": "FIFO broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm2\nm3\nm3\nm3\nMessages sent by the same node must be delivered in the\norder they were sent.\nMessages sent by diﬀerent nodes can be delivered in any order.\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 199,
+    "characters": 248,
+    "preview": "FIFO broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm2\nm3\nm3\nm3\nMessages sent by the same node must be delivered in the\norder they were sent.\nMessages sent by diﬀerent nodes can be delivered in any order.\nValid orders: (m2, m1, m3) or (m1, m2, m3) or (m1, m3, m2)\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 200,
+    "characters": 248,
+    "preview": "FIFO broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm2\nm3\nm3\nm3\nMessages sent by the same node must be delivered in the\norder they were sent.\nMessages sent by diﬀerent nodes can be delivered in any order.\nValid orders: (m2, m1, m3) or (m1, m2, m3) or (m1, m3, m2)\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 201,
+    "characters": 32,
+    "preview": "Causal broadcast\nA\nB\nC\nm1\nm1\nm1\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 202,
+    "characters": 38,
+    "preview": "Causal broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 203,
+    "characters": 47,
+    "preview": "Causal broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 204,
+    "characters": 159,
+    "preview": "Causal broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\nCausally related messages must be delivered in causal order.\nConcurrent messages can be delivered in any order.\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 205,
+    "characters": 279,
+    "preview": "Causal broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\nCausally related messages must be delivered in causal order.\nConcurrent messages can be delivered in any order.\nHere: broadcast(m1) → broadcast(m2) and\nbroadcast(m1) → broadcast(m3)\n=⇒ valid orders are: (m1, m2, m3) or (m1, m3, m2)\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 206,
+    "characters": 279,
+    "preview": "Causal broadcast\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\nCausally related messages must be delivered in causal order.\nConcurrent messages can be delivered in any order.\nHere: broadcast(m1) → broadcast(m2) and\nbroadcast(m1) → broadcast(m3)\n=⇒ valid orders are: (m1, m2, m3) or (m1, m3, m2)\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 207,
+    "characters": 41,
+    "preview": "Total order broadcast (1)\nA\nB\nC\nm1\nm1\nm1\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 208,
+    "characters": 47,
+    "preview": "Total order broadcast (1)\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 209,
+    "characters": 56,
+    "preview": "Total order broadcast (1)\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 210,
+    "characters": 125,
+    "preview": "Total order broadcast (1)\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\nAll nodes must deliver messages in the same order\n(here: m1, m2, m3)\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 211,
+    "characters": 170,
+    "preview": "Total order broadcast (1)\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\nAll nodes must deliver messages in the same order\n(here: m1, m2, m3)\nThis includes a node’s deliveries to itself!\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 212,
+    "characters": 173,
+    "preview": "Total order broadcast (2)\nA\nB\nC\nm1\nm1\nm1\nm2\nm2\nm3\nm3\nm3\nm2\nAll nodes must deliver messages in the same order\n(here: m1, m3, m2)\nThis includes a node’s deliveries to itself!\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 213,
+    "characters": 176,
+    "preview": "Relationships between broadcast models\nFIFO-total order broadcast\nTotal order\nbroadcast\nCausal broadcast\nFIFO broadcast\nReliable broadcast\nBest-eﬀort\nbroadcast\n= stronger than\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 214,
+    "characters": 177,
+    "preview": "Broadcast algorithms\nBreak down into two layers:\n1. Make best-eﬀort broadcast reliable by retransmitting\ndropped messages\n2. Enforce delivery order on top of reliable broadcast\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 215,
+    "characters": 296,
+    "preview": "Broadcast algorithms\nBreak down into two layers:\n1. Make best-eﬀort broadcast reliable by retransmitting\ndropped messages\n2. Enforce delivery order on top of reliable broadcast\nFirst attempt: broadcasting node sends message directly\nto every other node\n▶ Use reliable links (retry + deduplicate)\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 216,
+    "characters": 364,
+    "preview": "Broadcast algorithms\nBreak down into two layers:\n1. Make best-eﬀort broadcast reliable by retransmitting\ndropped messages\n2. Enforce delivery order on top of reliable broadcast\nFirst attempt: broadcasting node sends message directly\nto every other node\n▶ Use reliable links (retry + deduplicate)\n▶ Problem: node may crash before all messages delivered\nA\nB\nC\nm1\nm1\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 217,
+    "characters": 147,
+    "preview": "Eager reliable broadcast\nIdea: the ﬁrst time a node receives a particular message, it\nre-broadcasts to each other node (via reliable links).\nA\nB\nC\n",
+    "image_count": 0,
+    "vector_paths": 22
+  },
+  {
+    "page": 218,
+    "characters": 153,
+    "preview": "Eager reliable broadcast\nIdea: the ﬁrst time a node receives a particular message, it\nre-broadcasts to each other node (via reliable links).\nA\nB\nC\nm1\nm1\n",
+    "image_count": 0,
+    "vector_paths": 26
+  },
+  {
+    "page": 219,
+    "characters": 159,
+    "preview": "Eager reliable broadcast\nIdea: the ﬁrst time a node receives a particular message, it\nre-broadcasts to each other node (via reliable links).\nA\nB\nC\nm1\nm1\nm1\nm1\n",
+    "image_count": 0,
+    "vector_paths": 31
+  },
+  {
+    "page": 220,
+    "characters": 165,
+    "preview": "Eager reliable broadcast\nIdea: the ﬁrst time a node receives a particular message, it\nre-broadcasts to each other node (via reliable links).\nA\nB\nC\nm1\nm1\nm1\nm1\nm1\nm1\n",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 221,
+    "characters": 218,
+    "preview": "Eager reliable broadcast\nIdea: the ﬁrst time a node receives a particular message, it\nre-broadcasts to each other node (via reliable links).\nA\nB\nC\nm1\nm1\nm1\nm1\nm1\nm1\nReliable, but. . . up to O(n2) messages for n nodes!\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 222,
+    "characters": 172,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\n",
+    "image_count": 0,
+    "vector_paths": 53
+  },
+  {
+    "page": 223,
+    "characters": 172,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\n",
+    "image_count": 0,
+    "vector_paths": 68
+  },
+  {
+    "page": 224,
+    "characters": 172,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\n",
+    "image_count": 0,
+    "vector_paths": 92
+  },
+  {
+    "page": 225,
+    "characters": 172,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\n",
+    "image_count": 0,
+    "vector_paths": 126
+  },
+  {
+    "page": 226,
+    "characters": 172,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\n",
+    "image_count": 0,
+    "vector_paths": 108
+  },
+  {
+    "page": 227,
+    "characters": 172,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\n",
+    "image_count": 0,
+    "vector_paths": 100
+  },
+  {
+    "page": 228,
+    "characters": 226,
+    "preview": "Gossip protocols\nUseful when broadcasting to a large number of nodes.\nIdea: when a node receives a message for the ﬁrst time,\nforward it to 3 other nodes, chosen randomly.\nEventually reaches all nodes (with high probability).\n",
+    "image_count": 0,
+    "vector_paths": 76
+  },
+  {
+    "page": 229,
+    "characters": 452,
+    "preview": "FIFO broadcast algorithm\non initialisation do\nsendSeq := 0; delivered := ⟨0, 0, . . . , 0⟩; buﬀer := {}\nend on\non request to broadcast m at node Ni do\nsend (i, sendSeq, m) via reliable broadcast\nsendSeq := sendSeq + 1\nend on\non receiving msg from reliable broadcast at node Ni do\nbuﬀer := buﬀer ∪ {msg}\nwhile ∃sender, m. (sender, delivered[sender], m) ∈ buﬀer do\ndeliver m to the application\ndelivered[sender] := delivered[sender] + 1\nend while\nend o",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 230,
+    "characters": 520,
+    "preview": "Causal broadcast algorithm\non initialisation do\nsendSeq := 0; delivered := ⟨0, 0, . . . , 0⟩; buﬀer := {}\nend on\non request to broadcast m at node Ni do\ndeps := delivered; deps[i] := sendSeq\nsend (i, deps, m) via reliable broadcast\nsendSeq := sendSeq + 1\nend on\non receiving msg from reliable broadcast at node Ni do\nbuﬀer := buﬀer ∪ {msg}\nwhile ∃(sender, deps, m) ∈ buﬀer. deps ≤ delivered do\ndeliver m to the application\nbuﬀer := buﬀer \\ {(sender, ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 231,
+    "characters": 275,
+    "preview": "Vector clocks ordering\nDeﬁne the following order on vector timestamps\n(in a system with n nodes):\n▶ T = T ′ iﬀ T[i] = T ′[i] for all i ∈ {1, . . . , n}\n▶ T ≤ T ′ iﬀ T[i] ≤ T ′[i] for all i ∈ {1, . . . , n}\n▶ T < T ′ iﬀ T ≤ T ′ and T ̸= T ′\n▶ T ∥ T ′ iﬀ T ̸≤ T ′ and T ′ ̸≤ T\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 232,
+    "characters": 192,
+    "preview": "Total order broadcast algorithms\nSingle leader approach:\n▶ One node is designated as leader (sequencer)\n▶ To broadcast message, send it to the leader;\nleader broadcasts it via FIFO broadcast.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 233,
+    "characters": 288,
+    "preview": "Total order broadcast algorithms\nSingle leader approach:\n▶ One node is designated as leader (sequencer)\n▶ To broadcast message, send it to the leader;\nleader broadcasts it via FIFO broadcast.\n▶ Problem: leader crashes =⇒ no more messages delivered\n▶ Changing the leader safely is diﬃcult\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 234,
+    "characters": 405,
+    "preview": "Total order broadcast algorithms\nSingle leader approach:\n▶ One node is designated as leader (sequencer)\n▶ To broadcast message, send it to the leader;\nleader broadcasts it via FIFO broadcast.\n▶ Problem: leader crashes =⇒ no more messages delivered\n▶ Changing the leader safely is diﬃcult\nLamport clocks approach:\n▶ Attach Lamport timestamp to every message\n▶ Deliver messages in total order of timestamps\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 235,
+    "characters": 561,
+    "preview": "Total order broadcast algorithms\nSingle leader approach:\n▶ One node is designated as leader (sequencer)\n▶ To broadcast message, send it to the leader;\nleader broadcasts it via FIFO broadcast.\n▶ Problem: leader crashes =⇒ no more messages delivered\n▶ Changing the leader safely is diﬃcult\nLamport clocks approach:\n▶ Attach Lamport timestamp to every message\n▶ Deliver messages in total order of timestamps\n▶ Problem: how do you know if you have seen a",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 236,
+    "characters": 22,
+    "preview": "Lecture 5\nReplication\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 237,
+    "characters": 160,
+    "preview": "Replication\n▶ Keeping a copy of the same data on multiple nodes\n▶ Databases, ﬁlesystems, caches, . . .\n▶ A node that has a copy of the data is called a replica\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 238,
+    "characters": 254,
+    "preview": "Replication\n▶ Keeping a copy of the same data on multiple nodes\n▶ Databases, ﬁlesystems, caches, . . .\n▶ A node that has a copy of the data is called a replica\n▶ If some replicas are faulty, others are still accessible\n▶ Spread load across many replicas\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 239,
+    "characters": 334,
+    "preview": "Replication\n▶ Keeping a copy of the same data on multiple nodes\n▶ Databases, ﬁlesystems, caches, . . .\n▶ A node that has a copy of the data is called a replica\n▶ If some replicas are faulty, others are still accessible\n▶ Spread load across many replicas\n▶ Easy if the data doesn’t change: just copy it\n▶ We will focus on data changes\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 240,
+    "characters": 568,
+    "preview": "Replication\n▶ Keeping a copy of the same data on multiple nodes\n▶ Databases, ﬁlesystems, caches, . . .\n▶ A node that has a copy of the data is called a replica\n▶ If some replicas are faulty, others are still accessible\n▶ Spread load across many replicas\n▶ Easy if the data doesn’t change: just copy it\n▶ We will focus on data changes\nCompare to RAID (Redundant Array of Independent Disks):\nreplication within a single computer\n▶ RAID has single contr",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 241,
+    "characters": 109,
+    "preview": "Retrying state updates\nUser A: The moon is not actually made of cheese!\nLike\n12,300 people like this.\nclient\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 242,
+    "characters": 141,
+    "preview": "Retrying state updates\nUser A: The moon is not actually made of cheese!\nLike\n12,300 people like this.\nclient\nincrement post.likes\n12,301\nack\n",
+    "image_count": 0,
+    "vector_paths": 37
+  },
+  {
+    "page": 243,
+    "characters": 173,
+    "preview": "Retrying state updates\nUser A: The moon is not actually made of cheese!\nLike\n12,300 people like this.\nclient\nincrement post.likes\n12,301\nack\nincrement post.likes\n12,302\nack\n",
+    "image_count": 0,
+    "vector_paths": 41
+  },
+  {
+    "page": 244,
+    "characters": 285,
+    "preview": "Retrying state updates\nUser A: The moon is not actually made of cheese!\nLike\n12,300 people like this.\nclient\nincrement post.likes\n12,301\nack\nincrement post.likes\n12,302\nack\nDeduplicating requests requires that the database tracks which\nrequests it has already seen (in stable storage)\n",
+    "image_count": 0,
+    "vector_paths": 41
+  },
+  {
+    "page": 245,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 246,
+    "characters": 209,
+    "preview": "Idempotence\nA function f is idempotent if f(x) = f(f(x)).\n▶ Not idempotent: f(likeCount) = likeCount + 1\n▶ Idempotent: f(likeSet) = likeSet ∪ {userID}\nIdempotent requests can be retried without deduplication.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 247,
+    "characters": 453,
+    "preview": "Idempotence\nA function f is idempotent if f(x) = f(f(x)).\n▶ Not idempotent: f(likeCount) = likeCount + 1\n▶ Idempotent: f(likeSet) = likeSet ∪ {userID}\nIdempotent requests can be retried without deduplication.\nChoice of retry behaviour:\n▶ At-most-once semantics:\nsend request, don’t retry, update may not happen\n▶ At-least-once semantics:\nretry request until acknowledged, may repeat update\n▶ Exactly-once semantics:\nretry + idempotence or deduplicati",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 248,
+    "characters": 49,
+    "preview": "Adding and then removing again\nclient 1\nclient 2\n",
+    "image_count": 0,
+    "vector_paths": 26
+  },
+  {
+    "page": 249,
+    "characters": 93,
+    "preview": "Adding and then removing again\nclient 1\nclient 2\nf: add like\nack\nf(likes) = likes ∪ {userID}\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 250,
+    "characters": 106,
+    "preview": "Adding and then removing again\nclient 1\nclient 2\nf: add like\nack\nset of likes\nf(likes) = likes ∪ {userID}\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 251,
+    "characters": 148,
+    "preview": "Adding and then removing again\nclient 1\nclient 2\nf: add like\nack\nset of likes\ng: unlike\nack\nf(likes) = likes ∪ {userID}\ng(likes) = likes \\ {userID}\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 252,
+    "characters": 164,
+    "preview": "Adding and then removing again\nclient 1\nclient 2\nf: add like\nack\nset of likes\ng: unlike\nack\nf: add like\nack\nf(likes) = likes ∪ {userID}\ng(likes) = likes \\ {userID}\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 253,
+    "characters": 216,
+    "preview": "Adding and then removing again\nclient 1\nclient 2\nf: add like\nack\nset of likes\ng: unlike\nack\nf: add like\nack\nf(likes) = likes ∪ {userID}\ng(likes) = likes \\ {userID}\nIdempotent? f(f(x)) = f(x) but f(g(f(x)) ̸= g(f(x))\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 254,
+    "characters": 52,
+    "preview": "Another problem with adding and removing\nclient\nA\nB\n",
+    "image_count": 0,
+    "vector_paths": 31
+  },
+  {
+    "page": 255,
+    "characters": 66,
+    "preview": "Another problem with adding and removing\nclient\nA\nB\nadd(x)\nadd(x)\n",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 256,
+    "characters": 86,
+    "preview": "Another problem with adding and removing\nclient\nA\nB\nadd(x)\nadd(x)\nremove(x)\nremove(x)\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 257,
+    "characters": 143,
+    "preview": "Another problem with adding and removing\nclient\nA\nB\nadd(x)\nadd(x)\nremove(x)\nremove(x)\nFinal state (x /∈ A, x ∈ B) is the same as in this case:\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 258,
+    "characters": 168,
+    "preview": "Another problem with adding and removing\nclient\nA\nB\nadd(x)\nadd(x)\nremove(x)\nremove(x)\nFinal state (x /∈ A, x ∈ B) is the same as in this case:\nclient\nA\nB\nadd(x)\nadd(x)\n",
+    "image_count": 0,
+    "vector_paths": 58
+  },
+  {
+    "page": 259,
+    "characters": 102,
+    "preview": "Timestamps and tombstones\nclient\nA\nB\n(t1, add(x))\nt1\n(t1, add(x))\n{x �→ (t1, true)}\n{x �→ (t1, true)}\n",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 260,
+    "characters": 156,
+    "preview": "Timestamps and tombstones\nclient\nA\nB\n(t1, add(x))\nt1\n(t1, add(x))\n{x �→ (t1, true)}\n{x �→ (t1, true)}\n(t2, remove(x))\nt2\n(t2, remove(x))\n{x �→ (t2, false)}\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 261,
+    "characters": 262,
+    "preview": "Timestamps and tombstones\nclient\nA\nB\n(t1, add(x))\nt1\n(t1, add(x))\n{x �→ (t1, true)}\n{x �→ (t1, true)}\n(t2, remove(x))\nt2\n(t2, remove(x))\n{x �→ (t2, false)}\n“remove(x)” doesn’t actually remove x: it labels x with\n“false” to indicate it is invisible (a tombstone)\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 262,
+    "characters": 311,
+    "preview": "Timestamps and tombstones\nclient\nA\nB\n(t1, add(x))\nt1\n(t1, add(x))\n{x �→ (t1, true)}\n{x �→ (t1, true)}\n(t2, remove(x))\nt2\n(t2, remove(x))\n{x �→ (t2, false)}\n“remove(x)” doesn’t actually remove x: it labels x with\n“false” to indicate it is invisible (a tombstone)\nEvery record has logical timestamp of last write\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 263,
+    "characters": 147,
+    "preview": "Reconciling replicas\nReplicas periodically communicate among themselves\nto check for any inconsistencies.\nA\nB\n{x �→ (t2, false)}\n{x �→ (t1, true)}\n",
+    "image_count": 0,
+    "vector_paths": 26
+  },
+  {
+    "page": 264,
+    "characters": 178,
+    "preview": "Reconciling replicas\nReplicas periodically communicate among themselves\nto check for any inconsistencies.\nA\nB\n{x �→ (t2, false)}\n{x �→ (t1, true)}\nreconcile state\n(anti-entropy)\n",
+    "image_count": 0,
+    "vector_paths": 29
+  },
+  {
+    "page": 265,
+    "characters": 224,
+    "preview": "Reconciling replicas\nReplicas periodically communicate among themselves\nto check for any inconsistencies.\nA\nB\nreconcile state\n{x �→ (t2, false)}\n{x �→ (t1, true)}\n(anti-entropy)\nt1 < t2\n{x �→ (t2, false)}\n{x �→ (t2, false)}\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 266,
+    "characters": 335,
+    "preview": "Reconciling replicas\nReplicas periodically communicate among themselves\nto check for any inconsistencies.\nA\nB\nreconcile state\n{x �→ (t2, false)}\n{x �→ (t1, true)}\n(anti-entropy)\nt1 < t2\n{x �→ (t2, false)}\n{x �→ (t2, false)}\nPropagate the record with the latest timestamp,\ndiscard the records with earlier timestamps\n(for a given key).\n",
+    "image_count": 0,
+    "vector_paths": 33
+  },
+  {
+    "page": 267,
+    "characters": 60,
+    "preview": "Concurrent writes by diﬀerent clients\nclient 1\nA\nB\nclient 2\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 268,
+    "characters": 80,
+    "preview": "Concurrent writes by diﬀerent clients\nclient 1\nA\nB\nclient 2\nt1\n(t1, set(x, v1))\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 269,
+    "characters": 100,
+    "preview": "Concurrent writes by diﬀerent clients\nclient 1\nA\nB\nclient 2\nt1\nt2\n(t1, set(x, v1))\n(t2, set(x, v2))\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 270,
+    "characters": 254,
+    "preview": "Concurrent writes by diﬀerent clients\nclient 1\nA\nB\nclient 2\nt1\nt2\n(t1, set(x, v1))\n(t2, set(x, v2))\nTwo common approaches:\n▶ Last writer wins (LWW):\nUse timestamps with total order (e.g. Lamport clock)\nKeep v2 and discard v1 if t2 > t1. Note: data loss!\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 271,
+    "characters": 393,
+    "preview": "Concurrent writes by diﬀerent clients\nclient 1\nA\nB\nclient 2\nt1\nt2\n(t1, set(x, v1))\n(t2, set(x, v2))\nTwo common approaches:\n▶ Last writer wins (LWW):\nUse timestamps with total order (e.g. Lamport clock)\nKeep v2 and discard v1 if t2 > t1. Note: data loss!\n▶ Multi-value register:\nUse timestamps with partial order (e.g. vector clock)\nv2 replaces v1 if t2 > t1; preserve both {v1, v2} if t1 ∥ t2\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 272,
+    "characters": 122,
+    "preview": "Probability of faults\nA replica may be unavailable due to network partition or\nnode fault (e.g. crash, hardware problem).\n",
+    "image_count": 0,
+    "vector_paths": 43
+  },
+  {
+    "page": 273,
+    "characters": 294,
+    "preview": "Probability of faults\nA replica may be unavailable due to network partition or\nnode fault (e.g. crash, hardware problem).\nAssume each replica has probability p of being faulty or\nunavailable at any one time, and that faults are independent.\n(Not actually true! But okay approximation for now.)\n",
+    "image_count": 0,
+    "vector_paths": 43
+  },
+  {
+    "page": 274,
+    "characters": 405,
+    "preview": "Probability of faults\nA replica may be unavailable due to network partition or\nnode fault (e.g. crash, hardware problem).\nAssume each replica has probability p of being faulty or\nunavailable at any one time, and that faults are independent.\n(Not actually true! But okay approximation for now.)\nProbability of all n replicas being faulty: pn\nProbability of ≥ 1 out of n replicas being faulty: 1 − (1 − p)n\n",
+    "image_count": 0,
+    "vector_paths": 43
+  },
+  {
+    "page": 275,
+    "characters": 574,
+    "preview": "Probability of faults\nA replica may be unavailable due to network partition or\nnode fault (e.g. crash, hardware problem).\nAssume each replica has probability p of being faulty or\nunavailable at any one time, and that faults are independent.\n(Not actually true! But okay approximation for now.)\nProbability of all n replicas being faulty: pn\nProbability of ≥ 1 out of n replicas being faulty: 1 − (1 − p)n\nExample with p = 0.01:\n2\nfaulty)\nP(all n faul",
+    "image_count": 0,
+    "vector_paths": 43
+  },
+  {
+    "page": 276,
+    "characters": 60,
+    "preview": "Read-after-write consistency\nclient\nA\nB\n(t1, set(x, v1))\nt1\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 277,
+    "characters": 76,
+    "preview": "Read-after-write consistency\nclient\nA\nB\n(t1, set(x, v1))\nt1\nget(x)\n(t0, v0)\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 278,
+    "characters": 173,
+    "preview": "Read-after-write consistency\nclient\nA\nB\n(t1, set(x, v1))\nt1\nget(x)\n(t0, v0)\nWriting to one replica, reading from another: client does not\nread back the value it has written\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 279,
+    "characters": 270,
+    "preview": "Read-after-write consistency\nclient\nA\nB\n(t1, set(x, v1))\nt1\nget(x)\n(t0, v0)\nWriting to one replica, reading from another: client does not\nread back the value it has written\nRequire writing to/reading from both replicas =⇒ cannot\nwrite/read if one replica is unavailable\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 280,
+    "characters": 33,
+    "preview": "Quorum (2 out of 3)\nclient\nA\nB\nC\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 281,
+    "characters": 53,
+    "preview": "Quorum (2 out of 3)\nclient\nA\nB\nC\n(t1, set(x, v1))\nt1\n",
+    "image_count": 0,
+    "vector_paths": 42
+  },
+  {
+    "page": 282,
+    "characters": 85,
+    "preview": "Quorum (2 out of 3)\nclient\nA\nB\nC\n(t1, set(x, v1))\nt1\nok\nok\nWrite succeeds on B and C\n",
+    "image_count": 0,
+    "vector_paths": 46
+  },
+  {
+    "page": 283,
+    "characters": 92,
+    "preview": "Quorum (2 out of 3)\nclient\nA\nB\nC\n(t1, set(x, v1))\nt1\nok\nok\nget(x)\nWrite succeeds on B and C\n",
+    "image_count": 0,
+    "vector_paths": 52
+  },
+  {
+    "page": 284,
+    "characters": 136,
+    "preview": "Quorum (2 out of 3)\nclient\nA\nB\nC\n(t1, set(x, v1))\nt1\nok\nok\nget(x)\n(t0, v0)\n(t1, v1)\nWrite succeeds on B and C; read succeeds on A and B\n",
+    "image_count": 0,
+    "vector_paths": 56
+  },
+  {
+    "page": 285,
+    "characters": 192,
+    "preview": "Quorum (2 out of 3)\nclient\nA\nB\nC\n(t1, set(x, v1))\nt1\nok\nok\nget(x)\n(t0, v0)\n(t1, v1)\nWrite succeeds on B and C; read succeeds on A and B\nChoose between (t0, v0) and (t1, v1) based on timestamp\n",
+    "image_count": 0,
+    "vector_paths": 56
+  },
+  {
+    "page": 286,
+    "characters": 111,
+    "preview": "Read and write quorums\nIn a system with n replicas:\n▶ If a write is acknowledged by w replicas (write quorum),\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 287,
+    "characters": 186,
+    "preview": "Read and write quorums\nIn a system with n replicas:\n▶ If a write is acknowledged by w replicas (write quorum),\n▶ and we subsequently read from r replicas (read quorum),\n▶ and r + w > n,\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 288,
+    "characters": 290,
+    "preview": "Read and write quorums\nIn a system with n replicas:\n▶ If a write is acknowledged by w replicas (write quorum),\n▶ and we subsequently read from r replicas (read quorum),\n▶ and r + w > n,\n▶ . . . then the read will see the previously written value\n(or a value that subsequently overwrote it)\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 289,
+    "characters": 374,
+    "preview": "Read and write quorums\nIn a system with n replicas:\n▶ If a write is acknowledged by w replicas (write quorum),\n▶ and we subsequently read from r replicas (read quorum),\n▶ and r + w > n,\n▶ . . . then the read will see the previously written value\n(or a value that subsequently overwrote it)\n▶ Read quorum and write quorum share ≥ 1 replica\nA\nB\nC\nD\nE\nread quorum\nwrite quorum\n",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 290,
+    "characters": 495,
+    "preview": "Read and write quorums\nIn a system with n replicas:\n▶ If a write is acknowledged by w replicas (write quorum),\n▶ and we subsequently read from r replicas (read quorum),\n▶ and r + w > n,\n▶ . . . then the read will see the previously written value\n(or a value that subsequently overwrote it)\n▶ Read quorum and write quorum share ≥ 1 replica\n▶ Typical: r = w = n+1\n2\nfor n = 3, 5, 7, . . . (majority)\n▶ Reads can tolerate n − r unavailable replicas, wri",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 291,
+    "characters": 25,
+    "preview": "Read repair\nclient\nA\nB\nC\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 292,
+    "characters": 32,
+    "preview": "Read repair\nclient\nA\nB\nC\nget(x)\n",
+    "image_count": 0,
+    "vector_paths": 42
+  },
+  {
+    "page": 293,
+    "characters": 110,
+    "preview": "Read repair\nclient\nA\nB\nC\nget(x)\n(t0, v0)\n(t1, v1)\nUpdate (t1, v1) is more recent than (t0, v0) since t0 < t1.\n",
+    "image_count": 0,
+    "vector_paths": 46
+  },
+  {
+    "page": 294,
+    "characters": 178,
+    "preview": "Read repair\nclient\nA\nB\nC\nget(x)\n(t0, v0)\n(t1, v1)\n(t1, set(x, v1))\nUpdate (t1, v1) is more recent than (t0, v0) since t0 < t1.\nClient helps propagate (t1, v1) to other replicas.\n",
+    "image_count": 0,
+    "vector_paths": 50
+  },
+  {
+    "page": 295,
+    "characters": 122,
+    "preview": "State machine replication\nSo far we have used best-eﬀort broadcast for replication.\nWhat about stronger broadcast models?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 296,
+    "characters": 201,
+    "preview": "State machine replication\nSo far we have used best-eﬀort broadcast for replication.\nWhat about stronger broadcast models?\nTotal order broadcast: every node delivers the same\nmessages in the same order\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 297,
+    "characters": 349,
+    "preview": "State machine replication\nSo far we have used best-eﬀort broadcast for replication.\nWhat about stronger broadcast models?\nTotal order broadcast: every node delivers the same\nmessages in the same order\nState machine replication (SMR):\n▶ FIFO-total order broadcast every update to all replicas\n▶ Replica delivers update message: apply it to own state\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 298,
+    "characters": 387,
+    "preview": "State machine replication\nSo far we have used best-eﬀort broadcast for replication.\nWhat about stronger broadcast models?\nTotal order broadcast: every node delivers the same\nmessages in the same order\nState machine replication (SMR):\n▶ FIFO-total order broadcast every update to all replicas\n▶ Replica delivers update message: apply it to own state\n▶ Applying an update is deterministic\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 299,
+    "characters": 554,
+    "preview": "State machine replication\nSo far we have used best-eﬀort broadcast for replication.\nWhat about stronger broadcast models?\nTotal order broadcast: every node delivers the same\nmessages in the same order\nState machine replication (SMR):\n▶ FIFO-total order broadcast every update to all replicas\n▶ Replica delivers update message: apply it to own state\n▶ Applying an update is deterministic\n▶ Replica is a state machine: starts in ﬁxed initial state,\ngoe",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 300,
+    "characters": 216,
+    "preview": "State machine replication\non request to perform update u do\nsend u via FIFO-total order broadcast\nend on\non delivering u through FIFO-total order broadcast do\nupdate state using arbitrary deterministic logic!\nend on\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 301,
+    "characters": 295,
+    "preview": "State machine replication\non request to perform update u do\nsend u via FIFO-total order broadcast\nend on\non delivering u through FIFO-total order broadcast do\nupdate state using arbitrary deterministic logic!\nend on\nClosely related ideas:\n▶ Serializable transactions (execute in delivery order)\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 302,
+    "characters": 347,
+    "preview": "State machine replication\non request to perform update u do\nsend u via FIFO-total order broadcast\nend on\non delivering u through FIFO-total order broadcast do\nupdate state using arbitrary deterministic logic!\nend on\nClosely related ideas:\n▶ Serializable transactions (execute in delivery order)\n▶ Blockchains, distributed ledgers, smart contracts\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 303,
+    "characters": 439,
+    "preview": "State machine replication\non request to perform update u do\nsend u via FIFO-total order broadcast\nend on\non delivering u through FIFO-total order broadcast do\nupdate state using arbitrary deterministic logic!\nend on\nClosely related ideas:\n▶ Serializable transactions (execute in delivery order)\n▶ Blockchains, distributed ledgers, smart contracts\nLimitations:\n▶ Cannot update state immediately, have to wait for\ndelivery through broadcast\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 304,
+    "characters": 498,
+    "preview": "State machine replication\non request to perform update u do\nsend u via FIFO-total order broadcast\nend on\non delivering u through FIFO-total order broadcast do\nupdate state using arbitrary deterministic logic!\nend on\nClosely related ideas:\n▶ Serializable transactions (execute in delivery order)\n▶ Blockchains, distributed ledgers, smart contracts\nLimitations:\n▶ Cannot update state immediately, have to wait for\ndelivery through broadcast\n▶ Need faul",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 305,
+    "characters": 102,
+    "preview": "Database leader replica\nLeader database replica L ensures total order broadcast\nclient 1\nclient 2\nL\nF\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 306,
+    "characters": 108,
+    "preview": "Database leader replica\nLeader database replica L ensures total order broadcast\nclient 1\nclient 2\nL\nF\nT1\nT1\n",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 307,
+    "characters": 114,
+    "preview": "Database leader replica\nLeader database replica L ensures total order broadcast\nclient 1\nclient 2\nL\nF\nT1\nT1\nT2\nT2\n",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 308,
+    "characters": 175,
+    "preview": "Database leader replica\nLeader database replica L ensures total order broadcast\nclient 1\nclient 2\nL\nF\nT1\nT1\nT2\nT2\nok\ncommit\nFollower F applies transaction log in commit order\n",
+    "image_count": 0,
+    "vector_paths": 42
+  },
+  {
+    "page": 309,
+    "characters": 185,
+    "preview": "Database leader replica\nLeader database replica L ensures total order broadcast\nclient 1\nclient 2\nL\nF\nT1\nT1\nT2\nT2\nok\ncommit\nok\ncommit\nFollower F applies transaction log in commit order\n",
+    "image_count": 0,
+    "vector_paths": 46
+  },
+  {
+    "page": 310,
+    "characters": 151,
+    "preview": "Replication using causal (and weaker) broadcast\nState machine replication uses (FIFO-)total order broadcast.\nCan we use weaker forms of broadcast too?\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 311,
+    "characters": 330,
+    "preview": "Replication using causal (and weaker) broadcast\nState machine replication uses (FIFO-)total order broadcast.\nCan we use weaker forms of broadcast too?\nIf replica state updates are commutative, replicas can process\nupdates in diﬀerent orders and still end up in the same state.\nUpdates f and g are commutative if f(g(x)) = g(f(x))\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 312,
+    "characters": 412,
+    "preview": "Replication using causal (and weaker) broadcast\nState machine replication uses (FIFO-)total order broadcast.\nCan we use weaker forms of broadcast too?\nIf replica state updates are commutative, replicas can process\nupdates in diﬀerent orders and still end up in the same state.\nUpdates f and g are commutative if f(g(x)) = g(f(x))\nbroadcast\nassumptions about state update function\ntotal order\ndeterministic (SMR)\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 313,
+    "characters": 461,
+    "preview": "Replication using causal (and weaker) broadcast\nState machine replication uses (FIFO-)total order broadcast.\nCan we use weaker forms of broadcast too?\nIf replica state updates are commutative, replicas can process\nupdates in diﬀerent orders and still end up in the same state.\nUpdates f and g are commutative if f(g(x)) = g(f(x))\nbroadcast\nassumptions about state update function\ntotal order\ndeterministic (SMR)\ncausal\ndeterministic, concurrent updat",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 314,
+    "characters": 505,
+    "preview": "Replication using causal (and weaker) broadcast\nState machine replication uses (FIFO-)total order broadcast.\nCan we use weaker forms of broadcast too?\nIf replica state updates are commutative, replicas can process\nupdates in diﬀerent orders and still end up in the same state.\nUpdates f and g are commutative if f(g(x)) = g(f(x))\nbroadcast\nassumptions about state update function\ntotal order\ndeterministic (SMR)\ncausal\ndeterministic, concurrent updat",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 315,
+    "characters": 579,
+    "preview": "Replication using causal (and weaker) broadcast\nState machine replication uses (FIFO-)total order broadcast.\nCan we use weaker forms of broadcast too?\nIf replica state updates are commutative, replicas can process\nupdates in diﬀerent orders and still end up in the same state.\nUpdates f and g are commutative if f(g(x)) = g(f(x))\nbroadcast\nassumptions about state update function\ntotal order\ndeterministic (SMR)\ncausal\ndeterministic, concurrent updat",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 316,
+    "characters": 20,
+    "preview": "Lecture 6\nConsensus\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 317,
+    "characters": 239,
+    "preview": "Fault-tolerant total order broadcast\nTotal order broadcast is very useful for state machine\nreplication.\nCan implement total order broadcast by sending all messages\nvia a single leader.\nProblem: what if leader crashes/becomes unavailable?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 318,
+    "characters": 395,
+    "preview": "Fault-tolerant total order broadcast\nTotal order broadcast is very useful for state machine\nreplication.\nCan implement total order broadcast by sending all messages\nvia a single leader.\nProblem: what if leader crashes/becomes unavailable?\n▶ Manual failover: a human operator chooses a new\nleader, and reconﬁgures each node to use new leader\nUsed in many databases! Fine for planned maintenance.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 319,
+    "characters": 478,
+    "preview": "Fault-tolerant total order broadcast\nTotal order broadcast is very useful for state machine\nreplication.\nCan implement total order broadcast by sending all messages\nvia a single leader.\nProblem: what if leader crashes/becomes unavailable?\n▶ Manual failover: a human operator chooses a new\nleader, and reconﬁgures each node to use new leader\nUsed in many databases! Fine for planned maintenance.\nUnplanned outage? Humans are slow, may take a long\ntime",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 320,
+    "characters": 522,
+    "preview": "Fault-tolerant total order broadcast\nTotal order broadcast is very useful for state machine\nreplication.\nCan implement total order broadcast by sending all messages\nvia a single leader.\nProblem: what if leader crashes/becomes unavailable?\n▶ Manual failover: a human operator chooses a new\nleader, and reconﬁgures each node to use new leader\nUsed in many databases! Fine for planned maintenance.\nUnplanned outage? Humans are slow, may take a long\ntime",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 321,
+    "characters": 137,
+    "preview": "Consensus and total order broadcast\n▶ Traditional formulation of consensus: several nodes want\nto come to agreement about a single value\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 322,
+    "characters": 218,
+    "preview": "Consensus and total order broadcast\n▶ Traditional formulation of consensus: several nodes want\nto come to agreement about a single value\n▶ In context of total order broadcast: this value is the next\nmessage to deliver\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 323,
+    "characters": 307,
+    "preview": "Consensus and total order broadcast\n▶ Traditional formulation of consensus: several nodes want\nto come to agreement about a single value\n▶ In context of total order broadcast: this value is the next\nmessage to deliver\n▶ Once one node decides on a certain message order, all\nnodes will decide the same order\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 324,
+    "characters": 369,
+    "preview": "Consensus and total order broadcast\n▶ Traditional formulation of consensus: several nodes want\nto come to agreement about a single value\n▶ In context of total order broadcast: this value is the next\nmessage to deliver\n▶ Once one node decides on a certain message order, all\nnodes will decide the same order\n▶ Consensus and total order broadcast are formally\nequivalent\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 325,
+    "characters": 483,
+    "preview": "Consensus and total order broadcast\n▶ Traditional formulation of consensus: several nodes want\nto come to agreement about a single value\n▶ In context of total order broadcast: this value is the next\nmessage to deliver\n▶ Once one node decides on a certain message order, all\nnodes will decide the same order\n▶ Consensus and total order broadcast are formally\nequivalent\nCommon consensus algorithms:\n▶ Paxos: single-value consensus\nMulti-Paxos: general",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 326,
+    "characters": 559,
+    "preview": "Consensus and total order broadcast\n▶ Traditional formulation of consensus: several nodes want\nto come to agreement about a single value\n▶ In context of total order broadcast: this value is the next\nmessage to deliver\n▶ Once one node decides on a certain message order, all\nnodes will decide the same order\n▶ Consensus and total order broadcast are formally\nequivalent\nCommon consensus algorithms:\n▶ Paxos: single-value consensus\nMulti-Paxos: general",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 327,
+    "characters": 103,
+    "preview": "Consensus system models\nPaxos, Raft, etc. assume a partially synchronous,\ncrash-recovery system model.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 328,
+    "characters": 288,
+    "preview": "Consensus system models\nPaxos, Raft, etc. assume a partially synchronous,\ncrash-recovery system model.\nWhy not asynchronous?\n▶ FLP result (Fischer, Lynch, Paterson):\nThere is no deterministic consensus algorithm that is\nguaranteed to terminate in an asynchronous crash-stop\nsystem model.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 329,
+    "characters": 427,
+    "preview": "Consensus system models\nPaxos, Raft, etc. assume a partially synchronous,\ncrash-recovery system model.\nWhy not asynchronous?\n▶ FLP result (Fischer, Lynch, Paterson):\nThere is no deterministic consensus algorithm that is\nguaranteed to terminate in an asynchronous crash-stop\nsystem model.\n▶ Paxos, Raft, etc. use clocks only used for timeouts/failure\ndetector to ensure progress. Safety (correctness) does not\ndepend on timing.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 330,
+    "characters": 536,
+    "preview": "Consensus system models\nPaxos, Raft, etc. assume a partially synchronous,\ncrash-recovery system model.\nWhy not asynchronous?\n▶ FLP result (Fischer, Lynch, Paterson):\nThere is no deterministic consensus algorithm that is\nguaranteed to terminate in an asynchronous crash-stop\nsystem model.\n▶ Paxos, Raft, etc. use clocks only used for timeouts/failure\ndetector to ensure progress. Safety (correctness) does not\ndepend on timing.\nThere are also consensu",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 331,
+    "characters": 75,
+    "preview": "Leader election\nMulti-Paxos, Raft, etc. use a leader to sequence messages.\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 332,
+    "characters": 214,
+    "preview": "Leader election\nMulti-Paxos, Raft, etc. use a leader to sequence messages.\n▶ Use a failure detector (timeout) to determine suspected\ncrash or unavailability of leader.\n▶ On suspected leader crash, elect a new one.\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 333,
+    "characters": 270,
+    "preview": "Leader election\nMulti-Paxos, Raft, etc. use a leader to sequence messages.\n▶ Use a failure detector (timeout) to determine suspected\ncrash or unavailability of leader.\n▶ On suspected leader crash, elect a new one.\n▶ Prevent two leaders at the same time (“split-brain”)!\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 334,
+    "characters": 360,
+    "preview": "Leader election\nMulti-Paxos, Raft, etc. use a leader to sequence messages.\n▶ Use a failure detector (timeout) to determine suspected\ncrash or unavailability of leader.\n▶ On suspected leader crash, elect a new one.\n▶ Prevent two leaders at the same time (“split-brain”)!\nEnsure ≤ 1 leader per term:\n▶ Term is incremented every time a leader election is started\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 335,
+    "characters": 463,
+    "preview": "Leader election\nMulti-Paxos, Raft, etc. use a leader to sequence messages.\n▶ Use a failure detector (timeout) to determine suspected\ncrash or unavailability of leader.\n▶ On suspected leader crash, elect a new one.\n▶ Prevent two leaders at the same time (“split-brain”)!\nEnsure ≤ 1 leader per term:\n▶ Term is incremented every time a leader election is started\n▶ A node can only vote once per term\n▶ Require a quorum of nodes to elect a leader in a te",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 336,
+    "characters": 479,
+    "preview": "Leader election\nMulti-Paxos, Raft, etc. use a leader to sequence messages.\n▶ Use a failure detector (timeout) to determine suspected\ncrash or unavailability of leader.\n▶ On suspected leader crash, elect a new one.\n▶ Prevent two leaders at the same time (“split-brain”)!\nEnsure ≤ 1 leader per term:\n▶ Term is incremented every time a leader election is started\n▶ A node can only vote once per term\n▶ Require a quorum of nodes to elect a leader in a te",
+    "image_count": 0,
+    "vector_paths": 37
+  },
+  {
+    "page": 337,
+    "characters": 534,
+    "preview": "Leader election\nMulti-Paxos, Raft, etc. use a leader to sequence messages.\n▶ Use a failure detector (timeout) to determine suspected\ncrash or unavailability of leader.\n▶ On suspected leader crash, elect a new one.\n▶ Prevent two leaders at the same time (“split-brain”)!\nEnsure ≤ 1 leader per term:\n▶ Term is incremented every time a leader election is started\n▶ A node can only vote once per term\n▶ Require a quorum of nodes to elect a leader in a te",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 338,
+    "characters": 81,
+    "preview": "Can we guarantee there is only one leader?\nCan guarantee unique leader per term.\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 339,
+    "characters": 141,
+    "preview": "Can we guarantee there is only one leader?\nCan guarantee unique leader per term.\nCannot prevent having multiple leaders from diﬀerent terms.\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 340,
+    "characters": 331,
+    "preview": "Can we guarantee there is only one leader?\nCan guarantee unique leader per term.\nCannot prevent having multiple leaders from diﬀerent terms.\nExample: node 1 is leader in term t, but due to a network\npartition it can no longer communicate with nodes 2 and 3:\nnode 1\nnode 2\nnode 3\nNodes 2 and 3 may elect a new leader in term t + 1.\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 341,
+    "characters": 392,
+    "preview": "Can we guarantee there is only one leader?\nCan guarantee unique leader per term.\nCannot prevent having multiple leaders from diﬀerent terms.\nExample: node 1 is leader in term t, but due to a network\npartition it can no longer communicate with nodes 2 and 3:\nnode 1\nnode 2\nnode 3\nNodes 2 and 3 may elect a new leader in term t + 1.\nNode 1 may not even know that a new leader has been elected!\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 342,
+    "characters": 167,
+    "preview": "Checking if a leader has been voted out\nFor every decision (message to deliver), the leader must ﬁrst\nget acknowledgements from a quorum.\nleader\nfollower 1\nfollower 2\n",
+    "image_count": 0,
+    "vector_paths": 22
+  },
+  {
+    "page": 343,
+    "characters": 201,
+    "preview": "Checking if a leader has been voted out\nFor every decision (message to deliver), the leader must ﬁrst\nget acknowledgements from a quorum.\nleader\nfollower 1\nfollower 2\nShall I be your leader in term t?\n",
+    "image_count": 0,
+    "vector_paths": 26
+  },
+  {
+    "page": 344,
+    "characters": 209,
+    "preview": "Checking if a leader has been voted out\nFor every decision (message to deliver), the leader must ﬁrst\nget acknowledgements from a quorum.\nleader\nfollower 1\nfollower 2\nShall I be your leader in term t?\nyes\nyes\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 345,
+    "characters": 250,
+    "preview": "Checking if a leader has been voted out\nFor every decision (message to deliver), the leader must ﬁrst\nget acknowledgements from a quorum.\nleader\nfollower 1\nfollower 2\nShall I be your leader in term t?\nyes\nyes\nCan we deliver message m next in term t?\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 346,
+    "characters": 260,
+    "preview": "Checking if a leader has been voted out\nFor every decision (message to deliver), the leader must ﬁrst\nget acknowledgements from a quorum.\nleader\nfollower 1\nfollower 2\nShall I be your leader in term t?\nyes\nyes\nCan we deliver message m next in term t?\nokay\nokay\n",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 347,
+    "characters": 288,
+    "preview": "Checking if a leader has been voted out\nFor every decision (message to deliver), the leader must ﬁrst\nget acknowledgements from a quorum.\nleader\nfollower 1\nfollower 2\nShall I be your leader in term t?\nyes\nyes\nCan we deliver message m next in term t?\nokay\nokay\nRight, now deliver m please\n",
+    "image_count": 0,
+    "vector_paths": 42
+  },
+  {
+    "page": 348,
+    "characters": 57,
+    "preview": "Node state transitions in Raft\nFollower\nCandidate\nLeader\n",
+    "image_count": 0,
+    "vector_paths": 19
+  },
+  {
+    "page": 349,
+    "characters": 90,
+    "preview": "Node state transitions in Raft\nstarts up\nor recovers\nfrom crash\nFollower\nCandidate\nLeader\n",
+    "image_count": 0,
+    "vector_paths": 21
+  },
+  {
+    "page": 350,
+    "characters": 114,
+    "preview": "Node state transitions in Raft\nstarts up\nor recovers\nfrom crash\nsuspects\nleader failure\nFollower\nCandidate\nLeader\n",
+    "image_count": 0,
+    "vector_paths": 23
+  },
+  {
+    "page": 351,
+    "characters": 141,
+    "preview": "Node state transitions in Raft\nstarts up\nor recovers\nfrom crash\nsuspects\nleader failure\nreceives votes\nfrom quorum\nFollower\nCandidate\nLeader\n",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 352,
+    "characters": 160,
+    "preview": "Node state transitions in Raft\nstarts up\nor recovers\nfrom crash\nsuspects\nleader failure\nreceives votes\nfrom quorum\nFollower\nCandidate\nLeader\ndiscovers\nnew term\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 353,
+    "characters": 179,
+    "preview": "Node state transitions in Raft\nelection\ntimes out\nstarts up\nor recovers\nfrom crash\nsuspects\nleader failure\nreceives votes\nfrom quorum\nFollower\nCandidate\nLeader\ndiscovers\nnew term\n",
+    "image_count": 0,
+    "vector_paths": 29
+  },
+  {
+    "page": 354,
+    "characters": 198,
+    "preview": "Node state transitions in Raft\nelection\ntimes out\nstarts up\nor recovers\nfrom crash\nsuspects\nleader failure\nreceives votes\nfrom quorum\nFollower\nCandidate\nLeader\ndiscovers\nnew term\ndiscovers new term\n",
+    "image_count": 0,
+    "vector_paths": 31
+  },
+  {
+    "page": 355,
+    "characters": 747,
+    "preview": "Raft (1/9): initialisation\non initialisation do\ncurrentTerm := 0; votedFor := null\nlog := ⟨⟩; commitLength := 0\ncurrentRole := follower; currentLeader := null\nvotesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩\nend on\non recovery from crash do\ncurrentRole := follower; currentLeader := null\nvotesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩\nend on\non node nodeId suspects leader has failed, or on election timeout do\ncurrentTerm := curren",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 356,
+    "characters": 798,
+    "preview": "Raft (1/9): initialisation\nmsg\nterm\nlog =\nm1\n1\nm2\n1\nm3\n1\non initialisation do\nlog[0] log[1] log[2]\ncurrentTerm := 0; votedFor := null\nlog := ⟨⟩; commitLength := 0\ncurrentRole := follower; currentLeader := null\nvotesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩\nend on\non recovery from crash do\ncurrentRole := follower; currentLeader := null\nvotesReceived := {}; sentLength := ⟨⟩; ackedLength := ⟨⟩\nend on\non node nodeId suspects leader has fail",
+    "image_count": 0,
+    "vector_paths": 29
+  },
+  {
+    "page": 357,
+    "characters": 590,
+    "preview": "Raft (2/9): voting on a new leader\non receiving (VoteRequest, cId, cTerm, cLogLength, cLogTerm)\nat node nodeId do\nif cTerm > currentTerm then\ncurrentTerm := cTerm; currentRole := follower\nvotedFor := null\nend if\nlastTerm := 0\nif log.length > 0 then lastTerm := log[log.length − 1].term; end if\nlogOk := (cLogTerm > lastTerm) ∨\n(cLogTerm = lastTerm ∧ cLogLength ≥ log.length)\nif cTerm = currentTerm ∧ logOk ∧ votedFor ∈ {cId, null} then\nvotedFor := cI",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 358,
+    "characters": 606,
+    "preview": "c for candidate\nRaft (2/9): voting on a new leader\non receiving (VoteRequest, cId, cTerm, cLogLength, cLogTerm)\nat node nodeId do\nif cTerm > currentTerm then\ncurrentTerm := cTerm; currentRole := follower\nvotedFor := null\nend if\nlastTerm := 0\nif log.length > 0 then lastTerm := log[log.length − 1].term; end if\nlogOk := (cLogTerm > lastTerm) ∨\n(cLogTerm = lastTerm ∧ cLogLength ≥ log.length)\nif cTerm = currentTerm ∧ logOk ∧ votedFor ∈ {cId, null} the",
+    "image_count": 0,
+    "vector_paths": 17
+  },
+  {
+    "page": 359,
+    "characters": 590,
+    "preview": "Raft (3/9): collecting votes\non receiving (VoteResponse, voterId, term, granted) at nodeId do\nif currentRole = candidate ∧ term = currentTerm ∧ granted then\nvotesReceived := votesReceived ∪ {voterId}\nif |votesReceived| ≥ ⌈(|nodes| + 1)/2⌉ then\ncurrentRole := leader; currentLeader := nodeId\ncancel election timer\nfor each follower ∈ nodes \\ {nodeId} do\nsentLength[follower] := log.length\nackedLength[follower] := 0\nReplicateLog(nodeId, follower)\nend ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 360,
+    "characters": 504,
+    "preview": "Raft (4/9): broadcasting messages\non request to broadcast msg at node nodeId do\nif currentRole = leader then\nappend the record (msg : msg, term : currentTerm) to log\nackedLength[nodeId] := log.length\nfor each follower ∈ nodes \\ {nodeId} do\nReplicateLog(nodeId, follower)\nend for\nelse\nforward the request to currentLeader via a FIFO link\nend if\nend on\nperiodically at node nodeId do\nif currentRole = leader then\nfor each follower ∈ nodes \\ {nodeId} do",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 361,
+    "characters": 641,
+    "preview": "Raft (5/9): replicating from leader to followers\nCalled on the leader whenever there is a new message in the log, and also\nperiodically. If there are no new messages, suﬃx is the empty list.\nLogRequest messages with suﬃx = ⟨⟩ serve as heartbeats, letting\nfollowers know that the leader is still alive.\nfunction ReplicateLog(leaderId, followerId)\npreﬁxLen := sentLength[followerId]\nsuﬃx := ⟨log[preﬁxLen], log[preﬁxLen + 1], . . . ,\nlog[log.length − 1",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 362,
+    "characters": 661,
+    "preview": "Raft (6/9): followers receiving messages\non receiving (LogRequest, leaderId, term, preﬁxLen, preﬁxTerm,\nleaderCommit, suﬃx) at node nodeId do\nif term > currentTerm then\ncurrentTerm := term; votedFor := null\ncancel election timer\nend if\nif term = currentTerm then\ncurrentRole := follower; currentLeader := leaderId\nend if\nlogOk := (log.length ≥ preﬁxLen) ∧\n(preﬁxLen = 0 ∨ log[preﬁxLen − 1].term = preﬁxTerm)\nif term = currentTerm ∧ logOk then\nAppendE",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 363,
+    "characters": 621,
+    "preview": "Raft (7/9): updating followers’ logs\nfunction AppendEntries(preﬁxLen, leaderCommit, suﬃx)\nif suﬃx.length > 0 ∧ log.length > preﬁxLen then\nindex := min(log.length, preﬁxLen + suﬃx.length) − 1\nif log[index].term ̸= suﬃx[index − preﬁxLen].term then\nlog := ⟨log[0], log[1], . . . , log[preﬁxLen − 1]⟩\nend if\nend if\nif preﬁxLen + suﬃx.length > log.length then\nfor i := log.length − preﬁxLen to suﬃx.length − 1 do\nappend suﬃx[i] to log\nend for\nend if\nif le",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 364,
+    "characters": 553,
+    "preview": "Raft (8/9): leader receiving log acknowledgements\non receiving (LogResponse, follower, term, ack, success) at nodeId do\nif term = currentTerm ∧ currentRole = leader then\nif success = true ∧ ack ≥ ackedLength[follower] then\nsentLength[follower] := ack\nackedLength[follower] := ack\nCommitLogEntries()\nelse if sentLength[follower] > 0 then\nsentLength[follower] := sentLength[follower] − 1\nReplicateLog(nodeId, follower)\nend if\nelse if term > currentTerm",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 365,
+    "characters": 628,
+    "preview": "Raft (9/9): leader committing log entries\nAny log entries that have been acknowledged by a quorum of nodes are\nready to be committed by the leader. When a log entry is committed, its\nmessage is delivered to the application.\ndeﬁne acks(length) = |{n ∈ nodes | ackedLength[n] ≥ length}|\nfunction CommitLogEntries\nminAcks := ⌈(|nodes| + 1)/2⌉\nready := {len ∈ {1, . . . , log.length} | acks(len) ≥ minAcks}\nif ready ̸= {} ∧ max(ready) > commitLength ∧\nlo",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 366,
+    "characters": 30,
+    "preview": "Lecture 7\nReplica consistency\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 367,
+    "characters": 75,
+    "preview": "“Consistency”\nA word that means many diﬀerent things in diﬀerent contexts!\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 368,
+    "characters": 160,
+    "preview": "“Consistency”\nA word that means many diﬀerent things in diﬀerent contexts!\n▶ ACID: a transaction transforms the database from one\n“consistent” state to another\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 369,
+    "characters": 298,
+    "preview": "“Consistency”\nA word that means many diﬀerent things in diﬀerent contexts!\n▶ ACID: a transaction transforms the database from one\n“consistent” state to another\nHere, “consistent” = satisfying application-speciﬁc\ninvariants\ne.g. “every course with students enrolled must have at\nleast one lecturer”\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 370,
+    "characters": 341,
+    "preview": "“Consistency”\nA word that means many diﬀerent things in diﬀerent contexts!\n▶ ACID: a transaction transforms the database from one\n“consistent” state to another\nHere, “consistent” = satisfying application-speciﬁc\ninvariants\ne.g. “every course with students enrolled must have at\nleast one lecturer”\n▶ Read-after-write consistency (lecture 5)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 371,
+    "characters": 407,
+    "preview": "“Consistency”\nA word that means many diﬀerent things in diﬀerent contexts!\n▶ ACID: a transaction transforms the database from one\n“consistent” state to another\nHere, “consistent” = satisfying application-speciﬁc\ninvariants\ne.g. “every course with students enrolled must have at\nleast one lecturer”\n▶ Read-after-write consistency (lecture 5)\n▶ Replication: replica should be “consistent” with other\nreplicas\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 372,
+    "characters": 549,
+    "preview": "“Consistency”\nA word that means many diﬀerent things in diﬀerent contexts!\n▶ ACID: a transaction transforms the database from one\n“consistent” state to another\nHere, “consistent” = satisfying application-speciﬁc\ninvariants\ne.g. “every course with students enrolled must have at\nleast one lecturer”\n▶ Read-after-write consistency (lecture 5)\n▶ Replication: replica should be “consistent” with other\nreplicas\n“consistent” = in the same state? (when exa",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 373,
+    "characters": 120,
+    "preview": "Distributed transactions\nRecall atomicity in the context of ACID transactions:\n▶ A transaction either commits or aborts\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 374,
+    "characters": 207,
+    "preview": "Distributed transactions\nRecall atomicity in the context of ACID transactions:\n▶ A transaction either commits or aborts\n▶ If it commits, its updates are durable\n▶ If it aborts, it has no visible side-eﬀects\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 375,
+    "characters": 270,
+    "preview": "Distributed transactions\nRecall atomicity in the context of ACID transactions:\n▶ A transaction either commits or aborts\n▶ If it commits, its updates are durable\n▶ If it aborts, it has no visible side-eﬀects\n▶ ACID consistency (preserving invariants) relies on\natomicity\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 376,
+    "characters": 385,
+    "preview": "Distributed transactions\nRecall atomicity in the context of ACID transactions:\n▶ A transaction either commits or aborts\n▶ If it commits, its updates are durable\n▶ If it aborts, it has no visible side-eﬀects\n▶ ACID consistency (preserving invariants) relies on\natomicity\nIf the transaction updates data on multiple nodes, this implies:\n▶ Either all nodes must commit, or all must abort\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 377,
+    "characters": 505,
+    "preview": "Distributed transactions\nRecall atomicity in the context of ACID transactions:\n▶ A transaction either commits or aborts\n▶ If it commits, its updates are durable\n▶ If it aborts, it has no visible side-eﬀects\n▶ ACID consistency (preserving invariants) relies on\natomicity\nIf the transaction updates data on multiple nodes, this implies:\n▶ Either all nodes must commit, or all must abort\n▶ If any node crashes, all must abort\nEnsuring this is the atomic",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 378,
+    "characters": 133,
+    "preview": "Atomic commit versus consensus\nConsensus\nAtomic commit\nOne or more nodes propose\na value\nEvery node votes whether to\ncommit or abort\n",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 379,
+    "characters": 254,
+    "preview": "Atomic commit versus consensus\nConsensus\nAtomic commit\nOne or more nodes propose\na value\nEvery node votes whether to\ncommit or abort\nAny one of the proposed\nvalues is decided\nMust commit if all nodes\nvote to commit; must abort\nif ≥ 1 nodes vote to abort\n",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 380,
+    "characters": 360,
+    "preview": "Atomic commit versus consensus\nConsensus\nAtomic commit\nOne or more nodes propose\na value\nEvery node votes whether to\ncommit or abort\nAny one of the proposed\nvalues is decided\nMust commit if all nodes\nvote to commit; must abort\nif ≥ 1 nodes vote to abort\nMust abort if a participating\nnode crashes\nCrashed nodes can be\ntolerated, as long as a\nquorum is working\n",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 381,
+    "characters": 46,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 382,
+    "characters": 61,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\nbegin T1\nT1\nT1\n",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 383,
+    "characters": 100,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\nbegin T1\nT1\n. . . usual transaction execution. . .\nT1\n",
+    "image_count": 0,
+    "vector_paths": 43
+  },
+  {
+    "page": 384,
+    "characters": 110,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\nbegin T1\nT1\n. . . usual transaction execution. . .\nT1\ncommit T1\n",
+    "image_count": 0,
+    "vector_paths": 45
+  },
+  {
+    "page": 385,
+    "characters": 118,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\nbegin T1\nT1\n. . . usual transaction execution. . .\nT1\ncommit T1\nprepare\n",
+    "image_count": 0,
+    "vector_paths": 49
+  },
+  {
+    "page": 386,
+    "characters": 124,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\nbegin T1\nT1\n. . . usual transaction execution. . .\nT1\ncommit T1\nprepare\nok\nok\n",
+    "image_count": 0,
+    "vector_paths": 53
+  },
+  {
+    "page": 387,
+    "characters": 131,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\nbegin T1\nT1\n. . . usual transaction execution. . .\nT1\ncommit T1\nprepare\nok\nok\ncommit\n",
+    "image_count": 0,
+    "vector_paths": 57
+  },
+  {
+    "page": 388,
+    "characters": 167,
+    "preview": "Two-phase commit (2PC)\nclient\ncoordinator\nA\nB\nbegin T1\nT1\n. . . usual transaction execution. . .\nT1\ncommit T1\nprepare\nok\nok\ndecision whether\nto commit or abort\ncommit\n",
+    "image_count": 0,
+    "vector_paths": 58
+  },
+  {
+    "page": 389,
+    "characters": 69,
+    "preview": "The coordinator in two-phase commit\nWhat if the coordinator crashes?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 390,
+    "characters": 227,
+    "preview": "The coordinator in two-phase commit\nWhat if the coordinator crashes?\n▶ Coordinator writes its decision to disk\n▶ When it recovers, read decision from disk and send it to\nreplicas (or abort if no decision was made before crash)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 391,
+    "characters": 353,
+    "preview": "The coordinator in two-phase commit\nWhat if the coordinator crashes?\n▶ Coordinator writes its decision to disk\n▶ When it recovers, read decision from disk and send it to\nreplicas (or abort if no decision was made before crash)\n▶ Problem: if coordinator crashes after prepare, but before\nbroadcasting decision, other nodes do not know how it\nhas decided\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 392,
+    "characters": 501,
+    "preview": "The coordinator in two-phase commit\nWhat if the coordinator crashes?\n▶ Coordinator writes its decision to disk\n▶ When it recovers, read decision from disk and send it to\nreplicas (or abort if no decision was made before crash)\n▶ Problem: if coordinator crashes after prepare, but before\nbroadcasting decision, other nodes do not know how it\nhas decided\n▶ Replicas participating in transaction cannot commit or\nabort after responding “ok” to the prepa",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 393,
+    "characters": 551,
+    "preview": "The coordinator in two-phase commit\nWhat if the coordinator crashes?\n▶ Coordinator writes its decision to disk\n▶ When it recovers, read decision from disk and send it to\nreplicas (or abort if no decision was made before crash)\n▶ Problem: if coordinator crashes after prepare, but before\nbroadcasting decision, other nodes do not know how it\nhas decided\n▶ Replicas participating in transaction cannot commit or\nabort after responding “ok” to the prepa",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 394,
+    "characters": 644,
+    "preview": "Fault-tolerant two-phase commit (1/2)\non initialisation for transaction T do\ncommitVotes[T] := {}; replicas[T] := {}; decided[T] := false\nend on\non request to commit transaction T with participating nodes R do\nfor each r ∈ R do send (Prepare, T, R) to r\nend on\non receiving (Prepare, T, R) at node replicaId do\nreplicas[T] := R\nok = “is transaction T able to commit on this replica?”\ntotal order broadcast (Vote, T, replicaId, ok) to replicas[T]\nend ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 395,
+    "characters": 421,
+    "preview": "Fault-tolerant two-phase commit (2/2)\non delivering (Vote, T, replicaId, ok) by total order broadcast do\nif replicaId /∈ commitVotes[T] ∧ replicaId ∈ replicas[T] ∧\n¬decided[T] then\nif ok = true then\ncommitVotes[T] := commitVotes[T] ∪ {replicaId}\nif commitVotes[T] = replicas[T] then\ndecided[T] := true\ncommit transaction T at this node\nend if\nelse\ndecided[T] := true\nabort transaction T at this node\nend if\nend if\nend on\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 396,
+    "characters": 107,
+    "preview": "Linearizability\nMultiple nodes concurrently accessing replicated data.\nHow do we deﬁne “consistency” here?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 397,
+    "characters": 145,
+    "preview": "Linearizability\nMultiple nodes concurrently accessing replicated data.\nHow do we deﬁne “consistency” here?\nThe strongest option: linearizability\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 398,
+    "characters": 246,
+    "preview": "Linearizability\nMultiple nodes concurrently accessing replicated data.\nHow do we deﬁne “consistency” here?\nThe strongest option: linearizability\n▶ Informally: every operation takes eﬀect atomically\nsometime after it started and before it ﬁnished\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 399,
+    "characters": 360,
+    "preview": "Linearizability\nMultiple nodes concurrently accessing replicated data.\nHow do we deﬁne “consistency” here?\nThe strongest option: linearizability\n▶ Informally: every operation takes eﬀect atomically\nsometime after it started and before it ﬁnished\n▶ All operations behave as if executed on a single copy of\nthe data (even if there are in fact multiple replicas)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 400,
+    "characters": 450,
+    "preview": "Linearizability\nMultiple nodes concurrently accessing replicated data.\nHow do we deﬁne “consistency” here?\nThe strongest option: linearizability\n▶ Informally: every operation takes eﬀect atomically\nsometime after it started and before it ﬁnished\n▶ All operations behave as if executed on a single copy of\nthe data (even if there are in fact multiple replicas)\n▶ Consequence: every operation returns an “up-to-date”\nvalue, a.k.a. “strong consistency”\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 401,
+    "characters": 579,
+    "preview": "Linearizability\nMultiple nodes concurrently accessing replicated data.\nHow do we deﬁne “consistency” here?\nThe strongest option: linearizability\n▶ Informally: every operation takes eﬀect atomically\nsometime after it started and before it ﬁnished\n▶ All operations behave as if executed on a single copy of\nthe data (even if there are in fact multiple replicas)\n▶ Consequence: every operation returns an “up-to-date”\nvalue, a.k.a. “strong consistency”\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 402,
+    "characters": 621,
+    "preview": "Linearizability\nMultiple nodes concurrently accessing replicated data.\nHow do we deﬁne “consistency” here?\nThe strongest option: linearizability\n▶ Informally: every operation takes eﬀect atomically\nsometime after it started and before it ﬁnished\n▶ All operations behave as if executed on a single copy of\nthe data (even if there are in fact multiple replicas)\n▶ Consequence: every operation returns an “up-to-date”\nvalue, a.k.a. “strong consistency”\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 403,
+    "characters": 52,
+    "preview": "Read-after-write consistency revisited\nclient\nA\nB\nC\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 404,
+    "characters": 80,
+    "preview": "Read-after-write consistency revisited\nclient\nA\nB\nC\n(t1, set(x, v1))\nset(x, v1)\n",
+    "image_count": 0,
+    "vector_paths": 43
+  },
+  {
+    "page": 405,
+    "characters": 86,
+    "preview": "Read-after-write consistency revisited\nclient\nA\nB\nC\n(t1, set(x, v1))\nset(x, v1)\nok\nok\n",
+    "image_count": 0,
+    "vector_paths": 47
+  },
+  {
+    "page": 406,
+    "characters": 105,
+    "preview": "Read-after-write consistency revisited\nclient\nA\nB\nC\n(t1, set(x, v1))\nset(x, v1)\nok\nok\nget(x)\nget(x) → v1\n",
+    "image_count": 0,
+    "vector_paths": 54
+  },
+  {
+    "page": 407,
+    "characters": 123,
+    "preview": "Read-after-write consistency revisited\nclient\nA\nB\nC\n(t1, set(x, v1))\nset(x, v1)\nok\nok\nget(x)\n(t0, v0)\n(t1, v1)\nget(x) → v1\n",
+    "image_count": 0,
+    "vector_paths": 58
+  },
+  {
+    "page": 408,
+    "characters": 139,
+    "preview": "From the client’s point of view\nclient 1\n▶ Focus on client-observable\nbehaviour: when and what an\noperation returns\nset(x, v1)\nget(x) → v1\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 409,
+    "characters": 209,
+    "preview": "From the client’s point of view\nclient 1\n?\n▶ Focus on client-observable\nbehaviour: when and what an\noperation returns\nset(x, v1)\n▶ Ignore how the replication\nsystem is implemented internally\n?\n?\nget(x) → v1\n?\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 410,
+    "characters": 271,
+    "preview": "From the client’s point of view\nclient 1\n?\n▶ Focus on client-observable\nbehaviour: when and what an\noperation returns\nset(x, v1)\n▶ Ignore how the replication\nsystem is implemented internally\n?\n▶ Did operation A ﬁnish before\noperation B started?\nreal time\n?\nget(x) → v1\n?\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 411,
+    "characters": 328,
+    "preview": "From the client’s point of view\nclient 1\nclient 2\n?\n▶ Focus on client-observable\nbehaviour: when and what an\noperation returns\nset(x, v1)\n▶ Ignore how the replication\nsystem is implemented internally\n?\nreal time\n▶ Did operation A ﬁnish before\noperation B started?\n?\n▶ Even if the operations are on\ndiﬀerent nodes?\nget(x) → v1\n?\n",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 412,
+    "characters": 453,
+    "preview": "From the client’s point of view\nclient 1\nclient 2\n?\n▶ Focus on client-observable\nbehaviour: when and what an\noperation returns\nset(x, v1)\n▶ Ignore how the replication\nsystem is implemented internally\n?\nreal time\n▶ Did operation A ﬁnish before\noperation B started?\n?\n▶ Even if the operations are on\ndiﬀerent nodes?\nget(x) → v1\n?\n▶ This is not happens-before:\nwe want client 2 to read value\nwritten by client 1, even if the\nclients have not communicate",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 413,
+    "characters": 146,
+    "preview": "Operations overlapping in time\nclient 1\nclient 2\n▶ Client 2’s get operation\noverlaps in time with\nclient 1’s set operation\nset(x, v1)\nget(x) → v1\n",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 414,
+    "characters": 190,
+    "preview": "Operations overlapping in time\nclient 1\nclient 2\n▶ Client 2’s get operation\noverlaps in time with\nclient 1’s set operation\n▶ Maybe the set operation\ntakes eﬀect ﬁrst?\nset(x, v1)\nget(x) → v1\n",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 415,
+    "characters": 247,
+    "preview": "Operations overlapping in time\nclient 1\nclient 2\n▶ Client 2’s get operation\noverlaps in time with\nclient 1’s set operation\n▶ Maybe the set operation\ntakes eﬀect ﬁrst?\nset(x, v1)\nget(x) → v0\n▶ Just as likely, the get\noperation may be\nexecuted ﬁrst\n",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 416,
+    "characters": 284,
+    "preview": "Operations overlapping in time\nclient 1\nclient 2\n▶ Client 2’s get operation\noverlaps in time with\nclient 1’s set operation\n▶ Maybe the set operation\ntakes eﬀect ﬁrst?\nset(x, v1)\nget(x) → v0\n▶ Just as likely, the get\noperation may be\nexecuted ﬁrst\n▶ Either outcome is ﬁne in\nthis case\n",
+    "image_count": 0,
+    "vector_paths": 38
+  },
+  {
+    "page": 417,
+    "characters": 79,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 418,
+    "characters": 110,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nok\nset(x, v1)\n",
+    "image_count": 0,
+    "vector_paths": 45
+  },
+  {
+    "page": 419,
+    "characters": 129,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\nset(x, v1)\nget(x) → v1\n",
+    "image_count": 0,
+    "vector_paths": 50
+  },
+  {
+    "page": 420,
+    "characters": 147,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\n",
+    "image_count": 0,
+    "vector_paths": 54
+  },
+  {
+    "page": 421,
+    "characters": 166,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\nget(x)\nget(x) → v0\n",
+    "image_count": 0,
+    "vector_paths": 59
+  },
+  {
+    "page": 422,
+    "characters": 184,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\nget(x)\n(t0, v0)\nget(x) → v0\n(t0, v0)\n",
+    "image_count": 0,
+    "vector_paths": 63
+  },
+  {
+    "page": 423,
+    "characters": 184,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\nget(x)\n(t0, v0)\nget(x) → v0\n(t0, v0)\n",
+    "image_count": 0,
+    "vector_paths": 67
+  },
+  {
+    "page": 424,
+    "characters": 190,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\nget(x)\n(t0, v0)\nget(x) → v0\nok\n(t0, v0)\nok\n",
+    "image_count": 0,
+    "vector_paths": 71
+  },
+  {
+    "page": 425,
+    "characters": 108,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nclient 2\nclient 3\nset(x, v1)\nget(x) → v1\nget(x) → v0\n",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 426,
+    "characters": 118,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nclient 2\nclient 3\nset(x, v1)\nget(x) → v1\nreal time\nget(x) → v0\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 427,
+    "characters": 364,
+    "preview": "Not linearizable, despite quorum reads/writes\nclient 1\nclient 2\nclient 3\n▶ Client 2’s operation ﬁnishes\nbefore client 3’s operation\nstarts\nset(x, v1)\nget(x) → v1\nreal time\n▶ Linearizability therefore\nrequires client 3’s operation\nto observe a state no older\nthan client 2’s operation\nget(x) → v0\n▶ This example violates\nlinearizability because v0 is\nolder than v1\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 428,
+    "characters": 145,
+    "preview": "ABD: Making quorum reads/writes linearizable\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nok\nset(x, v1)\nget(x) → v1\n. . .\nget(x) → v1\n. . .\n",
+    "image_count": 0,
+    "vector_paths": 55
+  },
+  {
+    "page": 429,
+    "characters": 152,
+    "preview": "ABD: Making quorum reads/writes linearizable\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\nset(x, v1)\nget(x) → v1\n. . .\nget(x) → v1\n. . .\n",
+    "image_count": 0,
+    "vector_paths": 59
+  },
+  {
+    "page": 430,
+    "characters": 170,
+    "preview": "ABD: Making quorum reads/writes linearizable\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\n. . .\nget(x) → v1\n. . .\n",
+    "image_count": 0,
+    "vector_paths": 63
+  },
+  {
+    "page": 431,
+    "characters": 187,
+    "preview": "ABD: Making quorum reads/writes linearizable\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\n(t1, set(x, v1))\n. . .\nget(x) → v1\n. . .\n",
+    "image_count": 0,
+    "vector_paths": 67
+  },
+  {
+    "page": 432,
+    "characters": 193,
+    "preview": "ABD: Making quorum reads/writes linearizable\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\n(t1, set(x, v1))\n. . .\nok\nok\nget(x) → v1\n. . .\n",
+    "image_count": 0,
+    "vector_paths": 71
+  },
+  {
+    "page": 433,
+    "characters": 199,
+    "preview": "ABD: Making quorum reads/writes linearizable\nclient 1\nA\nB\nC\nclient 2\nclient 3\n(t1, set(x, v1))\nget(x)\nok\n(t1, v1)\nset(x, v1)\nget(x) → v1\n(t0, v0)\n(t1, set(x, v1))\n. . .\nok\nok\nget(x) → v1\n. . .\nok\nok\n",
+    "image_count": 0,
+    "vector_paths": 75
+  },
+  {
+    "page": 434,
+    "characters": 130,
+    "preview": "Linearizability for diﬀerent types of operation\nThis ensures linearizability of get (quorum read) and\nset (blind write to quorum)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 435,
+    "characters": 272,
+    "preview": "Linearizability for diﬀerent types of operation\nThis ensures linearizability of get (quorum read) and\nset (blind write to quorum)\n▶ When an operation ﬁnishes, the value read/written is\nstored on a quorum of replicas\n▶ Every subsequent quorum operation will see that value\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 436,
+    "characters": 326,
+    "preview": "Linearizability for diﬀerent types of operation\nThis ensures linearizability of get (quorum read) and\nset (blind write to quorum)\n▶ When an operation ﬁnishes, the value read/written is\nstored on a quorum of replicas\n▶ Every subsequent quorum operation will see that value\n▶ Multiple concurrent writes may overwrite each other\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 437,
+    "characters": 509,
+    "preview": "Linearizability for diﬀerent types of operation\nThis ensures linearizability of get (quorum read) and\nset (blind write to quorum)\n▶ When an operation ﬁnishes, the value read/written is\nstored on a quorum of replicas\n▶ Every subsequent quorum operation will see that value\n▶ Multiple concurrent writes may overwrite each other\nWhat about an atomic compare-and-swap operation?\n▶ CAS(x, oldValue, newValue) sets x to newValue iﬀ\ncurrent value of x is ol",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 438,
+    "characters": 583,
+    "preview": "Linearizability for diﬀerent types of operation\nThis ensures linearizability of get (quorum read) and\nset (blind write to quorum)\n▶ When an operation ﬁnishes, the value read/written is\nstored on a quorum of replicas\n▶ Every subsequent quorum operation will see that value\n▶ Multiple concurrent writes may overwrite each other\nWhat about an atomic compare-and-swap operation?\n▶ CAS(x, oldValue, newValue) sets x to newValue iﬀ\ncurrent value of x is ol",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 439,
+    "characters": 633,
+    "preview": "Linearizability for diﬀerent types of operation\nThis ensures linearizability of get (quorum read) and\nset (blind write to quorum)\n▶ When an operation ﬁnishes, the value read/written is\nstored on a quorum of replicas\n▶ Every subsequent quorum operation will see that value\n▶ Multiple concurrent writes may overwrite each other\nWhat about an atomic compare-and-swap operation?\n▶ CAS(x, oldValue, newValue) sets x to newValue iﬀ\ncurrent value of x is ol",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 440,
+    "characters": 562,
+    "preview": "Linearizable compare-and-swap (CAS)\non request to perform get(x) do\ntotal order broadcast (get, x) and wait for delivery\nend on\non request to perform CAS(x, old, new) do\ntotal order broadcast (CAS, x, old, new) and wait for delivery\nend on\non delivering (get, x) by total order broadcast do\nreturn localState[x] as result of operation get(x)\nend on\non delivering (CAS, x, old, new) by total order broadcast do\nsuccess := false\nif localState[x] = old ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 441,
+    "characters": 148,
+    "preview": "Eventual consistency\nLinearizability advantages:\n▶ Makes a distributed system behave as if it were\nnon-distributed\n▶ Simple for applications to use\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 442,
+    "characters": 222,
+    "preview": "Eventual consistency\nLinearizability advantages:\n▶ Makes a distributed system behave as if it were\nnon-distributed\n▶ Simple for applications to use\nDownsides:\n▶ Performance cost: lots of messages and waiting for\nresponses\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 443,
+    "characters": 271,
+    "preview": "Eventual consistency\nLinearizability advantages:\n▶ Makes a distributed system behave as if it were\nnon-distributed\n▶ Simple for applications to use\nDownsides:\n▶ Performance cost: lots of messages and waiting for\nresponses\n▶ Scalability limits: leader can be a bottleneck\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 444,
+    "characters": 369,
+    "preview": "Eventual consistency\nLinearizability advantages:\n▶ Makes a distributed system behave as if it were\nnon-distributed\n▶ Simple for applications to use\nDownsides:\n▶ Performance cost: lots of messages and waiting for\nresponses\n▶ Scalability limits: leader can be a bottleneck\n▶ Availability problems: if you can’t contact a quorum of\nnodes, you can’t process any operations\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 445,
+    "characters": 455,
+    "preview": "Eventual consistency\nLinearizability advantages:\n▶ Makes a distributed system behave as if it were\nnon-distributed\n▶ Simple for applications to use\nDownsides:\n▶ Performance cost: lots of messages and waiting for\nresponses\n▶ Scalability limits: leader can be a bottleneck\n▶ Availability problems: if you can’t contact a quorum of\nnodes, you can’t process any operations\nEventual consistency: a weaker model than linearizability.\nDiﬀerent trade-oﬀ choi",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 446,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 447,
+    "characters": 307,
+    "preview": "The CAP theorem\nA system can be either strongly Consistent (linearizable) or\nAvailable in the presence of a network Partition\nnode A\nnode B\nnode C\nnetwork partition\nset(x, v1)\nget(x) → v1\nget(x) → v1\nget(x) → v0\nC must either wait indeﬁnitely for the network to recover, or\nreturn a potentially stale value\n",
+    "image_count": 0,
+    "vector_paths": 41
+  },
+  {
+    "page": 448,
+    "characters": 203,
+    "preview": "Eventual consistency\nReplicas process operations based only on their local state.\nIf there are no more updates, eventually all replicas will be in\nthe same state. (No guarantees how long it might take.)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 449,
+    "characters": 350,
+    "preview": "Eventual consistency\nReplicas process operations based only on their local state.\nIf there are no more updates, eventually all replicas will be in\nthe same state. (No guarantees how long it might take.)\nStrong eventual consistency:\n▶ Eventual delivery: every update made to one non-faulty\nreplica is eventually processed by every non-faulty replica.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 450,
+    "characters": 502,
+    "preview": "Eventual consistency\nReplicas process operations based only on their local state.\nIf there are no more updates, eventually all replicas will be in\nthe same state. (No guarantees how long it might take.)\nStrong eventual consistency:\n▶ Eventual delivery: every update made to one non-faulty\nreplica is eventually processed by every non-faulty replica.\n▶ Convergence: any two replicas that have processed the\nsame set of updates are in the same state\n(e",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 451,
+    "characters": 622,
+    "preview": "Eventual consistency\nReplicas process operations based only on their local state.\nIf there are no more updates, eventually all replicas will be in\nthe same state. (No guarantees how long it might take.)\nStrong eventual consistency:\n▶ Eventual delivery: every update made to one non-faulty\nreplica is eventually processed by every non-faulty replica.\n▶ Convergence: any two replicas that have processed the\nsame set of updates are in the same state\n(e",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 452,
+    "characters": 675,
+    "preview": "Eventual consistency\nReplicas process operations based only on their local state.\nIf there are no more updates, eventually all replicas will be in\nthe same state. (No guarantees how long it might take.)\nStrong eventual consistency:\n▶ Eventual delivery: every update made to one non-faulty\nreplica is eventually processed by every non-faulty replica.\n▶ Convergence: any two replicas that have processed the\nsame set of updates are in the same state\n(e",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 453,
+    "characters": 184,
+    "preview": "Summary of minimum system model requirements\nProblem\nMust wait for\ncommunication\nRequires\nsynchrony\natomic commit\nall participating\nnodes\npartially\nsynchronous\nstrength of assumptions\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 454,
+    "characters": 264,
+    "preview": "Summary of minimum system model requirements\nProblem\nMust wait for\ncommunication\nRequires\nsynchrony\natomic commit\nall participating\nnodes\npartially\nsynchronous\nquorum\npartially\nsynchronous\nconsensus,\ntotal order broadcast,\nlinearizable CAS\nstrength of assumptions\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 455,
+    "characters": 305,
+    "preview": "Summary of minimum system model requirements\nProblem\nMust wait for\ncommunication\nRequires\nsynchrony\natomic commit\nall participating\nnodes\npartially\nsynchronous\nquorum\npartially\nsynchronous\nconsensus,\ntotal order broadcast,\nlinearizable CAS\nlinearizable get/set\nquorum\nasynchronous\nstrength of assumptions\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 456,
+    "characters": 392,
+    "preview": "Summary of minimum system model requirements\nProblem\nMust wait for\ncommunication\nRequires\nsynchrony\natomic commit\nall participating\nnodes\npartially\nsynchronous\nquorum\npartially\nsynchronous\nconsensus,\ntotal order broadcast,\nlinearizable CAS\nlinearizable get/set\nquorum\nasynchronous\nstrength of assumptions\nlocal replica only\nasynchronous\neventual consistency,\ncausal broadcast,\nFIFO broadcast\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 457,
+    "characters": 23,
+    "preview": "Lecture 8\nCase studies\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 458,
+    "characters": 147,
+    "preview": "Collaboration and conﬂict resolution\nNowadays we use a lot of collaboration software:\n▶ Examples: calendar sync (last lecture), Google Docs, . . .\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 459,
+    "characters": 253,
+    "preview": "Collaboration and conﬂict resolution\nNowadays we use a lot of collaboration software:\n▶ Examples: calendar sync (last lecture), Google Docs, . . .\n▶ Several users/devices working on a shared ﬁle/document\n▶ Each user device has local replica of the data\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 460,
+    "characters": 344,
+    "preview": "Collaboration and conﬂict resolution\nNowadays we use a lot of collaboration software:\n▶ Examples: calendar sync (last lecture), Google Docs, . . .\n▶ Several users/devices working on a shared ﬁle/document\n▶ Each user device has local replica of the data\n▶ Update local replica anytime (even while oﬄine),\nsync with others when network available\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 461,
+    "characters": 394,
+    "preview": "Collaboration and conﬂict resolution\nNowadays we use a lot of collaboration software:\n▶ Examples: calendar sync (last lecture), Google Docs, . . .\n▶ Several users/devices working on a shared ﬁle/document\n▶ Each user device has local replica of the data\n▶ Update local replica anytime (even while oﬄine),\nsync with others when network available\n▶ Challenge: how to reconcile concurrent updates?\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 462,
+    "characters": 529,
+    "preview": "Collaboration and conﬂict resolution\nNowadays we use a lot of collaboration software:\n▶ Examples: calendar sync (last lecture), Google Docs, . . .\n▶ Several users/devices working on a shared ﬁle/document\n▶ Each user device has local replica of the data\n▶ Update local replica anytime (even while oﬄine),\nsync with others when network available\n▶ Challenge: how to reconcile concurrent updates?\nFamilies of algorithms:\n▶ Conﬂict-free Replicated Data T",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 463,
+    "characters": 191,
+    "preview": "Conﬂicts due to concurrent updates\nnode A\nnode B\n{\n{\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n}\n}\nnetwork partition\n",
+    "image_count": 0,
+    "vector_paths": 23
+  },
+  {
+    "page": 464,
+    "characters": 275,
+    "preview": "Conﬂicts due to concurrent updates\nnode A\nnode B\n{\n{\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n}\n}\ntitle = \"Lecture 1\"\n{\nnetwork partition\n\"title\": \"Lecture 1\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n}\n",
+    "image_count": 0,
+    "vector_paths": 24
+  },
+  {
+    "page": 465,
+    "characters": 352,
+    "preview": "Conﬂicts due to concurrent updates\nnode A\nnode B\n{\n{\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n}\n}\ntitle = \"Lecture 1\"\ntime = \"10:00\"\n{\n{\nnetwork partition\n\"title\": \"Lecture 1\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"10:00\"\n}\n}\n",
+    "image_count": 0,
+    "vector_paths": 25
+  },
+  {
+    "page": 466,
+    "characters": 485,
+    "preview": "Conﬂicts due to concurrent updates\nnode A\nnode B\n{\n{\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n}\n}\ntitle = \"Lecture 1\"\ntime = \"10:00\"\n{\n{\nnetwork partition\n\"title\": \"Lecture 1\",\n\"date\": \"2020-11-05\",\n\"time\": \"12:00\"\n\"title\": \"Lecture\",\n\"date\": \"2020-11-05\",\n\"time\": \"10:00\"\n}\n}\nsync\n{\n{\n\"title\": \"Lecture 1\",\n\"date\": \"2020-11-05\",\n\"time\": \"10:00\"\n\"title\": \"Lecture 1\",\n\"date\":",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 467,
+    "characters": 559,
+    "preview": "Operation-based map CRDT\non initialisation do\nvalues := {}\nend on\non request to read value for key k do\nif ∃t, v. (t, k, v) ∈ values then return v else return null\nend on\non request to set key k to value v do\nt := newTimestamp()\n▷ globally unique, e.g. Lamport timestamp\nbroadcast (set, t, k, v) by reliable broadcast (including to self)\nend on\non delivering (set, t, k, v) by reliable broadcast do\nprevious := {(t′, k′, v′) ∈ values | k′ = k}\nif pre",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 468,
+    "characters": 158,
+    "preview": "Operation-based CRDTs\nReliable broadcast may deliver updates in any order:\n▶ broadcast (set, t1, “title”, “Lecture 1”)\n▶ broadcast (set, t2, “time”, “10:00”)\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 469,
+    "characters": 410,
+    "preview": "Operation-based CRDTs\nReliable broadcast may deliver updates in any order:\n▶ broadcast (set, t1, “title”, “Lecture 1”)\n▶ broadcast (set, t2, “time”, “10:00”)\nRecall strong eventual consistency:\n▶ Eventual delivery: every update made to one non-faulty\nreplica is eventually processed by every non-faulty replica.\n▶ Convergence: any two replicas that have processed the\nsame set of updates are in the same state\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 470,
+    "characters": 542,
+    "preview": "Operation-based CRDTs\nReliable broadcast may deliver updates in any order:\n▶ broadcast (set, t1, “title”, “Lecture 1”)\n▶ broadcast (set, t2, “time”, “10:00”)\nRecall strong eventual consistency:\n▶ Eventual delivery: every update made to one non-faulty\nreplica is eventually processed by every non-faulty replica.\n▶ Convergence: any two replicas that have processed the\nsame set of updates are in the same state\nCRDT algorithm implements this:\n▶ Reliab",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 471,
+    "characters": 615,
+    "preview": "Operation-based CRDTs\nReliable broadcast may deliver updates in any order:\n▶ broadcast (set, t1, “title”, “Lecture 1”)\n▶ broadcast (set, t2, “time”, “10:00”)\nRecall strong eventual consistency:\n▶ Eventual delivery: every update made to one non-faulty\nreplica is eventually processed by every non-faulty replica.\n▶ Convergence: any two replicas that have processed the\nsame set of updates are in the same state\nCRDT algorithm implements this:\n▶ Reliab",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 472,
+    "characters": 578,
+    "preview": "State-based map CRDT\nThe operator ⊔ merges two states s1 and s2 as follows:\ns1 ⊔ s2 = {(t, k, v) ∈ (s1 ∪ s2) | ∄(t′, k′, v′) ∈ (s1 ∪ s2). k′ = k ∧ t′ > t}\non initialisation do\nvalues := {}\nend on\non request to read value for key k do\nif ∃t, v. (t, k, v) ∈ values then return v else return null\nend on\non request to set key k to value v do\nt := newTimestamp()\n▷ globally unique, e.g. Lamport timestamp\nvalues := {(t′, k′, v′) ∈ values | k′ ̸= k} ∪ {(t",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 473,
+    "characters": 176,
+    "preview": "State-based CRDTs\nMerge operator ⊔ must satisfy: ∀s1, s2, s3. . .\n▶ Commutative: s1 ⊔ s2 = s2 ⊔ s1.\n▶ Associative: (s1 ⊔ s2) ⊔ s3 = s1 ⊔ (s2 ⊔ s3).\n▶ Idempotent: s1 ⊔ s1 = s1.\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 474,
+    "characters": 316,
+    "preview": "State-based CRDTs\nMerge operator ⊔ must satisfy: ∀s1, s2, s3. . .\n▶ Commutative: s1 ⊔ s2 = s2 ⊔ s1.\n▶ Associative: (s1 ⊔ s2) ⊔ s3 = s1 ⊔ (s2 ⊔ s3).\n▶ Idempotent: s1 ⊔ s1 = s1.\nState-based versus operation-based:\n▶ Op-based CRDT typically has smaller messages\n▶ State-based CRDT can tolerate message loss/duplication\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 475,
+    "characters": 444,
+    "preview": "State-based CRDTs\nMerge operator ⊔ must satisfy: ∀s1, s2, s3. . .\n▶ Commutative: s1 ⊔ s2 = s2 ⊔ s1.\n▶ Associative: (s1 ⊔ s2) ⊔ s3 = s1 ⊔ (s2 ⊔ s3).\n▶ Idempotent: s1 ⊔ s1 = s1.\nState-based versus operation-based:\n▶ Op-based CRDT typically has smaller messages\n▶ State-based CRDT can tolerate message loss/duplication\nNot necessarily uses broadcast:\n▶ Can also merge concurrent updates to replicas e.g. in\nquorum replication, anti-entropy, . . .\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 476,
+    "characters": 0,
+    "preview": "",
+    "image_count": 1,
+    "vector_paths": 16
+  },
+  {
+    "page": 477,
+    "characters": 88,
+    "preview": "Collaborative text editing: the problem\nuser A\nuser B\nB\nC\nB\nC\n0\n1\n0\n1\nnetwork partition\n",
+    "image_count": 0,
+    "vector_paths": 27
+  },
+  {
+    "page": 478,
+    "characters": 115,
+    "preview": "Collaborative text editing: the problem\nuser A\nuser B\nB\nC\nB\nC\n0\n1\n0\n1\ninsert(0, “A”)\nA\nB\nC\nnetwork partition\n0\n1\n2\n",
+    "image_count": 0,
+    "vector_paths": 31
+  },
+  {
+    "page": 479,
+    "characters": 142,
+    "preview": "Collaborative text editing: the problem\nuser A\nuser B\nB\nC\nB\nC\n0\n1\n0\n1\ninsert(0, “A”)\ninsert(2, “D”)\nA\nB\nC\nB\nC\nD\nnetwork partition\n0\n1\n2\n0\n1\n2\n",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 480,
+    "characters": 175,
+    "preview": "Collaborative text editing: the problem\nuser A\nuser B\nB\nC\nB\nC\n0\n1\n0\n1\ninsert(0, “A”)\ninsert(2, “D”)\nA\nB\nC\nB\nC\nD\nnetwork partition\n0\n1\n2\n0\n1\n2\n(insert, 0, “A”)\nA\nB\nC\nD\n0\n1\n2\n3\n",
+    "image_count": 0,
+    "vector_paths": 42
+  },
+  {
+    "page": 481,
+    "characters": 208,
+    "preview": "Collaborative text editing: the problem\nuser A\nuser B\nB\nC\nB\nC\n0\n1\n0\n1\ninsert(0, “A”)\ninsert(2, “D”)\nA\nB\nC\nB\nC\nD\nnetwork partition\n0\n1\n2\n0\n1\n2\n(insert, 0, “A”)\n(insert, 2, “D”)\nA\nB\nD\nC\nA\nB\nC\nD\n0\n1\n2\n3\n0\n1\n2\n3\n",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 482,
+    "characters": 95,
+    "preview": "Operational transformation\nuser A\nuser B\ninsert(0, “A”)\ninsert(2, “D”)\nA\nB\nC\nB\nC\nD\n0\n1\n2\n0\n1\n2\n",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 483,
+    "characters": 185,
+    "preview": "Operational transformation\nuser A\nuser B\ninsert(0, “A”)\ninsert(2, “D”)\nA\nB\nC\nB\nC\nD\n0\n1\n2\n0\n1\n2\n(insert, 2, “D”)\nT((insert, 2, “D”),\n(insert, 0, “A”)) =\n(insert, 3, “D”)\nA\nB\nC\nD\n0\n1\n2\n3\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 484,
+    "characters": 275,
+    "preview": "Operational transformation\nuser A\nuser B\ninsert(0, “A”)\ninsert(2, “D”)\nA\nB\nC\nB\nC\nD\n0\n1\n2\n0\n1\n2\n(insert, 0, “A”)\n(insert, 2, “D”)\nT((insert, 2, “D”),\n(insert, 0, “A”)) =\n(insert, 3, “D”)\nT((insert, 0, “A”),\n(insert, 2, “D”)) =\n(insert, 0, “A”)\nA\nB\nC\nD\nA\nB\nC\nD\n0\n1\n2\n3\n0\n1\n2\n3\n",
+    "image_count": 0,
+    "vector_paths": 44
+  },
+  {
+    "page": 485,
+    "characters": 82,
+    "preview": "Text editing CRDT\nuser A\nuser B\n⊢\nB\nC\n⊣\n⊢\nB\nC\n⊣\n0.0\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75\n1.0\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 486,
+    "characters": 132,
+    "preview": "Text editing CRDT\nuser A\nuser B\n⊢\nB\nC\n⊣\n⊢\nB\nC\n⊣\n0.0\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75\n1.0\ninsert(0.25, “A”)\n⊢\nA\nB\nC\n⊣\n0.0\n0.25\n0.5\n0.75\n1.0\n",
+    "image_count": 0,
+    "vector_paths": 36
+  },
+  {
+    "page": 487,
+    "characters": 184,
+    "preview": "Text editing CRDT\nuser A\nuser B\n⊢\nB\nC\n⊣\n⊢\nB\nC\n⊣\n0.0\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75\n1.0\ninsert(0.25, “A”)\ninsert(0.875, “D”)\n⊢\nA\nB\nC\n⊣\n⊢\nB\nC\nD\n⊣\n0.0\n0.25\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75 0.875 1.0\n",
+    "image_count": 0,
+    "vector_paths": 42
+  },
+  {
+    "page": 488,
+    "characters": 245,
+    "preview": "Text editing CRDT\nuser A\nuser B\n⊢\nB\nC\n⊣\n⊢\nB\nC\n⊣\n0.0\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75\n1.0\ninsert(0.25, “A”)\ninsert(0.875, “D”)\n⊢\nA\nB\nC\n⊣\n⊢\nB\nC\nD\n⊣\n0.0\n0.25\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75 0.875 1.0\n(insert, 0.875, “D”)\n⊢\nA\nB\nC\nD\n⊣\n0.0\n0.25\n0.5\n0.75 0.875 1.0\n",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 489,
+    "characters": 305,
+    "preview": "Text editing CRDT\nuser A\nuser B\n⊢\nB\nC\n⊣\n⊢\nB\nC\n⊣\n0.0\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75\n1.0\ninsert(0.25, “A”)\ninsert(0.875, “D”)\n⊢\nA\nB\nC\n⊣\n⊢\nB\nC\nD\n⊣\n0.0\n0.25\n0.5\n0.75\n1.0\n0.0\n0.5\n0.75 0.875 1.0\n(insert, 0.25, “A”)\n(insert, 0.875, “D”)\n⊢\nA\nB\nC\nD\n⊣\n⊢\nA\nB\nC\nD\n⊣\n0.0\n0.25\n0.5\n0.75 0.875 1.0\n0.0\n0.25\n0.5\n0.75 0.875 1.0\n",
+    "image_count": 0,
+    "vector_paths": 60
+  },
+  {
+    "page": 490,
+    "characters": 661,
+    "preview": "Operation-based text CRDT (1/2)\nfunction ElementAt(chars, index)\nmin = the unique triple (p, n, v) ∈ chars such that\n∄(p′, n′, v′) ∈ chars. p′ < p ∨ (p′ = p ∧ n′ < n)}\nif index = 0 then return min\nelse return ElementAt(chars \\ {min}, index − 1)\nend function\non initialisation do\nchars := {(0, null, ⊢), (1, null, ⊣)}\nend on\non request to read character at index index do\nlet (p, n, v) := ElementAt(chars, index + 1); return v\nend on\non request to ins",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 491,
+    "characters": 526,
+    "preview": "Operation-based text CRDT (2/2)\non delivering (insert, p, n, v) by causal broadcast do\nchars := chars ∪ {(p, n, v)}\nend on\non request to delete character at index index do\nlet (p, n, v) := ElementAt(chars, index + 1)\nbroadcast (delete, p, n) by causal broadcast\nend on\non delivering (delete, p, n) by causal broadcast do\nchars := {(p′, n′, v′) ∈ chars | ¬(p′ = p ∧ n′ = n)}\nend on\n▶ Use causal broadcast so that insertion of a character is\ndelivered ",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 492,
+    "characters": 119,
+    "preview": "Google’s Spanner\nA database system with millions of nodes, petabytes of data,\ndistributed across datacenters worldwide\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 493,
+    "characters": 212,
+    "preview": "Google’s Spanner\nA database system with millions of nodes, petabytes of data,\ndistributed across datacenters worldwide\nConsistency properties:\n▶ Serializable transaction isolation\n▶ Linearizable reads and writes\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 494,
+    "characters": 306,
+    "preview": "Google’s Spanner\nA database system with millions of nodes, petabytes of data,\ndistributed across datacenters worldwide\nConsistency properties:\n▶ Serializable transaction isolation\n▶ Linearizable reads and writes\n▶ Many shards, each holding a subset of the data;\natomic commit of transactions across shards\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 495,
+    "characters": 468,
+    "preview": "Google’s Spanner\nA database system with millions of nodes, petabytes of data,\ndistributed across datacenters worldwide\nConsistency properties:\n▶ Serializable transaction isolation\n▶ Linearizable reads and writes\n▶ Many shards, each holding a subset of the data;\natomic commit of transactions across shards\nMany standard techniques:\n▶ State machine replication (Paxos) within a shard\n▶ Two-phase locking for serializability\n▶ Two-phase commit for cros",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 496,
+    "characters": 530,
+    "preview": "Google’s Spanner\nA database system with millions of nodes, petabytes of data,\ndistributed across datacenters worldwide\nConsistency properties:\n▶ Serializable transaction isolation\n▶ Linearizable reads and writes\n▶ Many shards, each holding a subset of the data;\natomic commit of transactions across shards\nMany standard techniques:\n▶ State machine replication (Paxos) within a shard\n▶ Two-phase locking for serializability\n▶ Two-phase commit for cros",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 497,
+    "characters": 269,
+    "preview": "Consistent snapshots\nA read-only transaction observes a consistent snapshot:\nIf T1 → T2 (e.g. T2 reads data written by T1). . .\n▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1\n▶ Snapshot that does not reﬂect writes by T1 does not\nreﬂect writes by T2 either\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 498,
+    "characters": 378,
+    "preview": "Consistent snapshots\nA read-only transaction observes a consistent snapshot:\nIf T1 → T2 (e.g. T2 reads data written by T1). . .\n▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1\n▶ Snapshot that does not reﬂect writes by T1 does not\nreﬂect writes by T2 either\n▶ In other words, snapshot is consistent with causality\n▶ Even if read-only transaction runs for a long time\n",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 499,
+    "characters": 590,
+    "preview": "Consistent snapshots\nA read-only transaction observes a consistent snapshot:\nIf T1 → T2 (e.g. T2 reads data written by T1). . .\n▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1\n▶ Snapshot that does not reﬂect writes by T1 does not\nreﬂect writes by T2 either\n▶ In other words, snapshot is consistent with causality\n▶ Even if read-only transaction runs for a long time\nApproach: multi-version concurrency control (MVCC)\n▶ Each read-write tra",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 500,
+    "characters": 717,
+    "preview": "Consistent snapshots\nA read-only transaction observes a consistent snapshot:\nIf T1 → T2 (e.g. T2 reads data written by T1). . .\n▶ Snapshot reﬂecting writes by T2 also reﬂects writes by T1\n▶ Snapshot that does not reﬂect writes by T1 does not\nreﬂect writes by T2 either\n▶ In other words, snapshot is consistent with causality\n▶ Even if read-only transaction runs for a long time\nApproach: multi-version concurrency control (MVCC)\n▶ Each read-write tra",
+    "image_count": 0,
+    "vector_paths": 16
+  },
+  {
+    "page": 501,
+    "characters": 132,
+    "preview": "Obtaining commit timestamps\nMust ensure that whenever T1 → T2 we have t1 < t2.\n▶ Physical clocks may be inconsistent with causality\n",
+    "image_count": 0,
+    "vector_paths": 37
+  },
+  {
+    "page": 502,
+    "characters": 264,
+    "preview": "Obtaining commit timestamps\nMust ensure that whenever T1 → T2 we have t1 < t2.\n▶ Physical clocks may be inconsistent with causality\n▶ Can we use Lamport clocks instead?\n▶ Problem: linearizability depends on real-time order, and\nlogical clocks may not reﬂect this!\n",
+    "image_count": 0,
+    "vector_paths": 37
+  },
+  {
+    "page": 503,
+    "characters": 268,
+    "preview": "Obtaining commit timestamps\nMust ensure that whenever T1 → T2 we have t1 < t2.\n▶ Physical clocks may be inconsistent with causality\n▶ Can we use Lamport clocks instead?\n▶ Problem: linearizability depends on real-time order, and\nlogical clocks may not reﬂect this!\nA\nB\n",
+    "image_count": 0,
+    "vector_paths": 37
+  },
+  {
+    "page": 504,
+    "characters": 279,
+    "preview": "Obtaining commit timestamps\nMust ensure that whenever T1 → T2 we have t1 < t2.\n▶ Physical clocks may be inconsistent with causality\n▶ Can we use Lamport clocks instead?\n▶ Problem: linearizability depends on real-time order, and\nlogical clocks may not reﬂect this!\nA\nB\nT1\nresults\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 505,
+    "characters": 289,
+    "preview": "Obtaining commit timestamps\nMust ensure that whenever T1 → T2 we have t1 < t2.\n▶ Physical clocks may be inconsistent with causality\n▶ Can we use Lamport clocks instead?\n▶ Problem: linearizability depends on real-time order, and\nlogical clocks may not reﬂect this!\nA\nB\nT1\nresults\naction\nT2\n",
+    "image_count": 0,
+    "vector_paths": 43
+  },
+  {
+    "page": 506,
+    "characters": 67,
+    "preview": "TrueTime: explicit physical clock uncertainty\nA\nphysical\ntime\nB\nT1\n",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 507,
+    "characters": 207,
+    "preview": "TrueTime: explicit physical clock uncertainty\nSpanner’s TrueTime clock returns [tearliest, tlatest].\nTrue physical timestamp must lie within that range.\nA\nphysical\ntime\nB\nt1,earliest\nT1\ncommit req\nt1,latest\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 508,
+    "characters": 292,
+    "preview": "TrueTime: explicit physical clock uncertainty\nSpanner’s TrueTime clock returns [tearliest, tlatest].\nTrue physical timestamp must lie within that range.\nOn commit, wait for uncertainty δi = ti,latest − ti,earliest.\nA\nphysical\ntime\nB\nt1,earliest\nT1\ncommit req\nδ1\nδ1\nwait\nt1,latest\ncommit done\n",
+    "image_count": 0,
+    "vector_paths": 42
+  },
+  {
+    "page": 509,
+    "characters": 328,
+    "preview": "TrueTime: explicit physical clock uncertainty\nSpanner’s TrueTime clock returns [tearliest, tlatest].\nTrue physical timestamp must lie within that range.\nOn commit, wait for uncertainty δi = ti,latest − ti,earliest.\nA\nphysical\ntime\nB\nt1,earliest\nT1\ncommit req\nδ1\nδ1\nwait\nt1,latest\ncommit done\nt2,earliest\nT2\ncommit req\nt2,latest\n",
+    "image_count": 0,
+    "vector_paths": 47
+  },
+  {
+    "page": 510,
+    "characters": 351,
+    "preview": "TrueTime: explicit physical clock uncertainty\nSpanner’s TrueTime clock returns [tearliest, tlatest].\nTrue physical timestamp must lie within that range.\nOn commit, wait for uncertainty δi = ti,latest − ti,earliest.\nA\nphysical\ntime\nB\nt1,earliest\nT1\ncommit req\nδ1\nδ1\nwait\nt1,latest\ncommit done\nt2,earliest\nT2\ncommit req\nδ2\nδ2\nwait\nt2,latest\ncommit done\n",
+    "image_count": 0,
+    "vector_paths": 55
+  },
+  {
+    "page": 511,
+    "characters": 361,
+    "preview": "TrueTime: explicit physical clock uncertainty\nSpanner’s TrueTime clock returns [tearliest, tlatest].\nTrue physical timestamp must lie within that range.\nOn commit, wait for uncertainty δi = ti,latest − ti,earliest.\nA\nphysical\ntime\nB\nt1,earliest\nT1\ncommit req\nδ1\nδ1\nwait\nt1,latest\ncommit done\nreal time\nt2,earliest\nT2\ncommit req\nδ2\nδ2\nwait\nt2,latest\ncommit done\n",
+    "image_count": 0,
+    "vector_paths": 57
+  },
+  {
+    "page": 512,
+    "characters": 225,
+    "preview": "Determining clock uncertainty in TrueTime\nClock servers with atomic clock or GPS receiver in each\ndatacenter; servers report their clock uncertainty.\nlocal clock uncertainty [ms]\n6\n4\n2\ntime [s]\n0\n0\n10\n20\n30\n40\n50\n60\n70\n80\n90\n",
+    "image_count": 0,
+    "vector_paths": 34
+  },
+  {
+    "page": 513,
+    "characters": 309,
+    "preview": "Determining clock uncertainty in TrueTime\nClock servers with atomic clock or GPS receiver in each\ndatacenter; servers report their clock uncertainty.\nEach node syncs its quartz clock with a server every 30 sec.\nlocal clock uncertainty [ms]\n6\n4\n2\ntime [s]\n0\n0\n10\n20\n30\n40\n50\n60\n70\n80\n90\nsync with clock server\n",
+    "image_count": 0,
+    "vector_paths": 40
+  },
+  {
+    "page": 514,
+    "characters": 359,
+    "preview": "Determining clock uncertainty in TrueTime\nClock servers with atomic clock or GPS receiver in each\ndatacenter; servers report their clock uncertainty.\nEach node syncs its quartz clock with a server every 30 sec.\nBetween syncs, assume worst-case drift of 200ppm.\nlocal clock uncertainty [ms]\n6\n4\n2\ntime [s]\n0\n0\n10\n20\n30\n40\n50\n60\n70\n80\n90\nsync with clock server\n",
+    "image_count": 0,
+    "vector_paths": 41
+  },
+  {
+    "page": 515,
+    "characters": 412,
+    "preview": "Determining clock uncertainty in TrueTime\nClock servers with atomic clock or GPS receiver in each\ndatacenter; servers report their clock uncertainty.\nEach node syncs its quartz clock with a server every 30 sec.\nBetween syncs, assume worst-case drift of 200ppm.\nlocal clock uncertainty [ms]\n6\n4\n2\ntime [s]\nserver uncertainty + round trip time to clock server\n0\n0\n10\n20\n30\n40\n50\n60\n70\n80\n90\nsync with clock server\n",
+    "image_count": 0,
+    "vector_paths": 45
+  },
+  {
+    "page": 516,
+    "characters": 343,
+    "preview": "That’s all, folks!\nAny questions?\nEmail mk428@cst.cam.ac.uk!\nSummary:\n▶ Distributed systems are everywhere\n▶ You use them every day: e.g. web apps\n▶ Key goals: availability, scalability, performance\n▶ Key problems: concurrency, faults, unbounded latency\n▶ Key abstractions: replication, broadcast, consensus\n▶ No one right way, just trade-oﬀs\n",
+    "image_count": 0,
+    "vector_paths": 16
+  }
+]

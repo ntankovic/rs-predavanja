@@ -1,0 +1,27 @@
+---
+title: "Messaging and stream processing"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Explain why a message consumer may see the same event twice.
+
+**Prerequisites:** Lectures 03, 05, and 08.
+
+## Core idea
+
+A message broker decouples the time at which a producer sends work from the time at which a consumer processes it. Under at-least-once delivery, a consumer must be prepared to receive a message more than once.
+
+## Worked scenario
+
+A notification consumer sends an email but loses its acknowledgement. The broker redelivers the confirmation event.
+
+## Discussion
+
+Where could duplicate detection live, and what would it need to remember?
+
+## Recap
+
+A delivery guarantee must be connected to the effects performed by the consumer.

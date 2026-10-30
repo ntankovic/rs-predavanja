@@ -1,0 +1,27 @@
+---
+title: "Replication and consistency"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Explain how replication lag can produce a stale read.
+
+**Prerequisites:** Lectures 03 and 05.
+
+## Core idea
+
+Replication stores related state on multiple nodes. With asynchronous replication, an acknowledged update may not yet be visible on every replica. The promised read behaviour must therefore be stated explicitly.
+
+## Worked scenario
+
+A registration is written to a leader. An immediate read from a lagging replica still shows the old course list.
+
+## Discussion
+
+Which routing or synchronization choice could provide read-your-writes behaviour?
+
+## Recap
+
+More copies do not by themselves define what a read is allowed to return.

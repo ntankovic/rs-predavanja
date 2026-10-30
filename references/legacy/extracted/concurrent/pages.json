@@ -1,0 +1,1668 @@
+[
+  {
+    "page": 1,
+    "characters": 223,
+    "preview": "Concurrent & Distributed Systems\nLecture 1: Introduction to concurrency, threads,\nand mutual exclusion\nMichaelmas 2021\nDr David J Greaves and Dr Martin Kleppmann\n(With thanks to Dr Robert N. M. Watson and Dr Steven Hand)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 2,
+    "characters": 638,
+    "preview": "Concurrent and Distributed Systems\n• One course, two parts\n– 8 lectures on concurrent systems\n– 8 further lectures of distributed systems\n• Similar interests and concerns:\n– Scalability given parallelism and distributed systems\n– Mask local or distributed communications latency\n– Importance in observing (or enforcing) execution orders\n– Correctness in the presence of concurrency (+debugging).\n• Important differences\n– Underlying primitives: share",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 3,
+    "characters": 84,
+    "preview": "log scale\nhttps://www.karlrupp.net/2018/02/42-years-of-microprocessor-trend-data/\n3\n",
+    "image_count": 2,
+    "vector_paths": 7
+  },
+  {
+    "page": 4,
+    "characters": 534,
+    "preview": "Concurrent systems outline\n1. Introduction to concurrency, threads, and mutual exclusion.\n2. Automata composition - safety and liveness.\n3. Semaphores and associated design patterns.\n4. CCR, monitors and concurrency in programming languages.\n5. Deadlock, liveness and priority inversion and limits on \nparallelism.\n6. Concurrency without shared data; transactions.\n7. Further transactions.\n8. Crash recovery; lock free programming; (Transactional \nme",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 5,
+    "characters": 628,
+    "preview": "Recommended reading\n• “Operating Systems, Concurrent and Distributed Software Design“, Jean \nBacon and Tim Harris, Addison-Wesley 2003\n• “Designing Data-Intensive Applications”, Martin Kleppmann O’Reilly \nMedia 2017\n• “Modern Operating Systems”, Andrew Tannenbaum, Prentice-Hall 2007 \netc and free pdf online.\n• “Java Concurrency in Practice”, Brian Goetz and others, Addison-Wesley \n2006\nLook in books for more detailed explanations of algorithms; l",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 6,
+    "characters": 648,
+    "preview": "What is concurrency?\n• Computers appear to do many things at once \n– E.g. running multiple programs on a laptop\n– E.g. writing back data buffered in memory to the hard disk while \nthe program(s) continue to execute\n• In the first case, this may actually be an illusion \n– E.g. processes time sharing a single-cored CPU\n• In the second, there is true parallelism\n– E.g. Direct Memory Access (DMA) transfers data between memory \nand I/O devices (e.g., ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 7,
+    "characters": 633,
+    "preview": "In this course we will\n• Investigate concurrency in computer systems\n– Processes, threads, interrupts, hardware\n• Consider how to control concurrency\n– Mutual exclusion (locks, semaphores), condition synchronization,  \nHLL primitives and lock-free programming\n• Learn about deadlock, livelock, priority inversion\n– And prevention, avoidance, detection, recovery \n• See how abstraction can provide support for correct  & fault-tolerant \nconcurrent exe",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 8,
+    "characters": 734,
+    "preview": "Recall: Processes and threads\n• Processes are instances of programs in execution\n– OS unit of protection & resource allocation \n– Has a virtual address space; and one or more threads\n• Threads are entities managed by the scheduler \n– Represents an individual execution context\n– A thread control block (TCB) holds the saved context (registers, \nincluding stack pointer), scheduler info, etc\n• Threads run in the address spaces of their process\n– (and",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 9,
+    "characters": 463,
+    "preview": "Concurrency with a single CPU (1)\n• Process / OS concurrency \n– Process X runs for a while (until blocks or interrupted)\n– OS runs for a while (e.g. does some TCP processing)\n– Process X resumes where it left off…\n• Inter-process concurrency \n– Process X runs for a while; then OS; then Process Y; then OS; then \nProcess Z; etc\n• Intra-process concurrency \n– Process X has multiple threads X1, X2, X3, …\n– X1 runs for a while; then X3; then X1; then ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 10,
+    "characters": 523,
+    "preview": "Concurrency with a single CPU (2)\n• With just one CPU, can think of concurrency as \ninterleaving of different executions, e.g.\nProc(A)\nOS\nProc(B)\nProc(C)\nProc(A)\nOS\nProc(B)\nOS\nOS\ntime\ntimer interrupt\ndisk interrupt\nsystem call\npage fault\n• Exactly where execution is interrupted and \nresumed is not usually known in advance…\n• this makes concurrency challenging!\n• Generally should assume worst case behaviour\n10\nNon-deterministic or so complex as to",
+    "image_count": 0,
+    "vector_paths": 70
+  },
+  {
+    "page": 11,
+    "characters": 426,
+    "preview": "Concurrency with multiple CPUs (aka cores) \n• Many modern systems have multiple CPUs\n– And even if don’t, have other processing elements\n• Hence things occur in parallel, e.g. \nProc(A)\nOS\nProc(B)\nProc(C)\nOS\nProc(B)\nOS\nOS\nCPU0\nOS\nProc(A)\nCPU1\nProc(A)\nOS\nProc(D)\nProc(C)\nOS\ntime\n• Notice that the OS runs on both CPUs: tricky!\n• More generally can have different threads of the same process \nexecuting on different CPUs too \n11\n",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 12,
+    "characters": 1194,
+    "preview": "What might this code do?\nGlobal variables are \nshared by all threads\nGlobal variables are \nshared by all threads\n#define NUMTHREADS 4\nchar *threadstr = “Thread”;\n#define NUMTHREADS 4\nchar *threadstr = “Thread”;\nEach thread has its \nown local variables\nEach thread has its \nown local variables\nvoid threadfn(int threadnum) {\nsleep(rand(2));   // Sleep 0 or 1 seconds\nprintf(“%s %d\\n”, threadstr, threadnum);\n}\nvoid threadfn(int threadnum) {\nsleep(rand",
+    "image_count": 0,
+    "vector_paths": 204
+  },
+  {
+    "page": 13,
+    "characters": 471,
+    "preview": "Possible orderings of this program\n• What order could the printf()s occur in?\n• Two sources of non-determinism in example:\n– Program non-determinism: Threads randomly sleep 0 or 1 \nseconds before printing\n– Thread scheduling non-determinism: Arbitrary order for \nunprioritised, concurrent wakeups, preemptions\n• There are 4! (factorial) valid permutations\n– Assuming printf() is indivisible\n– Is printf() indivisible? Maybe.\n• Even more potential tim",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 14,
+    "characters": 659,
+    "preview": "Multiple threads within a process\n• A single-threaded process has code, a \nThread 1 \nregisters\n$a0\n$a0\nProcess \naddress \nspace\n$a1\n$a1\nStack\nStack\n$t0\n$t0\n$sp\n$sp\n$pc\n$pc\nStack\nStack\nThread 2 \nregisters\n$a0\n$a0\n$a1\n$a1\n$t0\n$t0\nHeap\nHeap\n$sp\n$sp\nheap, a stack, registers\n• Additional threads have their own \nregisters and stacks\n– Per-thread program counters ($pc) \nallow execution flows to differ\n– Per-thread stack pointers ($sp) allow \ncall stacks,",
+    "image_count": 0,
+    "vector_paths": 196
+  },
+  {
+    "page": 15,
+    "characters": 531,
+    "preview": "1:N - user-level threading\nP1\nP1\nT1\nT2\nT3\nP1\nP1\nP2\nP2\nKernel\nKernel\n• Kernel only knows about (and schedules) \nprocesses\n• A userspace library implements threads, \ncontext switching, scheduling, \nsynchronisation, …\n– E.g., the JVM or a threading library\n• Advantages\n– Lightweight creation/termination + \ncontext switch; application-specific \nscheduling; OS independence\n• Disadvantages\n– Awkward to handle blocking system \ncalls or page faults, pree",
+    "image_count": 0,
+    "vector_paths": 82
+  },
+  {
+    "page": 16,
+    "characters": 609,
+    "preview": "1:1 - kernel-level threading\nP1\nP1\nT1\nT2\nT3\n• Kernel provides threads directly\n– By default, a process has one thread… \n– … but can create more via system calls\n• Kernel implements threads, thread \ncontext switching, scheduling, etc.\n• Userspace thread library 1:1 maps user \nthreads into kernel threads\nP1\nP1\nKernel\nKernel\nCPU 1\nCPU 1\nCPU 2\nCPU 2\n• Advantages:\n– Handles preemption, blocking syscalls\n– Straightforward to use multiple CPUs\n• Disadva",
+    "image_count": 0,
+    "vector_paths": 103
+  },
+  {
+    "page": 17,
+    "characters": 742,
+    "preview": "M:N - hybrid threading\n• Best of both worlds?\n– M:N threads, scheduler activations, …\n• Kernel exposes a smaller number (M) of \nT1\nT2\nT3\nT2\nP1\nP1\nactivations – typically 1:1 with CPUs\n• Userspace schedules a larger number (N) of \nP1\nP1\nKernel\nKernel\nCPU 1\nCPU 1\nCPU 2\nCPU 2\nthreads onto available activations\n– Kernel upcalls when a thread blocks, \nreturning the activation to userspace\n– Kernel upcalls when a thread wakes up, \nuserspace schedules i",
+    "image_count": 0,
+    "vector_paths": 92
+  },
+  {
+    "page": 18,
+    "characters": 425,
+    "preview": "Advantages of concurrency\n• Allows us to overlap computation and I/O on a single machine\n• Can simplify code structuring and/or improve responsiveness \n– E.g. one thread redraws the GUI, another handles user input, and \nanother computes game logic\n– E.g. one thread per HTTP request\n– E.g. background GC thread in JVM/CLR \n• Enables the seamless (?!) use of multiple CPUs –greater performance \nthrough parallel processing\n18\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 19,
+    "characters": 530,
+    "preview": "Concurrent systems\n• In general, have some number of processes…\n– … each with some number of threads …\n– … running on some number of computers…\n– … each with some number of CPUs.\n• For this half of the course we’ll focus on a single computer running a multi-\nthreaded process\n– most problems & solutions generalize to multiple processes, CPUs, and \nmachines, but more complex\n– (we’ll look at distributed systems later in the term)\n• Challenge: threa",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 20,
+    "characters": 472,
+    "preview": "Example: Housemates Buying Beer\n• Thread 2 (person 2)\n1.Look in fridge\n2.If no beer, go buy beer\n3.Put beer in fridge \n• Thread 1 (person 1)\n1.Look in fridge\n2.If no beer, go buy beer\n3.Put beer in fridge \n• In most cases, this works just fine…\n• But if both people look (step 1) before either refills the fridge (step \n3)… we’ll end up with too much beer!\n• Obviously more worrying if “look in fridge” is “check reactor”, and \n“buy beer” is “toggle ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 21,
+    "characters": 389,
+    "preview": "Solution #1: Leave a Note\n• Thread 1 (person 1)\n1.Look in fridge\n2.If no beer & no note\n1.Leave note on fridge\n2.Go buy beer\n3.Put beer in fridge\n4.Remove note\n• Thread 2 (person 2)\n1.Look in fridge\n2.If no beer & no note\n1.Leave note on fridge\n2.Go buy beer\n3.Put beer in fridge\n4.Remove note\n• Probably works for human beings…\n• But computers are stooopid!\n• Can you see the problem?\n21\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 22,
+    "characters": 520,
+    "preview": "Non-Solution #1: Leave a Note\n// thread 2\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     buyBeer();\n     note = 0;\n  }\n}\n// thread 1\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     buyBeer();\n     note = 0;\n  }\n}\n// thread 2\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     buyBeer();\n     note = 0;\n  }\n}\n// thread 1\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     ",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 23,
+    "characters": 562,
+    "preview": "Non-Solution #1: Leave a Note\n// thread 2\n// thread 2\ncontext switch\n// thread 1\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n// thread 1\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     \n     \nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     buyBeer();\n     note = 0;\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     buyBeer();\n     note = 0;\ncontext switch\n  }\n}\n  }\n}\n     note = 1;\n     buyBeer();",
+    "image_count": 0,
+    "vector_paths": 11
+  },
+  {
+    "page": 24,
+    "characters": 449,
+    "preview": "Non-Solution #1: Leave a Note\n• Of course this won’t happen all the time\n–Need threads to interleave in the just the right way \n(or just the wrong way ;-)\n• Unfortunately code that is ‘mostly correct’ is \nmuch worse than code that is ‘mostly wrong’! \n–Difficult to catch in testing, as occurs rarely\n–May even go away when running under debugger\n• e.g. only context switches threads when they block \n• (such bugs are sometimes called Heisenbugs)\n24\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 25,
+    "characters": 495,
+    "preview": "Critical Sections & Mutual Exclusion\n• The high-level problem here is that we have \ntwo threads trying to solve the same problem \n–Both execute buyBeer() concurrently\n–Ideally want only one thread doing that at a time\n• We call this code a critical section\n–A piece of code which should never be concurrently \nexecuted by more than one thread\n• Ensuring this involves mutual exclusion\n–If one thread is executing within a critical section, all \nother",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 26,
+    "characters": 495,
+    "preview": "Achieving Mutual Exclusion\n• One way is to let only one thread ever execute a particular \ncritical section – e.g. a nominated beer buyer – but this \nrestricts concurrency \n• Alternatively our (broken) solution #1 was trying to provide \nmutual exclusion via the note\n– Leaving a note means “I’m in the critical section”;\n– Removing the note means “I’m done”\n– But, as we saw, it didn’t work ;-)\n• This was because we could experience a context switch ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 27,
+    "characters": 906,
+    "preview": "Non-Solution #1: Leave a Note\n// thread 2\n// thread 2\n// thread 1\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n// thread 1\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\ncontext switch\nWe decide to \nenter the critical \nsection here… \nBut only mark the \nfact here … \n     \n     \nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     buyBeer();\n     note = 0;\nbeer = checkFridge();\nif(!beer) { \n  if(!note) {\n     note = 1;\n     bu",
+    "image_count": 0,
+    "vector_paths": 61
+  },
+  {
+    "page": 28,
+    "characters": 587,
+    "preview": "Atomicity\n• What we want is for the checking of note and the (conditional) \nsetting of note to happen without any other thread being \ninvolved\n– We don’t care if another thread reads it after we’re done; or \nsets it before we start our check\n– But once we start our check, we want to continue without \nany interruption\n• If a sequence of operations (e.g. read-and-set) are made to \noccur as if one operation, we call them atomic\n– Since indivisible f",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 29,
+    "characters": 756,
+    "preview": "Solution #2: Atomic Note\n// thread 2\nbeer = checkFridge();\nif(!beer) { \n  if(read-and-set(note)) {\n     buyBeer();\n     note = 0;\n  }\n}\n// thread 1\nbeer = checkFridge();\nif(!beer) {\n  if(read-and-set(note)) {\n     buyBeer();\n     note = 0;\n  }\n}\n// thread 2\nbeer = checkFridge();\nif(!beer) { \n  if(read-and-set(note)) {\n     buyBeer();\n     note = 0;\n  }\n}\n// thread 1\nbeer = checkFridge();\nif(!beer) {\n  if(read-and-set(note)) {\n     buyBeer();\n    ",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 30,
+    "characters": 552,
+    "preview": "Non-Solution #2: Atomic Note\n// thread 2\n// thread 2\n// thread 1\nbeer = checkFridge();\nif(!beer) { \n// thread 1\nbeer = checkFridge();\nif(!beer) { \ncontext switch\nbeer = checkFridge();\nif(!beer) { \n  if(read-and-set(note)) {\n     buyBeer();\n     note = 0;\nbeer = checkFridge();\nif(!beer) { \n  if(read-and-set(note)) {\n     buyBeer();\n     note = 0;\ncontext switch\n  }\n}\n  }\n}\n  if(read-and-set(note)) {\n     buyBeer();\n     note = 0;\n  }\n}\n  if(read-a",
+    "image_count": 0,
+    "vector_paths": 11
+  },
+  {
+    "page": 31,
+    "characters": 549,
+    "preview": "General mutual exclusion\n• We would like the ability to define a region of \ncode as a critical section e.g.\n// thread 2\nENTER_CS();\nbeer = checkFridge();\nif(!beer) \n     buyBeer();\nLEAVE_CS();\n// thread 1\nENTER_CS();\nbeer = checkFridge();\nif(!beer) \n     buyBeer();\nLEAVE_CS();\n// thread 2\nENTER_CS();\nbeer = checkFridge();\nif(!beer) \n     buyBeer();\nLEAVE_CS();\n// thread 1\nENTER_CS();\nbeer = checkFridge();\nif(!beer) \n     buyBeer();\nLEAVE_CS();\n• ",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 32,
+    "characters": 513,
+    "preview": "Implementing mutual exclusion\n• One option is to prevent context switches\n– e.g. disable interrupts (for kernel threads), or set an in-\nmemory flag (for user threads)\n– ENTER_CS() = “disable context switches”; \n• LEAVE_CS() = “re-enable context switches”\n• Can work but:\n– Rather brute force (stops all other threads, not just those \nwho want to enter the critical section)\n– Potentially unsafe (if disable interrupts and then sleep \nwaiting for a ti",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 33,
+    "characters": 418,
+    "preview": "Implementing mutual exclusion\n• Associate a mutual exclusion lock with each \ncritical section, e.g. a variable L\n–(must ensure use correct lock variable!)\n–ENTER_CS() = “LOCK(L)”\nLEAVE_CS() = “UNLOCK(L)”\n• Can implement LOCK() using read-and-set():\nUNLOCK(L) { \n  L = 0;\n}\nUNLOCK(L) { \n  L = 0;\n}\nLOCK(L) { \n  while(!read-and-set(L))\n    ; // do nothing\n}\nLOCK(L) { \n  while(!read-and-set(L))\n    ; // do nothing\n}\n33\n",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 34,
+    "characters": 853,
+    "preview": "Solution #3: mutual exclusion locks\n// thread 2\nLOCK(fridgeLock); \nbeer = checkFridge();\nif(!beer)\n     buyBeer();\nUNLOCK(fridgeLock);\n// thread 1\nLOCK(fridgeLock); \nbeer = checkFridge();\nif(!beer)\n     buyBeer();\nUNLOCK(fridgeLock);\n// thread 2\nLOCK(fridgeLock); \nbeer = checkFridge();\nif(!beer)\n     buyBeer();\nUNLOCK(fridgeLock);\n// thread 1\nLOCK(fridgeLock); \nbeer = checkFridge();\nif(!beer)\n     buyBeer();\nUNLOCK(fridgeLock);\n• This is – finall",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 35,
+    "characters": 449,
+    "preview": "Summary + next time\n• Definition of a concurrent system\n• Origins of concurrency within a computer\n• Processes and threads\n• Challenge: concurrent access to shared resources\n• Critical sections, mutual exclusion, race conditions, atomicity\n• Mutual exclusion locks (mutexes)\n• Next time:\n– Operating System and hardware instructions and structures,  \n– Interacting automata view of concurrency,\n– Introduction to formal modelling of concurrency.\n35\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 36,
+    "characters": 148,
+    "preview": "Concurrent systems\nLecture 2:  Hardware, OS and Automaton Views\nDr David J Greaves\n(Thanks to Dr Robert N. M. Watson)\n(2020/21: Bakery Algorithm)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 37,
+    "characters": 327,
+    "preview": "From last time ...\n• Concurrency exploits parallel and distributed \ncomputation.\n• Concurrency is also a useful programming \nparadigm and a virtualisation means.\n• Race conditions arise with imperative \nlanguages in shared memory (sadly the \npredominant paradigm of last 15 years).\n• Concurrency bugs are hard to anticipate.\n2\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 38,
+    "characters": 229,
+    "preview": "This time\n• Computer architecture and O/S summary\n• Hardware support for atomicity\n• Basic Automata Theory/Jargon and \ninteractions.\n• Simple model checking\n• Dining Philosophers Taster\n• Primitive-free atomicity (Bakery Alg) \n3\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 39,
+    "characters": 606,
+    "preview": "General comments\n• Concurrency is essential in modern systems\n– overlapping I/O with computation\n– building distributed systems\n–But throws up a lot of challenges\n• need to ensure safety, allow synchronization, and avoid issues of liveness \n(deadlock, livelock, …)\n• A major risk of over-engineering exists: putting in too many locks not really \nneeded.\n• Also its possible to get accidental, excessive serialisation, killing the \nexpected parallel s",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 40,
+    "characters": 320,
+    "preview": "https://www.cl.cam.ac.uk/~djg11/socdam-patterns-hls-touchstones/soc-design-patterns/sp1-socparts/zhp6c8e57449.html\nComputer Architecture Reference Models\nEven on a uniprocessor, \ninterrupt routines will ‘magically’ \nchange stored values in memory.\nStop-the-world atomic\noperations are undesirable on \nparallel hardware.\n",
+    "image_count": 2,
+    "vector_paths": 3
+  },
+  {
+    "page": 41,
+    "characters": 248,
+    "preview": "Operating System Behaviour\nTCB contains saved registers for non-running tasks.\nRead-to-run tasks are in a nominal queue.\nBlocked TCBs point to semaphore (or similar) they are awaiting.\nMost interrupt routines will invoke scheduller as they return.\n",
+    "image_count": 2,
+    "vector_paths": 3
+  },
+  {
+    "page": 42,
+    "characters": 353,
+    "preview": "Hardware foundations for atomicity 1\n• On a simple uni-processor, without DMA devices, the \ncrudest mechanism is to disable interrupts.  \n• We bracket critical section with ints_off and ints_on \ninstructions. This guarantees no preemption.\n• Can disrupt real-time response\n• Not suitable when other CPUs and DMA exist\n• Requires supervisor privilege.\n7\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 43,
+    "characters": 418,
+    "preview": "Hardware foundations for atomicity 2\n• How can we implement atomic read-and-set?\n• Simple pair of load and store instructions fail \nthe atomicity test (obviously divisible!)\n• Need a new ISA primitive for protection against \nparallel access to memory from another CPU\n• Two common flavours:\n– Atomic Compare and Swap (CAS)\n– Load Linked, Store Conditional (LL/SC)\n– (But we also find atomic increment, bitset etc..)\n8\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 44,
+    "characters": 923,
+    "preview": "Atomic Compare and Swap (CAS)\n•\nInstruction operands: memory address, prior + new values\n– If prior value matches in-memory value, new value stored\n– If prior value does not match in-memory value, instruction fails\n– Software checks return value, can loop on failure\n•\nFound on CISC systems such as x86 (cmpxchg)?\nmov\n%edx, 1\n# New value -> register\nspin:\nmov\n%eax, [foo_lock] # Load prior value\ntest\n%eax, %eax\n# If non-zero (owned),\njnz\nspin\n#   lo",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 45,
+    "characters": 1372,
+    "preview": "Load Linked-Store Conditional (LL/SC)\n• Found on RISC systems (MIPS, RISC-V, ARM, …)\n– Load value from memory location with LL\n– Manipulate value in register (e.g., add, assign, …)\n– SC fails if memory neighbourhood modified (or interrupt) since LL\n– SC writes back register and indicates success (or not)\n– Software checks SC return value and typically loops on failure\n– An example of optimistic concurrency.\n• Preferred since it does not lock up w",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 46,
+    "characters": 412,
+    "preview": "Finite State Machine Revision and Terminology\nFSM is tuple:  (Q, q0, Σ,  Δ)  being states, start state, input alphabet, transition function.\nA live state is one that can be returned to infinitely often in the future.\nA dead(lock) state has no successors – machine stops if we enter it.\nStart-up states are those before the main live behaviour.\n‘Bad’ states are those that lead away from the main live behaviour.\n",
+    "image_count": 2,
+    "vector_paths": 3
+  },
+  {
+    "page": 47,
+    "characters": 634,
+    "preview": "Finite State Machine: Fairness and Livelock\nIgnoring the ‘F’, the live states of this FSM include Q5 and Q6.\nF has been labelled as a ‘fair’ state. If we also discard the start-up ‘lasso \nstem’, its existence changes the live states to just Q2, Q3, Q4.  Manual \nlabelling defines the intended system behaviour.\nAny fair state is live and states from which any fair state cannot be reached \nare not live. [ Hence if we also labelled Q5 as F, fairness ",
+    "image_count": 2,
+    "vector_paths": 3
+  },
+  {
+    "page": 48,
+    "characters": 205,
+    "preview": "Finite State Machine: FSM view of thread control flow.\nFSM expresses program control flow per thread.\nFSM arcs have ‘condition / action’ annotations.\nConditions and actions range over shared global state.\n",
+    "image_count": 2,
+    "vector_paths": 3
+  },
+  {
+    "page": 49,
+    "characters": 200,
+    "preview": "Finite State Machine: Product of Machines 1\nProduct of uncoupled machines simply multiplies state arities.\nProduct may be synchronous or asynchronous. \nWe shall not always show self arcs from now on.\n",
+    "image_count": 1,
+    "vector_paths": 3
+  },
+  {
+    "page": 50,
+    "characters": 624,
+    "preview": "Finite State Machine: Product of Machines 2\nAsynchronous product: one machine steps at a time. Interleaving order is  \nundefined (not strict alternation but so-called stuttering).\nSynchronous product: all machines step at once (lock-step).  We see \n‘diagonal’ arcs.\nSynchronous product corresponds to synchronous hardware in digital logic.\nAsynchronous product is relevant for this course.\nNote, in the small example, on the next slide, \nthe coupling",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 51,
+    "characters": 437,
+    "preview": "Finite State Machine: Product of Machines 3\nCoupling of FSMs reduces behaviour.\nArc removal can lead to deadlock.\nCouple FSMs by making input of one \ndepend on the state of the other. \nExample couplings:\n   Half coupled: \n     Let y = M1 in state A.\n \n  Full coupling:\n     Let y = M1 in state A\n     and x = M2 in state 0.\nAnother form of coupling is through\nShared variables: those written by one\nFSM appear in edge guards of another.\n",
+    "image_count": 1,
+    "vector_paths": 3
+  },
+  {
+    "page": 52,
+    "characters": 169,
+    "preview": "Finite State Machine: Product of Machines 4\n   Fully-coupled:\n     Let y = M1 in state A\n     and x = M2 in state 0.\nComposite machine has\nno remaining external inputs.\n",
+    "image_count": 1,
+    "vector_paths": 3
+  },
+  {
+    "page": 53,
+    "characters": 608,
+    "preview": "Example: Dining Philosophers\n•\n5 philosophers, 5 forks, round table…\nSemaphore forks[] = new Semaphore[5];\nSemaphore forks[] = new Semaphore[5];\nwhile(true) {        // philosopher i\n   think();\n   wait(fork[i]);\n   wait(fork[(i+1) % 5];\n   eat(); \n   signal(fork[i]);\n   signal(fork[(i+1) % 5];\n}\nwhile(true) {        // philosopher i\n   think();\n   wait(fork[i]);\n   wait(fork[(i+1) % 5];\n   eat(); \n   signal(fork[i]);\n   signal(fork[(i+1) % 5];\n}",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 54,
+    "characters": 498,
+    "preview": "Reachable State Space Algorithm\n• 0. Input FSM = (Q, q0, Σ, Δ)\n• 1. Initialise reachable R = { q0 }  \n• 2. while(changes)\nR = R ∪ { q’| q’ = Δ(q, σ), q ∈R, σ ∈Σ } \nThe `while(changes)’ construct makes this a fixed-point \niteration.\nA common requirement is to check that a condition holds in \nall reachable states.  This is called a safety property.  \nA model checker tool can either check the condition on each \niteration for early violation detectio",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 55,
+    "characters": 438,
+    "preview": "Live States Algorithm\n• 0. Input FSM = (Q, q0, Σ, Δ)\n• 1. Initialise live set L = Q (or perhaps R)  \n• 2. while(changes)\n– L = L ∩ { q| q’ = Δ(q, σ), q’ ∈L, σ ∈Σ } \nPremise: A state is live or a start-up state if it has a successor \nthat is live.\nThis finds the whole ‘lasso’.\nTo discard start-up states intersect the result with the same\ncomputation on the inverse transition function.\n(This slide for interest only: not examinable.)\n20\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 56,
+    "characters": 501,
+    "preview": "Critical without Atomic Actions\n• A global array indexed by thread id (tid) can be used instead \nof atomic primitives under appropriate use protocol.\n• Bakery algorithm provides n-way exclusion.\n• Dekker (non-examinable) and others are similar.\n• Not very important for SMP computing right now, but \npotentially useful for distributed computing.\n• They serve as lovely toy examples for model checking!\n• They need fence instructions on modern archite",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 57,
+    "characters": 754,
+    "preview": "Lamport Bakery Algorithm\nNote, the continue\nstatements operate\non their `whiles’ \nnot the outer ‘for’.\nThey are `spins’.\nvoid lock(tid)        // tid=thread identifier\n{  \n   Enter[tid] = true;\n   Number[tid] = 1 + maxj (Number[j]);\n   Enter[tid] = false;\n   for (j in 0..Ntid-1) \n      { while (Enter[j]) continue; \n        while (Number[j] && (Number[j], j)<(Number[tid], tid)) continue;\n      }\n}    \nTake a ticket on entry to bakery, one\ngreater ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 58,
+    "characters": 189,
+    "preview": "Model Checking Quick Demo\n• If time permits, CBMC demo in lectures.\n• Materials are (will be) on course site and \ndeveloped a little further next time.\n• Otherwise try in your own time.\n23\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 59,
+    "characters": 467,
+    "preview": "Summary + next time\n• We looked at underlying hardware structures (but this \nwas for completeness rather than for examination \npurposes) \n• We looked at finite-state models of programs and a \nmodel checker, but do note that today’s tools can \ncope only with highly-abstracted models or small sub-\nsystems of real-world applications.\n• Next time\n– Access to hardware primitives via O/S\n– Mutual exclusion using semaphores\n– Producer/consumer and one g",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 60,
+    "characters": 152,
+    "preview": "Concurrent systems\nLecture 3: Mutual exclusion, semaphores,\nand producer-consumer relationships\nDr David J Greaves\n(Thanks to Dr Robert N. M. Watson)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 61,
+    "characters": 237,
+    "preview": "Reminder from last time\n• Automata models of concurrent systems\n• Concurrency hardware mechanisms\n• Challenge: concurrent access to shared resources\n• Mutual exclusion, race conditions, and atomicity\n• Mutual exclusion locks (mutexes)\n2\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 62,
+    "characters": 967,
+    "preview": "From first lecture\nFrom first lecture\nFrom last time: beer-buying example\n• Thread 1 (person 1)\n1. Look in fridge\n2. If no beer, go buy beer\n3. Put beer in fridge \n• Thread 2 (person 2)\n1. Look in fridge\n2. If no beer, go buy beer\n3. Put beer in fridge \n• In most cases, this works just fine…\n• But if both people look (step 1) before either refills the fridge (step 3)… we’ll end up with \ntoo much beer!\n• Obviously more worrying if “look in fridge”",
+    "image_count": 0,
+    "vector_paths": 99
+  },
+  {
+    "page": 63,
+    "characters": 192,
+    "preview": "This time\n• Implementing mutual exclusion\n• Semaphores for mutual exclusion, condition \nsynchronisation, and resource allocation\n• Two-party and generalised producer-\nconsumer relationships\n4\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 64,
+    "characters": 429,
+    "preview": "Implementing mutual exclusion\n• Associate a mutual exclusion lock with each \ncritical section, e.g. a variable L\n– (must ensure use correct lock variable!)\nENTER_CS() = “LOCK(L)”\nLEAVE_CS() = “UNLOCK(L)”\n• Can implement LOCK() using read-and-set():\nUNLOCK(L) { \n  L = 0;\n}\nUNLOCK(L) { \n  L = 0;\n}\nLOCK(L) { \n while(!read-and-set(L))\n   continue; // do nothing\n}\nLOCK(L) { \n while(!read-and-set(L))\n   continue; // do nothing\n}\n5\n",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 65,
+    "characters": 651,
+    "preview": "Semaphores\n• Despite with atomic ops, busy waiting remains inefficient…\n– Lock contention with spinning-based solution wastes CPU cycles.\n– Better to sleep until resource available.\n• Dijkstra (THE, 1968) proposed semaphores\n– New type of variable\n– Initialized once to an integer value (default 0) \n• Supports two operations: wait() and signal()\n– Sometimes called down() and up()\n– (and originally called P() and V() ... blurk!)\n• Can be used for m",
+    "image_count": 0,
+    "vector_paths": 4
+  },
+  {
+    "page": 66,
+    "characters": 645,
+    "preview": "Semaphore implementation\n• Implemented as an integer and a queue \nwait(sem) { \n  if(sem > 0) {\n     sem = sem - 1;\n   } else suspend caller & add thread to queue for sem \n}\nwait(sem) { \n  if(sem > 0) {\n     sem = sem - 1;\n   } else suspend caller & add thread to queue for sem \n}\nsignal(sem) {\n  if no threads are waiting {\n     sem = sem + 1;\n  } else wake up some thread on queue \n} \nsignal(sem) {\n  if no threads are waiting {\n     sem = sem + 1;\n",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 67,
+    "characters": 702,
+    "preview": "Hardware support for wakeups: IPIs\n• CAS/LLSC/… support atomicity via shared memory\n• But what about “wake up thread”?\n– E.g., notify waiter of resources now free, work now waiting, …\n– Generally known as condition synchronisation\n– On a single CPU, wakeup triggers context switch\n– How to wake up a thread on another CPU that is already busy doing something \nelse?\n• Inter-Processor Interrupts (IPIs)            (aka Inter-Core Interrupt ICI)\n– Mark",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 68,
+    "characters": 247,
+    "preview": "Mutual exclusion with a semaphore\naSem\nC\nA\nB\n1\n0\nwait (aSem)\nwait (aSem)\n0\nB\nCS\nB  blocked\nwait (aSem)\n0\nB, C\nC  blocked\nsignal (aSem)\n0\nC\nCS\n0\nsignal (aSem)\nCS\n1\nsignal (aSem)\n• Initialize semaphore to 1; wait() is lock(), signal() is unlock()\n9\n",
+    "image_count": 0,
+    "vector_paths": 65
+  },
+  {
+    "page": 69,
+    "characters": 329,
+    "preview": "Condition synchronisation\n                wait before signal                                                  signal before wait\nA\nB\naSem\nA\nB\naSem\n0\n0\nwait (aSem)\n0\nA\nsignal (aSem)\n1\nA blocked\n“wake-up waiting”\nwait (aSem)\n0\nsignal (aSem)\n0\nA continues\nA continues\n• Initialize semaphore to 0; A proceeds only after B signals\n10\n",
+    "image_count": 0,
+    "vector_paths": 47
+  },
+  {
+    "page": 70,
+    "characters": 433,
+    "preview": "N-resource allocation\n• Suppose there are N instances of a resource\n– e.g. N printers attached to a DTP system\n• Can manage allocation with a semaphore sem, \ninitialized to N \n– Any job wanting printer does wait(sem)\n– After N jobs get a printer, next will sleep\n– To release resource, signal(sem)\n• Will wake some job if any job is waiting.\n• Will typically also require mutual exclusion\n– E.g. to decide which printers are free\n11\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 71,
+    "characters": 470,
+    "preview": "Semaphore design patterns\n• Semaphores are quite powerful\n– Can solve mutual exclusion… \n– Can also provide condition synchronization\n• Thread waits until some condition set by another thread\n• Let’s look at three common examples:\n– One producer thread, one consumer thread, with a N-\nslot shared memory buffer\n– Any number of producer and consumer threads,  again \nusing an N-slot shared memory buffer\n– Multiple reader, single writer synchronizatio",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 72,
+    "characters": 695,
+    "preview": "Producer-consumer problem\nIf producer thread paused while buffer\nis full, this is called ‘backpressure’.\n• General “pipe” concurrent programming paradigm\n– E.g. pipelines in Unix; staged servers; work stealing;\ndownload thread vs. rendering thread in web browser\n• Shared buffer B[] with N slots, initially empty\n• Producer thread wants to:\n– Produce an item\n– If there’s room, insert into next slot; \n– Otherwise, wait until there is room\n• Consumer",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 73,
+    "characters": 780,
+    "preview": "Producer-consumer solution\nint buffer[N]; int in = 0, out = 0;\nspaces = new Semaphore(N); \nitems  = new Semaphore(0);  \nint buffer[N]; int in = 0, out = 0;\nspaces = new Semaphore(N); \nitems  = new Semaphore(0);  \n// consumer thread \nwhile(true) {\n  if there is an item { \n     item = buffer[out]; \n     out  = (out + 1) % N;\n  }\n  consume(item);\n}\n// producer thread\nwhile(true) {\n  item = produce(); \n  if there is space { \n     buffer[in] = item;\n ",
+    "image_count": 0,
+    "vector_paths": 30
+  },
+  {
+    "page": 74,
+    "characters": 804,
+    "preview": "Producer-consumer solution\nint buffer[N]; int in = 0, out = 0;\nspaces = new Semaphore(N); \nitems  = new Semaphore(0);  \nint buffer[N]; int in = 0, out = 0;\nspaces = new Semaphore(N); \nitems  = new Semaphore(0);  \n// consumer thread \nwhile(true) {\n  wait(items); \n     item = buffer[out]; \n     out  = (out + 1) % N;\n  signal(spaces);\n  consume(item);\n}\n// producer thread\nwhile(true) {\n  item = produce(); \n  wait(spaces); \n     buffer[in] = item;\n  ",
+    "image_count": 0,
+    "vector_paths": 32
+  },
+  {
+    "page": 75,
+    "characters": 540,
+    "preview": "Producer-consumer solution\n• Use of semaphores for N-resource allocation\n– In this case, resource is a slot in the buffer\n– spaces allocates empty slots (for producer)\n– items allocates full slots (for consumer)\n• No explicit mutual exclusion\n– Threads will never try to access the same slot at the \nsame time; if “in == out” then either\n• buffer is empty (and consumer will sleep on items), or\n• buffer is full (and producer will sleep on spaces)\n– ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 76,
+    "characters": 461,
+    "preview": "Generalized producer-consumer\n• Previously had exactly one producer thread, and \nexactly one consumer thread\n• More generally might have many threads adding \nitems, and many removing them\n• If so, we do need explicit mutual exclusion\n– E.g. to prevent two consumers from trying to remove \n(and consume) the same item\n– (Race conditions due to concurrent use of in and out \nprecluded when just one thread on each end)\n• Can implement with one more sem",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 77,
+    "characters": 1129,
+    "preview": "Generalized P-C solution\nint buffer[N]; int in = 0, out = 0;\nspaces = new Semaphore(N); \nitems  = new Semaphore(0);\nguard  = new Semaphore(1);   // for mutual exclusion \nint buffer[N]; int in = 0, out = 0;\nspaces = new Semaphore(N); \nitems  = new Semaphore(0);\nguard  = new Semaphore(1);   // for mutual exclusion \n// consumer threads \nwhile(true) {\n  wait(items);\n  wait(guard); \n     item = buffer[out]; \n     out  = (out + 1) % N;\n  signal(guard);",
+    "image_count": 0,
+    "vector_paths": 18
+  },
+  {
+    "page": 78,
+    "characters": 449,
+    "preview": "Semaphores: summary\n• Powerful abstraction for implementing concurrency \ncontrol:\n– Mutual exclusion & condition synchronization\n• Better than read-and-set()… but correct use requires \nconsiderable care \n– E.g. forget to wait(), can corrupt data\n– E.g. forget to signal(), can lead to infinite delay\n– Generally get more complex as add more semaphores\n• Used internally in some OSes and libraries, but \ngenerally deprecated for other mechanisms…\n19\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 79,
+    "characters": 602,
+    "preview": "Mutual exclusion and invariants\n• One important goal of locking is to avoid exposing \ninconsistent intermediate states to other threads\n• This suggests an invariants-based strategy:\n– Invariants hold as mutex is acquired\n– Invariants may be violated while mutex is held\n– Invariants must be restored before mutex is released\n• E.g., deletion from a doubly linked list\n– Invariant: an entry is in the list, or not in the list\n– Individually non-atomic",
+    "image_count": 0,
+    "vector_paths": 28
+  },
+  {
+    "page": 80,
+    "characters": 441,
+    "preview": "Summary + next time\n• Implementing mutual exclusion: hardware support for \natomicity and inter-processor interrupts\n• Semaphores for mutual exclusion, condition synchronisation, \nand resource allocation\n• Two-party and generalised producer-consumer relationships\n• Invariants and locks\n• Next time:\n– Multi-Reader Single-Writer (MRSW) locks\n– Starvation and fairness\n– Alternatives to semaphores/locks\n– Concurrent primitives in practice\n21\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 81,
+    "characters": 441,
+    "preview": "Summary + next time\n• Implementing mutual exclusion: hardware support for \natomicity and inter-processor interrupts\n• Semaphores for mutual exclusion, condition synchronisation, \nand resource allocation\n• Two-party and generalised producer-consumer relationships\n• Invariants and locks\n• Next time:\n– Multi-Reader Single-Writer (MRSW) locks\n– Starvation and fairness\n– Alternatives to semaphores/locks\n– Concurrent primitives in practice\n22\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 82,
+    "characters": 130,
+    "preview": "Concurrent systems\nLecture 4: CCR, monitors, and\nconcurrency in practice.\nDr David J Greaves\n(Thanks to Dr Robert N. M. Watson)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 83,
+    "characters": 294,
+    "preview": "Reminder from last time\n• Implementing mutual exclusion: hardware \nsupport for atomicity and inter-processor \ninterrupts\n• Semaphores for mutual exclusion, condition \nsynchronisation, and resource allocation\n• Two-party and generalised producer-\nconsumer relationships\n• Invariants and locks\n2\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 84,
+    "characters": 698,
+    "preview": "From last time: Semaphores summary\n• Powerful abstraction for implementing concurrency control:\n– mutual exclusion & condition synchronization\n• Better than read-and-set()… but correct use requires \nconsiderable care \n– e.g. forget to wait(), can corrupt data\n– e.g. forget to signal(), can lead to infinite delay\n– generally get more complex as add more semaphores\n• Used internally in some OSes and libraries, but generally \ndeprecated for other me",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 85,
+    "characters": 309,
+    "preview": "This time\n• Multi-Reader Single-Writer (MRSW) locks\n– Starvation and fairness\n• Alternatives to semaphores/locks:\n– Conditional critical regions (CCRs)\n– Monitors\n– Condition variables\n– Signal-and-wait vs. signal-and-continue semantics\n• Concurrency primitives in practice\n• Concurrency primitives wrap-up\n4\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 86,
+    "characters": 700,
+    "preview": "Multiple-Readers Single-Writer (MRSW)\n• Another common synchronisation paradigm is MRSW\n– Shared resource accessed by a set of threads\n• e.g. cached set of DNS results \n– Safe for many threads to read simultaneously, but a writer \n(updating) must have exclusive access\n– MRSW locks have read lock and write lock operations\n– Mutual exclusion vs. data stability\n• Simple implementation uses two semaphores\n• First semaphore is a mutual exclusion lock ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 87,
+    "characters": 1014,
+    "preview": "Simplest MRSW solution\nint nr = 0;                 // number of readers \nrSem   = new Semaphore(1);  // protects access to nr\nwSem   = new Semaphore(1);  // protects writes to data\nint nr = 0;                 // number of readers \nrSem   = new Semaphore(1);  // protects access to nr\nwSem   = new Semaphore(1);  // protects writes to data\n// a writer thread \nwait(wSem);\n.. perform update to data\nsignal(wSem);\n// a writer thread \nwait(wSem);\n.. perf",
+    "image_count": 0,
+    "vector_paths": 18
+  },
+  {
+    "page": 88,
+    "characters": 460,
+    "preview": "Simplest MRSW solution\n• Solution on previous slide is “correct”\n– Only one writer will be able to access data structure, \nbut – providing there is no writer – any number of \nreaders can access it\n• However writers can starve\n– If readers continue to arrive, a writer might wait \nforever (since readers will not release wSem)\n– Would be fairer if a writer only had to wait for all \ncurrent readers to exit…\n– Can implement this with an additional sem",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 89,
+    "characters": 1192,
+    "preview": "A fairer MRSW solution\nint nr = 0;                 // number of readers \nrSem   = new Semaphore(1);  // protects access to nr\nwSem   = new Semaphore(1);  // protects writes to data\nturn   = new Semaphore(1);  // write is awaiting a turn\nint nr = 0;                 // number of readers \nrSem   = new Semaphore(1);  // protects access to nr\nwSem   = new Semaphore(1);  // protects writes to data\nturn   = new Semaphore(1);  // write is awaiting a turn",
+    "image_count": 0,
+    "vector_paths": 20
+  },
+  {
+    "page": 90,
+    "characters": 748,
+    "preview": "Conditional Critical Regions\n• Implementing synchronisation with locks is difficult\n• Only the developer knows what data is protected by \nwhich locks\n• One early (1970s) effort to address this problem was CCRs\n– Variables can be explicitly declared as ‘shared’\n– Code can be tagged as using those variables, e.g.\nshared int A, B, C; \nregion A, B {\n    await( /* arbitrary condition */); \n    // critical code using A and B\n}\nshared int A, B, C; \nregi",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 91,
+    "characters": 954,
+    "preview": "CCR example: Producer-Consumer\nshared int buffer[N]; \nshared int in = 0; shared int out = 0;\nshared int buffer[N]; \nshared int in = 0; shared int out = 0;\n// consumer thread \nwhile(true) {\n  region in, out, buffer {  \n    await((in-out) > 0); \n    item = buffer[out % N]; \n    out  = out + 1;\n  }\n  consume(item);\n}\n// producer thread\nwhile(true) {\n  item = produce(); \n  region in, out, buffer {\n    await((in–out) < N);\n    buffer[in % N] = item;\n ",
+    "image_count": 0,
+    "vector_paths": 12
+  },
+  {
+    "page": 92,
+    "characters": 557,
+    "preview": "CCR pros and cons\n• On the surface seems like a definite step up\n– Programmer focuses on variables to be protected, \ncompiler generates appropriate semaphores (etc)\n– Compiler can also check that shared variables are \nnever accessed outside a CCR\n– (still rely on programmer annotating correctly ?)\n• But await(<expr>) is problematic…\n– What to do if the (arbitrary) <expr> is not true? \n– very difficult to work out when it becomes true?\n– Solution ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 93,
+    "characters": 591,
+    "preview": "Monitors\n• Monitors are similar to CCRs (implicit mutual exclusion), \nbut modify them in two ways\n– Waiting is limited to explicit condition variables\n– All related routines are combined together, along with \ninitialization code, in a single construct\n• Idea is that only one thread can ever be executing \n‘within’ the monitor\n– If a thread calls a monitor method, it will block (enqueue) \nif another thread is holding the monitor\n– Hence all methods",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 94,
+    "characters": 703,
+    "preview": "Example Monitor syntax\nAll related data and \nmethods kept together\nmonitor <foo> {\nmonitor <foo> {\n // declarations of shared variables \n // declarations of shared variables \nShared variables only \naccessible from within \nmonitor methods\n // set of procedures (or methods) \n procedure P1(...) { ... }\n procedure P2(...) { ... }\n ...\n procedure PN(...) { ... }\n // set of procedures (or methods) \n procedure P1(...) { ... }\n procedure P2(...) { ... }\n",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 95,
+    "characters": 748,
+    "preview": "Condition Variables (Queues)\n• Mutual exclusion not always sufficient\n– Condition synchronization -- e.g., wait for a condition to occur\n• Monitors allow condition variables (aka condition queues)\n– Explicitly declared and managed by programmer\n– NB: No integrated counter – not a stateful semaphore!\n– Support three operations:\nwait(cv) { \n   suspend thread and add it to the queue for CV,\n   release monitor lock; \n}\nsignal(cv) { \n   if any threads",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 96,
+    "characters": 1108,
+    "preview": "Monitor Producer-Consumer solution? \nmonitor ProducerConsumer {\n int in, out, buffer[N]; \n condition notfull = TRUE, notempty = FALSE; \nmonitor ProducerConsumer {\n int in, out, buffer[N]; \n condition notfull = TRUE, notempty = FALSE; \nIf buffer is full,\nwait for consumer\nIf buffer was empty,\nsignal the consumer\nIf buffer is empty,\nwait for producer\nIf buffer was full,\nsignal the producer\n15\n procedure produce(item) { \n   if ((in-out) == N) wait(n",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 97,
+    "characters": 647,
+    "preview": "Does this work?\n• Depends on implementation of wait() & signal()\n• Imagine two threads, T1 and T2\n– T1 enters the monitor and calls wait(C) – this suspends T1, \nplaces it on the queue for C, and unlocks the monitor\n– Next T2 enters the monitor, and invokes signal(C)\n– Now T1 is unblocked (i.e. capable of running again)… \n– … but can only have one thread active inside a monitor!\n• If we let T2 continue (signal-and-continue), T1 must queue for \nre-",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 98,
+    "characters": 652,
+    "preview": "Signal-and-Wait (“Hoare Monitors”)\n• Consider the queue E to enter the monitor\n– If monitor is occupied, threads are added to E\n– May not be FIFO, but should be fair.\n• If thread T1 waits on C, added to queue C\n• If T2 enters monitor & signals, waking T1\n– T2 is added to a new queue S “in front of” E\n– T1 continues and eventually exits (or re-waits)\n• Some thread on S chosen to resume \n– Only admit a thread from E when S is empty.\nNote: C is one ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 99,
+    "characters": 483,
+    "preview": "Signal-and-Wait pros and cons\n• We call signal() exactly when condition is true, then \ndirectly transfer control to waking thread\n– Hence condition will still be true! \n• But more difficult to implement… \n• And can be complex to reason about (a call to signal may \nor may not result in a context switch)\n– Hence we must ensure that any invariants are maintained \nat time we invoke signal()\n• With these semantics, our example is broken:\n– We signal()",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 100,
+    "characters": 1134,
+    "preview": "Same code as slide 15\nSame code as slide 15\nMonitor Producer-Consumer solution? \nmonitor ProducerConsumer {\n int in, out, buf[N]; \n condition notfull,notempty; \nmonitor ProducerConsumer {\n int in, out, buf[N]; \n condition notfull,notempty; \nIf buffer is full,\nwait for consumer\nIf buffer was empty,\nsignal the consumer\nRace\nRace\nIf buffer is empty,\nwait for producer\nIf buffer was full,\nsignal the producer\nRace\nRace\n19\n procedure produce(item) { \n  ",
+    "image_count": 0,
+    "vector_paths": 62
+  },
+  {
+    "page": 101,
+    "characters": 414,
+    "preview": "Signal-and-Continue\n• Alternative semantics introduced by Mesa \nprogramming language (Xerox PARC).\n• An invocation of signal() moves a thread from the \ncondition queue C to the entry queue E\n– Invoking threads continues until exits (or waits).\n• Simpler to build…  but now not guaranteed that \ncondition holds (is true) when resume!\n– Other threads may have executed after the signal, but \nbefore you continue.\n20\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 102,
+    "characters": 904,
+    "preview": "Signal-and-Continue example (1)\nP1 wakes up \ndespite !(not full)\nP1 wakes up \ndespite !(not full)\nP1 tries to enter,\nenqueued on E\nP1 tries to enter,\nenqueued on E\nP1 waits \nas !(not \nfull)\nP1 enters\nP1 enters\nP1 waits \nas !(not \nfull)\nP1\nP2\nP2 enters\nP2 enters\nP2 tries to enter, \nenqueued on E\nP2 tries to enter, \nenqueued on E\nP2 inserts item, \nsets !(not full)\nP2 inserts item, \nsets !(not full)\nBuffer\nfull\nfull\nnot full\nnot full\nfull\nfull\nC1\nC1",
+    "image_count": 0,
+    "vector_paths": 1687
+  },
+  {
+    "page": 103,
+    "characters": 492,
+    "preview": "Signal-and-Continue example (2)\n• Consider multiple producer-consumer threads\n1. P1 enters. Buffer is full so blocks on queue for C\n2. C1 enters.\n3. P2 tries to enter; occupied, so queues on E\n4. C1 continues, consumes, and signals C (“notfull”)\n5. P1 unblocks; monitor occupied, so queues on E\n6. C1 exits, allowing P2 to enter\n7. P2 fills buffer, and exits monitor\n8. P1 resumes and tries to add item – BUG!\n• Hence must re-test condition: \n i.e. w",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 104,
+    "characters": 1314,
+    "preview": "if() replaced with while() for conditions\nif() replaced with while() for conditions\nMonitor Producer-Consumer solution? \nmonitor ProducerConsumer {\n int in, out, buf[N]; \n condition notfull, notempty; \nmonitor ProducerConsumer {\n int in, out, buf[N]; \n condition notfull, notempty; \nWhile buffer is full,\nwait for consumer\nIf buffer was empty,\nsignal the consumer\nWhile buffer is empty,\nwait for producer\nIf buffer was full,\nsignal the producer\n23\n p",
+    "image_count": 0,
+    "vector_paths": 114
+  },
+  {
+    "page": 105,
+    "characters": 458,
+    "preview": "Monitors: summary\n• Structured concurrency control\n– groups together shared data and methods\n– (today we’d call this object-oriented)\n• Considerably simpler than semaphores, but still perilous \nin places\n• May be overly conservative sometimes: \n– e.g. for MRSW cannot have >1 reader in monitor\n– Typically must work around with entry and exit methods \n(BeginRead(), EndRead(), BeginWrite(), etc)\n• Exercise: sketch a working MRSW monitor \nimplementat",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 106,
+    "characters": 236,
+    "preview": "Concurrency in practice\n• Seen a number of abstractions for concurrency \ncontrol \n– Mutual exclusion and condition synchronization \n• Next let’s look at some concrete examples:\n– POSIX pthreads (C/C++ API) \n– FreeBSD kernels\n– Java.\n25\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 107,
+    "characters": 734,
+    "preview": "Example: pthreads (1)\n• Standard (POSIX) threading API for C, C++, etc\n• mutexes, condition variables, and barriers\n• Mutexes are essentially binary semaphores:\nint pthread_mutex_init(pthread_mutex_t *mutex, ...);\nint pthread_mutex_lock(pthread_mutex_t *mutex); \nint pthread_mutex_trylock(pthread_mutex_t *mutex);\nint pthread_mutex_unlock(pthread_mutex_t *mutex);\nint pthread_mutex_init(pthread_mutex_t *mutex, ...);\nint pthread_mutex_lock(pthread_mu",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 108,
+    "characters": 935,
+    "preview": "Example: pthreads (2)\n• Condition variables are Mesa-style:\nint pthread_cond_init(pthread_cond_t *cond, ...); \nint pthread_cond_wait(pthread_cond_t *cond,\n  pthread_mutex_t *mutex);\nint pthread_cond_signal(pthread_cond_t *cond);\nint pthread_cond_broadcast(pthread_cond_t *cond);\nint pthread_cond_init(pthread_cond_t *cond, ...); \nint pthread_cond_wait(pthread_cond_t *cond,\n  pthread_mutex_t *mutex);\nint pthread_cond_signal(pthread_cond_t *cond);\nin",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 109,
+    "characters": 853,
+    "preview": "Example: pthreads (3)\n• Barriers: explicit synchronization mechanism\n• Wait until all threads reach some point\n• E.g., in discrete event simulation, all parallel threads \nmust complete one epoch before any begin on the next\nint pthread_barrier_init(pthread_barrier_t *b, ...,  N);\nint pthread_barrier_wait(pthread_barrier_t *b);\nint pthread_barrier_init(pthread_barrier_t *b, ...,  N);\nint pthread_barrier_wait(pthread_barrier_t *b);\npthread_barrier_",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 110,
+    "characters": 512,
+    "preview": "Example: FreeBSD kernel\n• Kernel provides spin locks, mutexes, conditional variables, \nreader-writer + read-mostly locks\n– Semantics (roughly) modelled on POSIX threads\n• A variety of deferred work primitives\n•\n“Fully preemptive” and highly threaded\n– (e.g., interrupt processing in threads)\n– Interesting debugging tools\n– such as DTrace, lock\n– contention measurement,\n• lock-order checking\n• Further details are in 2019’s\nlecture 8 ...\n For modern",
+    "image_count": 4,
+    "vector_paths": 3
+  },
+  {
+    "page": 111,
+    "characters": 795,
+    "preview": "Example: Java synchronization (1)\n•\nInspired by monitors – objects have intrinsic locks\n•\nSynchronized methods:\npublic synchronized void myMethod() throws ...{\n    // This code runs with the intrinsic lock held.\n}\npublic synchronized void myMethod() throws ...{\n    // This code runs with the intrinsic lock held.\n}\n•\nSynchronized statements:\npublic void myMethod() throws ...{\n    synchronized(this) {     \n        // This code runs with the intrins",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 112,
+    "characters": 585,
+    "preview": "Example: Java synchronization (2)\n•\nObjects have condition variables for guarded blocks\n•\nwait() puts the thread to sleep:\npublic synchronized void waitDone() {\n    while (!done) {\n        wait();\n    }\n}\npublic synchronized void waitDone() {\n    while (!done) {\n        wait();\n    }\n}\n•\nnotify() and notifyAll() wake threads up:\npublic synchronized void notifyDone() {\n    done = true;\n    notifyAll();\n}\npublic synchronized void notifyDone() {\n   ",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 113,
+    "characters": 548,
+    "preview": "Example: Java synchronization (3)\n• Java also specifies memory consistency and atomicity \nproperties that make some lock-free concurrent access safe – \nif used very carefully\n– We will consider lock-free structures later in the term\n• java.util.concurrent (especially as of Java 8) includes many \nhigher-level primitives –for example, thread pools, concurrent \ncollections, semaphores, cyclic barriers, …\n• Because Java is a type-safe, managed langua",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 114,
+    "characters": 785,
+    "preview": "Parallel C++ Extensions: Cilk and OpenMP\n• Cilk allowed a function call to be ‘spawned’ to another worker \nand requires all the results to be ready at the ‘sync’ boundary.\n• OpenMP embeds parallelisation suggestions in #pragma \ndirectives.\n// OpenMP C/C++\ndouble sum_array(double A[], int len)\n{  double sum = 0.0;\n   #pragma omp parallel for\n   for (int i = 0; i < len; i++) \n        Sum += Normalise(a[i]);\n \n   return sum;\n}\n// Cilk C/C++\ncilk int",
+    "image_count": 0,
+    "vector_paths": 4
+  },
+  {
+    "page": 115,
+    "characters": 705,
+    "preview": "Parallel Iteration in Modern HLLs\n• C# Example using Parallel.ForEach to sum an array of doubles.\n• Localised iterations (without locks) from each worker are \ncombined (under a lock) into the final result.\nThe local iteration initial partial \nresult (as a unit lambda)\ndouble[] sequence = …\nThe worker’s loop body\nParallel.ForEach(sequence,\n    () => 0.0d,\n    (x, loopState, partialResult) =>  { return Normalize(x) + partialResult; },\n    (localPar",
+    "image_count": 0,
+    "vector_paths": 7
+  },
+  {
+    "page": 116,
+    "characters": 581,
+    "preview": "Concurrency Primitives: Summary\n• Concurrent systems require means to ensure:\n– Safety (mutual exclusion in critical sections), and\n– Progress (condition synchronization)\n• Spinlocks (busy wait); semaphores; MRSWs, CCRs, and \nmonitors\n– Signal-and-Wait vs. Signal-and-Continue\n• Many of these are used in practice\n– Subtle minor differences can be dangerous\n– Much care required to avoid bugs, especially where concurrency \nis a bolt-on to an existin",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 117,
+    "characters": 514,
+    "preview": "Summary + next time\n•\nMulti-Reader Single-Writer (MRSW) locks\n•\nAlternatives to semaphores/locks:\n– Conditional critical regions (CCRs)\n– Monitors\n– Condition variables\n– Signal-and-wait vs. signal-and-continue semantics\n•\nConcurrency primitives in practice\n•\nConcurrency primitives wrap-up\n•\nNext time:\n– Problems with concurrency: deadlock, livelock, priorities\n– Resource allocation graphs; deadlock {prevention, detection, recovery}\n– Priority an",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 118,
+    "characters": 119,
+    "preview": "Concurrent systems\nLecture 5: Liveness and Priority Guarantees\nDr David J Greaves\n(Thanks to Dr Robert N. M. Watson)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 119,
+    "characters": 297,
+    "preview": "Reminder from last time\n• Multi-Reader Single-Writer (MRSW) locks\n• Alternatives to semaphores/locks:\n– Conditional critical regions (CCRs)\n– Monitors\n– Condition variables\n– Signal-and-wait vs. signal-and-continue semantics\n• Concurrency primitives in practice\n• Concurrency primitives wrap-up\n2\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 120,
+    "characters": 762,
+    "preview": "From last time: primitives summary\n•\nConcurrent systems require means to ensure:\n– Safety (mutual exclusion in critical sections), and\n– Progress (condition synchronization)\n•\nSpinlocks (busy wait); semaphores; CCRs and monitors\n– Hardware primitives for synchronisation\n– Signal-and-Wait vs. Signal-and-Continue\n•\nMany of these are still used in practice\n– Subtle minor differences can be dangerous\n– Require care to avoid bugs – e.g., “lost wakeups",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 121,
+    "characters": 302,
+    "preview": "This time\n• Liveness properties\n• Deadlock\n– Requirements\n– Resource allocation graphs and detection\n– Prevention – the Dining Philosophers Problem – and \nrecovery\n• Thread priority and the scheduling problem\n• Priority inversion and priority inheritance\n• Limits to parallelisation and automation. \n4\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 122,
+    "characters": 471,
+    "preview": "Liveness properties\n• From a theoretical viewpoint must ensure that \nwe eventually make progress, i.e. want to avoid\n– Deadlock (threads sleep waiting for one another), and\n– Livelock (threads execute but make no progress)\n• Practically speaking, also want good performance\n– No starvation (single thread must make progress)\n– (more generally may aim for fairness) \n– Minimality (no unnecessary waiting or signalling)\n• The properties are often at od",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 123,
+    "characters": 734,
+    "preview": "(Compositional) Deadlock\n• Set of k threads go asleep and cannot wake up\n– each can only be woken by another who’s asleep!\n• Real-life example (Kansas, 1920s): \n“When two trains approach each other at a crossing, both shall come to \na full stop and neither shall start up again until the other has gone.”\n• In concurrent programs, tends to involve the taking of mutual \nexclusion locks, e.g.:\nRisk of deadlock if \nboth threads get here \nsimultaneousl",
+    "image_count": 0,
+    "vector_paths": 11
+  },
+  {
+    "page": 124,
+    "characters": 608,
+    "preview": "Requirements for deadlock\n• Like all concurrency bugs, deadlock may be rare (e.g. imagine \n<cond> is mostly false)\n• In practice there are four necessary conditions\n1. Mutual Exclusion: resources have bounded #owners\n2. Hold-and-Wait: can acquire Rx and wait for Ry\n3. No Preemption: keep Rx until you release it\n4. Circular Wait: cyclic dependency\n• Require all four to hold for deadlock\n–. But most modern systems always satisfy 1, 2, 3 \n• Tempting",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 125,
+    "characters": 362,
+    "preview": "Resource allocation graphs\n• Graphical way of thinking about deadlock:\n– Circles are threads (or processes)\n– Boxes are single-owner resources (e.g. mutexes)\n– Edges show lock hold and wait conditions\n– A cycle means we (will) have deadlock.\nDashed line T->R\nT wants resource R\nThick line R->T means\nT holds resource R\nT1\nT3\nT2\nDeadlock!\nDeadlock!\nRa\nRb\nRc\nRd\n8\n",
+    "image_count": 0,
+    "vector_paths": 85
+  },
+  {
+    "page": 126,
+    "characters": 486,
+    "preview": "Resource allocation graphs (2)\n• Can generalize to resources which can have K \ndistinct users (c/f semaphores)\n• Absence of a cycle means no deadlock…\n– but presence only means may encounter deadlock, e.g.\nT1\nT3\nT2\nT4\nResource in \nquantity 1\nResource in \nquantity 1\nRa(1)\nRb(2)\nRc(2)\nRd(1)\n9\nResource in quantity 2\nResource in quantity 2\nNo deadlock: If T1 releases Rb, then \nT2’s acquire of Rb can be satisfied\nNo deadlock: If T1 releases Rb, then \n",
+    "image_count": 0,
+    "vector_paths": 162
+  },
+  {
+    "page": 127,
+    "characters": 325,
+    "preview": "Resource allocation graphs (3)\n• Another generalisation is for threads to have several \npossible ways forward and that are able to select \naccording to which locks have already been taken.\n• Read up on generalised AND-OR wait-for graphs for \nthose interested (link will be on course web site).\n• [This slide non-examinable].\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 128,
+    "characters": 393,
+    "preview": "Deadlock Design Approaches\n1. Ensure it never happens\n– Deadlock (static) prevention (using code structure rules)\n– Deadlock (dynamic) avoidance (cycle finding or Banker’s Alg)\n2. Let it happen, but recover\n– Deadlock (dynamic) detection & recovery\n3. Ignore it! \n– The so-called “Ostrich Algorithm” ;-)\n– “Have you tried turning it off and back on again?”\n– Very widely used in practice! \n11\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 129,
+    "characters": 737,
+    "preview": "Deadlock Static Prevention\n1. Mutual Exclusion: resources have bounded #owners\n–\nCould always allow access… but probably unsafe ;-(\n–\nHowever can help e.g. by using MRSW locks \n2. Hold-and-Wait: can get Rx and wait for Ry\n–\nRequire that we request all resources simultaneously; deny the \nrequest if any resource is not available now\n–\nBut must know maximal resource set in advance = hard?\n3. No Preemption: keep Rx until you release it\n–\nStealing a r",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 130,
+    "characters": 549,
+    "preview": "Example: Dining Philosophers\n• 5 philosophers, 5 forks, round table…\nSemaphore forks[] = new Semaphore[5];\nSemaphore forks[] = new Semaphore[5];\nwhile(true) {        // philosopher i\n   think();\n   wait(fork[i]);\n   wait(fork[(i+1) % 5];\n   eat(); \n   signal(fork[i]);\n   signal(fork[(i+1) % 5];\n}\nwhile(true) {        // philosopher i\n   think();\n   wait(fork[i]);\n   wait(fork[(i+1) % 5];\n   eat(); \n   signal(fork[i]);\n   signal(fork[(i+1) % 5];\n}",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 131,
+    "characters": 660,
+    "preview": "Example: Dining Philosophers\n• (one) Solution: always take lower fork first \nSemaphore forks[] = new Semaphore[5];\nSemaphore forks[] = new Semaphore[5];\nwhile(true) {        // philosopher i \n   think();\n   first = MIN(i, (i+1) % 5);\n   second = MAX(i, (i+1) % 5); \n   wait(fork[first]);\n   wait(fork[second];\n   eat(); \n   signal(fork[second]);\n   signal(fork[first]);\n}\nwhile(true) {        // philosopher i \n   think();\n   first = MIN(i, (i+1) % 5",
+    "image_count": 0,
+    "vector_paths": 35
+  },
+  {
+    "page": 132,
+    "characters": 594,
+    "preview": "Deadlock Dynamic Avoidance\n• Prevention aims for deadlock-free “by design”\n• Deadlock avoidance is a dynamic scheme: \n– Assumption: We know maximum possible resource allocation \nfor every process / thread\n– Assumption: A process granted all desired resources will \ncomplete, terminate, and free its resources\n– Track actual allocations in real-time\n– When a request is made, only grant  if guaranteed no deadlock \neven if all others take max resource",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 133,
+    "characters": 802,
+    "preview": "Deadlock detection (anticipation)\n• Deadlock detection is a dynamic scheme that determines if deadlock \nexists (or would exist if we granted a request)\n– Principle: At a some moment in execution, examine resource allocations and \ngraph\n– Determine if there is at least one plausible sequence of events in which all \nthreads could make progress\n– I.e., check that we are not in an unsafe state in which no further sequences can \ncomplete without deadl",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 134,
+    "characters": 771,
+    "preview": "Banker’s Algorithm (1)\n• Have m distinct resources and n threads\n• V[0:m-1], vector of currently available resources\n• A, the m x n resource allocation matrix, and\nR, the m x n (outstanding) request matrix\n– Ai,j is the number of objects of type j owned by i\n– Ri,j is the number of objects of type j needed by i\n• Proceed by successively marking rows in A for \nthreads that are not part of a deadlocked set \n– If we cannot mark all rows of A we have",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 135,
+    "characters": 550,
+    "preview": "Banker’s Algorithm (2)\n• Mark all zero rows of A (since a thread holding zero \nresources can’t be part of deadlock set)\n• Initialize a working vector W[0:m-1] to V\n– W[] describes any free resources at start, plus any \nresources released by a hypothesized sequence of \nsatisfied threads freeing and terminating \n• Select an unmarked row i of A s.t. R[i] <= W\n– (i.e. find a thread who’s request can be satisfied)\n– Set W = W + A[i]; mark row i, and r",
+    "image_count": 0,
+    "vector_paths": 11
+  },
+  {
+    "page": 136,
+    "characters": 826,
+    "preview": "Banker’s Algorithm: Example 1\n• Five threads and three resources (none free)\n  W\n  W\n       A         R         V\n       A         R         V\nX Y Z\n0 0 0 \nX Y Z\n0 0 0 \nX Y Z\n0 1 0 \nX Y Z\n0 1 0 \nX Y Z\n3 1 3 \nX Y Z\n3 1 3 \nX Y Z\n5 2 4 \nX Y Z\n5 2 4 \nX Y Z\n5 2 5 \nX Y Z\n5 2 5 \nX Y Z\n7 2 5 \nX Y Z\n7 2 5 \n     X Y Z     X Y Z     X Y Z \nT0   0 1 0     0 0 0     0 0 0 \nT1   2 0 0     2 0 2 \nT2   3 0 3     0 0 0 \nT3   2 1 1     1 0 0 \nT4   0 0 1     0 0 2\n",
+    "image_count": 0,
+    "vector_paths": 88
+  },
+  {
+    "page": 137,
+    "characters": 649,
+    "preview": "Banker’s Algorithm: Example 2\n• Five threads and three resources (none free)\n  W\n  W\n       A         R         V\n       A         R         V\nX Y Z\n0 0 0 \nX Y Z\n0 0 0 \nX Y Z\n0 1 0 \nX Y Z\n0 1 0 \nCannot find a row in \nR <= W!!\n     X Y Z     X Y Z     X Y Z \nT0   0 1 0     0 0 0     0 0 0 \nT1   2 0 0     2 0 2 \nT2   3 0 3     0 0 1 \nT3   2 1 1     1 0 0 \nT4   0 0 1     0 0 2\n     X Y Z     X Y Z     X Y Z \nT0   0 1 0     0 0 0     0 0 0 \nT1   2 0 ",
+    "image_count": 0,
+    "vector_paths": 24
+  },
+  {
+    "page": 138,
+    "characters": 619,
+    "preview": "Deadlock recovery\n• What can we do when we detect deadlock?\n• Simplest solution: kill something!\n– Ideally someone in the deadlock set ;-)\n• Brutal, and not guaranteed to work \n– But sometimes the best (only) thing we can do \n– E.g. Linux OOM killer (better than system reboot?)\n– … Or not – often kills the X server! \n• Could also resume from checkpoint\n– Assuming we have one\n• In practice computer systems seldom detect or recover \nfrom deadlock: ",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 139,
+    "characters": 701,
+    "preview": "Livelock\n• Deadlock is at least ‘easy’ to detect by humans\n– System basically blocks & stops making any progress\n• Livelock is less easy to detect as threads continue to run… \nbut do nothing useful\n• Often occurs from trying to be clever, e.g.:\nLivelock if both \nthreads get here \nsimultaneously\n// thread 1\nlock(X);\n ...\n while (!trylock(Y)) {\n   unlock(X); \n   yield();\n   lock(X); \n } \n ...\n// thread 2\nlock(Y);\n  ... \n  while(!trylock(X)) {\n    u",
+    "image_count": 0,
+    "vector_paths": 11
+  },
+  {
+    "page": 140,
+    "characters": 769,
+    "preview": "Scheduling and thread priorities\n• Which thread should run when >1 runnable? E.g., if:\n– A thread releases a contended lock and continues to run\n– CV broadcast wakes up several waiting threads\n• Many possible scheduling policies; e.g.,\n– Round robin – rotate between threads to ensure progress\n– Fixed priorities – assign priorities to threads, schedule highest– \ne.g., real-time > interactive >  bulk > idle-time\n– Dynamic priorities – adjust priori",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 141,
+    "characters": 580,
+    "preview": "Priority inversion\n• Another liveness problem…\n– Due to interaction between locking and scheduler\n• Consider three threads: T1, T2, T3\n– T1 is high priority, T2 medium priority, T3 is low\n– T3 gets lucky and acquires lock L… \n– … T1 preempts T3 and sleeps waiting for L…\n– … then T2 runs, preventing T3 from releasing L!\n– Priority inversion: despite having higher priority and no shared \nlock, T1 waits for lower priority thread T2\n• This is not dea",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 142,
+    "characters": 548,
+    "preview": "Priority inheritance\n• Typical solution is priority inheritance: \n– Temporarily boost priority of lock holder to that of the \nhighest waiting thread\n– T3 would have run with T1’s priority while holding a lock \nT1 was waiting for – preventing T2 from preempting T3\n– Concrete benefits to system interactivity \n– (some RT systems (like VxWorks) allow you specify on a \nper-mutex basis [to Rover’s detriment ;-])\n• Windows “solution”\n– Check if any read",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 143,
+    "characters": 679,
+    "preview": "Problems with priority inheritance\n• Hard to reason about resulting behaviour: heuristic\n• Works for locks\n– More complex than it appears: propagation might need to be \npropagated across chains containing multiple locks\n– (How might we handle reader-writer locks?)\n• How about condition synchronisation, res. allocation?\n– With locks, we know what thread holds the lock\n– Semaphores do not record which thread might issue a signal or \nrelease an allo",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 144,
+    "characters": 557,
+    "preview": "Limits to Parallelisation\nDepending on how it is coded, a program or task can exhibit \nvarious levels of dependency between its parts:\n• No dependencies (embarassingly parallel): No dependencies \nbetween work units, such as Mandelbrot pixel or JPEG tile.\n• Data dependencies: where the result of one computation is \nneeded for others\n• Control dependencies: where its not known if a result will be \nneeded.\n• One can speculate on both types of depend",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 145,
+    "characters": 488,
+    "preview": "Available Parallelism of a task.\nExample for parallel speedup. 35 units of work run across four servers, showing\ndata dependency arcs as typically found.  Arcs implicitly exist between all \nadjacent work unit boxes.\n• With one worker/core, this uses 35 units of time.\n• On an infinite number of cores (or 4) it uses 4+8+2=14.\n• (Can be schedulled on 3 cores in 16 units, 2 in ...)\n• Available parallelism is 35/14 = 2.5.\n28\n(From section 4.2 of “Mode",
+    "image_count": 1,
+    "vector_paths": 3
+  },
+  {
+    "page": 146,
+    "characters": 1278,
+    "preview": "Auto-parallelisation possibilities\n•\nA lot of old code and classic algorithms are expressed imperatively and \ndesigned for single-threaded execution.\n•\nAutomatic parallelisation of legacy software is sometimes a problem, but there\nare pitfalls (that allegedly do not arise with declarative expression).\npublic static int associative_reduction_example(int starting)\n{  int vr = 0;\n   for (int i=0;i<15;i++) // or also i+=4\n   {  int vx = (i+starting)*",
+    "image_count": 0,
+    "vector_paths": 5
+  },
+  {
+    "page": 147,
+    "characters": 1290,
+    "preview": "Mutable arrays (and collections) are the biggest pain for \nauto-parallelisation.\n•\nThe main memory of a computer is a powerful mechanism: random access to any \nlocation is exploitable in an HLL using the `array’ construct:\n         double sequence[] = new double [100000000];\n•\nAlgorithm design for early computers was influenced by small memories and tape \ndrives but then moved to using the array as much as possible.\n•\nPure functional/declarative ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 148,
+    "characters": 451,
+    "preview": "Summary + next time\n• Liveness properties\n• Deadlock\n– Requirements\n– Resource allocation graphs and detection\n– Prevention – the Dining Philosophers Problem – and recovery\n• Thread priority and the scheduling problem\n• Priority inversion and inheritance\n• Limits to parallelisation.\n• Next time:\n– Concurrency without shared data\n– Active objects; message passing\n– Composite operations; transactions\n– ACID properties; isolation; serialisability\n31",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 149,
+    "characters": 179,
+    "preview": "Concurrent systems\nLecture 6: Concurrency without shared data, composite operations\n and transactions, and serialisability\nDr David J Greaves\n(Thanks to Dr Robert N. M. Watson)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 150,
+    "characters": 628,
+    "preview": "Reminder from last time\n•\nLiveness properties\n•\nDeadlock (requirements; resource allocation graphs; detection; \nprevention; recovery)\n•\nThe Dining Philosophers\n•\nPriority inversion\n•\nPriority inheritance\nConcurrency is so hard!\nConcurrency is so hard!\nIf only there were some way that programmers could accomplish useful concurrent \ncomputation without…\nIf only there were some way that programmers could accomplish useful concurrent \ncomputation wit",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 151,
+    "characters": 631,
+    "preview": "This time\n•\nConcurrency without shared data\n– Use same hardware+OS primitives, but expose higher-level models via \nsoftware libraries or programming languages\n•\nActive objects\n– Ada\n•\nMessage passing; the Actor model\n– Occam, Erlang\n•\nComposite operations\n– Transactions, ACID properties\n– Isolation and serialisability\n•\nHistory graphs; good (and bad) schedules\nThis material has significant overlap with databases and distributed \nsystems – but is ",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 152,
+    "characters": 759,
+    "preview": "Concurrency without shared data\n• The examples so far have involved threads which can \narbitrarily read & write shared data\n– A key need for mutual exclusion has been to avoid race-\nconditions (i.e. ‘collisions’ on access to this data)\n• An alternative approach is to have only one thread \naccess any particular piece of data\n– Different threads can own distinct chunks of data\n• Retain concurrency by allowing other threads to ask for \noperations to",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 153,
+    "characters": 683,
+    "preview": "Example: Active Objects\n• A monitor with an associated server thread\n– Exports an entry for each operation it provides\n– Other (client) threads ‘call’ methods\n– Call returns when operation is done\n• All complexity bundled up in an active object\n– Must manage mutual exclusion where needed\n– Must queue requests from multiple threads\n– May need to delay requests pending conditions\n• E.g. if a producer wants to insert but buffer is full\n5\nObservation",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 154,
+    "characters": 919,
+    "preview": "Producer-Consumer in Ada\nClause is active only \nwhen condition is true\nACCEPT dequeues a \nclient request and \nperforms the operation\nSingle thread: no need \nfor mutual exclusion\nNon-deterministic choice \nbetween a set of \nguarded ACCEPT clauses\ntask-body ProducerConsumer is \n  ...\n  loop \n    SELECT \n      when count < buffer-size\n        ACCEPT insert(item) do\n          // insert item into buffer\n        end;\n      count++; \n    or\n      when co",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 155,
+    "characters": 768,
+    "preview": "Message passing\n• Dynamic invocations between threads can be thought of \nas general message passing\n– Thread X can send a message to Thread Y\n– Contents of message can be arbitrary data values\n• Can be used to build Remote Procedure Call (RPC)\n– Message includes name of operation to invoke along with as \nany parameters \n– Receiving thread checks operation name, and invokes the \nrelevant code\n– Return value(s) sent back as another message\n• (Calle",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 156,
+    "characters": 595,
+    "preview": "Message passing semantics\n• Can conceptually view sending a message to be similar to \nsending an email: \n1. Sender prepares contents locally, and then sends\n2. System eventually delivers a copy to receiver\n3. Receiver checks for messages\n• In this model, sending is asynchronous:\n–.Sender doesn’t need to wait for message delivery\n–.(but they may, of course, choose to wait for a reply)\n–.Bounded FIFO may ultimately apply sender back pressure\n• Rece",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 157,
+    "characters": 204,
+    "preview": "Synchronous Message Passing\n• FSM view: both (all) participating FSMs execute the message passing primitive \nsimultaneously.\n• Send and receive operations must be part of edge guard (before the slash).\n9\n",
+    "image_count": 1,
+    "vector_paths": 3
+  },
+  {
+    "page": 158,
+    "characters": 175,
+    "preview": "Asynchronous Message Passing\n• We will normally assume asynchronous unless obviously or \nexplicitly otherwise.\n• Send and receive operations in action part (after slash). \n10\n",
+    "image_count": 1,
+    "vector_paths": 3
+  },
+  {
+    "page": 159,
+    "characters": 496,
+    "preview": "Message passing advantages\n• Copy semantics avoid race conditions\n– At least directly on the data\n• Flexible API: e.g. \n– Batching: can send K messages before waiting; and can similarly \nbatch a set of replies\n– Scheduling: can choose when to receive, who to receive from, \nand which messages to prioritize\n– Broadcast: can send messages to many recipients\n• Works both within and between machines\n– i.e. same design works for distributed systems\n• E",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 160,
+    "characters": 852,
+    "preview": "Example: Occam\n• Language based on Hoare’s Communicating Sequential Processes (CSP) formalism\n– A projection of a process algebra into a real-world language\n• No shared variables\n• Processes synchronously communicate via channels\n<channel> ? <variable>    // an input process\n<channel> ! <expression>  // an output process\n<channel> ? <variable>    // an input process\n<channel> ! <expression>  // an output process\n•\nBuild complex processes via SEQ,",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 161,
+    "characters": 844,
+    "preview": "Example: Erlang\n•\nFunctional programming language designed in mid 80’s, made popular \nmore recently (especially in eternal systems such as telephone network).\n•\nImplements the actor model\n•\nActors: lightweight language-level processes\n– Can spawn() new processes very cheaply\n•\nSingle-assignment: each variable is assigned only once, and thereafter is \nimmutable\n– But values can be sent to other processes\n•\nGuarded receives (as in Ada, occam)\n– Mes",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 162,
+    "characters": 751,
+    "preview": "Producer-Consumer in Erlang\n-module(producerconsumer).\n-export([start/0]).\n-module(producerconsumer).\n-export([start/0]).\nInvoking start() will \nspawn an actor…\nstart() -> \n  spawn(fun() -> loop() end).\nstart() -> \n  spawn(fun() -> loop() end).\nreceive matches \nmessages to patterns\nexplicit tail-recursion is \nrequired to keep the \nactor alive…\n… so if send ‘stop’, \nprocess will terminate.\nloop() ->  \n  receive \n    {produce, item } ->\n      enter",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 163,
+    "characters": 724,
+    "preview": "Message passing: summary\n• A way of sidestepping (at least some of) the issues with \nshared memory concurrency\n– No direct access to data => no data race conditions\n– Threads choose actions based on message\n• Explicit message passing can be awkward\n– Many weird and wonderful languages ;-)\n• Can also use with traditional languages, e.g. \n– Transparent messaging via RPC/RMI\n– Scala, Kilim (actors on Java),  Bastion for Rust, …\n15\nWe have eliminated",
+    "image_count": 0,
+    "vector_paths": 39
+  },
+  {
+    "page": 164,
+    "characters": 648,
+    "preview": "Composite operations\n• So far have seen various ways to ensure safe concurrent access to \na single object\n– e.g. monitors, active objects, message passing\n• More generally want to handle composite operations:\n– i.e. build systems which act on multiple distinct objects\n• As an example, imagine an internal bank system which allows \naccount access via three method calls: \nint amount = getBalance(account);\nbool credit(account, amount);\nbool debit(acc",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 165,
+    "characters": 772,
+    "preview": "Composite operations\n• Consider two concurrently executing client threads:\n– One wishes to transfer 100 quid from the savings account to the \ncurrent account \n– The other wishes to learn the combined balance\n// thread 2: check balance\n  s = getBalance(savings);\n  c = getBalance(current);\n  tot = s + c;\n// thread 1: transfer 100\n// from savings->current\n  debit(savings, 100); \n  credit(current, 100);\n// thread 2: check balance\n  s = getBalance(sav",
+    "image_count": 0,
+    "vector_paths": 48
+  },
+  {
+    "page": 166,
+    "characters": 439,
+    "preview": "Problems with composite operations \nTwo separate kinds of problem here:\n1. Insufficient Isolation\n– Individual operations being atomic is not enough\n– E.g., want the credit & debit making up the transfer to \nhappen as one operation\n– Could fix this particular example with a new transfer() \nmethod, but not very general ...\n2. Fault Tolerance\n– In the real-word, programs (or systems) can fail\n– Need to make sure we can recover safely\n18\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 167,
+    "characters": 596,
+    "preview": "Transactions\n• Want programmer to be able to specify that a set of operations should \nhappen atomically, e.g. \n// transfer amt from A -> B\ntransaction {\n if (getBalance(A) > amt) { \n    debit(A, amt); \n    credit(B, amt);\n    return true; \n  } else return false;\n}\n// transfer amt from A -> B\ntransaction {\n if (getBalance(A) > amt) { \n    debit(A, amt); \n    credit(B, amt);\n    return true; \n  } else return false;\n}\n• A transaction either executes",
+    "image_count": 0,
+    "vector_paths": 7
+  },
+  {
+    "page": 168,
+    "characters": 910,
+    "preview": "ACID Properties\nWant committed transactions to satisfy four properties:\n• Atomicity: either all or none of the transaction’s operations are performed \n– Programmer doesn’t need to worry about clean up\n• Consistency: a transaction transforms the system from one consistent \nstate to another – i.e., preserves invariants\n– Programmer must ensure e.g. conservation of money\n• Isolation: each transaction executes [as if] isolated from the concurrent \nef",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 169,
+    "characters": 468,
+    "preview": "ACID Properties\nCan group these into two categories\n1.\nAtomicity & Durability deal with making sure the system is safe \neven across failures\n– (A) No partially complete txactions\n– (D) Transactions previously reported as committed don’t disappear, \neven after a system crash\n2.\nConsistency & Isolation ensure correct behavior even in the face \nof concurrency\n– (C) Can always code as if invariants in place\n– (I) Concurrently executing transactions a",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 170,
+    "characters": 672,
+    "preview": "Isolation\n• To ensure a transaction executes in isolation could just have a \nserver-wide lock… simple!\n// transfer amt from A -> B\ntransaction {  // acquire server lock\n if (getBalance(A) > amt) { \n    debit(A, amt); \n    credit(B, amt);\n    return true; \n  } else return false;\n}              // release server lock\n// transfer amt from A -> B\ntransaction {  // acquire server lock\n if (getBalance(A) > amt) { \n    debit(A, amt); \n    credit(B, amt)",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 171,
+    "characters": 781,
+    "preview": "Isolation – Serialisability\n• The idea of executing transactions serially (one after the other) \nis a useful model for the programmer:\n– To improve performance, transaction systems execute many \ntransactions concurrently\n– But programmers must only observe behaviours consistent with a \npossible serial execution: serialisability\n• Consider two transactions, T1 and T2\nT1 transaction {\n  s = getBalance(S);\n  c = getBalance(C);\n  return (s + c);\n}\nT2",
+    "image_count": 0,
+    "vector_paths": 9
+  },
+  {
+    "page": 172,
+    "characters": 536,
+    "preview": "Isolation – serialisability\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n• First case is a serial execution and hence serialisable\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n• Second case is not serial as transactions are interleaved\n– Its results are identical to serially executing T2 and then T1\n– The schedule is therefore serialisable\n• Informally: it is serialisable because we have only swapped the \nexecution orders of non-confl",
+    "image_count": 0,
+    "vector_paths": 693
+  },
+  {
+    "page": 173,
+    "characters": 427,
+    "preview": "Isolation – serialisability\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n• This execution is neither serial nor serialisable\n– T1 sees inconsistent values: old S and new C\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n• This execution is also neither serial nor serialisable\n– T1 sees inconsistent values: new S, old C\n• Both orderings swap conflicting operations such that there is \nno matching serial execution\n25\n",
+    "image_count": 0,
+    "vector_paths": 693
+  },
+  {
+    "page": 174,
+    "characters": 436,
+    "preview": "Conflict Serialisability\n• There are many flavours of serialisability\n• Conflict serialisability is satisfied for a schedule S if \n(and only if):\n– It contains the same set of operations as some serial \nschedule T; and \n– All conflicting operations are ordered the same way as \nin T\n• Define conflicting as non-commutative\n– I.e., differences are permitted between the execution \nordering and T, but they can’t have a visible impact\n26\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 175,
+    "characters": 555,
+    "preview": "History graphs\n• Can construct a graph for any execution schedule:\n– Nodes represent individual operations, and \n– Arrows represent “happens-before” relations \n• Insert edges between operations within a given transaction in \nprogram order (i.e., as written)\n• Insert edges between conflicting operations operating on the \nsame objects, ordered by execution schedule\n– e.g. A.credit(), A.debit() commute [don’t conflict]\n– A.credit() and A.addInterest",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 176,
+    "characters": 354,
+    "preview": "History graphs: good schedules\nT1:\nCOMMIT\nSTART\nS.getBalance\nC.getBalance\nT2:\nSTART\nCOMMIT\nS.debit\nC.credit\nT1:\nCOMMIT\nSTART\nS.getBalance\nC.getBalance\nSTART\nCOMMIT\nS.debit\nC.credit\nT2:\n• Same schedules as before (both ok)\n• Can easily see that everything in T1 either happens \nbefore everything in T2, or vice versa\n– Hence schedule can be serialised\n28\n",
+    "image_count": 0,
+    "vector_paths": 737
+  },
+  {
+    "page": 177,
+    "characters": 493,
+    "preview": "History graphs: bad schedules\nT1:\nCOMMIT\nSTART\nS.getBalance\nC.getBalance\nT2:\nSTART\nCOMMIT\nS.debit\nC.credit\nT1:\nCOMMIT\nSTART\nS.getBalance\nC.getBalance\nSTART\nCOMMIT\nS.debit\nC.credit\nT2:\n• Cycles indicate that schedules are bad :-(\n• Neither transaction strictly “happened before” the other:\n– Arrows from T1 to T2 mean “T1 must happen before T2”\n– But arrows from T2 to T1 => “T2 must happen before T1”\n– Notice the cycle in the graph!\n• Can’t both be ",
+    "image_count": 0,
+    "vector_paths": 737
+  },
+  {
+    "page": 178,
+    "characters": 875,
+    "preview": "Same as earlier slide.\nIsolation – serialisability\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n•\nThis execution is neither serial nor serialisable\n– T1 sees inconsistent values: old S and new C\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n•\nThis execution is also neither serial nor serialisable\n–\nT1 sees inconsistent values: new S, old C\n•\nBoth orderings swap conflicting operations such that there is no matching serial execution\nThe ",
+    "image_count": 0,
+    "vector_paths": 742
+  },
+  {
+    "page": 179,
+    "characters": 471,
+    "preview": "Summary + next time\n• Concurrency without shared data (Active Objects)\n• Message passing, actor model (Occam, Erlang)\n• Composite operations; transactions; ACID properties\n• Isolation and serialisability\n• History graphs; good (and bad) schedules\n• Next time – more on transactions:\n– Isolation vs. strict isolation; enforcing isolation\n– Two-phase locking; rollback\n– Timestamp ordering (TSO); optimistic concurrency control (OCC)\n– Isolation and co",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 180,
+    "characters": 210,
+    "preview": "Concurrent systems\nLecture 7: Isolation vs. Strict Isolation,\n2-Phase Locking (2PL), Time Stamp Ordering (TSO), and\nOptimistic Concurrency Control (OCC) \nDr David J Greaves\n(Thanks to Dr Robert N. M. Watson)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 181,
+    "characters": 258,
+    "preview": "Reminder from last time\n•\nConcurrency without shared data\n– Active objects\n•\nMessage passing; the actor model\n– Occam, Erlang\n•\nComposite operations\n– Transactions, ACID properties\n– Isolation and serialisability\n•\nHistory graphs; good (and bad) schedules\n2\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 182,
+    "characters": 1306,
+    "preview": "Last time: isolation – serialisability\n•\n    The idea of executing transactions serially (one after the other) is a useful model\n–\n   We want to run transactions concurrently \n–\n   But the result should be as if they ran serially\n•\n    Consider two transactions, T1 and T2\nT1 transaction {\n  s = getBalance(S);\n  c = getBalance(C);\n  return (s + c);\n}\nT1 transaction {\n  s = getBalance(S);\n  c = getBalance(C);\n  return (s + c);\n}\nT2 transaction {\n  ",
+    "image_count": 0,
+    "vector_paths": 57
+  },
+  {
+    "page": 183,
+    "characters": 888,
+    "preview": "From last lecture\nFrom last lecture\nIsolation – serialisability\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n•\nThis execution is neither serial nor serialisable\n–\nT1 sees inconsistent values: old S and new C\nT1:\nS.getBalance\nC.getBalance\nS.debit\nC.credit\nT2:\n•\nThis execution is also neither serial nor serialisable\n–\nT1 sees inconsistent values: new S, old C\n•\nBoth orderings swap conflicting operations such that there is no matching serial \n",
+    "image_count": 0,
+    "vector_paths": 789
+  },
+  {
+    "page": 184,
+    "characters": 446,
+    "preview": "This time\n• Effects of bad schedules\n• Isolation vs. strict isolation; enforcing isolation\n• Two-phase locking; rollback\n• Timestamp ordering (TSO)\n• Optimistic concurrency control (OCC)\n• Isolation and concurrency summary.\nThis lecture considers how the transaction implementation \nitself can provide transactional (ACID) guarantees\nThis lecture considers how the transaction implementation \nitself can provide transactional (ACID) guarantees\n5\n",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 185,
+    "characters": 1043,
+    "preview": "Effects of bad schedules\n•\nLost Updates\n– T1 updates (writes) an object, but this is then overwritten by concurrently \nexecuting T2\n– (also called a write-write conflict, WaW)\nLack of atomicity: \noperation results “lost”\nLack of atomicity: \noperation results “lost”\n•\nDirty Reads\n– T1 reads an object which has been updated an uncommitted transaction T2\n– (also called a read-after-write conflict, RaW)  \n•\nUnrepeatable Reads\nLack of isolation: \npart",
+    "image_count": 0,
+    "vector_paths": 195
+  },
+  {
+    "page": 186,
+    "characters": 683,
+    "preview": "Isolation and strict isolation\n• Ideally want to avoid all three problems\n• Two ways: Strict Isolation and Non-Strict Isolation \n– Strict Isolation: guarantee we never experience lost updates, dirty \nreads, or unrepeatable reads\n– Non-Strict Isolation: let transaction continue to execute despite \npotential problems (i.e., more optimistic)\n• Non-strict isolation usually allows more concurrency but can lead \nto complications\n– E.g. if T2 reads some",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 187,
+    "characters": 429,
+    "preview": "Enforcing isolation\n• In practice there are a number of techniques we can \nuse to enforce isolation (of either kind)\n• We will look at:\n– Two-Phase Locking (2PL); \n– Timestamp Ordering (TSO); and\n– Optimistic Concurrency Control (OCC)\n• More complete descriptions and examples of these \napproaches can be found in:\nOperating Systems, Concurrent and Distributed Software \nDesign, Jean Bacon and Tim Harris, Addison-Wesley 2003.\n8\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 188,
+    "characters": 415,
+    "preview": "Two-phase locking (2PL)\n• Associate a lock with every object\n– Could be mutual exclusion, or MRSW\n• Transactions proceed in two phases:\n– Expanding Phase: during which locks are acquired but \nnone are released\n– Shrinking Phase: during which locks are released, and no \nfurther are acquired\n• Operations on objects occur in either phase, \nproviding appropriate locks are held\n– Guarantees serializable execution \n9\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 189,
+    "characters": 880,
+    "preview": "2PL example\nAcquire a read lock \n(shared) before ‘read’ A\nUpgrade to a write lock \n(exclusive) before write A\nExpanding \nPhase\nAcquire a write lock \n(exclusive) before write B\nRelease locks when done \nto allow concurrency\nShrinking \nPhase\n// transfer amt from A -> B\ntransaction {\n readLock(A); \n if (getBalance(A) > amt) { \n    writeLock(A);    \n    debit(A, amt); \n    writeLock(B); \n    credit(B, amt);\n    writeUnlock(B);\n    addInterest(A); \n   ",
+    "image_count": 0,
+    "vector_paths": 12
+  },
+  {
+    "page": 190,
+    "characters": 854,
+    "preview": "Problems with 2PL\n• Requires knowledge of which locks required:\n– Complexity arises if complex control flow inside a transaction\n– Some transactions look up objects dynamically\n– But can be automated in many systems\n– User may declare affected objects statically to assist checker tool or have built-in \nmechanisms in high-level language (HLL) compilers. \n● Risk of deadlock:\n– Can attempt to impose a partial order\n– Or can detect deadlock and abort",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 191,
+    "characters": 893,
+    "preview": "Strict(er) 2PL example\nExpanding \nPhase\nRetain lock on B here to \nensure strict isolation\nUnlock All \nPhase\n// transfer amt from A -> B\ntransaction {\n readLock(A); \n if (getBalance(A) > amt) { \n    writeLock(A);    \n    debit(A, amt); \n    writeLock(B); \n    credit(B, amt);\n    addInterest(A);\n    tryCommit(return=true); \n  } else {\n    readUnlock(A); \n    tryCommit(return=false);\n} on commit, abort {\n    unlock(A);\n    unlock(B);\n}\n// transfer a",
+    "image_count": 0,
+    "vector_paths": 58
+  },
+  {
+    "page": 192,
+    "characters": 507,
+    "preview": "2PL: rollback\n• Recall that transactions can abort\n– Could be due to run-time conflicts (non-strict 2PL), or \ncould be programmed (e.g. on an exception)\n• Using locking for isolation works, but means that \nupdates are made ‘in place’\n– i.e. once acquire write lock, can directly update\n– If transaction aborts, need to ensure no visible effects\n• Rollback is the process of returning the world to \nthe state it in was before the transaction started\n–",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 193,
+    "characters": 434,
+    "preview": "Why might a transaction abort?\n• Some failures are internal to transaction systems:\n– Transaction T2 depends on T1, and T1 aborts\n– Deadlock is detected between two transactions\n– Memory is exhausted or a system error occurs\n• Some are programmer-triggered:\n– Transaction self-aborted – e.g., debit() failed due to \ninadequate balance\n• Some failures must be programmer visible\n• Others may simply trigger retry of the transaction\n14\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 194,
+    "characters": 497,
+    "preview": "Implementing rollback: undo\n• One strategy is to undo operations, e.g.\n– Keep a log of all operations, in order: O1, O2, .. On\n– On abort, undo changes of On, O(n-1), .. O1\n• Must know how to undo an operation:\n– Assume we log both operations and parameters\n– Programmer can provide an explicit counter action\n• UNDO(credit(A, x) ⇒ debit(A, x));\n• May not be sufficient (e.g. setBalance(A, x))\n– Would need to record previous balance, which we may \nn",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 195,
+    "characters": 464,
+    "preview": "Implementing rollback: copy\n• A more brute-force approach is to take a copy of an \nobject before [first] modification\n– On abort, just revert to original copy\n• Has some advantages: \n– Doesn’t require programmer effort\n– Undo is simple, and can be efficient (e.g. if there are many \noperations, and/or they are complex)\n• However can lead to high overhead if objects are \nlarge … and may not be needed if don’t abort!\n– Can reduce overhead with parti",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 196,
+    "characters": 954,
+    "preview": "Timestamp ordering (TSO)\n• 2PL and Strict 2PL are widely used in practice\n– But can limit concurrency (certainly the latter)\n– And must be able to deal with deadlock\n• Time Stamp Ordering (TSO) is an alternative approach:\n– As a transaction begins, it is assigned a timestamp – the proposed \neventual (total) commit order / serialisation\n– Timestamps are comparable, and unique (can think of as e.g. current \ntime – or a logical incrementing number)\n",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 197,
+    "characters": 856,
+    "preview": "TSO example 1\nT1 transaction {\n  s = getBalance(S);\n  c = getBalance(C);\n  return = s + c;\n}\nT2 transaction {  \n  debit(S, 100); \n  credit(C, 100);\n  return true;\n}\nT1 transaction {\n  s = getBalance(S);\n  c = getBalance(C);\n  return = s + c;\n}\nT2 transaction {  \n  debit(S, 100); \n  credit(C, 100);\n  return true;\n}\nImagine that objects S and C start off with version 10\n1.\nT1 and T2 both start concurrently: \n•\nT1 gets timestamp 27, T2 gets timestam",
+    "image_count": 0,
+    "vector_paths": 57
+  },
+  {
+    "page": 198,
+    "characters": 719,
+    "preview": "TSO example 2\nT1 transaction {\n  s = getBalance(S);\n  c = getBalance(C);\n  return = s + c;\n}\nT2 transaction {  \n  debit(S, 100); \n  credit(C, 100);\n  return true;\n}\nT1 transaction {\n  s = getBalance(S);\n  c = getBalance(C);\n  return = s + c;\n}\nT2 transaction {  \n  debit(S, 100); \n  credit(C, 100);\n  return true;\n}\nAs before, S and C start off with version 10\n1.\nT1 and T2 both start concurrently: \n•\nT1 gets timestamp 27, T2 gets timestamp 29\n2.\nT1",
+    "image_count": 0,
+    "vector_paths": 10
+  },
+  {
+    "page": 199,
+    "characters": 823,
+    "preview": "Advantages of TSO\n• Deadlock free\n• Can allow more concurrency than 2PL\n• Can be implemented in a decentralized fashion\n• Can be augmented to distinguish reads & writes\n– objects have read timestamp R & write timestamp W \nOnly safe to read if no-\none wrote “after” us\nREAD(O, T) {\n  if(V(T) < W(O)) abort;\n  // do actual read \n  R(O): = MAX(V(T), R(O));\n}\nREAD(O, T) {\n  if(V(T) < W(O)) abort;\n  // do actual read \n  R(O): = MAX(V(T), R(O));\n}\nR(O) h",
+    "image_count": 0,
+    "vector_paths": 13
+  },
+  {
+    "page": 200,
+    "characters": 552,
+    "preview": "However…\n• TSO needs a rollback mechanism (like 2PL)\n• TSO does not provide strict isolation:\n– Hence subject to cascading aborts\n– (Can provide strict TSO by locking objects when access is \ngranted – still remains deadlock free if can abort)\n• TSO decides a priori on one serialisation\n– Even if others might have been possible\n• And TSO does not perform well under contention\n– Will repeatedly have transactions aborting & retrying & …\n• In general",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 201,
+    "characters": 600,
+    "preview": "Optimistic concurrency control\n• OCC is an alternative to 2PL or TSO\n• Optimistic since assume conflicts are rare\n– Execute transaction on a shadow [copy] of the data\n– On commit, check if all “OK”; if so, apply updates; otherwise discard \nshadows & retry\n• “OK” means:\n– All shadows read were mutually consistent, and \n– No one else has committed “later” changes to any object that we \nare hoping to update\n• Advantages: no deadlock, no cascading ab",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 202,
+    "characters": 837,
+    "preview": "Implementing OCC (1)\n• All objects are tagged with version/generation numbers\n– e.g. the Validation timestamp of the transaction which most recently wrote its \nupdates to that object\n– Nominally stored with the object, but possibly held as a validator data structure.\n• Many threads execute transactions\n– When wish to read any object, take a shadow copy, and take note of the version \nnumber\n– If wish to write: edit the shadows (perhaps as held as ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 203,
+    "characters": 799,
+    "preview": "Implementing OCC (2)\n• NB: There are many approaches following this basic technique.\n• Various efficient schemes for shadowing \n– e.g. write buffering, page-based copy-on-write.\n• All complexity resides in the two-step validator that must reflect a \nserialisable commit order in its ultimate side effects.\n• Read validation:\n– Must ensure that all versions of data read by T (all shadows) were valid at some \nparticular time t\n– This becomes the tent",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 204,
+    "characters": 580,
+    "preview": "OCC example (1)\n• Validator keeps track of last k validated transactions, \ntheir timestamps, and the objects they updated\nTransaction\nValidation Timestamp\nObjects Updated\nWriteback Done?\nT5\n10\nA, B, C\nYes\nT6\n11\nD\nYes\nT7\n12\nA, E\nNo\nObject\nVersion\nA\n12\nB\n10\n• The versions of the objects are as follows:\n• T7 has started, but not finished, writeback \n• (A has been updated, but not E)\nC\n10\nD\n11\nWhat will happen if we now start a new \ntransaction T8 on",
+    "image_count": 0,
+    "vector_paths": 79
+  },
+  {
+    "page": 205,
+    "characters": 761,
+    "preview": "OCC example (2)\nLooking at log: have \nother transactions \ninterfered with T8’s \ninputs?\nLooking at log: have \nother transactions \ninterfered with T8’s \ninputs?\n• Consider T8: { updates(B), updates(E) };\n• T8 executes and makes shadows of B & E\n– Records timestamps: B@10, E@9\n– When done, T8 submits for validation\n• Phase 1: read validation \n– Check shadows are part of a consistent snapshot\n– Latest committed start time is 11 = OK (10, 9 < 11)\n• P",
+    "image_count": 0,
+    "vector_paths": 99
+  },
+  {
+    "page": 206,
+    "characters": 535,
+    "preview": "Issues with OCC\n• Preceding example uses a simple validator\n– Possible will abort even when don’t need to\n– (e.g. can search for a ‘better’ start time)\n• In general OCC can find more serializable schedules than \nTSO\n– Timestamps assigned after the fact, and taking the actual data \nread and written into account\n• However OCC is not suitable when high conflict\n– Can perform lots of work with ‘stale’ data => wasteful!\n– Starvation possible if confli",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 207,
+    "characters": 756,
+    "preview": "Isolation & concurrency: Summary \n•\n2PL explicitly locks items as required, then releases\n–\nGuarantees a serializable schedule \n–\nStrict 2PL avoids cascading aborts\n–\nCan limit concurrency & prone to deadlock\n•\nTSO assigns timestamps when transactions start\n–\nCannot deadlock, but may miss serializable schedules\n–\nSuitable for distributed/decentralized systems.\n•\nOCC executes with shadow copies, then validates\n–\nValidation assigns timestamps when ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 208,
+    "characters": 389,
+    "preview": "Summary + next time\n• History graphs; good (and bad) schedules\n• Isolation vs. strict isolation; enforcing isolation\n• Two-phase locking; rollback\n• Timestamp ordering (TSO)\n• Optimistic concurrency control (OCC)\n• Isolation and concurrency summary\n• Next time:\n– Transactional durability: crash recovery and logging,\n– Lock-free programming, \n– Transactional memory (if time permits).\n29\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 209,
+    "characters": 175,
+    "preview": "Concurrent systems\nLecture 8a: Durability & crash recovery. \nLecture 8b: lock-free programming & transactional memory.\nDr David J Greaves\n(Thanks to Dr Robert N. M. Watson)\n1\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 210,
+    "characters": 213,
+    "preview": "Reminder from last time\n• Isolation vs. strict isolation; enforcing isolation\n• Two-phase locking; rollback\n• Timestamp ordering (TSO)\n• Optimistic concurrency control (OCC)\n• Isolation and concurrency summary.\n2\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 211,
+    "characters": 205,
+    "preview": "This time\n• Transaction durability: crash recovery, logging\n– Write-ahead logging\n– Checkpoints\n– Recovery and Rollback\n• Advanced topics (as time permits)\n– Lock-free programming\n– Transactional memory\n3\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 212,
+    "characters": 842,
+    "preview": "Crash Recovery & Logging\n• Transactions require ACID properties\n– So far have focused on I (and implicitly C). \n• How can we ensure Atomicity & Durability? \n– Need to make sure that a transaction is always done entirely or \nnot at all\n– Need to make sure that a transaction reported as committed \nremains so, even after a crash.\n• Consider for now a fail-stop model:\n– If system crashes, all in-memory contents are lost\n– Data on disk, however, remai",
+    "image_count": 0,
+    "vector_paths": 51
+  },
+  {
+    "page": 213,
+    "characters": 522,
+    "preview": "Using persistent storage\n• Simplest “solution”: write all updated objects to disk on \ncommit, read back on reboot\n– Doesn’t work, since crash could occur during write\n– Can fail to provide Atomicity and/or Consistency\n• Instead split update into two stages\n1.\nWrite proposed updates to a write-ahead log\n2.\nWrite actual updates\n• Crash during #1 => no actual updates done\n• Crash during #2 => use log to redo, or undo.\n• Recall transactions can also ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 214,
+    "characters": 664,
+    "preview": "Write-ahead logging\n•\nLog: an ordered, append-only file on disk\n•\nContains entries like <txid, obj, op, old, new>\n– ID of transaction, object modified, (optionally) the operation \nperformed, the old value and the new value\n– This means we can both “roll forward” (redo operations) and \n“rollback” (undo operations)\n•\nWhen persisting a transaction to disk:\n– First log a special entry <txid, START>\n– Next log a number of entries to describe operation",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 215,
+    "characters": 724,
+    "preview": "Using a write-ahead log\n•\nWhen executing transactions, perform updates to objects in memory with \nlazy write back\n– I.e. the OS will normally delay all disk writes to improve efficiency.\n•\nInvariant: write log records before corresponding data.\n•\nBut when wish to commit a transaction, must first synchronously flush a \ncommit record to the log \n– Assume there is a fsync() or fsyncdata() operation or similar which allows us \nto force data out to di",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 216,
+    "characters": 512,
+    "preview": "The Big Picture\nRAM acts as a cache of disk\n(e.g. no in-memory copy of z)\nLog conceptually infinite, \nand spans RAM & Disk\nLog Entries\nObject Values\nRAM\nx = 3\ny = 27\nT3, START\nT2, ABORT\nT2, y, 17, 27\nT1, x, 2, 3\nNewer Log Entries\nOlder Log Entries\nObject Values\nLog Entries\nDisk\nx = 1\ny = 17\nz = 42\nT2, z, 40, 42\nT2, START\nT1, START\nT0, COMMIT\nT0, x, 1, 2\nT0, START\n8\nOn-disk values may be older versions of objects \n(e.g., x) – or new uncommitted va",
+    "image_count": 0,
+    "vector_paths": 211
+  },
+  {
+    "page": 217,
+    "characters": 731,
+    "preview": "Checkpoint Approach\n•\nAs described, log will get very long\n– And need to process every entry in log to recover\n•\nBetter to periodically write a checkpoint  \n1.\nFlush all current in-memory log records to disk\n2.\nWrite a special checkpoint record to log with a list of active \ntransactions\n(pointers to earliest undo/redo log entries that must be searched \nduring recovery)\n3.\nFlush all ‘dirty’ objects (i.e. ensure object values on disk are up to \ndat",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 218,
+    "characters": 474,
+    "preview": "Checkpoints and recovery\n• Key benefit of a checkpoint is it lets us focus our \nattention on possibly-affected transactions\nCheckpoint Time\nFailure Time\nTime\nT1: no action required\nT1\nT2: REDO\nT2\nT3: UNDO\nT3\nT4: REDO\nT4\nActive at checkpoint. \nHas since committed; \nand record in log.\nT5\nT5: UNDO\n10\nNot active at checkpoint, \nand still in progress.\nActive at checkpoint; \nin progress at crash. \nNot active at checkpoint. \nBut has since committed, \nan",
+    "image_count": 0,
+    "vector_paths": 302
+  },
+  {
+    "page": 219,
+    "characters": 714,
+    "preview": "Recovery algorithm\n•\nInitialize undo set U = { set of active txactions }\n•\nAlso have redo set R, initially empty.\n•\nWalk log forward as indicated by checkpoint record:\n– If see a START record, add transaction to U\n– If see a COMMIT record, move transaction from U->R\n•\nWhen hit end of log, perform undo:\n– Walk backward and undo all records for all Tx in U\n•\nWhen reach checkpoint timestamp again, Redo:\n– Walk forward, and re-do all records for all ",
+    "image_count": 0,
+    "vector_paths": 4
+  },
+  {
+    "page": 220,
+    "characters": 680,
+    "preview": "Write-ahead logging: assumptions\n•\nWhat can go wrong writing commits to disk?\n•\nEven if sector writes are atomic:\n– All affected objects may not fit in a single sector\n– Large objects may span multiple sectors\n– Trend towards copy-on-write, rather than journalled, FSes\n– Many of the problems seen with in-memory commit (ordering and atomicity) \napply to disks as well!\n•\nContemporary disks may not be entirely honest about sector size and \natomicity",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 221,
+    "characters": 638,
+    "preview": "Transactions: Summary\n•\nStandard mutual exclusion techniques not programmer friendly \nwhen dealing with >1 object\n– intricate locking (& lock order) required, or\n– single coarse-grained lock, limiting concurrency\n•\nTransactions allow us a better way:\n– potentially many operations (reads and updates) on many objects, but \nshould execute as if atomically\n– underlying system deals with providing isolation, allowing safe \nconcurrency, and even fault ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 222,
+    "characters": 157,
+    "preview": "Advanced Topics\n• Will briefly look at two advanced topics\n– lock-free data structures, and\n– transactional memory\n• Then, next time, Distributed Systems\n14\n",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 223,
+    "characters": 473,
+    "preview": "Lock-free programming\n•\nWhat’s wrong with locks?\n– Difficult to get right (if locks are fine-grained)\n– Don’t scale well (if locks too coarse-grained)\n– Don’t compose well (deadlock!)\n– Poor cache behavior (e.g. convoying)\n– Priority inversion\n– And can be expensive\n•\nLock-free programming involves getting rid of locks ... but not at the cost \nof safety! \n•\nRecall TAS, CAS, LL/SC from our early lecture: what if we used them to \nimplement somethin",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 224,
+    "characters": 852,
+    "preview": "Assumptions\n•\nWe have a cache-consistent shared-memory system (and we \nunderstand the sequential consistency model)\n•\nLow-level (assembly instructions) include:\nval  = read(addr);            // atomic read from memory\n(void) write(addr, val);      // atomic write to memory\ndone = CAS(addr, old, new);   // atomic compare-and-swap\nval  = read(addr);            // atomic read from memory\n(void) write(addr, val);      // atomic write to memory\ndone =",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 225,
+    "characters": 636,
+    "preview": "Lock-free approach\nThe delete() operation is\nleft as an example for you\nthis year.\n• Directly use CAS to update shared data\n• For example, consider a lock-free linked list of integers\n– list is singly linked, and sorted\n– Use CAS to update pointers\n– Handle CAS failure cases (i.e., races)\n• Represents the ‘set’ abstract data type, i.e.\n– find(int) -> bool\n– insert(int) -> bool\n– delete(int) -> bool\n• Return values required as operations may fail,",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 226,
+    "characters": 71,
+    "preview": "Searching a sorted list\n• find(20):\n20?\nH\n10\n30\nT\nfind(20) -> false\n18\n",
+    "image_count": 0,
+    "vector_paths": 186
+  },
+  {
+    "page": 227,
+    "characters": 99,
+    "preview": "Inserting an item with a simple store \n• insert(20):\n30  20\nH\n10\n30\nT\n20\n20\ninsert(20) -> true\n19\n",
+    "image_count": 0,
+    "vector_paths": 296
+  },
+  {
+    "page": 228,
+    "characters": 90,
+    "preview": "Inserting an item with CAS\n• insert(20):\n• insert(25):\n30  20\n30  25\nH\n10\n30\nT\n20\n25\n20\n",
+    "image_count": 0,
+    "vector_paths": 401
+  },
+  {
+    "page": 229,
+    "characters": 366,
+    "preview": "Concurrent find+insert\n• find(20)\n-> false\n• insert(20) -> true\n20?\nH\n10\n30\nT\n20\n(One issue with lock free programming is that it sometimes relies on a change\nbeing reflected through a pointer having a different value. So as store is\nreclaimed, we should sometimes quarantine recently-used memory to stop a\nchange becoming invisible – the so-called ABA problem.)\n21\n",
+    "image_count": 0,
+    "vector_paths": 292
+  },
+  {
+    "page": 230,
+    "characters": 475,
+    "preview": "Concurrent find+insert\n• find(20)\n-> false\n• insert(20) -> true\n20?\nThis thread saw 20 \nwas not in the set...\n...but this thread \nsucceeded in putting \nit in!\nH\n10\n30\nT\n20\n• Is this a correct implementation of a set?\n• Is this a correct implementation of a set?\n• Should the programmer be surprised if this happens?\n• Should the programmer be surprised if this happens?\n• What about more complicated mixes of operations?\n• What about more complicated",
+    "image_count": 0,
+    "vector_paths": 298
+  },
+  {
+    "page": 231,
+    "characters": 968,
+    "preview": "Linearisability\n• As with transactions, we return to a conceptual model to define correctness:\n– a lock-free data structure is ‘correct’ if all changes (and return values) are consistent \nwith some serial view: we call this a linearisable schedule.\n– Lock-free structure and code must be designed to tolerate all possible thread \ninterleaving patterns that may occur.\n• Hence in the previous example, we are always ok: \n– Either the insert() or the f",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 232,
+    "characters": 673,
+    "preview": "(S/W) Transactional Memory (TM)\nlock(&sharedx_mutex);\nsharedx[i] *= sharedx[j] + 17;\nunlock(&sharedx_mutex);\n• Based on optimistic concurrency control.\n• Instead of:\nlock(&sharedx_mutex);\nsharedx[i] *= sharedx[j] + 17;\nunlock(&sharedx_mutex);\natomic { \nsharedx[i] *= sharedx[j] + 17;\n}\n Use:\natomic { \nsharedx[i] *= sharedx[j] + 17;\n}\n Has “obvious” semantics, i.e. all operations within block \noccur as if atomically\n Transactional since under th",
+    "image_count": 0,
+    "vector_paths": 13
+  },
+  {
+    "page": 233,
+    "characters": 628,
+    "preview": "TM advantages\n• Simplicity: \n– Programmer just puts atomic { } around anything they want to occur in \nisolation.\n– Fine-grain concurrency is possible without manual partition of variables or \narray locations into locking groups.\n• Composability: \n– Unlike locks, atomic { } blocks nest, e.g.:\ncredit(a, x) = atomic { \nsetbal(a, readbal(a) + x);\n}\ndebit(a, x) = atomic { \nsetbal(a, readbal(a) - x);\n}\ntransfer(a, b, x) = atomic { \ndebit(a, x);\ncredit(",
+    "image_count": 0,
+    "vector_paths": 6
+  },
+  {
+    "page": 234,
+    "characters": 546,
+    "preview": "TM advantages\n• Cannot deadlock: \n– No locks, so don’t have to worry about locking order\n– (Though may get live lock if not careful)\n• No races (mostly): \n– Cannot forget to take a lock (although you can forget to put \natomic { } around your critical section ;-)) \n• Scalability: \n– High performance possible via OCC\n– No need to worry about complex fine-grained locking\n• There remains a simplicity vs. performance tradeoff\n– Too much atomic {} and ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 235,
+    "characters": 748,
+    "preview": "TM is very promising…\n• Essentially does ‘ACI’ but no D\n– no need to worry about crash recovery\n– can work entirely in memory\n– can be implemented in HLL, VM or hardware (S/W v H/W TM)\n– some hardware support emerging (take 1)\n– some hardware support emerging (take 2)\n• Last decade, both x86 and Arm offered direct support for transactions \nusing augmented cache protocols\n– … And promptly withdrawn in errata\n– Now back on the street again\n– Securi",
+    "image_count": 0,
+    "vector_paths": 4
+  },
+  {
+    "page": 236,
+    "characters": 546,
+    "preview": "Supervision questions + exercises\nThis slide likely out-of-date.\nSee web site.\n• Supervision questions\n– CS0, CS1: - get started, for discussion with supervsisors\n– CS2: Threads and synchronisation\n• Semaphores, priorities, and work distribution\n– CS3: Transactions\n• ACID properties, 2PL, TSO, and OCC\n– CS4: Miscellaneous: lock free, load balancing, work stealing.\n• See also the optional Java practical exercises\n– Java concurrency primitives and ",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 237,
+    "characters": 558,
+    "preview": "Concurrent systems: summary\n• Concurrency is essential in modern systems\n– overlapping I/O with computation,\n– exploiting multi-core,\n– building distributed systems.\n• But throws up a lot of challenges\n– need to ensure safety, allow synchronization, and avoid issues of \nliveness (deadlock, livelock, ...)\n• Major risks of bugs and over-engineering\n– generally worth running as a sequential system first,\n– too much locking leads to too much serial e",
+    "image_count": 0,
+    "vector_paths": 3
+  },
+  {
+    "page": 238,
+    "characters": 275,
+    "preview": "Summary + next time\n• Transactional durability: crash recovery and logging\n– Write-ahead logging; checkpoints; recovery.\n• Advanced topics\n– Lock-free programming\n– Transactional memory.\n• Notes on supervision exercises.\n• Next time: Distributed Systems with Dr Kleppmann\n30\n",
+    "image_count": 0,
+    "vector_paths": 3
+  }
+]

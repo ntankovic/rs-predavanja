@@ -1,0 +1,414 @@
+
+
+--- PDF PAGE 1 ---
+
+Distributed systems
+Lectures: doc. dr. sc. Nikola Tanković 
+Replication
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 2 ---
+
+https://bit.ly/rs-blic-2
+Distributed systems
+2
+2022/23
+
+
+--- PDF PAGE 3 ---
+
+http://bit.ly/rs-tu-sam
+
+
+--- PDF PAGE 4 ---
+
+Replication
+• Copy of the same data on multiple nodes 
+– Databases 
+• Apache Cassandra (Netﬂix, eBay, Uber, ...) 
+• MongoDB (primary/replica) 
+• Some of the SQL databases (*) 
+– Filesystems 
+• HDFS, NFS (Sun, 1984), ... 
+– Caches 
+• Redis, ...
+Distributed systems
+4
+2022/23
+
+
+--- PDF PAGE 5 ---
+
+Replica
+• A copy of the data is called a replica  
+• If one replica is not available, others could still 
+be available 
+• Challenges?
+Distributed systems
+5
+2022/23
+
+
+--- PDF PAGE 6 ---
+
+time
+Client A
+SET "A"
+OK
+«component»
+Leader 1
+"A"
+«component»
+Leader 2
+GET
+"A"
+Client B
+
+Distributed systems
+2022/23
+6
+
+
+--- PDF PAGE 7 ---
+
+time
+Client A
+SET "A"
+OK
+«component»
+Leader 1
+"A"
+«component»
+Leader 2
+GET
+???
+Client B
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 8 ---
+
+Synchronization
+• ... usual problems
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+8
+2022/23
+
+
+--- PDF PAGE 9 ---
+
+Retry behavior semantics
+• At-most-once: 
+– Send a message, no retries, hope for the best... 
+• At-least-once: 
+– Retry until acknowledged, update can happen 
+many times 
+• Exactly-once: 
+– Retry but be careful not to have any side eﬀects (!) 
+– Deduplicate or Idempotency
+Distributed systems
+9
+2022/23
+
+
+--- PDF PAGE 10 ---
+
+Idempotency
+• A function  is idempotent if 
+f
+ 
+f(x) = f(f(x))
+–Not ok: 
+ 
+f1(like) = like + 1
+–Idempotent version: 
+🤔
+f2(likeSet, userId) = likeSet ∪ {userId}
+Distributed systems
+10
+2022/23
+
+
+--- PDF PAGE 11 ---
+
+What about now?
+PC
+Mobile
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+11
+2022/23
+
+
+--- PDF PAGE 12 ---
+
+Similar problem
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+12
+2022/23
+
+
+--- PDF PAGE 13 ---
+
+Logical clock + Tombstone
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+13
+2022/23
+
+
+--- PDF PAGE 14 ---
+
+Synchronizing replicas
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+14
+2022/23
+
+
+--- PDF PAGE 15 ---
+
+Concurrent writes
+Author: Dr. Mar8n Kleppmann
+Distributed systems
+15
+2022/23
+
+
+--- PDF PAGE 16 ---
+
+Last Writer Wins
+time
+Client A
+SET "A"
+OK
+GET
+"A"
+«component»
+Leader 1
+"A"
+"B"
+«component»
+Leader 2
+"A"
+GET
+SET "B"
+Client B
+
+Distributed systems
+16
+2022/23
+
+
+--- PDF PAGE 17 ---
+
+Multi-Value Register
+time
+Client A
+SET "A"
+OK
+GET
+"A", "B"
+«component»
+Leader 1
+"A"
+"B"
+«component»
+Leader 2
+"A", "B"
+GET
+SET "B"
+Client B
+
+Distributed systems
+17
+2022/23
+
+
+--- PDF PAGE 18 ---
+
+Challenges
+• Vector clocks are expensive for a large number 
+of clients 
+– Can be larger than the data itself 
+• Alternatives exist 
+– Dotted version vectors (2010)  - used in Riak DB 
+• Apache Cassandra uses Physical clocks! 😳 
+• AWS Dynamo uses vector clocks
+Distributed systems
+18
+2022/23
+
+
+--- PDF PAGE 19 ---
+
+Fault probabilities
+• A replica could be unavailable (network, hardware, 
+...) 
+• Assume  as the probability of the node being 
+p
+unavailable (  is not constant in time, but for 
+example) as  replicas 
+p
+n
+•
+ 
+P(all down) = pn
+•
+ 
+P(all up) = (1 − p)n
+•
+P( ≥ 1 down) = 1 − (1 − p)n
+Distributed systems
+19
+2022/23
+
+
+--- PDF PAGE 20 ---
+
+Example
+Distributed systems
+20
+2022/23
+
+
+--- PDF PAGE 21 ---
+
+Replication fault tolerance
+• Quorum, if 2 out 3 successful
+Distributed systems
+21
+2022/23
+
+
+--- PDF PAGE 22 ---
+
+Quorum properties
+• Typical: Majority quorum 
+at most 
+ failed nodes among  nodes 
+⌊ n − 1
+2
+⌋
+n
+• Used widely: replication, consensus, distributed 
+databases, shared memory, abstract data types 
+• Can consider: heterogeneity, workload skew, 
+load, ... 
+• Quorum is used for both for reads and writes
+Distributed systems
+22
+2022/23
+
+
+--- PDF PAGE 23 ---
+
+Read and write quorums
+• writes acknowledged by  replicas 
+w
+• reads acknowledged by  replicas 
+r
+• ensure that 
+ 
+w + r > n
+• result: every read will see at least one latest write
+Distributed systems
+23
+2022/23
+
+
+--- PDF PAGE 24 ---
+
+A better "Read-write" quorum
+Distributed systems
+24
+2022/23
+
+
+--- PDF PAGE 25 ---
+
+Read repairs
+Distributed systems
+25
+2022/23
+
+
+--- PDF PAGE 26 ---
+
+Using broadcast
+• So far, we have used best-eﬀort broadcast 
+– it is ok to fail on some links, and re-ordering is possible 
+• What if we use FIFO total-order broadcast 
+– Messages will be delivered in-order based on 
+happened-before relation between events
+Distributed systems
+26
+2022/23
+
+
+--- PDF PAGE 27 ---
+
+State Machine Replication (SMR)
+• (1) Using FIFO total order broadcast to broadcast 
+every update to all replicas 
+– Replicas will get the update messages in order 
+• (2) Updates are applied in a deterministic order 
+on all replicas  
+– e.g. according to some predetermined rules 
+• (1) + (2) = SMR
+Distributed systems
+27
+2022/23
+
+
+--- PDF PAGE 28 ---
+
+State Machine Replication (SMR)
+• Close ideas: 
+– Distributed ledgers (cryptocurrencies) 
+– Smart contracts 
+– Serializable transactions 
+• Limitations: 
+– Has some update latency waiting for broadcast delivery 
+– Requires fault-tolerant total order broadcast
+Distributed systems
+28
+2022/23
+
+
+--- PDF PAGE 29 ---
+
+Replication using weaker broadcasts
+• SMR uses FIFO total order broadcast 
+• We can use weaker broadcasts if the updates are 
+commutative 
+– e.g. two updates  and  are commutative if 
+f
+g
+f(g(x)) = g(f(x))
+Distributed systems
+29
+2022/23
+
+
+--- PDF PAGE 30 ---
+
+Self-assesment
+Why do we need replication? 
+What is a replica and what are the challenges in replica 
+synchronization? 
+What are the diﬀerences between retry semantics? 
+What do we use logical clocks in replication? 
+What is a data tombstone? 
+Diﬀerence between LWW and MVR? 
+Contrast probabilities of all nodes being down or all nodes being up. 
+What is a quorum? 
+Why is state-machine replication useful?
+Distributed systems
+30
+2022/23

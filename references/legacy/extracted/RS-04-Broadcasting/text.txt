@@ -1,0 +1,275 @@
+
+
+--- PDF PAGE 1 ---
+
+Distributed systems
+Lectures: doc. dr. sc. Nikola Tanković 
+Broadcasting and delivery order
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 2 ---
+
+http://bit.ly/rs-tu-sam
+
+
+--- PDF PAGE 3 ---
+
+Broadcasting
+• Broadcast (multicast) is group communication 
+– One sender, all in a group, deliver and receive 
+– No. of members can be static (ﬁxed-size) or dynamic 
+– If a node is faulty, group members carry on 
+– Since the Internet (and many networks) support only 
+unicast, broadcasting takes that into consideration 
+• Can be best-eﬀort (messages can be dropped) 
+or reliable (with re-transmitting)
+Distributed systems
+3
+2022/23
+
+
+--- PDF PAGE 4 ---
+
+Receiving and delivering
+May send to 
+many nodes if 
+on unicast 
+network
+Distributed systems
+4
+2022/23
+
+
+--- PDF PAGE 5 ---
+
+Reliable broadcast types
+• FIFO broadcast 
+– Given 
+ and 
+ are delivered from the same node, and 
+m1
+m2
+ then 
+ is to be delivered before 
+ 
+broadcast(m1) → broadcast(m2)
+m1
+m2
+• Causal broadcast 
+– If 
+  then 
+ is to be delivered before 
+ 
+broadcast(m1) → broadcast(m2)
+m1
+m2
+• Total order broadcast 
+– Agreement on delivery order between the nodes 
+– If 
+ is delivered before 
+ on one node, then 
+ must be 
+m1
+m2
+m1
+delivered before 
+ on all nodes 
+m2
+• FIFO-total order broadcast 
+– Combine FIFO and Total order broadcast
+Distributed systems
+5
+2022/23
+
+
+--- PDF PAGE 6 ---
+
+FIFO broadcast
+• Valid delivery orders: (m2, m1, m3), (m1, m2, m3), (m1, m3, m2)
+Distributed systems
+6
+2022/23
+
+
+--- PDF PAGE 7 ---
+
+Causal broadcast
+• We observe: 
+ and 
+broadcast(m1) → broadcast(m2)
+ 
+broadcast(m1) → broadcast(m3)
+• Valid orders are: 
+(m1, m2, m3), (m1, m3, m2)
+Distributed systems
+7
+2022/23
+
+
+--- PDF PAGE 8 ---
+
+Total order broadcast
+• All nodes must get the messages in the same 
+order, e.g. m1, m2, m3
+Distributed systems
+8
+2022/23
+
+
+--- PDF PAGE 9 ---
+
+Total order broadcast
+• Alternatively m1, m3, m2
+Distributed systems
+9
+2022/23
+
+
+--- PDF PAGE 10 ---
+
+Relationships
+Distributed systems
+10
+2022/23
+
+
+--- PDF PAGE 11 ---
+
+How to broadcast reliable
+• Two goals: 
+– Ensure that messages are delivered to all nodes' 
+middleware (re-transmit etc.) 
+– Deliver message to the app in the right node (by sorting 
+in the middleware) 
+• Challenge: node & link crash
+Distributed systems
+11
+2022/23
+
+
+--- PDF PAGE 12 ---
+
+Eager reliable broadcast
+• The ﬁrst time you receive a message,  
+re-broadcast it to everyone
+O(n2)messages
+Distributed systems
+12
+2022/23
+
+
+--- PDF PAGE 13 ---
+
+Gossip protocol
+• Choose 3 other random nodes to re-transmit 
+• Eventually the message will reach all nodes
+Distributed systems
+13
+2022/23
+
+
+--- PDF PAGE 14 ---
+
+FIFO broadcast algorithm
+• Try to implement it in Python
+Distributed systems
+14
+2022/23
+
+
+--- PDF PAGE 15 ---
+
+NODES = 3 
+buffer = {} 
+delivered = [0]*NODES 
+async def on_receive(reader, _): 
+    """  
+    Handle TCP message 
+    """ 
+    while data := await reader.read(100): 
+        ldata = data.decode("utf8").split(",", maxsplit=2) 
+        sender, seq, msg = int(ldata[0]), int(ldata[1]), ldata[2].strip() 
+        print("Received:", sender, seq, msg) 
+buffer[sender, seq] = msg 
+        def deliver_message(): 
+            for n, x in enumerate(delivered): 
+                if (n, x) in buffer: 
+                    print(f"Delivering (node={n}, seq={x}):", buffer[n, x]) 
+                    del buffer[n, x] 
+                    delivered[n] += 1 
+                    return True 
+        while deliver_message(): 
+            pass 
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 16 ---
+
+Causal broadcast
+Homework!
+Distributed systems
+16
+2022/23
+
+
+--- PDF PAGE 17 ---
+
+Total order broadcast algorithm
+• Remember: all nodes receive the messages in the same order 
+• Two usual approaches, but not fault-tolerant: 
+• Single leader 
+– Designate a leader (called sequencer) - "leader election" 
+– To broadcast, send it to the leader, the leader will FIFO broadcast to the rest 
+– Leader crash is fatal 
+• Lamport clock implementation: 
+– Attach Lamport timestamp to every message 
+– Deliver in the total order of timestamps 
+– Issue: how do you know that you have seen all messages with a timestamp 
+ ? Need to use FIFO links and wait for messages with a timestamp 
+ from every node
+t < T
+t ≥ T
+Distributed systems
+17
+2022/23
+
+
+--- PDF PAGE 18 ---
+
+Issue (continued)
+C
+FIFO
+FIFO
+delivered
+FIFO
+A
+B
+pending
+wait!
+A
+(1, B)
+t
+(1, B)
+(12, B)
+(5, B)
+Distributed systems
+18
+2022/23
+
+
+--- PDF PAGE 19 ---
+
+Self-assesment
+What is broadcasting? 
+Why do we need a middleware layer? 
+Compare FIFO and causal broadcast. 
+What is a total order broadcast? 
+How do we broadcast reliably? 
+Contrast FIFO and causal broadcast algorithms. 
+Why do we use gossip protocols?
+Distributed systems
+19
+2022/23

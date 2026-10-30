@@ -1,0 +1,22 @@
+---
+title: "[Naslov predavanja]"
+lang: hr
+---
+
+## Ishodi učenja
+
+## Predznanje
+
+## Motivacija i primjer
+
+## Pojmovi i objašnjenja
+
+## Primjeri
+
+## Pretpostavke, kvarovi i kompromisi
+
+## Zadaci i rasprava
+
+## Sažetak
+
+## Dodatna literatura

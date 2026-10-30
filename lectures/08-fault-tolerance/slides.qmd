@@ -1,0 +1,32 @@
+---
+title: "Fault tolerance and recovery"
+subtitle: "Distributed Systems · Lecture 08"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Describe a recovery plan for a crash during request processing.
+
+::: {.notes}
+Prerequisites: Lectures 03 and 07. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+A worker records that a registration task finished, then crashes before acknowledging the queue message. The task is delivered again.
+
+::: {.notes}
+Recovery depends on knowing which state survives a failure. A process restart removes volatile state but may preserve durable records. A correct recovery path must reconcile those records with requests that clients may retry.
+:::
+
+## Discussion and recap
+
+How can the worker recognize that the repeated task was already completed?
+
+**Takeaway:** Design recovery and normal processing together.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

@@ -1,0 +1,9 @@
+# O ovoj knjizi {.unnumbered}
+
+Ova knjiga prati predloženi plan kolegija Raspodijeljeni sustavi na Fakultetu informatike Sveučilišta Jurja Dobrile u Puli.
+
+Nastavnik: izv. prof. dr. sc. Nikola Tanković
+
+Materijale razvijamo i uređujemo najprije na hrvatskom jeziku. Nakon pregleda hrvatske verzije pripremamo engleski prijevod, koji nastavnik zasebno pregledava.
+
+Knjiga je u pripremi. Poglavlja razvijamo redom; uspješna izrada PDF-a sama po sebi ne znači da je sadržaj spreman za nastavu.

@@ -1,0 +1,30 @@
+---
+title: "[Lecture title]"
+subtitle: "Distributed Systems · Lecture NN"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcomes
+
+<!-- Add concise outcomes from chapter.md. -->
+
+---
+
+## Motivation
+
+<!-- Introduce the running example. Add speaker notes as needed. -->
+
+---
+
+## Core concepts and worked examples
+
+<!-- Expand into focused slides aligned with chapter.md. -->
+
+---
+
+## Check for understanding
+
+---
+
+## Recap and further reading

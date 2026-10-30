@@ -1,0 +1,32 @@
+---
+title: "Security, observability, and system design"
+subtitle: "Distributed Systems · Lecture 12"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Justify a design using an invariant, failure scenario, and observable evidence.
+
+::: {.notes}
+Prerequisites: Lectures 01–11. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+A student reports a missing registration. A request identifier links the API request, durable registration record, and notification event without logging the student password.
+
+::: {.notes}
+A system design should state who can perform an action, what must remain true, and how failures will be investigated. Logs and traces help connect operations across service boundaries, but sensitive information should not be copied into diagnostic output unnecessarily.
+:::
+
+## Discussion and recap
+
+Which evidence distinguishes a failed registration from a delayed confirmation?
+
+**Takeaway:** A defensible design connects correctness, access control, and operational evidence.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

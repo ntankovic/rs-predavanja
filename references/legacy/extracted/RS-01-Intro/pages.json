@@ -1,0 +1,471 @@
+[
+  {
+    "page": 1,
+    "characters": 101,
+    "preview": "Distributed systems\nLectures: doc. dr. sc. Nikola Tanković \nIntroduction\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 2,
+    "characters": 24,
+    "preview": "http://bit.ly/rs-tu-sam\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 3,
+    "characters": 196,
+    "preview": "Course Goals\n• Introduction to theoretical concepts of designing \ndistributed systems \n• Master developing simple distributed systems \nthrough several small projects\nDistributed systems\n3\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 4,
+    "characters": 236,
+    "preview": "Practicum topics\n• Microservice architecture - implementing \nmicroservices in sync and async communication \npatterns \n• Big-data analysis - Implementing parallel and \ndistributed programs for data analysis\nDistributed systems\n4\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 5,
+    "characters": 263,
+    "preview": "Students obligations\n• Attending classes (lectures & practicum) \n–not mandatory! \n– but if so, please be active! 👍 \n• Create projects individually \n–progress will be monitored on GitHub  \n• Defend the projects and pass the oral exam\nDistributed systems\n5\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 6,
+    "characters": 225,
+    "preview": "Seeking help\n1.\nGoogling Stackoverﬂow \n2.\nOﬃcial documentation \n3.\nSlack group \n•  Answers, directions… \n→ #trebam-pomoc \n4.\nColleagues \n5.\nClass Assistant \n6.\nConsultations \n(Slack, mail, live)\nDistributed systems\n6\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 7,
+    "characters": 80,
+    "preview": "Distributed systems\nIntroduction and key deﬁnitions\nDistributed systems\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 1
+  },
+  {
+    "page": 8,
+    "characters": 51,
+    "preview": "Is smaller possible?\nDistributed systems\n8\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 9,
+    "characters": 302,
+    "preview": "Transistor limits\n• 14 nm transistor production \n– just 70 silicon atoms wide \n– 14 times wider than DNA molecule \n• Thermal limits \n– turning transistors on/oﬀ thousands of times per \nsecond \n– heat is deadly to silicon \n• Impedance rises on wires connecting transistors\nDistributed systems\n9\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 10,
+    "characters": 42,
+    "preview": "Key trends\nDistributed systems\n10\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 11,
+    "characters": 565,
+    "preview": "DEF\nDistributed system\n• A distributed system is a collection of autonomous computing \nelements that appears to its users as a single coherent system. \n \nKey features: \n– Collection of elements - hardware device or software process \n• Referred to as a node, sometimes also as an agent \n– Coherent system - users cannot perceive whether there are one or more \nelements underneath \n• Collaboration between the nodes necessary \n– Note that nodes can be ",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 12,
+    "characters": 296,
+    "preview": "Why do we need it?\n• Scaling up Facebook \n– 2004: Facebook started on a single server \n• Web server front end to assemble each user’s page. \n• Database to store posts, friend lists, etc. \n• 2008: 100M users \n• 2010: 500M users \n• 2012: 1B users \n• 2019: 2.5B users\nDistributed systems\n12\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 13,
+    "characters": 60,
+    "preview": "Concurrency vs Parallelism\n?\nDistributed systems\n13\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 14,
+    "characters": 36,
+    "preview": "... \nDistributed systems\n14\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 15,
+    "characters": 348,
+    "preview": "Concurrency\n• The ability of diﬀerent parts or units of an \nalgorithm to be executed out-of-order or in \npartial order without aﬀecting the ﬁnal \noutcome \n• Concurrency refers to the decomposability of a \nprogram, algorithm, or problem into order-\nindependent or partially-ordered components or \nunits of computation\nDistributed systems\n15\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 16,
+    "characters": 342,
+    "preview": "DEF\nConcurrency\n• Concurrency is the execution of more than one \ntask in overlapping periods \n• An important detail is that tasks are not \nnecessarily performed simultaneously (but it's \npossible) \n• That is based on the notion of Interruptability \n— tasks can be divided into smaller and \nalternating subtasks\nDistributed systems\n16\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 17,
+    "characters": 398,
+    "preview": "Parallelism\n• Parallelism is the simultaneous execution of \ntasks \n• Parallelism is a subclass of concurrency \n– There is concurrency without parallelism, but not the \nother way around  \n– Concurrency allows for parallel execution of the \nconcurrent units, which can signiﬁcantly improve the \noverall speed of the execution in multi-processor and \nmulti-core systems\nDistributed systems\n17\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 18,
+    "characters": 160,
+    "preview": "In a nutshell\n• Concurrency is about dealing with lots of things \nat once but parallelism is about doing lots of \nthings at once\nDistributed systems\n18\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 19,
+    "characters": 53,
+    "preview": "Challenges of DistSys\nDistributed systems\n19\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 20,
+    "characters": 42,
+    "preview": "Challenges\nDistributed systems\n20\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 21,
+    "characters": 42,
+    "preview": "Challenges\nDistributed systems\n21\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 22,
+    "characters": 787,
+    "preview": "Examples\nFinance and commerce\neCommerce e.g. Amazon and eBay, PayPal,  online banking \nand trading\nThe information society\nWeb information and search engines, Wikipedia; social \nnetworking: Facebook and MySpace.\nCreative industries and \nentertainment\nonline gaming,  music and film in the home, user-generated \ncontent, e.g. YouTube, Netflix\nHealthcare\nhealth informatics, on online patient records, monitoring \npatients\nEducation\ne-learning,  virtua",
+    "image_count": 2,
+    "vector_paths": 12
+  },
+  {
+    "page": 23,
+    "characters": 60,
+    "preview": "... even the Internet itself\nDistributed systems\n23\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 24,
+    "characters": 179,
+    "preview": "DEF\nBack to deﬁnition\nA distributed system is a collection of \nautonomous computing elements that appears \nto its users as a single coherent system\nDistributed systems\n24\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 25,
+    "characters": 584,
+    "preview": "Characteristic 1: Collection ...\n• ... of autonomous computing elements \n• Principle: nodes can act independently from each other \n• But in practice, nodes are programmed to achieve a common goal \n• Independence: each node has its notion of time; we cannot \nassume a global clock \n• We may also need to deal with membership → who can be a \npart of the system? \n• How to organize such a collection?  → very often as an overlay \nnetwork (through TCP/IP",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 26,
+    "characters": 409,
+    "preview": "Characteristic 2: Single coherent system\n• Since that is hard, at least appear as coherent: \nbehaving according to expectance of the users \n• The end-user should not be able to: \n– Diﬀerentiate where the data is located \n– Diﬀerentiate on which process the execution takes \nplace \n– Distribution transparency \n• There are trade-oﬀs: \n– Sometimes the system will inevitably fail\nDistributed systems\n26\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 27,
+    "characters": 44,
+    "preview": "Design goals\nDistributed systems\n27\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 28,
+    "characters": 287,
+    "preview": "Important design goals\n• We don't need a distributed system for \neverything, but when we build one, we should \nstrive for: \nG.1\n(G-1) Support for resource sharing \nG.2\n(G-2) Distribution transparency \nG.3\n(G-3) Being open - openness \nG.4\n(G-4) Scalability\nDistributed systems\n28\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 8
+  },
+  {
+    "page": 29,
+    "characters": 401,
+    "preview": "G.1\nResource sharing\n• What is a resource? \n– Peripherals, storage, data, ﬁles, services, infrastructure ... \n• Why share? \n– Costs: high-end reliable resources (reuse, eﬀectiveness) \n• Common goal \n– P2P, BitTorrent, Blockchain networks, ... \n• Good examples \n– Cloud resources (AWS S3, EC2, ...) - IaaS, PaaS, Saas \n(infrastructure, platform, software - as a service)\nDistributed systems\n29\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 30,
+    "characters": 390,
+    "preview": "G.2\nDistribution transparency\n• Hide the distribution of resources from the users \n• What is the optimal degree of transparency? \n– Full transparency comes at a great cost (hot replicas, ...) \n– Physical constraints (for start!)  \n• e.g. latency&throughput \n– Sometimes the user does not want transparency! \n• Going oﬄine on YouTube, DropBox, Google Drive...\nDistributed systems\n30\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 31,
+    "characters": 704,
+    "preview": "Important transparencies\nAccess transparency hides the diﬀerences in data \nrepresenta8on and how an object is accessed. \nLoca.on transparency enables resources to be accessed \nwithout knowledge of their physical or network loca8on (URLs, \nIPFS). \nConcurrency transparency enables several processes to operate \nconcurrently using shared resources without interference. \nLeaving resources in consistent states (e.g. transac8ons). \nReplica.on transparen",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 32,
+    "characters": 656,
+    "preview": "...continued\nFailure transparency enables the concealment of faults, allowing \nusers and applica8on programs to complete their tasks despite the \nfailure of hardware or soQware components. \nMobility/migra.on transparency allows the movement of resources \nand clients within a system without aﬀec8ng the opera8on of users \nor programs (e.g. cloud compu8ng, mobile networks). \n \nPerformance transparency allows the system to be reconﬁgured to \nimprove ",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 33,
+    "characters": 390,
+    "preview": "G.3\nOpenness\n• Adhering to the standard rules that describe the \nsyntax and semantics of individual components \n• Conforming to well-deﬁned interfaces \n• Example: IDL - interface description language, \nREST services, ... \n• Policy vs mechanism \n– Example: Caching is a mechanism \n– How to cache is a policy \n• Where, How much, Shared or private, Refreshing? \nDistributed systems\n33\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 34,
+    "characters": 592,
+    "preview": "G.4\nScalability\n• Dimensions of scalability \n– Size - easily adding more users or resources without noticeable loss of \nperformance \n• Computational, storage, and networking limits \n– Geographical - the system can be spread geographically with no \napparent latency issues \n• Sync vs. Async communication, reliability \n– Administrative - degree of how easily the system can be managed \neven if it spans many independent organizations \n• e.g. how to sh",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 35,
+    "characters": 151,
+    "preview": "How to scale?\n• Scaling up - increasing the capacity of existing \ncomponents \n• Scaling out - deploying more components\nDistributed systems\n35\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 36,
+    "characters": 196,
+    "preview": "How to scale?\n• Hide communication latencies \n– Try to avoid waiting for remote responses as much as \npossible \n– Switch synchronous communication with asynchronous\nDistributed systems\n36\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 37,
+    "characters": 316,
+    "preview": "Geo-scalability problems\n• Hard to switch from LAN to WAN \n– hard to keep synchronous interactions → latency \nincrease \n– WAN links are much more unreliable \n– No multipoint communication (broadcasting) \n• Developing naming and directory services (with scaling \nproblems of their own)\nDistributed systems\n37\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 38,
+    "characters": 317,
+    "preview": "🔥 How to develop a bad system\n• False (and often hidden) assumptions: \n– Network is reliable \n– Network is secure \n– Network is homogeneous \n– Topology does not change \n– Latency is zero \n– Bandwidth is inﬁnite \n– Transport cost is zero \n– There is one (always available) administrator\nDistributed systems\n38\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 39,
+    "characters": 77,
+    "preview": "Distributed systems\nTypes of distributed systems\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 40,
+    "characters": 381,
+    "preview": " Distributed systems types\nT1\n• Distributed computing system - high-\nperformance computing (HPC) \n– Dedicated expensive hardware in solving diﬃcult (often \nscientiﬁc) problems \nT2\n• Distributed information systems \n– Your everyday centralized, but still distributed system \nT3\n• Distributed pervasive computing \n– Often decentralized and distributed\nDistributed systems\n40\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 6
+  },
+  {
+    "page": 41,
+    "characters": 103,
+    "preview": "T1\nHPC\n• High-performance computing \n–  started with parallel computing\nDistributed systems\n41\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 2
+  },
+  {
+    "page": 42,
+    "characters": 596,
+    "preview": "Shared vs. Private memory\n– Multiprocessors (w. shared-memory) are relatively easy to \nprogram in comparison to multi-computer approaches \n– Problems arise with more cores \n– There are \"shared-memory\" models atop multi-computer \napproaches \n• Example: Map all main-memory pages (from diﬀerent \nprocessors) into one single virtual address space. If the \nprocess at processor A addresses a page P located at \nprocessor B, the OS at A traps and fetches ",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 43,
+    "characters": 54,
+    "preview": "Example: IBM Blue Gene\nDistributed systems\n43\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 44,
+    "characters": 79,
+    "preview": "IBM Blue Gene P\n• Cosmology, ﬂuid-dynamics, ...\nDistributed systems\n44\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 45,
+    "characters": 218,
+    "preview": "Also HPC: Cluster computing\n• A group of high-end systems connected via LAN \n– Homogeneous group (easy to plan/execute programs) \n– Single managing node (centralised) - e.g. Apache Spark\nDistributed systems\n45\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 46,
+    "characters": 143,
+    "preview": "Key characteristic\n• Low latency, high bandwidth interconnection \n• Usually master-slave (controller-responder)\nDistributed systems\n46\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 47,
+    "characters": 225,
+    "preview": "Grid computing\n• Homogeneous > heterogeneus \n• Several organizations often on WAN (wide-area \nnetwork)  \n• Again often used in scientiﬁc purposes \n– Particle physicists \n– Astronomy \n– Medicine\nDistributed systems\n47\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 48,
+    "characters": 80,
+    "preview": "Key characteristic\n• WAN, multiple organizations\nDistributed systems\n48\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 49,
+    "characters": 47,
+    "preview": "Cloud computing\nDistributed systems\n49\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 50,
+    "characters": 479,
+    "preview": "Cloud computing\n• Hardware: processors, routers, power management, \ncooling, security systems - customers don't get to see \nthese \n• Infrastructure: virtualization - allocating virtual \nservers, networks and storage devices \n• Platform: even higher-level abstractions, e.g. for \nstorage - example: Amazon S3, RDS, Dynamo... or \ncomputing: Amazon Lambda, or both: Google Firebase \n• Application: actual applications - GoogleMail/Docs, \nDropbox, ...\nDi",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 51,
+    "characters": 224,
+    "preview": "Is cloud computing cost-eﬀective?\n• Is outsourcing cheaper for organizations? \n• Costs: \n– Storage \n– Computing \n– Platforms \n– Bandwidth \n– SLA's... \n• OPEX vs CAPEX \n• Scaling considerations\nDistributed systems\n51\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 52,
+    "characters": 377,
+    "preview": "T2\nDistributed information systems\n• Organizations had many networked applications, \nbut the challenge was in interoperability \n– Networked application example: client-server \narchitecture \n• How to communicate application-to-application? \n– Enterprise Application Integration \n• one possible solution \n• Distributed transactions are challenging\nDistributed systems\n52\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 53,
+    "characters": 102,
+    "preview": "TPM: transaction processing monitor\nTP Monitor\nXA libraries/drivers...\nDistributed systems\n53\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 2
+  },
+  {
+    "page": 54,
+    "characters": 652,
+    "preview": "Enterprise Application Integration\n• Purpose \n– Data integration: Ensures that information in multiple systems is \nkept consistent \n– Vendor independence: Extracts business policies or rules from \napplications and implements them in the EAI system so that even \nif one of the business applications is replaced with a diﬀerent \nvendor's application, the business rules do not have to be \nreimplemented \n– Common facade: An EAI system can front-end a c",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 55,
+    "characters": 449,
+    "preview": "Enterprise Application Integration\n• Patterns \n– Mediation (intra-communication): broker between \nmultiple applications. The broker propagates the \nchanges within relevant applications \n– Federation (inter-communication): In this case, the EAI \nsystem acts as the overarching facade across multiple \napplications. All event calls from the 'outside world' to \nany of the applications are front-ended by the EAI \nsystem\nDistributed systems\n55\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 56,
+    "characters": 31,
+    "preview": "Distributed systems\n2022/23\n56\n",
+    "image_count": 4,
+    "vector_paths": 0
+  },
+  {
+    "page": 57,
+    "characters": 310,
+    "preview": "Other ways to integrate\n• File transfer \n😳\n– Not very ﬂexible \n• Shared databases \n– Risk of bottleneck \n🤯\n• RPC \n– Eﬀective, could be hard to maintain \n– The caller and Receiver should be up&running \n• Messaging \n– Enabling async communication \n🤩\n– Decoupling in time and space\nDistributed systems\n57\n2022/23\n",
+    "image_count": 5,
+    "vector_paths": 0
+  },
+  {
+    "page": 58,
+    "characters": 458,
+    "preview": "T3\nDistributed pervasive systems\n• Next generation systems in which nodes are \nsmall, mobile in (often embedded) systems that \nnaturally blend in the user's environment (IoT) \n• Sub-types (overlapping): \n– Ubiquitous computing systems - pervasive and \ncontinuously present (in interaction with users) \n– Mobile computing systems - inherently mobile \n– Sensor (and actuator) networks - sensing and actuation \nin the environment\nDistributed systems\n58\n",
+    "image_count": 2,
+    "vector_paths": 2
+  },
+  {
+    "page": 59,
+    "characters": 527,
+    "preview": "Ubiquitous systems\n• Core elements: \n– Distribution: Devices are networked, distributed, and \naccessible in a transparent manner \n– Interaction: Interaction between users and devices is highly \nunobtrusive \n– Context awareness: The system is aware of a user’s context to \noptimize interaction \n– Autonomy: Devices operate autonomously without human \nintervention and are thus highly self-managed \n– Intelligence: The system as a whole can handle a wi",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 60,
+    "characters": 417,
+    "preview": "Mobile computing\n• Key challenges: \n– Discovery: since the location changes over time, how \ncan we establish a network? Who are my peers? \n– Connectivity: no stable routes, but also no guaranteed \nconnectivity → disruption-tolerant networking \n• Example strategy: \n– pocket-switched network \n• Alice maintains a list of friend devices \n• Alice sends the message to Bob via friends only\nDistributed systems\n60\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 61,
+    "characters": 47,
+    "preview": "Sensor networks\nDistributed systems\n61\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 62,
+    "characters": 206,
+    "preview": "Sensor networks\n• Typically many nodes: 10s - 1000s \n• Simple hardware (small memory/compute/\ncommunication capacity - saving power) \n• Battery-powered (or even battery-less)\nDistributed systems\n62\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 63,
+    "characters": 44,
+    "preview": "Two extremes\nDistributed systems\n63\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 64,
+    "characters": 314,
+    "preview": "Energy conservation\n• Using duty cycles \n– A node is active during \n active time units, and then \nTactive\nsuspended for \n units, to become active again. Duty \nTsuspended\ncycle  is expressed as: \nτ\n– Typically 10-30%, but as low as 1% \n– Challenge: peer discovery and synchronization\nDistributed systems\n64\n2022/23\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 65,
+    "characters": 40,
+    "preview": "Fireﬂies\nDistributed systems\n2022/23\n65\n",
+    "image_count": 3,
+    "vector_paths": 0
+  },
+  {
+    "page": 66,
+    "characters": 281,
+    "preview": "Why does IoT keep failing?\n• Security is hard to do right \n– Huge attack surface \n• Embedded devices hard to program \n– C still dominant \n– Everything is distributed \n• Outdated software \n– Hard to do upgrades \n• Lack of standards \n– So many vendors\nDistributed systems\n66\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 67,
+    "characters": 250,
+    "preview": "Self-assesment\nHow do I deﬁne a distributed system? \nWhat are the main challenges in designing one? \nWhich types of DS can I diﬀerentiate? \nWhat are the important design goals? \nWhat types of cloud computing are there?\nDistributed systems\n67\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  }
+]

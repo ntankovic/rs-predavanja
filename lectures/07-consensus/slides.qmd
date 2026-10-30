@@ -1,0 +1,36 @@
+---
+title: "Consensus and leader election"
+subtitle: "Distributed Systems · Lecture 07"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Explain the role of a majority in a three-node consensus group.
+
+::: {.notes}
+Prerequisites: Lectures 05–06. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+Three registration metadata nodes split into a connected pair and one isolated node. The pair can make progress once a suitable leader is established.
+
+::: {.notes}
+Consensus lets participating nodes agree on decisions despite some failures. In Raft, a three-node group uses a majority of two. A node isolated from the other two cannot commit a new log entry by itself.
+:::
+
+## Discussion and recap
+
+Why should the isolated node avoid accepting independent committed updates?
+
+**Takeaway:** Agreement and progress are separate properties; a partition can prevent progress for some nodes.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::
+
+::: {.notes}
+Source: Ongaro and Ousterhout, https://raft.github.io/raft.pdf, sections 2 and 5.
+:::

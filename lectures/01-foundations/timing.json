@@ -1,0 +1,289 @@
+[
+  {
+    "slide": 1,
+    "title": "Foundations and system models",
+    "start": 0,
+    "end": 0.5,
+    "minutes": 0.5
+  },
+  {
+    "slide": 2,
+    "title": "Mark your presence (shared slide)",
+    "start": 0.5,
+    "end": 1,
+    "minutes": 0.5
+  },
+  {
+    "slide": 3,
+    "title": "A timeout after submission",
+    "start": 1,
+    "end": 3,
+    "minutes": 2
+  },
+  {
+    "slide": 4,
+    "title": "What do we need to know to answer?",
+    "start": 3,
+    "end": 4,
+    "minutes": 1
+  },
+  {
+    "slide": 5,
+    "title": "A project-submission system",
+    "start": 4,
+    "end": 7,
+    "minutes": 3
+  },
+  {
+    "slide": 6,
+    "title": "What makes it distributed?",
+    "start": 7,
+    "end": 9,
+    "minutes": 2
+  },
+  {
+    "slide": 7,
+    "title": "Distributed system or not?",
+    "start": 9,
+    "end": 11,
+    "minutes": 2
+  },
+  {
+    "slide": 8,
+    "title": "Why distribute the work?",
+    "start": 11,
+    "end": 13,
+    "minutes": 2
+  },
+  {
+    "slide": 9,
+    "title": "Facebook: scale changes the architecture",
+    "start": 13,
+    "end": 14,
+    "minutes": 1
+  },
+  {
+    "slide": 10,
+    "title": "Must everyone wait for one submission?",
+    "start": 14,
+    "end": 16,
+    "minutes": 2
+  },
+  {
+    "slide": 11,
+    "title": "Several submissions can make progress together",
+    "start": 16,
+    "end": 18,
+    "minutes": 2
+  },
+  {
+    "slide": 12,
+    "title": "Dealing with tasks vs. doing them",
+    "start": 18,
+    "end": 19,
+    "minutes": 1
+  },
+  {
+    "slide": 13,
+    "title": "Local function calls and remote requests",
+    "start": 19,
+    "end": 21,
+    "minutes": 2
+  },
+  {
+    "slide": 14,
+    "title": "Delay, capacity, and completed work",
+    "start": 21,
+    "end": 23,
+    "minutes": 2
+  },
+  {
+    "slide": 15,
+    "title": "Recall Web Apps: time to first byte",
+    "start": 23,
+    "end": 24,
+    "minutes": 1
+  },
+  {
+    "slide": 16,
+    "title": "One component fails; others keep running",
+    "start": 24,
+    "end": 25,
+    "minutes": 1
+  },
+  {
+    "slide": 17,
+    "title": "A client can be another service",
+    "start": 25,
+    "end": 25.5,
+    "minutes": 0.5
+  },
+  {
+    "slide": 18,
+    "title": "Timeout",
+    "start": 25.5,
+    "end": 26.0,
+    "minutes": 0.5
+  },
+  {
+    "slide": 19,
+    "title": "History A: the request is lost",
+    "start": 26.0,
+    "end": 27.5,
+    "minutes": 1.5
+  },
+  {
+    "slide": 20,
+    "title": "History B: the reply is lost",
+    "start": 27.5,
+    "end": 29.0,
+    "minutes": 1.5
+  },
+  {
+    "slide": 21,
+    "title": "History C: the server process crashes",
+    "start": 29.0,
+    "end": 30.0,
+    "minutes": 1
+  },
+  {
+    "slide": 22,
+    "title": "Same observation, different outcomes",
+    "start": 30.0,
+    "end": 31.0,
+    "minutes": 1
+  },
+  {
+    "slide": 23,
+    "title": "Pair exercise: should the client retry?",
+    "start": 31.0,
+    "end": 34.0,
+    "minutes": 3
+  },
+  {
+    "slide": 24,
+    "title": "A retry can overlap the original request",
+    "start": 34.0,
+    "end": 35.0,
+    "minutes": 1
+  },
+  {
+    "slide": 25,
+    "title": "State the rule before choosing the protocol",
+    "start": 35.0,
+    "end": 36.0,
+    "minutes": 1
+  },
+  {
+    "slide": 26,
+    "title": "Safety and liveness",
+    "start": 36.0,
+    "end": 37.0,
+    "minutes": 1
+  },
+  {
+    "slide": 27,
+    "title": "Safety and liveness in different systems",
+    "start": 37.0,
+    "end": 38.0,
+    "minutes": 1
+  },
+  {
+    "slide": 28,
+    "title": "A system model makes assumptions explicit",
+    "start": 38.0,
+    "end": 40.0,
+    "minutes": 2
+  },
+  {
+    "slide": 29,
+    "title": "Network assumptions: can messages get through?",
+    "start": 40.0,
+    "end": 42.0,
+    "minutes": 2
+  },
+  {
+    "slide": 30,
+    "title": "Three node-failure models",
+    "start": 42.0,
+    "end": 44.0,
+    "minutes": 2
+  },
+  {
+    "slide": 31,
+    "title": "How long should the portal wait?",
+    "start": 44.0,
+    "end": 45.0,
+    "minutes": 1
+  },
+  {
+    "slide": 32,
+    "title": "Timing models: what may we assume?",
+    "start": 45.0,
+    "end": 47.0,
+    "minutes": 2
+  },
+  {
+    "slide": 33,
+    "title": "etcd: one successful claim",
+    "start": 47.0,
+    "end": 49.0,
+    "minutes": 2
+  },
+  {
+    "slide": 34,
+    "title": "Cassandra: choose what a reply promises",
+    "start": 49.0,
+    "end": 51.0,
+    "minutes": 2
+  },
+  {
+    "slide": 35,
+    "title": "Bitcoin: confidence grows with confirmations",
+    "start": 51.0,
+    "end": 53.0,
+    "minutes": 2
+  },
+  {
+    "slide": 36,
+    "title": "Our portal: assumptions behind the promise",
+    "start": 53.0,
+    "end": 54.0,
+    "minutes": 1
+  },
+  {
+    "slide": 37,
+    "title": "🔥 How to develop a bad system",
+    "start": 54.0,
+    "end": 55.0,
+    "minutes": 1
+  },
+  {
+    "slide": 38,
+    "title": "No reply after 101 ms",
+    "start": 55.0,
+    "end": 57.0,
+    "minutes": 2
+  },
+  {
+    "slide": 39,
+    "title": "Back to the start: did the portal accept the project?",
+    "start": 57.0,
+    "end": 58.0,
+    "minutes": 1
+  },
+  {
+    "slide": 40,
+    "title": "Design the next step: did I submit on time?",
+    "start": 58.0,
+    "end": 59.5,
+    "minutes": 1.5
+  },
+  {
+    "slide": 41,
+    "title": "Homework: invoices 1, 2, 3, …",
+    "start": 59.5,
+    "end": 60.0,
+    "minutes": 0.5
+  }
+]

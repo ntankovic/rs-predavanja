@@ -1,0 +1,27 @@
+---
+title: "Communication and remote calls"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Explain why retrying a remote request can duplicate an effect.
+
+**Prerequisites:** Lectures 01–02.
+
+## Core idea
+
+A remote call can complete even when its response never reaches the caller. Retrying a state-changing operation can repeat its effect unless the receiver detects duplicate requests or the operation is idempotent.
+
+## Worked scenario
+
+A client sends the same registration request twice using one request identifier. The service stores that identifier with the result and returns the stored result for a duplicate.
+
+## Discussion
+
+What must be stored atomically to avoid a duplicate registration after a crash?
+
+## Recap
+
+A retry policy needs an explicit strategy for duplicate effects.

@@ -1,0 +1,27 @@
+---
+title: "Distributed transactions and workflows"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Identify an invariant that spans two services.
+
+**Prerequisites:** Lectures 06–08.
+
+## Core idea
+
+A workflow that changes multiple services can stop between steps. An application must decide whether it needs atomic commitment or can expose intermediate states with a recovery or compensation process. Compensation is an application action and is not always an exact undo.
+
+## Worked scenario
+
+A paid course registration reserves a seat and then requests payment. Payment fails after the seat was reserved.
+
+## Discussion
+
+What state should the student see, and how should the reservation be released?
+
+## Recap
+
+Choose coordination mechanisms from the invariant the application must preserve.

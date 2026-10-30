@@ -1,0 +1,14 @@
+## Evidencija prisutnosti {#attendance .attendance-slide}
+
+::: {.attendance-content}
+
+![](../../assets/shared/attendance-qr.svg){width=455.4 height=455.4 fig-alt="QR kod za evidenciju prisutnosti"}
+
+[https://bit.ly/rs-tu-sam](https://bit.ly/rs-tu-sam)
+
+:::
+
+::: {.notes}
+Vrijeme: 00:30–01 min (30 sekundi, unutar uvodne minute). Pozovite studente da evidentiraju prisutnost. Evidencija sama po sebi ne određuje pravila obveznog dolaska.
+:::
+

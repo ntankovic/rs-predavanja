@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="500" viewBox="0 0 1120 500">
+<title>Concurrency and parallelism</title>
+<desc>One worker interleaves tasks A and B. Two workers execute them at the same time. Equal slots illustrate equal work durations, not guaranteed speedup.</desc>
+<defs><marker id="time" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#617886"/></marker></defs>
+<rect width="1120" height="500" fill="white"/>
+<g font-family="Arial, Helvetica, sans-serif" fill="#18344b"><text x="24" y="42" font-size="30" fill="#18344b" font-weight="700" text-anchor="start">Jedan izvršitelj</text>
+<text x="1080" y="42" font-size="26" fill="#617886" font-weight="400" text-anchor="end">A i B se izmjenjuju</text>
+<text x="24" y="235" font-size="30" fill="#18344b" font-weight="700" text-anchor="start">Dva izvršitelja</text>
+<text x="1080" y="235" font-size="26" fill="#617886" font-weight="400" text-anchor="end">A i B rade istodobno</text>
+<path d="M200 67V170 M200 257V419" stroke="#e2ebf0" stroke-width="1.5" stroke-dasharray="4 7"/><path d="M345 67V170 M345 257V419" stroke="#e2ebf0" stroke-width="1.5" stroke-dasharray="4 7"/><path d="M490 67V170 M490 257V419" stroke="#e2ebf0" stroke-width="1.5" stroke-dasharray="4 7"/><path d="M635 67V170 M635 257V419" stroke="#e2ebf0" stroke-width="1.5" stroke-dasharray="4 7"/><path d="M780 67V170 M780 257V419" stroke="#e2ebf0" stroke-width="1.5" stroke-dasharray="4 7"/><path d="M925 67V170 M925 257V419" stroke="#e2ebf0" stroke-width="1.5" stroke-dasharray="4 7"/><path d="M1070 67V170 M1070 257V419" stroke="#e2ebf0" stroke-width="1.5" stroke-dasharray="4 7"/><text x="24" y="132" font-size="26" fill="#18344b" font-weight="400" text-anchor="start">Izvršitelj</text>
+<rect x="194" y="84" width="882" height="78" rx="15" fill="#f5f8fa"/><rect x="200" y="90" width="135" height="66" rx="12" fill="#dff1fb" stroke="#78b5d6" stroke-width="1.5"/><text x="267.5" y="133" font-size="30" fill="#15567b" font-weight="700" text-anchor="middle">A1</text>
+<rect x="345" y="90" width="135" height="66" rx="12" fill="#fff0da" stroke="#dcaf6a" stroke-width="1.5"/><text x="412.5" y="133" font-size="30" fill="#80531c" font-weight="700" text-anchor="middle">B1</text>
+<rect x="490" y="90" width="135" height="66" rx="12" fill="#dff1fb" stroke="#78b5d6" stroke-width="1.5"/><text x="557.5" y="133" font-size="30" fill="#15567b" font-weight="700" text-anchor="middle">A2</text>
+<rect x="635" y="90" width="135" height="66" rx="12" fill="#fff0da" stroke="#dcaf6a" stroke-width="1.5"/><text x="702.5" y="133" font-size="30" fill="#80531c" font-weight="700" text-anchor="middle">B2</text>
+<rect x="780" y="90" width="135" height="66" rx="12" fill="#dff1fb" stroke="#78b5d6" stroke-width="1.5"/><text x="847.5" y="133" font-size="30" fill="#15567b" font-weight="700" text-anchor="middle">A3</text>
+<rect x="925" y="90" width="135" height="66" rx="12" fill="#fff0da" stroke="#dcaf6a" stroke-width="1.5"/><text x="992.5" y="133" font-size="30" fill="#80531c" font-weight="700" text-anchor="middle">B3</text>
+<text x="24" y="319" font-size="26" fill="#18344b" font-weight="400" text-anchor="start">Izvršitelj 1</text>
+<rect x="194" y="271" width="882" height="78" rx="15" fill="#f5f8fa"/><text x="24" y="405" font-size="26" fill="#18344b" font-weight="400" text-anchor="start">Izvršitelj 2</text>
+<rect x="194" y="357" width="882" height="78" rx="15" fill="#f5f8fa"/><rect x="200" y="277" width="135" height="66" rx="12" fill="#dff1fb" stroke="#78b5d6" stroke-width="1.5"/><text x="267.5" y="320" font-size="30" fill="#15567b" font-weight="700" text-anchor="middle">A1</text>
+<rect x="200" y="363" width="135" height="66" rx="12" fill="#fff0da" stroke="#dcaf6a" stroke-width="1.5"/><text x="267.5" y="406" font-size="30" fill="#80531c" font-weight="700" text-anchor="middle">B1</text>
+<rect x="345" y="277" width="135" height="66" rx="12" fill="#dff1fb" stroke="#78b5d6" stroke-width="1.5"/><text x="412.5" y="320" font-size="30" fill="#15567b" font-weight="700" text-anchor="middle">A2</text>
+<rect x="345" y="363" width="135" height="66" rx="12" fill="#fff0da" stroke="#dcaf6a" stroke-width="1.5"/><text x="412.5" y="406" font-size="30" fill="#80531c" font-weight="700" text-anchor="middle">B2</text>
+<rect x="490" y="277" width="135" height="66" rx="12" fill="#dff1fb" stroke="#78b5d6" stroke-width="1.5"/><text x="557.5" y="320" font-size="30" fill="#15567b" font-weight="700" text-anchor="middle">A3</text>
+<rect x="490" y="363" width="135" height="66" rx="12" fill="#fff0da" stroke="#dcaf6a" stroke-width="1.5"/><text x="557.5" y="406" font-size="30" fill="#80531c" font-weight="700" text-anchor="middle">B3</text>
+<text x="860" y="333" font-size="26" fill="#617886" font-weight="400" text-anchor="middle">Oba su dovršena</text>
+<text x="860" y="368" font-size="23" fill="#617886" font-weight="400" text-anchor="middle">u idealiziranom primjeru</text>
+<path d="M200 454H1075" stroke="#617886" stroke-width="2" marker-end="url(#time)"/><text x="1080" y="489" font-size="23" fill="#617886" font-weight="400" text-anchor="end">Vrijeme</text>
+</g></svg>

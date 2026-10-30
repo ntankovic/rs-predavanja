@@ -1,0 +1,27 @@
+---
+title: "Partitioning and scalability"
+---
+
+*Sample chapter for the proposed course plan.*
+
+## Learning outcome
+
+Identify how a partition key can create a hotspot.
+
+**Prerequisites:** Lectures 04, 06, and 10.
+
+## Core idea
+
+Partitioning assigns different data to different nodes. The chosen key affects both query routing and load distribution. Evenly dividing identifiers does not guarantee evenly dividing traffic.
+
+## Worked scenario
+
+Registrations are partitioned by course identifier. One very popular course receives most requests during enrolment.
+
+## Discussion
+
+Why might adding nodes leave the popular course as a bottleneck?
+
+## Recap
+
+Evaluate the request distribution as well as the data distribution.

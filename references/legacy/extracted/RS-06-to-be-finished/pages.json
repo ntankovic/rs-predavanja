@@ -1,0 +1,58 @@
+[
+  {
+    "page": 1,
+    "characters": 98,
+    "preview": "Distributed systems\nLectures: doc. dr. sc. Nikola Tanković \nConsensus\nDistributed systems\n2022/23\n",
+    "image_count": 4,
+    "vector_paths": 1
+  },
+  {
+    "page": 2,
+    "characters": 419,
+    "preview": "Fault-tolerant total order broadcast\n• Total order broadcast is very important for State \nMachine Replication \n– It can be implemented by marking one node as a leader \nand sending all messages through the leader \n– The leader then uses FIFO total-order broadcast to sync \nwith replicas \n– Leader is SPOF \n– Can we transfer leadership to another node \nautomatically? → consensus algorithms\nDistributed systems\n2\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 3,
+    "characters": 308,
+    "preview": "Consensus problem\n• Several nodes want to come to an agreement \nabout a value \n• One or more nodes can propose, and the \nconsensus algorithm will decide \n• Consensus algorithm will ensure that a value is \nchosen from proposed values, and that all nodes \nagree on the same value\nDistributed systems\n3\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 4,
+    "characters": 412,
+    "preview": "Consensus vs T.O.B\n• What is the relationship between consensus and \ntotal-order broadcast? \n– Interchangeable concepts, formally equivalent [Chandra \n& Toueg, 1996] \n– T.O. Broadcast → consensus: messages are proposed \nvalues, and the ﬁrst message delivered is accepted \n– Consensus → T. O. Broadcast: we use a consensus \nprotocol to agree on the ﬁrst, second, third, ... message \nDistributed systems\n4\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 5,
+    "characters": 273,
+    "preview": "Popular consensus algorithms\n• Paxos: single-value consensus \n• Multi-Paxos: generalization to total-order \nbroadcast \n• Raft (Ongaro&Ousterhout, Stanford), \nViewstamped Replication (B. Liskov&Cowling, \nMIT), Zab (FIFO total-order by default)\nDistributed systems\n5\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 6,
+    "characters": 256,
+    "preview": "Primitive: 2PC\n• Two-phase commit \n– A necessary primitive to achieve any consensus \nalgorithm \n– Used widely in distributed, fault-tolerant databases for \nactual transaction commits \n– Here will be described in general sense\nDistributed systems\n6\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  },
+  {
+    "page": 7,
+    "characters": 212,
+    "preview": "2 Phase Commit\ntime\n«component»\nParticipant 1\nWhat do you think?\nReady!\nGo for it\nDone!\n«component»\nCoordinator\nGo for it\nWhat do you think?\nSeems ok!\nDone\n«component»\nParticipant 2\nDistributed systems\n7\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 86
+  },
+  {
+    "page": 8,
+    "characters": 73,
+    "preview": "Self-assesment\nWhy is consensus important?\nDistributed systems\n8\n2022/23\n",
+    "image_count": 2,
+    "vector_paths": 0
+  }
+]

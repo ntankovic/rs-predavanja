@@ -1,0 +1,32 @@
+---
+title: "Messaging and stream processing"
+subtitle: "Distributed Systems · Lecture 10"
+author: "assoc. prof. Nikola Tankovic, PhD"
+institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
+---
+
+## Learning outcome
+
+Explain why a message consumer may see the same event twice.
+
+::: {.notes}
+Prerequisites: Lectures 03, 05, and 08. This is a sample deck for the proposed syllabus, not a full lecture.
+:::
+
+## Worked scenario
+
+A notification consumer sends an email but loses its acknowledgement. The broker redelivers the confirmation event.
+
+::: {.notes}
+A message broker decouples the time at which a producer sends work from the time at which a consumer processes it. Under at-least-once delivery, a consumer must be prepared to receive a message more than once.
+:::
+
+## Discussion and recap
+
+Where could duplicate detection live, and what would it need to remember?
+
+**Takeaway:** A delivery guarantee must be connected to the effects performed by the consumer.
+
+::: {.notes}
+Ask students to name assumptions before proposing a solution. The complete planned scope is recorded in the lecture brief.
+:::

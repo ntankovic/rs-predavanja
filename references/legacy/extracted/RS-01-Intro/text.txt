@@ -1,0 +1,931 @@
+
+
+--- PDF PAGE 1 ---
+
+Distributed systems
+Lectures: doc. dr. sc. Nikola Tanković 
+Introduction
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 2 ---
+
+http://bit.ly/rs-tu-sam
+
+
+--- PDF PAGE 3 ---
+
+Course Goals
+• Introduction to theoretical concepts of designing 
+distributed systems 
+• Master developing simple distributed systems 
+through several small projects
+Distributed systems
+3
+2022/23
+
+
+--- PDF PAGE 4 ---
+
+Practicum topics
+• Microservice architecture - implementing 
+microservices in sync and async communication 
+patterns 
+• Big-data analysis - Implementing parallel and 
+distributed programs for data analysis
+Distributed systems
+4
+2022/23
+
+
+--- PDF PAGE 5 ---
+
+Students obligations
+• Attending classes (lectures & practicum) 
+–not mandatory! 
+– but if so, please be active! 👍 
+• Create projects individually 
+–progress will be monitored on GitHub  
+• Defend the projects and pass the oral exam
+Distributed systems
+5
+2022/23
+
+
+--- PDF PAGE 6 ---
+
+Seeking help
+1.
+Googling Stackoverﬂow 
+2.
+Oﬃcial documentation 
+3.
+Slack group 
+•  Answers, directions… 
+→ #trebam-pomoc 
+4.
+Colleagues 
+5.
+Class Assistant 
+6.
+Consultations 
+(Slack, mail, live)
+Distributed systems
+6
+2022/23
+
+
+--- PDF PAGE 7 ---
+
+Distributed systems
+Introduction and key deﬁnitions
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 8 ---
+
+Is smaller possible?
+Distributed systems
+8
+2022/23
+
+
+--- PDF PAGE 9 ---
+
+Transistor limits
+• 14 nm transistor production 
+– just 70 silicon atoms wide 
+– 14 times wider than DNA molecule 
+• Thermal limits 
+– turning transistors on/oﬀ thousands of times per 
+second 
+– heat is deadly to silicon 
+• Impedance rises on wires connecting transistors
+Distributed systems
+9
+2022/23
+
+
+--- PDF PAGE 10 ---
+
+Key trends
+Distributed systems
+10
+2022/23
+
+
+--- PDF PAGE 11 ---
+
+DEF
+Distributed system
+• A distributed system is a collection of autonomous computing 
+elements that appears to its users as a single coherent system. 
+ 
+Key features: 
+– Collection of elements - hardware device or software process 
+• Referred to as a node, sometimes also as an agent 
+– Coherent system - users cannot perceive whether there are one or more 
+elements underneath 
+• Collaboration between the nodes necessary 
+– Note that nodes can be heterogeneous, and there are no assumptions on 
+performance or size (IoT, HPC, ...)
+Distributed systems
+11
+2022/23
+
+
+--- PDF PAGE 12 ---
+
+Why do we need it?
+• Scaling up Facebook 
+– 2004: Facebook started on a single server 
+• Web server front end to assemble each user’s page. 
+• Database to store posts, friend lists, etc. 
+• 2008: 100M users 
+• 2010: 500M users 
+• 2012: 1B users 
+• 2019: 2.5B users
+Distributed systems
+12
+2022/23
+
+
+--- PDF PAGE 13 ---
+
+Concurrency vs Parallelism
+?
+Distributed systems
+13
+2022/23
+
+
+--- PDF PAGE 14 ---
+
+... 
+Distributed systems
+14
+2022/23
+
+
+--- PDF PAGE 15 ---
+
+Concurrency
+• The ability of diﬀerent parts or units of an 
+algorithm to be executed out-of-order or in 
+partial order without aﬀecting the ﬁnal 
+outcome 
+• Concurrency refers to the decomposability of a 
+program, algorithm, or problem into order-
+independent or partially-ordered components or 
+units of computation
+Distributed systems
+15
+2022/23
+
+
+--- PDF PAGE 16 ---
+
+DEF
+Concurrency
+• Concurrency is the execution of more than one 
+task in overlapping periods 
+• An important detail is that tasks are not 
+necessarily performed simultaneously (but it's 
+possible) 
+• That is based on the notion of Interruptability 
+— tasks can be divided into smaller and 
+alternating subtasks
+Distributed systems
+16
+2022/23
+
+
+--- PDF PAGE 17 ---
+
+Parallelism
+• Parallelism is the simultaneous execution of 
+tasks 
+• Parallelism is a subclass of concurrency 
+– There is concurrency without parallelism, but not the 
+other way around  
+– Concurrency allows for parallel execution of the 
+concurrent units, which can signiﬁcantly improve the 
+overall speed of the execution in multi-processor and 
+multi-core systems
+Distributed systems
+17
+2022/23
+
+
+--- PDF PAGE 18 ---
+
+In a nutshell
+• Concurrency is about dealing with lots of things 
+at once but parallelism is about doing lots of 
+things at once
+Distributed systems
+18
+2022/23
+
+
+--- PDF PAGE 19 ---
+
+Challenges of DistSys
+Distributed systems
+19
+2022/23
+
+
+--- PDF PAGE 20 ---
+
+Challenges
+Distributed systems
+20
+2022/23
+
+
+--- PDF PAGE 21 ---
+
+Challenges
+Distributed systems
+21
+2022/23
+
+
+--- PDF PAGE 22 ---
+
+Examples
+Finance and commerce
+eCommerce e.g. Amazon and eBay, PayPal,  online banking 
+and trading
+The information society
+Web information and search engines, Wikipedia; social 
+networking: Facebook and MySpace.
+Creative industries and 
+entertainment
+online gaming,  music and film in the home, user-generated 
+content, e.g. YouTube, Netflix
+Healthcare
+health informatics, on online patient records, monitoring 
+patients
+Education
+e-learning,  virtual learning environments; distance learning
+Transport and logistics
+GPS in route finding systems, map services: Google Maps, 
+Google Earth
+Science
+The Grid as an enabling technology for collaboration between 
+scientists
+Environmental management
+sensor technology to monitor  earthquakes, floods or tsunamis
+Distributed systems
+22
+2022/23
+
+
+--- PDF PAGE 23 ---
+
+... even the Internet itself
+Distributed systems
+23
+2022/23
+
+
+--- PDF PAGE 24 ---
+
+DEF
+Back to deﬁnition
+A distributed system is a collection of 
+autonomous computing elements that appears 
+to its users as a single coherent system
+Distributed systems
+24
+2022/23
+
+
+--- PDF PAGE 25 ---
+
+Characteristic 1: Collection ...
+• ... of autonomous computing elements 
+• Principle: nodes can act independently from each other 
+• But in practice, nodes are programmed to achieve a common goal 
+• Independence: each node has its notion of time; we cannot 
+assume a global clock 
+• We may also need to deal with membership → who can be a 
+part of the system? 
+• How to organize such a collection?  → very often as an overlay 
+network (through TCP/IP or UDP channels) 
+– Structured (tree/ring - well deﬁned neighbors) 
+– Unstructured (random neighbors)
+Distributed systems
+25
+2022/23
+
+
+--- PDF PAGE 26 ---
+
+Characteristic 2: Single coherent system
+• Since that is hard, at least appear as coherent: 
+behaving according to expectance of the users 
+• The end-user should not be able to: 
+– Diﬀerentiate where the data is located 
+– Diﬀerentiate on which process the execution takes 
+place 
+– Distribution transparency 
+• There are trade-oﬀs: 
+– Sometimes the system will inevitably fail
+Distributed systems
+26
+2022/23
+
+
+--- PDF PAGE 27 ---
+
+Design goals
+Distributed systems
+27
+2022/23
+
+
+--- PDF PAGE 28 ---
+
+Important design goals
+• We don't need a distributed system for 
+everything, but when we build one, we should 
+strive for: 
+G.1
+(G-1) Support for resource sharing 
+G.2
+(G-2) Distribution transparency 
+G.3
+(G-3) Being open - openness 
+G.4
+(G-4) Scalability
+Distributed systems
+28
+2022/23
+
+
+--- PDF PAGE 29 ---
+
+G.1
+Resource sharing
+• What is a resource? 
+– Peripherals, storage, data, ﬁles, services, infrastructure ... 
+• Why share? 
+– Costs: high-end reliable resources (reuse, eﬀectiveness) 
+• Common goal 
+– P2P, BitTorrent, Blockchain networks, ... 
+• Good examples 
+– Cloud resources (AWS S3, EC2, ...) - IaaS, PaaS, Saas 
+(infrastructure, platform, software - as a service)
+Distributed systems
+29
+2022/23
+
+
+--- PDF PAGE 30 ---
+
+G.2
+Distribution transparency
+• Hide the distribution of resources from the users 
+• What is the optimal degree of transparency? 
+– Full transparency comes at a great cost (hot replicas, ...) 
+– Physical constraints (for start!)  
+• e.g. latency&throughput 
+– Sometimes the user does not want transparency! 
+• Going oﬄine on YouTube, DropBox, Google Drive...
+Distributed systems
+30
+2022/23
+
+
+--- PDF PAGE 31 ---
+
+Important transparencies
+Access transparency hides the diﬀerences in data 
+representa8on and how an object is accessed. 
+Loca.on transparency enables resources to be accessed 
+without knowledge of their physical or network loca8on (URLs, 
+IPFS). 
+Concurrency transparency enables several processes to operate 
+concurrently using shared resources without interference. 
+Leaving resources in consistent states (e.g. transac8ons). 
+Replica.on transparency enables mul8ple instances of 
+resources to be used to increase reliability and performance 
+without knowledge of the replicas by users or applica8on 
+programmers.
+hLps://www.cl.cam.ac.uk/~jac22/books/ods/ods/node18.html
+Distributed systems
+31
+2022/23
+
+
+--- PDF PAGE 32 ---
+
+...continued
+Failure transparency enables the concealment of faults, allowing 
+users and applica8on programs to complete their tasks despite the 
+failure of hardware or soQware components. 
+Mobility/migra.on transparency allows the movement of resources 
+and clients within a system without aﬀec8ng the opera8on of users 
+or programs (e.g. cloud compu8ng, mobile networks). 
+ 
+Performance transparency allows the system to be reconﬁgured to 
+improve performance as loads vary. 
+ 
+Scaling transparency allows the system and applica8ons to expand in 
+scale without change to the system structure or the applica8on 
+algorithms.
+Distributed systems
+32
+2022/23
+
+
+--- PDF PAGE 33 ---
+
+G.3
+Openness
+• Adhering to the standard rules that describe the 
+syntax and semantics of individual components 
+• Conforming to well-deﬁned interfaces 
+• Example: IDL - interface description language, 
+REST services, ... 
+• Policy vs mechanism 
+– Example: Caching is a mechanism 
+– How to cache is a policy 
+• Where, How much, Shared or private, Refreshing? 
+Distributed systems
+33
+2022/23
+
+
+--- PDF PAGE 34 ---
+
+G.4
+Scalability
+• Dimensions of scalability 
+– Size - easily adding more users or resources without noticeable loss of 
+performance 
+• Computational, storage, and networking limits 
+– Geographical - the system can be spread geographically with no 
+apparent latency issues 
+• Sync vs. Async communication, reliability 
+– Administrative - degree of how easily the system can be managed 
+even if it spans many independent organizations 
+• e.g. how to share a large radio telescope as a large-scale shared 
+sensor network, security, etc.,  
+• P2P as a good example
+Distributed systems
+34
+2022/23
+
+
+--- PDF PAGE 35 ---
+
+How to scale?
+• Scaling up - increasing the capacity of existing 
+components 
+• Scaling out - deploying more components
+Distributed systems
+35
+2022/23
+
+
+--- PDF PAGE 36 ---
+
+How to scale?
+• Hide communication latencies 
+– Try to avoid waiting for remote responses as much as 
+possible 
+– Switch synchronous communication with asynchronous
+Distributed systems
+36
+2022/23
+
+
+--- PDF PAGE 37 ---
+
+Geo-scalability problems
+• Hard to switch from LAN to WAN 
+– hard to keep synchronous interactions → latency 
+increase 
+– WAN links are much more unreliable 
+– No multipoint communication (broadcasting) 
+• Developing naming and directory services (with scaling 
+problems of their own)
+Distributed systems
+37
+2022/23
+
+
+--- PDF PAGE 38 ---
+
+🔥 How to develop a bad system
+• False (and often hidden) assumptions: 
+– Network is reliable 
+– Network is secure 
+– Network is homogeneous 
+– Topology does not change 
+– Latency is zero 
+– Bandwidth is inﬁnite 
+– Transport cost is zero 
+– There is one (always available) administrator
+Distributed systems
+38
+2022/23
+
+
+--- PDF PAGE 39 ---
+
+Distributed systems
+Types of distributed systems
+Distributed systems
+2022/23
+
+
+--- PDF PAGE 40 ---
+
+ Distributed systems types
+T1
+• Distributed computing system - high-
+performance computing (HPC) 
+– Dedicated expensive hardware in solving diﬃcult (often 
+scientiﬁc) problems 
+T2
+• Distributed information systems 
+– Your everyday centralized, but still distributed system 
+T3
+• Distributed pervasive computing 
+– Often decentralized and distributed
+Distributed systems
+40
+2022/23
+
+
+--- PDF PAGE 41 ---
+
+T1
+HPC
+• High-performance computing 
+–  started with parallel computing
+Distributed systems
+41
+2022/23
+
+
+--- PDF PAGE 42 ---
+
+Shared vs. Private memory
+– Multiprocessors (w. shared-memory) are relatively easy to 
+program in comparison to multi-computer approaches 
+– Problems arise with more cores 
+– There are "shared-memory" models atop multi-computer 
+approaches 
+• Example: Map all main-memory pages (from diﬀerent 
+processors) into one single virtual address space. If the 
+process at processor A addresses a page P located at 
+processor B, the OS at A traps and fetches P from B, just as it 
+would if P had been located on a local disk. 
+• Failed to meet the expectations → abbandoned
+Distributed systems
+42
+2022/23
+
+
+--- PDF PAGE 43 ---
+
+Example: IBM Blue Gene
+Distributed systems
+43
+2022/23
+
+
+--- PDF PAGE 44 ---
+
+IBM Blue Gene P
+• Cosmology, ﬂuid-dynamics, ...
+Distributed systems
+44
+2022/23
+
+
+--- PDF PAGE 45 ---
+
+Also HPC: Cluster computing
+• A group of high-end systems connected via LAN 
+– Homogeneous group (easy to plan/execute programs) 
+– Single managing node (centralised) - e.g. Apache Spark
+Distributed systems
+45
+2022/23
+
+
+--- PDF PAGE 46 ---
+
+Key characteristic
+• Low latency, high bandwidth interconnection 
+• Usually master-slave (controller-responder)
+Distributed systems
+46
+2022/23
+
+
+--- PDF PAGE 47 ---
+
+Grid computing
+• Homogeneous > heterogeneus 
+• Several organizations often on WAN (wide-area 
+network)  
+• Again often used in scientiﬁc purposes 
+– Particle physicists 
+– Astronomy 
+– Medicine
+Distributed systems
+47
+2022/23
+
+
+--- PDF PAGE 48 ---
+
+Key characteristic
+• WAN, multiple organizations
+Distributed systems
+48
+2022/23
+
+
+--- PDF PAGE 49 ---
+
+Cloud computing
+Distributed systems
+49
+2022/23
+
+
+--- PDF PAGE 50 ---
+
+Cloud computing
+• Hardware: processors, routers, power management, 
+cooling, security systems - customers don't get to see 
+these 
+• Infrastructure: virtualization - allocating virtual 
+servers, networks and storage devices 
+• Platform: even higher-level abstractions, e.g. for 
+storage - example: Amazon S3, RDS, Dynamo... or 
+computing: Amazon Lambda, or both: Google Firebase 
+• Application: actual applications - GoogleMail/Docs, 
+Dropbox, ...
+Distributed systems
+50
+2022/23
+
+
+--- PDF PAGE 51 ---
+
+Is cloud computing cost-eﬀective?
+• Is outsourcing cheaper for organizations? 
+• Costs: 
+– Storage 
+– Computing 
+– Platforms 
+– Bandwidth 
+– SLA's... 
+• OPEX vs CAPEX 
+• Scaling considerations
+Distributed systems
+51
+2022/23
+
+
+--- PDF PAGE 52 ---
+
+T2
+Distributed information systems
+• Organizations had many networked applications, 
+but the challenge was in interoperability 
+– Networked application example: client-server 
+architecture 
+• How to communicate application-to-application? 
+– Enterprise Application Integration 
+• one possible solution 
+• Distributed transactions are challenging
+Distributed systems
+52
+2022/23
+
+
+--- PDF PAGE 53 ---
+
+TPM: transaction processing monitor
+TP Monitor
+XA libraries/drivers...
+Distributed systems
+53
+2022/23
+
+
+--- PDF PAGE 54 ---
+
+Enterprise Application Integration
+• Purpose 
+– Data integration: Ensures that information in multiple systems is 
+kept consistent 
+– Vendor independence: Extracts business policies or rules from 
+applications and implements them in the EAI system so that even 
+if one of the business applications is replaced with a diﬀerent 
+vendor's application, the business rules do not have to be 
+reimplemented 
+– Common facade: An EAI system can front-end a cluster of 
+applications, providing a single consistent access interface to 
+these applications and shielding users from having to learn to use 
+diﬀerent software packages
+Distributed systems
+54
+2022/23
+
+
+--- PDF PAGE 55 ---
+
+Enterprise Application Integration
+• Patterns 
+– Mediation (intra-communication): broker between 
+multiple applications. The broker propagates the 
+changes within relevant applications 
+– Federation (inter-communication): In this case, the EAI 
+system acts as the overarching facade across multiple 
+applications. All event calls from the 'outside world' to 
+any of the applications are front-ended by the EAI 
+system
+Distributed systems
+55
+2022/23
+
+
+--- PDF PAGE 56 ---
+
+Distributed systems
+2022/23
+56
+
+
+--- PDF PAGE 57 ---
+
+Other ways to integrate
+• File transfer 
+😳
+– Not very ﬂexible 
+• Shared databases 
+– Risk of bottleneck 
+🤯
+• RPC 
+– Eﬀective, could be hard to maintain 
+– The caller and Receiver should be up&running 
+• Messaging 
+– Enabling async communication 
+🤩
+– Decoupling in time and space
+Distributed systems
+57
+2022/23
+
+
+--- PDF PAGE 58 ---
+
+T3
+Distributed pervasive systems
+• Next generation systems in which nodes are 
+small, mobile in (often embedded) systems that 
+naturally blend in the user's environment (IoT) 
+• Sub-types (overlapping): 
+– Ubiquitous computing systems - pervasive and 
+continuously present (in interaction with users) 
+– Mobile computing systems - inherently mobile 
+– Sensor (and actuator) networks - sensing and actuation 
+in the environment
+Distributed systems
+58
+2022/23
+
+
+--- PDF PAGE 59 ---
+
+Ubiquitous systems
+• Core elements: 
+– Distribution: Devices are networked, distributed, and 
+accessible in a transparent manner 
+– Interaction: Interaction between users and devices is highly 
+unobtrusive 
+– Context awareness: The system is aware of a user’s context to 
+optimize interaction 
+– Autonomy: Devices operate autonomously without human 
+intervention and are thus highly self-managed 
+– Intelligence: The system as a whole can handle a wide range 
+of dynamic actions and interactions
+Distributed systems
+59
+2022/23
+
+
+--- PDF PAGE 60 ---
+
+Mobile computing
+• Key challenges: 
+– Discovery: since the location changes over time, how 
+can we establish a network? Who are my peers? 
+– Connectivity: no stable routes, but also no guaranteed 
+connectivity → disruption-tolerant networking 
+• Example strategy: 
+– pocket-switched network 
+• Alice maintains a list of friend devices 
+• Alice sends the message to Bob via friends only
+Distributed systems
+60
+2022/23
+
+
+--- PDF PAGE 61 ---
+
+Sensor networks
+Distributed systems
+61
+2022/23
+
+
+--- PDF PAGE 62 ---
+
+Sensor networks
+• Typically many nodes: 10s - 1000s 
+• Simple hardware (small memory/compute/
+communication capacity - saving power) 
+• Battery-powered (or even battery-less)
+Distributed systems
+62
+2022/23
+
+
+--- PDF PAGE 63 ---
+
+Two extremes
+Distributed systems
+63
+2022/23
+
+
+--- PDF PAGE 64 ---
+
+Energy conservation
+• Using duty cycles 
+– A node is active during 
+ active time units, and then 
+Tactive
+suspended for 
+ units, to become active again. Duty 
+Tsuspended
+cycle  is expressed as: 
+τ
+– Typically 10-30%, but as low as 1% 
+– Challenge: peer discovery and synchronization
+Distributed systems
+64
+2022/23
+
+
+--- PDF PAGE 65 ---
+
+Fireﬂies
+Distributed systems
+2022/23
+65
+
+
+--- PDF PAGE 66 ---
+
+Why does IoT keep failing?
+• Security is hard to do right 
+– Huge attack surface 
+• Embedded devices hard to program 
+– C still dominant 
+– Everything is distributed 
+• Outdated software 
+– Hard to do upgrades 
+• Lack of standards 
+– So many vendors
+Distributed systems
+66
+2022/23
+
+
+--- PDF PAGE 67 ---
+
+Self-assesment
+How do I deﬁne a distributed system? 
+What are the main challenges in designing one? 
+Which types of DS can I diﬀerentiate? 
+What are the important design goals? 
+What types of cloud computing are there?
+Distributed systems
+67
+2022/23

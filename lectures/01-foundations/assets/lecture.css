@@ -1,0 +1,46 @@
+.reveal { font-size: 32px; }
+.reveal h1, .reveal h2 { color: #18344b; text-transform: none; }
+.reveal h2 { font-size: 1.55em; line-height: 1.15; margin-bottom: 0.6em; }
+.reveal #title-slide h1 { font-size: 2.0em; line-height: 1.1; max-width: 950px; }
+.reveal #title-slide .subtitle { color: #1585b4; margin-top: 0.9em; }
+.reveal #title-slide .quarto-title-author-name { font-size: 0.8em; }
+.reveal #title-slide .institute { font-size: 0.7em; }
+.reveal table { font-size: 0.86em; width: 100%; }
+.reveal table th, .reveal table td { padding: 0.45em; border-bottom: 1px solid #c5d5df; }
+.reveal img { object-fit: contain; }
+.reveal .property-examples table { font-size: 0.76em; table-layout: fixed; }
+.reveal .property-examples th:first-child, .reveal .property-examples td:first-child { width: 18%; }
+.reveal .property-examples td, .reveal .property-examples th { padding: 0.4em; }
+.reveal .property-examples > p { font-size: 0.78em; }
+.reveal .submission-flow ol { display: flex; list-style: none; counter-reset: submission-step; gap: 28px; margin: 0.65em 0 0.9em; padding: 0; width: 100%; }
+.reveal .submission-flow li { counter-increment: submission-step; position: relative; flex: 1; margin: 0; padding: 20px 8px 17px; border: 1.5px solid #a3c9dc; border-radius: 12px; background: #edf7fc; color: #18344b; text-align: center; font-size: 23px; font-weight: 600; line-height: 1.25; }
+.reveal .submission-flow li::before { content: counter(submission-step); display: block; margin: 0 auto 10px; width: 28px; height: 28px; line-height: 28px; border-radius: 50%; background: #1585b4; color: white; font-size: 17px; }
+.reveal .submission-flow li:not(:last-child)::after { content: "→"; position: absolute; right: -25px; top: 50%; transform: translateY(-50%); color: #1585b4; font-size: 26px; font-weight: 400; }
+.reveal .classification-exercise table { font-size: 0.68em; }
+.reveal .classification-exercise table td, .reveal .classification-exercise table th { padding: 0.35em 0.5em; }
+.reveal .classification-exercise table td:first-child { width: 43%; }
+.reveal .example-slide > h2::before,
+.reveal .use-case-slide > h2::before,
+.reveal .exercise-slide > h2::before { display: table; padding: 0.25em 0.7em; margin-bottom: 0.6em; border-radius: 999px; font-family: inherit; font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: normal; }
+.reveal .use-case-slide > h2::before { content: "🎓 Use case"; background: #e7f3fb; color: #184d70; }
+.reveal .exercise-slide > h2::before { content: "✏️ Exercise"; background: #f0ebfa; color: #594079; }
+.reveal .answer-chips p { display: flex; flex-wrap: wrap; gap: 0.65em; align-items: center; }
+.reveal .answer-chip { display: inline-flex; align-items: center; gap: 0.5em; padding: 0.35em 0.75em; border-radius: 999px; border: 2px solid; font-size: 0.9em; }
+.reveal .answer-chip strong { color: inherit; }
+.reveal .answer-a { background: #e7f3fb; border-color: #8cbad7; color: #184d70; }
+.reveal .answer-b { background: #f0ebfa; border-color: #b5a0d4; color: #594079; }
+.reveal .answer-c { background: #fff2df; border-color: #d5ad70; color: #795219; }
+.reveal strong { color: #105d80; }
+
+.reveal .retry-overlap .definition { font-size: 0.85em; margin: 0.6em 0; padding: 0.6em 0.75em; }
+
+.reveal .visual-definitions .definition { font-size: 0.78em; margin: 0.4em 0; padding: 0.45em 0.7em; }
+
+.reveal .example-slide > h2::before { content: "💡 Example"; background: #e7f3fb; color: #184d70; }
+.reveal .system-example table { font-size: 0.76em; }
+.reveal .system-example col:first-child { width: 23% !important; }
+.reveal .system-example col:last-child { width: 77% !important; }
+.reveal .system-example td:first-child { width: 23%; }
+.reveal .system-example > p { font-size: 0.82em; }
+.reveal .facebook-scale > p { font-size: 0.82em; }
+.reveal .facebook-scale > p img { display: inline-block; vertical-align: middle; margin: 0 0.4em 0 0; }

@@ -1,0 +1,198 @@
+[
+  {
+    "slide": 1,
+    "title": "Arhitekture i granice usluga",
+    "start": 0,
+    "end": 0.5,
+    "minutes": 0.5
+  },
+  {
+    "slide": 2,
+    "title": "Evidencija prisutnosti (zajednički slajd)",
+    "start": 0.5,
+    "end": 1.0,
+    "minutes": 0.5
+  },
+  {
+    "slide": 3,
+    "title": "Domaća zadaća: računi 1, 2, 3, …",
+    "start": 1.0,
+    "end": 4.0,
+    "minutes": 3
+  },
+  {
+    "slide": 4,
+    "title": "Portal pred rok",
+    "start": 4.0,
+    "end": 6.0,
+    "minutes": 2
+  },
+  {
+    "slide": 5,
+    "title": "Što trebamo znati da bismo odlučili?",
+    "start": 6.0,
+    "end": 7.0,
+    "minutes": 1
+  },
+  {
+    "slide": 6,
+    "title": "Logička organizacija i fizički smještaj",
+    "start": 7.0,
+    "end": 9.0,
+    "minutes": 2
+  },
+  {
+    "slide": 7,
+    "title": "Klijent–poslužitelj",
+    "start": 9.0,
+    "end": 11.0,
+    "minutes": 2
+  },
+  {
+    "slide": 8,
+    "title": "Slojevi i njihov smještaj",
+    "start": 11.0,
+    "end": 13.0,
+    "minutes": 2
+  },
+  {
+    "slide": 9,
+    "title": "Vertikalna i horizontalna raspodjela",
+    "start": 13.0,
+    "end": 15.0,
+    "minutes": 2
+  },
+  {
+    "slide": 10,
+    "title": "Monolit: jedan proces, jedno izdanje",
+    "start": 15.0,
+    "end": 17.0,
+    "minutes": 2
+  },
+  {
+    "slide": 11,
+    "title": "Usluga i granica usluge",
+    "start": 17.0,
+    "end": 19.0,
+    "minutes": 2
+  },
+  {
+    "slide": 12,
+    "title": "Gdje povući granicu?",
+    "start": 19.0,
+    "end": 21.0,
+    "minutes": 2
+  },
+  {
+    "slide": 13,
+    "title": "Cijena granice 1: latencija",
+    "start": 21.0,
+    "end": 24.0,
+    "minutes": 3
+  },
+  {
+    "slide": 14,
+    "title": "Cijena granice 2: dostupnost lanca",
+    "start": 24.0,
+    "end": 26.0,
+    "minutes": 2
+  },
+  {
+    "slide": 15,
+    "title": "Cijena granice 3: podaci i pravila",
+    "start": 26.0,
+    "end": 28.0,
+    "minutes": 2
+  },
+  {
+    "slide": 16,
+    "title": "Podijelite portal u usluge",
+    "start": 28.0,
+    "end": 32.0,
+    "minutes": 4
+  },
+  {
+    "slide": 17,
+    "title": "Jedno moguće rješenje",
+    "start": 32.0,
+    "end": 34.0,
+    "minutes": 2
+  },
+  {
+    "slide": 18,
+    "title": "P2P: svi su klijenti i poslužitelji",
+    "start": 34.0,
+    "end": 36.0,
+    "minutes": 2
+  },
+  {
+    "slide": 19,
+    "title": "BitTorrent: P2P uz tracker",
+    "start": 36.0,
+    "end": 38.0,
+    "minutes": 2
+  },
+  {
+    "slide": 20,
+    "title": "Može li portal biti P2P?",
+    "start": 38.0,
+    "end": 40.0,
+    "minutes": 2
+  },
+  {
+    "slide": 21,
+    "title": "Klaster s koordinatorom: Spark",
+    "start": 40.0,
+    "end": 42.0,
+    "minutes": 2
+  },
+  {
+    "slide": 22,
+    "title": "Granice razmještaja",
+    "start": 42.0,
+    "end": 45.0,
+    "minutes": 3
+  },
+  {
+    "slide": 23,
+    "title": "Ista arhitektura, različiti ispadi",
+    "start": 45.0,
+    "end": 47.0,
+    "minutes": 2
+  },
+  {
+    "slide": 24,
+    "title": "Natrag na početak: kamo s provjerom?",
+    "start": 47.0,
+    "end": 50.0,
+    "minutes": 3
+  },
+  {
+    "slide": 25,
+    "title": "🔥 Kako napraviti lošu granicu",
+    "start": 50.0,
+    "end": 52.0,
+    "minutes": 2
+  },
+  {
+    "slide": 26,
+    "title": "Sažetak",
+    "start": 52.0,
+    "end": 54.0,
+    "minutes": 2
+  },
+  {
+    "slide": 27,
+    "title": "Osmislite sljedeći korak: obavijesti nastavniku",
+    "start": 54.0,
+    "end": 58.0,
+    "minutes": 4
+  },
+  {
+    "slide": 28,
+    "title": "Za vaš projekt: granice i smještaj",
+    "start": 58.0,
+    "end": 60.0,
+    "minutes": 2
+  }
+]
