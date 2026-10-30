@@ -4,7 +4,13 @@ name: Publish slides
 on:
   push:
     branches: [main]
-    paths: ["output/hr/slides/**", ".github/workflows/pages.yml"]
+    paths:
+      - "output/hr/slides/**"
+      - "output/hr/lectures/**"
+      - "lectures/*/slides.hr.qmd"
+      - "lectures/*/timing.json"
+      - "scripts/build_pages_index.py"
+      - ".github/workflows/pages.yml"
   workflow_dispatch:
 
 permissions:
@@ -34,6 +40,10 @@ jobs:
             cp "$f" "_site/$name"
             cp "$f" "_site/${name%%-*}.html"
           done
+          mkdir _site/pdf
+          cp output/hr/lectures/*.pdf _site/pdf/ 2>/dev/null || true
+          cp assets/shared/fipu-logo.svg _site/
+          python3 scripts/build_pages_index.py _site
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
