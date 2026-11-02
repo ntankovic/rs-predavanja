@@ -171,15 +171,19 @@ f.save('client-server-p2p')
 
 # 6. Spark-style cluster: one coordinator, many executor processes.
 f = Figure(h=400)
-f.card(40, 150, 250, 100, 'Driver', 'dijeli posao na zadatke')
-f.card(420, 30, 280, 90, 'Upravitelj klastera', 'dodjeljuje resurse', GRAY)
+# Driver above the middle executor; tasks fan out over one bus with vertical drops, so no line crosses a card.
+f.card(420, 30, 280, 100, 'Driver', 'dijeli posao na zadatke')
+f.card(820, 30, 260, 100, 'Upravitelj klastera', 'dodjeljuje resurse', GRAY)
+f.arrow([(700, 80), (816, 80)], 'gray', True)
+f.text(758, 66, 'traži resurse', 16, GRAY)
+f.line(560, 130, 560, 190, ACCENT, 3)
+f.line(200, 190, 920, 190, ACCENT, 3)
 for i in range(3):
-    x = 380 + i * 250
-    f.card(x, 250, 230, 100, f'Executor {i + 1}', 'proces na čvoru')
-    f.arrow([(290, 190 + i * 22), (x + 40, 246)])
-f.arrow([(290, 170), (416, 85)], 'gray', True)
+    cx = 200 + i * 360
+    f.card(cx - 130, 250, 260, 95, f'Executor {i + 1}', 'proces na čvoru')
+    f.arrow([(cx, 190), (cx, 246)])
+f.text(560 - 14, 178, 'zadaci', 16, GRAY, 400, 'end')
 f.text(560, 385, 'Driver šalje zadatke executorima i skuplja rezultate. Executori su procesi na računalima klastera.', 17, GRAY)
-f.text(372, 150, 'traži resurse', 16, GRAY, 400, 'start')
 f.save('cluster-driver')
 
 # 7. Nested deployment boundaries.
