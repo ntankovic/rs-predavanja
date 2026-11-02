@@ -76,15 +76,15 @@ def card(d):
     pdf = (f'<a class="btn ghost" href="{e(d["pdf"])}" download>PDF skripta</a>' if d['pdf'] else '')
     return f'''
       <article class="card">
-        <a class="cover" href="{e(d['name'])}.html" aria-label="Otvori slajdove: {e(d['title'])}">
+        <a class="cover" href="{e(d['name'])}.html" target="_blank" rel="noopener" aria-label="Otvori slajdove: {e(d['title'])}">
           <span class="num">{d['number']:02d}</span>
         </a>
         <div class="body">
           <p class="kicker">{label}</p>
-          <h3><a href="{e(d['name'])}.html">{e(d['title'])}</a></h3>
+          <h3><a href="{e(d['name'])}.html" target="_blank" rel="noopener">{e(d['title'])}</a></h3>
           <p class="facts">{' · '.join(f for f in facts if f)}</p>
           <div class="actions">
-            <a class="btn" href="{e(d['name'])}.html">Otvori slajdove</a>{pdf}
+            <a class="btn" href="{e(d['name'])}.html" target="_blank" rel="noopener">Otvori slajdove</a>{pdf}
           </div>
         </div>
       </article>'''
