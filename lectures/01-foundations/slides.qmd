@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "1.6"
+version: "1.7"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -257,6 +257,36 @@ A worker can switch on waits or yields, while respecting each task’s dependenc
 - Neither guarantees faster individual jobs; both can occur on one machine.
 
 Sources: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-systems.net/index.php/books/ds4/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+:::
+
+## When does a worker switch tasks? {.interruption-slide}
+
+![](assets/interruption-points.en.svg){fig-alt="One worker runs A1, B1, A2, B2. Switch 1: A waits for storage (await). Switch 2: the OS preempts the thread because its time slice expired. Switch 3: A yields without I/O using await asyncio.sleep(0). Cooperative scheduling switches only at await, preemptive scheduling between any two instructions." width=100%}
+
+```python
+async def check(submission):
+    for file in submission.files:
+        scan(file)                 # CPU only: the loop cannot switch tasks
+        await asyncio.sleep(0)     # voluntary switch point, no I/O
+    await storage.save(submission) # waiting for I/O: switch point
+```
+
+**Someone else can run between the check and the write.**
+
+::: {.notes}
+- **Story:** We refresh how execution really interleaves, because the duplicate check later fails on exactly this.
+
+- Three switch points: waiting for I/O (await), OS preemption (the time slice expires; the thread does not choose it) and a voluntary yield without I/O.
+
+- asyncio (one thread): a coroutine switches only at await. The OS can still pause the whole process, but then no other coroutine of the same loop runs.
+
+- Threads: the OS preempts between any two machine instructions; in CPython between bytecode instructions (GIL, sys.getswitchinterval(), 5 ms by default). So even counter += 1 is not indivisible: read, add, write.
+
+- Code: without await asyncio.sleep(0) a long CPU loop holds the event loop and other submissions wait. sleep(0) waits for nothing; it only yields.
+
+- Transition: remember the switch points; we return to them with retries (check, then write).
+
+Sources: [Python, asyncio.sleep](https://docs.python.org/3/library/asyncio-task.html#asyncio.sleep); [Python, sys.setswitchinterval](https://docs.python.org/3/library/sys.html#sys.setswitchinterval).
 :::
 
 ## Dealing with tasks vs. doing them {.example-slide}

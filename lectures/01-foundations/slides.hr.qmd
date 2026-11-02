@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "1.6"
+version: "1.7"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -258,6 +258,36 @@ Izvršitelj može promijeniti zadatak pri čekanju ili ustupanju izvršavanja, u
 - Ne jamče brži pojedinačni posao; oboje je moguće na jednom računalu.
 
 Izvori: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-systems.net/index.php/books/ds4/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+:::
+
+## Kada izvršitelj mijenja zadatak? {.interruption-slide}
+
+![](assets/interruption-points.hr.svg){fig-alt="Jedan izvršitelj izvodi A1, B1, A2, B2. Promjena 1: A čeka pohranu (await). Promjena 2: OS prekida dretvu jer je istekao vremenski odsječak. Promjena 3: A ustupa bez I/O pomoću await asyncio.sleep(0). Kooperativno raspoređivanje mijenja zadatak samo na await, preemptivno između bilo koje dvije instrukcije." width=100%}
+
+```python
+async def provjeri(predaja):
+    for datoteka in predaja.datoteke:
+        skeniraj(datoteka)         # samo CPU: petlja ne može promijeniti zadatak
+        await asyncio.sleep(0)     # dobrovoljna točka prekida, bez I/O
+    await pohrana.spremi(predaja)  # čekanje I/O: točka prekida
+```
+
+**Između provjere i upisa može doći na red netko drugi.**
+
+::: {.notes}
+- **Priča:** Osvježavamo kako se izvršavanje doista izmjenjuje, jer na tome kasnije pada provjera duplikata.
+
+- Tri točke promjene: čekanje I/O (await), prekid OS-a (istekne vremenski odsječak, dretva to ne bira) i dobrovoljno ustupanje bez I/O.
+
+- asyncio (jedna dretva): korutina se mijenja samo na await. OS i dalje može pauzirati cijeli proces, ali tada ne radi nijedna druga korutina iz iste petlje.
+
+- Dretve: OS prekida između bilo koje dvije strojne instrukcije; u CPythonu između bytecode instrukcija (GIL, sys.getswitchinterval(), zadano 5 ms). Zato ni brojac += 1 nije nedjeljiv: čitanje, zbrajanje, upis.
+
+- Kod: bez await asyncio.sleep(0) duga CPU petlja zauzme petlju događaja, pa ostale predaje čekaju. sleep(0) ne čeka ništa, samo ustupa red.
+
+- Prijelaz: zapamtite točke promjene; vratit ćemo se na njih kod ponovnog pokušaja (provjeri pa zapiši).
+
+Izvori: [Python, asyncio.sleep](https://docs.python.org/3/library/asyncio-task.html#asyncio.sleep); [Python, sys.setswitchinterval](https://docs.python.org/3/library/sys.html#sys.setswitchinterval).
 :::
 
 ## Bavljenje zadacima i njihovo izvršavanje {.example-slide}

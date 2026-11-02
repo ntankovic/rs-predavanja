@@ -147,6 +147,24 @@ Concurrency can occur inside a single machine; it does not require a distributed
 
 Under our definition, parallel tasks also overlap, so parallel execution is concurrent; concurrent tasks do not have to run in parallel. A single worker may switch on a wait, a yield or scheduler preemption. Dependencies still constrain the order of steps. Concurrency does not mean arbitrary reordering preserves the result: unsynchronized shared state can introduce races.
 
+### When does a worker switch tasks?
+
+A task can switch in three ways (@fig-foundations-switch). First, the task **waits for I/O**, such as storage, and the worker meanwhile continues another task. Second, **the operating system preempts the thread** when its time slice expires; the thread does not choose this and does not know where it will stop. Third, a task can **yield voluntarily** without any I/O.
+
+![Three task-switch points on one worker. Cooperative scheduling (asyncio) switches only at `await`; preemptive scheduling of operating-system threads can switch between any two instructions.](assets/interruption-points.en.pdf){#fig-foundations-switch width=100% fig-pos="H" fig-alt="One worker runs A1, B1, A2, B2. Switch 1: A waits for storage. Switch 2: the OS preempts the thread. Switch 3: A yields without I/O."}
+
+In `asyncio`, one thread runs several coroutines, and a coroutine switches only at `await`. The operating system can still pause the whole process, but then no other coroutine of the same event loop runs. A long CPU-only loop therefore holds the event loop; `await asyncio.sleep(0)` waits for nothing and only yields to other tasks:
+
+```python
+async def check(submission):
+    for file in submission.files:
+        scan(file)                 # CPU only: the loop cannot switch tasks
+        await asyncio.sleep(0)     # voluntary switch point, no I/O
+    await storage.save(submission) # waiting for I/O: switch point
+```
+
+With threads, the operating system preempts execution between any two machine instructions, and CPython switches threads between bytecode instructions (every 5 ms by default; see `sys.getswitchinterval()`). So even `counter += 1` is not indivisible: read, add and write are separate steps. Either way, **someone else can run between the check and the write.** We return to this with retries.
+
 Rob Pike expresses the distinction as: “Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once.” See [*Concurrency is not Parallelism*](https://go.dev/talks/2012/waza.slide). A cook managing two dishes illustrates switching attention; two cooks can perform actions simultaneously. This analogy concerns active attention, not every physical process in the kitchen.
 
 ![One cook switches attention between two dishes; two cooks can actively work simultaneously.](assets/concurrency-cooks.en.pdf){width=95%}

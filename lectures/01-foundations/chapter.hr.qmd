@@ -152,6 +152,24 @@ Konkurentnost se može pojaviti unutar jednog računala; ne zahtijeva raspodijel
 
 Prema našoj definiciji paralelni se zadaci također preklapaju, pa je paralelno izvršavanje konkurentno; konkurentni se zadaci ne moraju izvršavati paralelno. Jedan radni proces može se prebaciti pri čekanju, dobrovoljnom prepuštanju (yield) ili kada ga raspoređivač prekine. Ovisnosti i dalje ograničavaju redoslijed koraka. Konkurentnost ne znači da proizvoljan redoslijed čuva rezultat: nesinkronizirano zajedničko stanje može izazvati utrke (races).
 
+### Kada izvršitelj mijenja zadatak?
+
+Zadatak se može promijeniti na tri načina (slika [-@fig-foundations-switch]). Prvo, zadatak **čeka ulaz/izlaz**, na primjer pohranu, pa izvršitelj u međuvremenu nastavlja drugi zadatak. Drugo, **operacijski sustav prekida dretvu** kada istekne njezin vremenski odsječak; dretva to ne bira i ne zna gdje će stati. Treće, zadatak može **dobrovoljno ustupiti red** i bez ulaza/izlaza.
+
+![Tri točke promjene zadatka na jednom izvršitelju. Kooperativno raspoređivanje (asyncio) mijenja zadatak samo na `await`; preemptivno raspoređivanje dretvi operacijskog sustava može ga promijeniti između bilo koje dvije instrukcije.](assets/interruption-points.hr.pdf){#fig-foundations-switch width=100% fig-pos="H" fig-alt="Jedan izvršitelj izvodi A1, B1, A2, B2. Promjena 1: A čeka pohranu. Promjena 2: OS prekida dretvu. Promjena 3: A ustupa bez I/O."}
+
+U `asyncio` jedna dretva izvršava više korutina, a korutina se mijenja samo na `await`. Operacijski sustav i dalje može pauzirati cijeli proces, ali tada ne radi nijedna druga korutina iz iste petlje događaja. Duga petlja koja samo računa zato zauzima petlju događaja; `await asyncio.sleep(0)` ne čeka ništa, nego samo ustupa red drugim zadacima:
+
+```python
+async def provjeri(predaja):
+    for datoteka in predaja.datoteke:
+        skeniraj(datoteka)         # samo CPU: petlja ne može promijeniti zadatak
+        await asyncio.sleep(0)     # dobrovoljna točka prekida, bez I/O
+    await pohrana.spremi(predaja)  # čekanje I/O: točka prekida
+```
+
+Kod dretvi operacijski sustav prekida izvršavanje između bilo koje dvije strojne instrukcije, a CPython mijenja dretvu između instrukcija bytecodea (zadano svakih 5 ms, vidi `sys.getswitchinterval()`). Zato ni `brojac += 1` nije nedjeljiv: čitanje, zbrajanje i upis zasebni su koraci. U oba slučaja vrijedi isto: **između provjere i upisa može doći na red netko drugi.** Tome se vraćamo kod ponovnih pokušaja.
+
 Rob Pike razliku izražava ovako: „Concurrency is about dealing with lots of things at once. Parallelism is about doing lots of things at once.” (Konkurentnost je bavljenje mnogim stvarima odjednom. Paralelizam je izvršavanje mnogih stvari odjednom.) Vidi [*Concurrency is not Parallelism*](https://go.dev/talks/2012/waza.slide). Kuhar koji vodi dva jela ilustrira prebacivanje pažnje; dva kuhara mogu raditi istodobno. Analogija se odnosi na aktivnu pažnju, a ne na svaki fizički proces u kuhinji.
 
 ![Jedan kuhar prebacuje pažnju između dvaju jela; dva kuhara mogu aktivno raditi istodobno.](assets/concurrency-cooks.hr.pdf){width=95% fig-alt="Jedan kuhar prebacuje pažnju između dvaju jela; dva kuhara rade istodobno."}

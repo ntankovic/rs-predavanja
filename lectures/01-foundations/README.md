@@ -55,45 +55,48 @@ Timings include explanation and student participation. `timing.json` is the mach
 
 | Slide | Minutes | Topic |
 | --- | --- | --- |
-| 1 | 00–0:30 | Foundations and system models |
-| 2 | 0:30–01 | Mark your presence (shared slide) |
-| 3 | 01–03 | A timeout after submission |
-| 4 | 03–04 | What do we need to know to answer? |
-| 5 | 04–07 | A project-submission system |
-| 6 | 07–09 | What makes it distributed? |
-| 7 | 09–11 | Distributed system or not? |
-| 8 | 11–13 | Must everyone wait for one submission? |
-| 9 | 13–15 | Several submissions can make progress together |
-| 10 | 15–16 | Dealing with tasks vs. doing them |
-| 11 | 16–18 | Why distribute the work? |
-| 12 | 18–19 | Facebook: scale changes the architecture |
-| 13 | 19–21 | Local function calls and remote requests |
-| 14 | 21–23 | Delay, capacity, and completed work |
-| 15 | 23–24 | Recall Web Apps: time to first byte |
-| 16 | 24–25 | One component fails; others keep running |
-| 17 | 25–26 | A client can be another service |
-| 18 | 26–27:30 | History A: the request is lost |
-| 19 | 27:30–29 | History B: the reply is lost |
-| 20 | 29–30 | History C: the server process crashes |
-| 21 | 30–31 | Same observation, different outcomes |
-| 22 | 31–34 | Pair exercise: should the client retry? |
-| 23 | 34–35 | A retry can overlap the original request |
-| 24 | 35–36 | State the rule before choosing the protocol |
-| 25 | 36–37 | Safety and liveness |
-| 26 | 37–38 | Safety and liveness in different systems |
-| 27 | 38–40 | A system model makes assumptions explicit |
-| 28 | 40–42 | Network assumptions: can messages get through? |
-| 29 | 42–44 | Three node-failure models |
-| 30 | 44–45 | How long should the portal wait? |
-| 31 | 45–47 | Timing models: what may we assume? |
-| 32 | 47–49 | etcd: one successful claim |
-| 33 | 49–51 | Cassandra: choose what a reply promises |
-| 34 | 51–53 | Bitcoin: confidence grows with confirmations |
-| 35 | 53–54 | Our portal: assumptions behind the promise |
-| 36 | 54–56 | No reply after 101 ms |
-| 37 | 56–57 | 🔥 How to develop a bad system |
-| 38 | 57–58 | A checklist for distributed-system reasoning |
-| 39 | 58–60 | Design the next step: did I submit on time? |
+| 1 | 0–0:30 | Foundations and system models |
+| 2 | 0:30–1 | Mark your presence (shared slide) |
+| 3 | 1–3 | A timeout after submission |
+| 4 | 3–4 | What do we need to know to answer? |
+| 5 | 4–7 | A project-submission system |
+| 6 | 7–9 | What makes it distributed? |
+| 7 | 9–11 | Distributed system or not? |
+| 8 | 11–13 | Why distribute the work? |
+| 9 | 13–14 | Facebook: scale changes the architecture |
+| 10 | 14–15:30 | Must everyone wait for one submission? |
+| 11 | 15:30–17 | Several submissions can make progress together |
+| 12 | 17–18 | When does a worker switch tasks? |
+| 13 | 18–19 | Dealing with tasks vs. doing them |
+| 14 | 19–21 | Local function calls and remote requests |
+| 15 | 21–23 | Delay, capacity, and completed work |
+| 16 | 23–24 | Recall Web Apps: time to first byte |
+| 17 | 24–25 | One component fails; others keep running |
+| 18 | 25–25:30 | A client can be another service |
+| 19 | 25:30–26 | Timeout |
+| 20 | 26–27:30 | History A: the request is lost |
+| 21 | 27:30–29 | History B: the reply is lost |
+| 22 | 29–30 | History C: the server process crashes |
+| 23 | 30–31 | Same observation, different outcomes |
+| 24 | 31–34 | Pair exercise: should the client retry? |
+| 25 | 34–35 | A retry can overlap the original request |
+| 26 | 35–36 | State the rule before choosing the protocol |
+| 27 | 36–37 | Safety and liveness |
+| 28 | 37–38 | Safety and liveness in different systems |
+| 29 | 38–40 | A system model makes assumptions explicit |
+| 30 | 40–42 | Network assumptions: can messages get through? |
+| 31 | 42–44 | Three node-failure models |
+| 32 | 44–45 | How long should the portal wait? |
+| 33 | 45–47 | Timing models: what may we assume? |
+| 34 | 47–49 | etcd: one successful claim |
+| 35 | 49–51 | Cassandra: choose what a reply promises |
+| 36 | 51–53 | Bitcoin: confidence grows with confirmations |
+| 37 | 53–54 | Our portal: assumptions behind the promise |
+| 38 | 54–55 | 🔥 How to develop a bad system |
+| 39 | 55–57 | No reply after 101 ms |
+| 40 | 57–58 | Back to the start: did the portal accept the project? |
+| 41 | 58–59:30 | Design the next step: did I submit on time? |
+| 42 | 59:30–60 | Homework: invoices 1, 2, 3, … |
 
 ## Review checklist
 
@@ -208,3 +211,5 @@ Na nastavnikov zahtjev dodan je `chapter.hr.qmd`, prijevod engleskog `chapter.qm
 
 - Build: `just lecture 01-foundations` → `output/hr/lectures/01-foundations.pdf` (31 stranica); pregled svih stranica u smanjenom prikazu, stranice 17–18 detaljno; oznake „Slika”/„Definicija” provjerene.
 - [ ] Nastavnikov jezični i sadržajni pregled hrvatskog poglavlja.
+
+2026-11-02 — Na nastavnikov zahtjev dodan je slajd 12 „Kada izvršitelj mijenja zadatak?” / „When does a worker switch tasks?” (17–18): tri točke promjene zadatka (čekanje I/O, prekid OS-a, dobrovoljno ustupanje `await asyncio.sleep(0)`), kooperativno naspram preemptivnog raspoređivanja i primjer koda. „Moraju li svi čekati” i „Više predaja” traju po 1,5 min; 42 slajda / 60 min. Novi dvojezični dijagram `assets/interruption-points.{hr,en}` (generator `draw_interruptions.py`); odlomak dodan u oba poglavlja. Verzija decka 1.7 u oba jezika. Tablica vremena iznad ponovno je generirana iz `timing.json`. Provjere: `just language-check`, `just browser-check 01-foundations` (hr, 42 slajda, PASS), oba poglavlja i oba decka izgrađena. Prijevod na engleski čeka pregled.

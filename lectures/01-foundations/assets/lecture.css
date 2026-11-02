@@ -44,3 +44,5 @@
 .reveal .system-example > p { font-size: 0.82em; }
 .reveal .facebook-scale > p { font-size: 0.82em; }
 .reveal .facebook-scale > p img { display: inline-block; vertical-align: middle; margin: 0 0.4em 0 0; }
+.reveal .interruption-slide img { max-height: 300px; object-fit: contain; }
+.reveal .interruption-slide pre { font-size: 0.5em; margin: 0.3em 0 0.5em; }
