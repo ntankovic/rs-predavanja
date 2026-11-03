@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="370" viewBox="0 0 1120 370">
+<defs><marker id="time" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#617886"/></marker></defs>
+<rect width="1120" height="370" fill="white"/>
+<text x="24" y="56" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" text-anchor="start" fill="#18344b">Core · OS</text>
+<text x="24" y="80" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400" text-anchor="start" fill="#617886">threads T1, T2</text>
+<text x="24" y="176" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="700" text-anchor="start" fill="#18344b">Loop in T1</text>
+<text x="24" y="200" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400" text-anchor="start" fill="#617886">coroutines A, B, C</text>
+<rect x="230" y="30" width="290" height="56" rx="10" fill="#e8eef3" stroke="#546573" stroke-width="1.5"/>
+<text x="375.0" y="67" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">T1</text>
+<line x1="230" y1="90" x2="230" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<line x1="520" y1="90" x2="520" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<rect x="530" y="30" width="150" height="56" rx="10" fill="#f6f6f6" stroke="#a3adb5" stroke-width="1.5"/>
+<text x="605.0" y="67" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">T2</text>
+<rect x="530" y="150" width="150" height="56" rx="10" fill="none" stroke="#c3ccd3" stroke-width="1.5" stroke-dasharray="6 5"/>
+<line x1="530" y1="90" x2="530" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<line x1="680" y1="90" x2="680" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<rect x="690" y="30" width="310" height="56" rx="10" fill="#e8eef3" stroke="#546573" stroke-width="1.5"/>
+<text x="845.0" y="67" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">T1</text>
+<line x1="690" y1="90" x2="690" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<line x1="1000" y1="90" x2="1000" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<rect x="1010" y="30" width="80" height="56" rx="10" fill="#f6f6f6" stroke="#a3adb5" stroke-width="1.5"/>
+<text x="1050.0" y="67" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">T2</text>
+<rect x="1010" y="150" width="80" height="56" rx="10" fill="none" stroke="#c3ccd3" stroke-width="1.5" stroke-dasharray="6 5"/>
+<line x1="1010" y1="90" x2="1010" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<line x1="1090" y1="90" x2="1090" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
+<text x="605" y="185" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#617886">loop paused</text>
+<rect x="230" y="150" width="130" height="56" rx="10" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.5"/>
+<text x="295.0" y="187" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">A</text>
+<rect x="372" y="150" width="148" height="56" rx="10" fill="#fff0dc" stroke="#b56a21" stroke-width="1.5"/>
+<text x="446.0" y="187" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">B</text>
+<rect x="690" y="150" width="140" height="56" rx="10" fill="#fff0dc" stroke="#b56a21" stroke-width="1.5"/>
+<text x="760.0" y="187" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">B</text>
+<rect x="842" y="150" width="158" height="56" rx="10" fill="#eaf5ec" stroke="#3d7f4f" stroke-width="1.5"/>
+<text x="921.0" y="187" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">C</text>
+<line x1="366" y1="140" x2="366" y2="222" stroke="#1585b4" stroke-width="2.5" stroke-dasharray="6 5"/>
+<text x="366" y="244" font-family="Menlo, Consolas, monospace" font-size="17" font-weight="700" text-anchor="middle" fill="#1585b4">await</text>
+<line x1="836" y1="140" x2="836" y2="222" stroke="#1585b4" stroke-width="2.5" stroke-dasharray="6 5"/>
+<text x="836" y="244" font-family="Menlo, Consolas, monospace" font-size="17" font-weight="700" text-anchor="middle" fill="#1585b4">await</text>
+<line x1="525" y1="22" x2="525" y2="222" stroke="#b33e44" stroke-width="2.5"/>
+<text x="525" y="244" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" text-anchor="middle" fill="#b33e44">OS preempts: B unaware</text>
+<path d="M230 262H1090" stroke="#617886" stroke-width="2" marker-end="url(#time)"/>
+<text x="1090" y="284" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400" text-anchor="end" fill="#617886">Time</text>
+<rect x="40" y="292" width="500" height="68" rx="12" fill="#f8fbfd" stroke="#c6dbe8" stroke-width="1.2"/>
+<rect x="50" y="306" width="6" height="40" rx="3" fill="#b33e44"/>
+<text x="70" y="320" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="start" fill="#18344b">The OS schedules threads</text>
+<text x="70" y="346" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#617886">preemptive, can stop anywhere</text>
+<rect x="580" y="292" width="500" height="68" rx="12" fill="#f8fbfd" stroke="#c6dbe8" stroke-width="1.2"/>
+<rect x="590" y="306" width="6" height="40" rx="3" fill="#1585b4"/>
+<text x="610" y="320" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="start" fill="#18344b">The event loop schedules coroutines</text>
+<text x="610" y="346" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="400" text-anchor="start" fill="#617886">cooperative, only at await</text>
+</svg>

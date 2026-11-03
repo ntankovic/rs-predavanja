@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "1.7"
+version: "1.8"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -288,6 +288,29 @@ async def provjeri(predaja):
 - Prijelaz: zapamtite točke promjene; vratit ćemo se na njih kod ponovnog pokušaja (provjeri pa zapiši).
 
 Izvori: [Python, asyncio.sleep](https://docs.python.org/3/library/asyncio-task.html#asyncio.sleep); [Python, sys.setswitchinterval](https://docs.python.org/3/library/sys.html#sys.setswitchinterval).
+:::
+
+## Dva raspoređivača: OS i petlja događaja {.interruption-slide}
+
+![](assets/scheduler-layers.hr.svg){fig-alt="Gore: na jezgri se preemptivno izmjenjuju dretve T1 i T2. Dolje: unutar dretve T1 petlja događaja izvodi korutine A, B i C, koje se mijenjaju samo na await. Dok radi T2, petlja stoji; B nastavlja nakon prekida i ne zna da je bio pauziran." width=100%}
+
+- **Petlja događaja** je obična petlja u jednoj dretvi: raspoređivač u korisničkom prostoru.
+- Korutina koja ne dođe do `await` **zaustavlja sve ostale** u toj petlji.
+
+**Između dva `await` kod je nedjeljiv za ostale korutine, ali ne i za druge dretve.**
+
+::: {.notes}
+- **Priča:** Ista logika na dvije razine: OS raspoređuje dretve, a petlja događaja korutine unutar jedne dretve.
+
+- Usporedba: dretva ↔ zadatak (Task); red spremnih dretvi ↔ red spremnih poziva petlje; blokirajući syscall ↔ await na I/O (socket se registrira, epoll javi spremnost); sched_yield ↔ await asyncio.sleep(0); preempcija timerom ↔ ne postoji.
+
+- Petlja nije zaseban proces; radi u istoj dretvi kao korutine. OS može pauzirati cijelu dretvu; tada ne radi ni petlja ni ijedna korutina (B ne primijeti prekid).
+
+- Kooperativno kao Windows 3.x i stari Mac OS: tko ne ustupi, zamrzne sve. Dugo računanje: asyncio.to_thread ili ProcessPoolExecutor; debug način upozorava na korake dulje od 100 ms.
+
+- Za portal: provjera i upis bez await između njih ne mogu se ispreplesti s drugim korutinama. Čim je između njih await (upit bazi), mogu: to je utrka s ponovnim pokušajem.
+
+Izvori: [Python, asyncio event loop](https://docs.python.org/3/library/asyncio-eventloop.html); [Python, Developing with asyncio](https://docs.python.org/3/library/asyncio-dev.html).
 :::
 
 ## Bavljenje zadacima i njihovo izvršavanje {.example-slide}

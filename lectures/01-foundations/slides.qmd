@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "1.7"
+version: "1.8"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -287,6 +287,29 @@ async def check(submission):
 - Transition: remember the switch points; we return to them with retries (check, then write).
 
 Sources: [Python, asyncio.sleep](https://docs.python.org/3/library/asyncio-task.html#asyncio.sleep); [Python, sys.setswitchinterval](https://docs.python.org/3/library/sys.html#sys.setswitchinterval).
+:::
+
+## Two schedulers: the OS and the event loop {.interruption-slide}
+
+![](assets/scheduler-layers.en.svg){fig-alt="Top: threads T1 and T2 alternate preemptively on a core. Bottom: inside thread T1 the event loop runs coroutines A, B and C, which switch only at await. While T2 runs, the loop is paused; B continues after the preemption without noticing it." width=100%}
+
+- The **event loop** is an ordinary loop in one thread: a user-space scheduler.
+- A coroutine that never reaches `await` **stops all others** in that loop.
+
+**Between two `await`s code is indivisible for other coroutines, but not for other threads.**
+
+::: {.notes}
+- **Story:** The same logic on two levels: the OS schedules threads, the event loop schedules coroutines inside one thread.
+
+- Mapping: thread ↔ task (Task); ready queue of threads ↔ the loop's ready queue; blocking syscall ↔ await on I/O (the socket is registered, epoll reports readiness); sched_yield ↔ await asyncio.sleep(0); timer preemption ↔ none.
+
+- The loop is not a separate process; it runs in the same thread as the coroutines. The OS can pause the whole thread; then neither the loop nor any coroutine runs (B does not notice).
+
+- Cooperative like Windows 3.x and classic Mac OS: whoever does not yield freezes everything. Long computation: asyncio.to_thread or ProcessPoolExecutor; debug mode warns about steps longer than 100 ms.
+
+- For the portal: a check and a write with no await between them cannot interleave with other coroutines. With an await between them (a database query), they can: that is the retry race.
+
+Sources: [Python, asyncio event loop](https://docs.python.org/3/library/asyncio-eventloop.html); [Python, Developing with asyncio](https://docs.python.org/3/library/asyncio-dev.html).
 :::
 
 ## Dealing with tasks vs. doing them {.example-slide}

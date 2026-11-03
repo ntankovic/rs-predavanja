@@ -67,36 +67,37 @@ Timings include explanation and student participation. `timing.json` is the mach
 | 10 | 14–15:30 | Must everyone wait for one submission? |
 | 11 | 15:30–17 | Several submissions can make progress together |
 | 12 | 17–18 | When does a worker switch tasks? |
-| 13 | 18–19 | Dealing with tasks vs. doing them |
-| 14 | 19–21 | Local function calls and remote requests |
-| 15 | 21–23 | Delay, capacity, and completed work |
-| 16 | 23–24 | Recall Web Apps: time to first byte |
-| 17 | 24–25 | One component fails; others keep running |
-| 18 | 25–25:30 | A client can be another service |
-| 19 | 25:30–26 | Timeout |
-| 20 | 26–27:30 | History A: the request is lost |
-| 21 | 27:30–29 | History B: the reply is lost |
-| 22 | 29–30 | History C: the server process crashes |
-| 23 | 30–31 | Same observation, different outcomes |
-| 24 | 31–34 | Pair exercise: should the client retry? |
-| 25 | 34–35 | A retry can overlap the original request |
-| 26 | 35–36 | State the rule before choosing the protocol |
-| 27 | 36–37 | Safety and liveness |
-| 28 | 37–38 | Safety and liveness in different systems |
-| 29 | 38–40 | A system model makes assumptions explicit |
-| 30 | 40–42 | Network assumptions: can messages get through? |
-| 31 | 42–44 | Three node-failure models |
-| 32 | 44–45 | How long should the portal wait? |
-| 33 | 45–47 | Timing models: what may we assume? |
-| 34 | 47–49 | etcd: one successful claim |
-| 35 | 49–51 | Cassandra: choose what a reply promises |
-| 36 | 51–53 | Bitcoin: confidence grows with confirmations |
-| 37 | 53–54 | Our portal: assumptions behind the promise |
-| 38 | 54–55 | 🔥 How to develop a bad system |
-| 39 | 55–57 | No reply after 101 ms |
-| 40 | 57–58 | Back to the start: did the portal accept the project? |
-| 41 | 58–59:30 | Design the next step: did I submit on time? |
-| 42 | 59:30–60 | Homework: invoices 1, 2, 3, … |
+| 13 | 18–19 | Two schedulers: the OS and the event loop |
+| 14 | 19–19:30 | Dealing with tasks vs. doing them |
+| 15 | 19:30–21 | Local function calls and remote requests |
+| 16 | 21–23 | Delay, capacity, and completed work |
+| 17 | 23–24 | Recall Web Apps: time to first byte |
+| 18 | 24–25 | One component fails; others keep running |
+| 19 | 25–25:30 | A client can be another service |
+| 20 | 25:30–26 | Timeout |
+| 21 | 26–27:30 | History A: the request is lost |
+| 22 | 27:30–29 | History B: the reply is lost |
+| 23 | 29–30 | History C: the server process crashes |
+| 24 | 30–31 | Same observation, different outcomes |
+| 25 | 31–34 | Pair exercise: should the client retry? |
+| 26 | 34–35 | A retry can overlap the original request |
+| 27 | 35–36 | State the rule before choosing the protocol |
+| 28 | 36–37 | Safety and liveness |
+| 29 | 37–38 | Safety and liveness in different systems |
+| 30 | 38–40 | A system model makes assumptions explicit |
+| 31 | 40–42 | Network assumptions: can messages get through? |
+| 32 | 42–44 | Three node-failure models |
+| 33 | 44–45 | How long should the portal wait? |
+| 34 | 45–47 | Timing models: what may we assume? |
+| 35 | 47–49 | etcd: one successful claim |
+| 36 | 49–51 | Cassandra: choose what a reply promises |
+| 37 | 51–53 | Bitcoin: confidence grows with confirmations |
+| 38 | 53–54 | Our portal: assumptions behind the promise |
+| 39 | 54–55 | 🔥 How to develop a bad system |
+| 40 | 55–57 | No reply after 101 ms |
+| 41 | 57–58 | Back to the start: did the portal accept the project? |
+| 42 | 58–59:30 | Design the next step: did I submit on time? |
+| 43 | 59:30–60 | Homework: invoices 1, 2, 3, … |
 
 ## Review checklist
 
@@ -213,3 +214,5 @@ Na nastavnikov zahtjev dodan je `chapter.hr.qmd`, prijevod engleskog `chapter.qm
 - [ ] Nastavnikov jezični i sadržajni pregled hrvatskog poglavlja.
 
 2026-11-02 — Na nastavnikov zahtjev dodan je slajd 12 „Kada izvršitelj mijenja zadatak?” / „When does a worker switch tasks?” (17–18): tri točke promjene zadatka (čekanje I/O, prekid OS-a, dobrovoljno ustupanje `await asyncio.sleep(0)`), kooperativno naspram preemptivnog raspoređivanja i primjer koda. „Moraju li svi čekati” i „Više predaja” traju po 1,5 min; 42 slajda / 60 min. Novi dvojezični dijagram `assets/interruption-points.{hr,en}` (generator `draw_interruptions.py`); odlomak dodan u oba poglavlja. Verzija decka 1.7 u oba jezika. Tablica vremena iznad ponovno je generirana iz `timing.json`. Provjere: `just language-check`, `just browser-check 01-foundations` (hr, 42 slajda, PASS), oba poglavlja i oba decka izgrađena. Prijevod na engleski čeka pregled.
+
+2026-11-03 — Na nastavnikov zahtjev dodan je slajd 13 „Dva raspoređivača: OS i petlja događaja” / „Two schedulers: the OS and the event loop” (18–19): dvije vremenske crte (dretve T1/T2 na jezgri, preemptivno; korutine A/B/C u petlji dretve T1, samo na await). Slajd s citatom Roba Pikea traje 0,5 min, „Lokalni pozivi” 1,5 min; 43 slajda / 60 min. Dijagram `assets/scheduler-layers.{hr,en}` (u `draw_interruptions.py`); odlomak u oba poglavlja; verzija decka 1.8 u oba jezika. Provjere: `just language-check`, `just browser-check` (hr i en, 43 slajda, PASS). Prijevod na engleski čeka pregled.
