@@ -7,7 +7,7 @@ The lecturer selected the current English deck as the anchor. Croatian slide tex
 ## Web Apps refresher: TTFB
 
 - Public source consulted 2026-09-19: [web.dev, Time to First Byte](https://web.dev/articles/ttfb). Supports inclusion of setup and server/network waiting in navigation-start TTFB, distinct from downloading the full response. No login required.
-- `assets/web-ttfb.svg` is original editable course artwork prompted by the lecturer's reference image; its PDF is generated with `just headless-preview`. Uses TLS terminology and a simplified fresh HTTPS-over-TCP path. Widths are schematic; caching/reuse and omitted phases are explained in notes.
+- `assets/web-ttfb.svg` is original editable course artwork prompted by the lecturer's reference image; its PDF is generated with `just headless-preview`. Redrawn 2026-11-03 at the lecturer's request in the card style; now generated with `assets/draw_ttfb.py` (both languages, SVG and PDF). Uses TLS terminology and a simplified fresh HTTPS-over-TCP path. Widths are schematic; caching/reuse and omitted phases are explained in notes.
 
 All page numbers below are one-based PDF pages. References were read from the supplied local documents on 2026-09-14. No historical course administration or performance statistics are carried into this lecture.
 

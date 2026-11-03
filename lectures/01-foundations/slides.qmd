@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "2.3"
+version: "2.4"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"

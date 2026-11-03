@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "2.3"
+version: "2.4"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"

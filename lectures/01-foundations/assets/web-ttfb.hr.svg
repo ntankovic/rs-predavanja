@@ -1,13 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="300" viewBox="0 0 1120 300">
-<title>Web request timing and time to first byte</title>
-<desc>Navigation-start TTFB includes DNS, TCP, TLS and waiting for the first response byte. Download follows.</desc>
-<rect width="1120" height="300" fill="white"/>
-<g font-family="Arial, Helvetica, sans-serif" font-size="24" text-anchor="middle" fill="#18344b">
-<text x="90" y="40">DNS</text><text x="210" y="40">TCP</text><text x="330" y="40">TLS</text>
-<text x="595" y="28">Put zahtjeva, čekanje,</text><text x="595" y="57">obrada, put odgovora</text><text x="945" y="40">Preuzimanje</text>
-<rect x="30" y="80" width="120" height="45" rx="8" fill="#58ab76"/><rect x="150" y="80" width="120" height="45" fill="#deb25b"/><rect x="270" y="80" width="120" height="45" fill="#aa83ce"/><rect x="390" y="80" width="410" height="45" fill="#438caf"/><rect x="800" y="80" width="290" height="45" rx="8" fill="#54b4b6"/>
-<path d="M800 65V150" stroke="#18344b" stroke-width="2" stroke-dasharray="5 5"/><text x="800" y="177" font-size="21">Prvi bajt odgovora</text>
-<path d="M30 153V205H800V191" fill="none" stroke="#1585b4" stroke-width="2.5"/>
-<text x="410" y="238" font-weight="bold">TTFB od početka navigacije</text><text x="945" y="238" font-size="21">Cijeli odgovor stiže poslije</text>
-<text x="560" y="285" font-size="20" fill="#607582">Nova HTTPS veza preko TCP-a; shematska trajanja. DNS i veze mogu se ponovno koristiti.</text>
-</g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="276" viewBox="0 0 1120 276">
+<rect width="1120" height="276" fill="white"/>
+<rect x="38" y="68" width="130" height="64" rx="12" fill="#eaf5ec" stroke="#3d7f4f" stroke-width="1.6"/>
+<text x="103.0" y="107.0" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#3d7f4f">DNS</text>
+<rect x="174" y="68" width="130" height="64" rx="12" fill="#fff0dc" stroke="#b56a21" stroke-width="1.6"/>
+<text x="239.0" y="107.0" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#b56a21">TCP</text>
+<rect x="310" y="68" width="130" height="64" rx="12" fill="#f1ecf8" stroke="#7a5aa6" stroke-width="1.6"/>
+<text x="375.0" y="107.0" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#7a5aa6">TLS</text>
+<rect x="446" y="68" width="420" height="64" rx="12" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.6"/>
+<text x="656.0" y="107.0" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#1585b4">zahtjev → red → obrada → odgovor</text>
+<rect x="872" y="68" width="210" height="64" rx="12" fill="#f3f6f8" stroke="#9aa9b4" stroke-width="1.6" stroke-dasharray="6 5"/>
+<text x="977.0" y="107.0" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#617886">Preuzimanje</text>
+<path d="M42 62V52H436V62" fill="none" stroke="#b8c6d0" stroke-width="2" stroke-linejoin="round"/>
+<text x="239.0" y="42" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" text-anchor="middle" fill="#617886">Uspostava veze</text>
+<path d="M450 62V52H862V62" fill="none" stroke="#b8c6d0" stroke-width="2" stroke-linejoin="round"/>
+<text x="656.0" y="42" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" text-anchor="middle" fill="#617886">Mreža i poslužitelj</text>
+<line x1="869.0" y1="60" x2="869.0" y2="196" stroke="#18344b" stroke-width="2" stroke-dasharray="4 4"/>
+<circle cx="869.0" cy="60" r="6" fill="#18344b"/>
+<text x="881.0" y="162" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="start" fill="#18344b">prvi bajt odgovora</text>
+<path d="M38 172V182H869.0V172" fill="none" stroke="#1585b4" stroke-width="2" stroke-linejoin="round"/>
+<text x="453.5" y="212" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="#1585b4">TTFB od početka navigacije</text>
+<text x="977.0" y="212" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400" text-anchor="middle" fill="#617886">ostatak odgovora stiže poslije</text>
+<text x="560.0" y="262" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400" text-anchor="middle" fill="#617886">Nova HTTPS veza preko TCP-a; trajanja su shematska. DNS i veze mogu se ponovno koristiti.</text>
+</svg>
