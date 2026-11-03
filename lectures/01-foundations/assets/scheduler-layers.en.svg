@@ -23,7 +23,7 @@
 <rect x="1010" y="150" width="80" height="56" rx="10" fill="none" stroke="#c3ccd3" stroke-width="1.5" stroke-dasharray="6 5"/>
 <line x1="1010" y1="90" x2="1010" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
 <line x1="1090" y1="90" x2="1090" y2="146" stroke="#d5dee5" stroke-width="1.5" stroke-dasharray="3 5"/>
-<text x="605" y="185" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#617886">loop paused</text>
+<text x="605" y="185" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#617886">our loop is paused</text>
 <rect x="230" y="150" width="130" height="56" rx="10" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.5"/>
 <text x="295.0" y="187" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#18344b">A</text>
 <rect x="372" y="150" width="148" height="56" rx="10" fill="#fff0dc" stroke="#b56a21" stroke-width="1.5"/>

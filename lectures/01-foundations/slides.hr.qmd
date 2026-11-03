@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "1.8"
+version: "2.3"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -359,6 +359,77 @@ Lokalni poziv (**local call**) · udaljeni zahtjev (**remote request**)
 Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
+## Isti posao, lokalno i udaljeno {.code-compare-slide}
+
+:::: {.columns}
+::: {.column width="33%"}
+**Lokalni poziv**
+
+```python
+def provjeri_rok(zadatak, sada):
+    return sada <= ROKOVI[zadatak]
+
+try:
+    ok = provjeri_rok("rs-01", sada)
+except KeyError:
+    ok = None  # nepoznat zadatak
+```
+
+Vrijednost ili iznimka. Izvršilo se **točno jednom**.
+:::
+::: {.column width="65%"}
+**Udaljeni zahtjev**
+
+```python
+async def provjeri_rok(klijent, zadatak, sada):
+    for pokusaj in range(3):
+        t0 = time.perf_counter()
+        try:
+            r = await klijent.get(f"/zadaci/{zadatak}/rok", timeout=2.0)
+            r.raise_for_status()
+            return sada <= datetime.fromisoformat(r.json()["rok"])
+        except httpx.ConnectError:
+            pass   # zahtjev nije poslan: smijemo ponoviti
+        except httpx.TimeoutException:
+            pass   # spor ili srušen? čitanje smijemo ponoviti
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code < 500:
+                raise  # 404: ponavljanje ne pomaže
+        except (KeyError, ValueError):
+            raise      # drukčiji odgovor: druga verzija usluge
+        finally:
+            ms = (time.perf_counter() - t0) * 1000
+            log.info("rok %s, pokušaj %d: %.0f ms", zadatak, pokusaj + 1, ms)
+        await asyncio.sleep(0.2 * 2**pokusaj + random.uniform(0, 0.1))
+    raise RuntimeError("usluga zadataka ne odgovara")
+```
+:::
+::::
+
+**Kod upisa (`POST /predaje`) timeout znači: predaja je možda spremljena, a možda nije.**
+
+::: {.notes}
+- **Priča:** Isti posao u kodu: lokalno dva ishoda, udaljeno i treći, „ne znam”.
+
+- Lokalno: vrijednost ili iznimka; funkcija se izvršila točno jednom; greška je u našem kodu ili podacima.
+
+- Udaljeno: veza nije uspostavljena (zahtjev nije poslan), istek čekanja (možda je obrađen), greška druge usluge (status 404/503/500), odgovor neočekivanog oblika (druga verzija usluge).
+
+- Provjera roka je čitanje: ponovni pokušaj ništa ne mijenja (idempotentno, Web aplikacije). Problem je upis: ReadTimeout nakon POST /predaje ne kaže je li predaja spremljena.
+
+- Najava: operaciji damo identitet koji preživi ponovni pokušaj (npr. zaglavlje Idempotency-Key s istim predaja_id); razrađujemo u predavanju 03.
+
+- Pitati: koliko dugo čekati? 2 s je naš izbor, a ne jamstvo usluge.
+
+- Ponovni pokušaji: najviše 3, s eksponencijalnim čekanjem (0,2 s, 0,4 s, 0,8 s) i nasumičnim pomakom (jitter), da tisuće klijenata ne udare istodobno (oluja ponavljanja). 4xx ne ponavljamo: zahtjev je kriv. Ponavljamo samo čitanje; upis tek uz identitet operacije.
+
+- finally zapisuje trajanje svakog pokušaja, i uspješnog i neuspješnog: bez toga ne znamo je li usluga spora ili nedostupna. Lokalno ništa od toga ne treba.
+
+Izvori: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/).
+
+Izvori: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+:::
+
 ## Kašnjenje, kapacitet i dovršeni posao
 
 **Više projekata završi u sekundi. Mora li moj prijenos završiti brže?**
@@ -588,6 +659,26 @@ Primamljiv pristup: **„Ako nema prihvaćenog zapisa, stvori ga.”**
 - Predložiti „provjeri pa stvori”; mogu li oba vidjeti odsutnost?
 
 - Najprije invarijanta, zatim protokol.
+:::
+
+## Ponovni pokušaji mogu srušiti uslugu {.storm-slide}
+
+![](assets/retry-storm.hr.svg){fig-alt="Lijevo deset klijenata, svaki s prvim i dva ponovna pokušaja, šalje zahtjeve istoj preopterećenoj usluzi zadataka. Desno shematska krivulja: do kapaciteta broj obrađenih zahtjeva raste s brojem pristiglih, a iznad kapaciteta pada jer timeouti izazivaju još pokušaja." width=100%}
+
+**Sporiji odgovori → više timeouta → još više pokušaja.** Legitimni klijenti tako izvode **nenamjerni DDoS**: oluju ponavljanja (retry storm).
+
+::: {.notes}
+- **Priča:** Ponovni pokušaj pomaže jednom klijentu, ali kad pokušavaju svi, usluga koja pati dobiva još više posla.
+
+- Lijevo: 10 klijenata × 3 pokušaja = 30 zahtjeva umjesto 10, baš kad je usluga najsporija.
+
+- Desno: do kapaciteta usluga radi dobro. Iznad njega red raste, odgovori kasne, klijentima istječe čekanje, a usluga i dalje obrađuje zahtjeve na koje više nitko ne čeka. Krivulja je shematska, ne mjerenje.
+
+- Pitati: kako biste vi ograničili štetu? Očekivano: najviše N pokušaja, eksponencijalno čekanje, jitter, budžet ponovnih pokušaja, prekidač strujnog kruga (circuit breaker) kasnije.
+
+- Ovo nije napad: nitko nije zlonamjeran, ali učinak je isti kao kod DDoS-a.
+
+Izvori: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/); [Google SRE Book, Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/).
 :::
 
 ## Najprije pravilo, zatim protokol {.retry-overlap}
@@ -821,7 +912,7 @@ Replicirana pohrana ključ–vrijednost: **dva klijenta žele isti naziv**.
 | O čemu zaključujemo | Klaster etcd s tri člana |
 |:---|:---|
 | **Pretpostavke modela** | Pouzdani, nebizantski članovi; ispad s oporavkom i trajnim stanjem. Moguća kašnjenja i particije. |
-| **Invarijanta / sigurnost** | Atomarno „ako ne postoji, stvori” dopušta **najviše jedan uspjeh** dok se ključ ne izbriše. Odvojeno čitanje pa upis nije dovoljno. |
+| **Invarijanta / sigurnost** | Atomarno (atomic) „ako ne postoji, stvori” (create-if-absent) dopušta **najviše jedan uspjeh** dok se ključ ne izbriše. Odvojeno čitanje pa upis (read-then-write) nije dovoljno. |
 | **Uvjeti napredovanja** | Dostupna **većina (majority, 2 od 3)**, stabilan vođa te pravodobna komunikacija i obrada. |
 
 **Particija 2 + 1:** većina može potvrditi upis; izolirani član ne može potvrditi konkurentsko zauzimanje.
@@ -844,7 +935,7 @@ Replicirana pohrana ključ–vrijednost: **dva klijenta žele isti naziv**.
 Izvori: [etcd API guarantees](https://etcd.io/docs/v3.6/learning/api_guarantees/); [failure modes](https://etcd.io/docs/v3.6/op-guide/failures/); [Raft paper](https://raft.github.io/raft.pdf).
 :::
 
-## Cassandra: što odgovor obećava? {.example-slide .system-example}
+## Cassandra: što odgovor obećava? {.example-slide .system-example .dense-table}
 
 Raspodijeljena baza: **tri replike; obična čitanja i upisi uz razinu konzistentnosti (consistency level) ONE**.
 
@@ -853,6 +944,7 @@ Raspodijeljena baza: **tri replike; obična čitanja i upisi uz razinu konzisten
 | **Pretpostavke modela** | Nebizantske replike mogu pasti i oporaviti se. Moguća mrežna kašnjenja i particije. |
 | **Sigurnost i ograničenje** | Uspjeh traži potvrdu jedne replike. Čitanje može biti zastarjelo; „pročitaj pa upiši” **ne čuva** pravilo „prodaj sjedalo najviše jednom”. |
 | **Uvjeti napredovanja** | Dostupna, odzivna replika može obraditi operaciju. Replike se usklade kad komunikacija i popravak dostave sačuvane promjene. |
+| **U odnosu na etcd** | etcd prije potvrde traži **većinu i jedan redoslijed** upisa (Raft); u particiji manjina ne piše. Cassandra s ONE potvrđuje nakon **jedne replike** i usklađuje kasnije: obje strane particije pišu, a sukob rješava vremenska oznaka. |
 
 **Izbor je važan:** QUORUM traži većinu; uvjetne rezervacije trebaju jaču koordinaciju, npr. lake transakcije (LWT).
 
@@ -868,6 +960,8 @@ Raspodijeljena baza: **tri replike; obična čitanja i upisi uz razinu konzisten
 - Usklađivanje treba sačuvane promjene, popravak, komunikaciju i prestanak novih upisa.
 
 - „Posljednje” prema vremenskoj oznaci, ne nužno stvarnom redoslijedu.
+
+- Razlika od etcd-a: etcd bira dosljednost (CP: bez većine nema upisa), Cassandra s ONE dostupnost i brzinu (AP: upisuje se i u manjini, usklađuje kasnije). Isti problem duplikata etcd rješava, Cassandra s ONE ne.
 
 - QUORUM ne čini provjeru/upis atomarnima; LWT dodaje uvjetnu koordinaciju.
 

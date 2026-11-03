@@ -187,6 +187,41 @@ A function-call interface can hide a remote exchange. Underneath it, a caller pr
 
 A remote call has several possible costs: request preparation, transmission, queueing, processing, and reply handling. These costs are not necessarily constant. A service that normally responds quickly may pause, become overloaded, or wait for another dependency.
 
+The difference is clear in code. A local deadline check has two outcomes, a value or an exception, and it ran exactly once:
+
+```python
+def check_deadline(task, now):
+    return now <= DEADLINES[task]        # KeyError if the task does not exist
+```
+
+The same check as a remote request must distinguish more cases, and one of them has no answer:
+
+```python
+async def check_deadline(client, task, now):
+    for attempt in range(3):
+        t0 = time.perf_counter()
+        try:
+            r = await client.get(f"/tasks/{task}/deadline", timeout=2.0)
+            r.raise_for_status()
+            return now <= datetime.fromisoformat(r.json()["deadline"])
+        except httpx.ConnectError:
+            pass   # request not sent: safe to retry
+        except httpx.TimeoutException:
+            pass   # slow or crashed? a read is safe to retry
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code < 500:
+                raise  # 404: retrying does not help
+        except (KeyError, ValueError):
+            raise      # different reply: another service version
+        finally:
+            ms = (time.perf_counter() - t0) * 1000
+            log.info("deadline %s, attempt %d: %.0f ms", task, attempt + 1, ms)
+        await asyncio.sleep(0.2 * 2**attempt + random.uniform(0, 0.1))
+    raise RuntimeError("task service not responding")
+```
+
+We must also decide how often to retry and how long to wait between attempts: exponentially growing waits with random jitter keep many clients from retrying at the same moment. Logging the duration of every attempt (`finally`) shows whether the service is slow or unavailable. A local call needs none of this. The deadline check only reads, so a retry changes nothing. A write is different: if waiting expires after `POST /submissions`, we do not know whether the submission was stored. We return to this in the section on three histories behind one timeout.
+
 **Latency** describes a delay, such as the time from issuing a request to receiving a response. **Bandwidth** describes a communication link's data-transfer capacity. **Throughput** is the rate of completed work, such as accepted projects per second. A link with high bandwidth can still have high latency; a service with high throughput can still have slow individual requests. State the measurement and its units rather than treating these terms as interchangeable [3, section 1.2]. A 20 MB archive makes transfer time noticeable, but validation, queueing, and storage can also delay confirmation. The file size is illustrative, not a measured performance claim.
 
 ![A delivery analogy separates the time for one delivery, the route's cargo capacity, and the rate of completed deliveries. These measure different things: a large cargo capacity does not by itself guarantee a short trip or fast acceptance at the destination.](assets/latency-bandwidth-throughput.pdf){#fig-foundations-performance width=100% fig-pos="H" fig-alt="Three panels show a timed truck journey, cargo moving along a route, and completed deliveries. Portal units are seconds per request, bits per second, and accepted projects per second."}
@@ -373,6 +408,8 @@ Without a guaranteed response-time bound, silence cannot distinguish a slow serv
 
 **Insight: timeout and retry policies can overload the service they are meant to help.** If many clients use too-short timeouts and retry aggressively, their original requests may still be running when new attempts arrive. More load causes slower replies, which trigger more retries: a **retry storm**. Legitimate distributed clients can thereby cause a self-inflicted denial of service with DDoS-like effects, without a malicious attacker. Bound the retry count or budget and use backoff with jitter (randomized delays) to reduce amplification and synchronized bursts. These measures control load; they do not replace safe handling of duplicate requests. See [AWS Builders’ Library, *Timeouts, retries, and backoff with jitter*](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/).
 
+![A retry storm. Left: ten clients, each with a first attempt and two retries, send requests to the same overloaded service. Right: a schematic curve: up to capacity, completed requests grow; above capacity they fall because timeouts trigger more retries.](assets/retry-storm.en.pdf){#fig-foundations-storm width=100% fig-pos="H" fig-alt="Ten clients retry against an overloaded service; the completed-requests curve rises to capacity, then falls."}
+
 There is also a **liveness** consequence. Waiting forever avoids an overlapping retry but can leave valid work unfinished. Eventual acceptance needs explicit conditions: the necessary services recover and remain available, communication eventually succeeds, pending work is retained or retried, and processing eventually runs. These conditions support a progress argument; they do not supply a fixed response deadline.
 
 If a model guarantees that every live service replies within a known end-to-end bound, with reliable communication and the other assumptions holding, exceeding that bound rules out the healthy execution. A network-delay bound alone is insufficient: processing and the return path also take time. When messages may be lost or the network may fail independently, silence cannot uniquely identify a service crash.
@@ -417,7 +454,7 @@ etcd is a replicated key-value store used for coordination. Consider three non-B
 
 #### Cassandra: configuration changes the promise
 
-Take three replicas of a single cell and ordinary reads and writes at consistency level **ONE**. The coordinator needs one relevant replica to acknowledge an operation. With adequate resources, a client can therefore complete an operation without contacting a majority, but a later read from another replica may return old data. Non-Byzantine replicas can crash and recover; delayed messages and partitions are expected. Timestamp-based reconciliation selects among conflicting values, so the selected value is not necessarily the last write in real-world time. See Cassandra’s [Dynamo architecture](https://cassandra.apache.org/doc/stable/cassandra/architecture/dynamo.html).
+Take three replicas of a single cell and ordinary reads and writes at consistency level **ONE**. The coordinator needs one relevant replica to acknowledge an operation. With adequate resources, a client can therefore complete an operation without contacting a majority, but a later read from another replica may return old data. Non-Byzantine replicas can crash and recover; delayed messages and partitions are expected. Timestamp-based reconciliation selects among conflicting values, so the selected value is not necessarily the last write in real-world time. See Cassandra’s [Dynamo architecture](https://cassandra.apache.org/doc/stable/cassandra/architecture/dynamo.html). The difference from etcd lies in when a write is confirmed: etcd confirms it only after a majority accepts it and assigns it a place in one order, so the minority side of a partition cannot write. Cassandra at ONE confirms after one replica and reconciles replicas later, so both sides of a partition can write, and timestamps resolve conflicts.
 
 **Application invariant not supplied:** “sell a seat at most once” does not follow from ordinary read-then-write operations. Two clients can read “free” and both report a successful sale. Reconciling to one final stored value does not undo those two promises. Cassandra provides [lightweight transactions](https://cassandra.apache.org/doc/stable/cassandra/architecture/guarantees.html) for conditional operations with stronger consistency. Choosing QUORUM alone does not make separate reads and writes atomic.
 

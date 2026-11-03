@@ -46,3 +46,8 @@
 .reveal .facebook-scale > p img { display: inline-block; vertical-align: middle; margin: 0 0.4em 0 0; }
 .reveal .interruption-slide img { max-height: 300px; object-fit: contain; }
 .reveal .interruption-slide pre { font-size: 0.5em; margin: 0.3em 0 0.5em; }
+.reveal .code-compare-slide pre { font-size: 0.4em; margin: 0.2em 0 0.4em; }
+.reveal .code-compare-slide .column p { font-size: 0.8em; margin: 0.2em 0; }
+.reveal .storm-slide img { max-height: 400px; object-fit: contain; }
+.reveal .system-example.dense-table table { font-size: 0.66em; }
+.reveal .system-example.dense-table > p { font-size: 0.76em; }

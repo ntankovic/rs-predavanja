@@ -81,13 +81,13 @@ def draw(lang):
 LAYERS = {
     'hr': {
         'top': ('Jezgra · OS', 'dretve T1, T2'), 'bottom': ('Petlja u T1', 'korutine A, B, C'),
-        'idle': 'petlja stoji', 'await': 'await', 'preempt': 'OS prekid: B ne zna', 'time': 'Vrijeme',
+        'idle': 'naša petlja stoji', 'await': 'await', 'preempt': 'OS prekid: B ne zna', 'time': 'Vrijeme',
         'os': ('OS raspoređuje dretve', 'preemptivno, prekid bilo gdje'),
         'loop': ('Petlja događaja raspoređuje korutine', 'kooperativno, samo na await'),
     },
     'en': {
         'top': ('Core · OS', 'threads T1, T2'), 'bottom': ('Loop in T1', 'coroutines A, B, C'),
-        'idle': 'loop paused', 'await': 'await', 'preempt': 'OS preempts: B unaware', 'time': 'Time',
+        'idle': 'our loop is paused', 'await': 'await', 'preempt': 'OS preempts: B unaware', 'time': 'Time',
         'os': ('The OS schedules threads', 'preemptive, can stop anywhere'),
         'loop': ('The event loop schedules coroutines', 'cooperative, only at await'),
     },

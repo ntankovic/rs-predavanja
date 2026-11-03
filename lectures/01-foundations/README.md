@@ -69,35 +69,37 @@ Timings include explanation and student participation. `timing.json` is the mach
 | 12 | 17–18 | When does a worker switch tasks? |
 | 13 | 18–19 | Two schedulers: the OS and the event loop |
 | 14 | 19–19:30 | Dealing with tasks vs. doing them |
-| 15 | 19:30–21 | Local function calls and remote requests |
-| 16 | 21–23 | Delay, capacity, and completed work |
-| 17 | 23–24 | Recall Web Apps: time to first byte |
-| 18 | 24–25 | One component fails; others keep running |
-| 19 | 25–25:30 | A client can be another service |
-| 20 | 25:30–26 | Timeout |
-| 21 | 26–27:30 | History A: the request is lost |
-| 22 | 27:30–29 | History B: the reply is lost |
-| 23 | 29–30 | History C: the server process crashes |
-| 24 | 30–31 | Same observation, different outcomes |
-| 25 | 31–34 | Pair exercise: should the client retry? |
-| 26 | 34–35 | A retry can overlap the original request |
-| 27 | 35–36 | State the rule before choosing the protocol |
-| 28 | 36–37 | Safety and liveness |
-| 29 | 37–38 | Safety and liveness in different systems |
-| 30 | 38–40 | A system model makes assumptions explicit |
-| 31 | 40–42 | Network assumptions: can messages get through? |
-| 32 | 42–44 | Three node-failure models |
-| 33 | 44–45 | How long should the portal wait? |
-| 34 | 45–47 | Timing models: what may we assume? |
-| 35 | 47–49 | etcd: one successful claim |
-| 36 | 49–51 | Cassandra: choose what a reply promises |
-| 37 | 51–53 | Bitcoin: confidence grows with confirmations |
-| 38 | 53–54 | Our portal: assumptions behind the promise |
-| 39 | 54–55 | 🔥 How to develop a bad system |
-| 40 | 55–57 | No reply after 101 ms |
-| 41 | 57–58 | Back to the start: did the portal accept the project? |
-| 42 | 58–59:30 | Design the next step: did I submit on time? |
-| 43 | 59:30–60 | Homework: invoices 1, 2, 3, … |
+| 15 | 19:30–20:30 | Local function calls and remote requests |
+| 16 | 20:30–21:30 | Same work, local and remote |
+| 17 | 21:30–23 | Delay, capacity, and completed work |
+| 18 | 23–24 | Recall Web Apps: time to first byte |
+| 19 | 24–25 | One component fails; others keep running |
+| 20 | 25–25:30 | A client can be another service |
+| 21 | 25:30–26 | Timeout |
+| 22 | 26–27:30 | History A: the request is lost |
+| 23 | 27:30–29 | History B: the reply is lost |
+| 24 | 29–30 | History C: the server process crashes |
+| 25 | 30–31 | Same observation, different outcomes |
+| 26 | 31–33 | Pair exercise: should the client retry? |
+| 27 | 33–34 | A retry can overlap the original request |
+| 28 | 34–35 | Retries can bring a service down |
+| 29 | 35–36 | State the rule before choosing the protocol |
+| 30 | 36–37 | Safety and liveness |
+| 31 | 37–38 | Safety and liveness in different systems |
+| 32 | 38–40 | A system model makes assumptions explicit |
+| 33 | 40–42 | Network assumptions: can messages get through? |
+| 34 | 42–44 | Three node-failure models |
+| 35 | 44–45 | How long should the portal wait? |
+| 36 | 45–47 | Timing models: what may we assume? |
+| 37 | 47–49 | etcd: one successful claim |
+| 38 | 49–51 | Cassandra: choose what a reply promises |
+| 39 | 51–53 | Bitcoin: confidence grows with confirmations |
+| 40 | 53–54 | Our portal: assumptions behind the promise |
+| 41 | 54–55 | 🔥 How to develop a bad system |
+| 42 | 55–57 | No reply after 101 ms |
+| 43 | 57–58 | Back to the start: did the portal accept the project? |
+| 44 | 58–59:30 | Design the next step: did I submit on time? |
+| 45 | 59:30–60 | Homework: invoices 1, 2, 3, … |
 
 ## Review checklist
 
@@ -216,3 +218,7 @@ Na nastavnikov zahtjev dodan je `chapter.hr.qmd`, prijevod engleskog `chapter.qm
 2026-11-02 — Na nastavnikov zahtjev dodan je slajd 12 „Kada izvršitelj mijenja zadatak?” / „When does a worker switch tasks?” (17–18): tri točke promjene zadatka (čekanje I/O, prekid OS-a, dobrovoljno ustupanje `await asyncio.sleep(0)`), kooperativno naspram preemptivnog raspoređivanja i primjer koda. „Moraju li svi čekati” i „Više predaja” traju po 1,5 min; 42 slajda / 60 min. Novi dvojezični dijagram `assets/interruption-points.{hr,en}` (generator `draw_interruptions.py`); odlomak dodan u oba poglavlja. Verzija decka 1.7 u oba jezika. Tablica vremena iznad ponovno je generirana iz `timing.json`. Provjere: `just language-check`, `just browser-check 01-foundations` (hr, 42 slajda, PASS), oba poglavlja i oba decka izgrađena. Prijevod na engleski čeka pregled.
 
 2026-11-03 — Na nastavnikov zahtjev dodan je slajd 13 „Dva raspoređivača: OS i petlja događaja” / „Two schedulers: the OS and the event loop” (18–19): dvije vremenske crte (dretve T1/T2 na jezgri, preemptivno; korutine A/B/C u petlji dretve T1, samo na await). Slajd s citatom Roba Pikea traje 0,5 min, „Lokalni pozivi” 1,5 min; 43 slajda / 60 min. Dijagram `assets/scheduler-layers.{hr,en}` (u `draw_interruptions.py`); odlomak u oba poglavlja; verzija decka 1.8 u oba jezika. Provjere: `just language-check`, `just browser-check` (hr i en, 43 slajda, PASS). Prijevod na engleski čeka pregled.
+
+2026-11-03 — Natpis „naša petlja stoji” / „our loop is paused” na dijagramu dvaju raspoređivača (v1.9). Dodan slajd 16 „Isti posao, lokalno i udaljeno” / „Same work, local and remote” (20:30–21:30): provjera roka kao lokalna funkcija i kao `httpx` zahtjev s četiri vrste grešaka; upis nakon isteka čekanja ima nepoznat ishod. „Lokalni pozivi” traju 1 min, „Kašnjenje, kapacitet” 1,5 min; 44 slajda / 60 min. Isti primjer u oba poglavlja; verzija decka 2.0 u oba jezika. Provjere: `just language-check`, `just browser-check` (hr i en, 44 slajda, PASS). Na nastavnikov zahtjev udaljeni primjer dobio je ponovne pokušaje s eksponencijalnim čekanjem i jitterom te zapis trajanja svakog pokušaja (v2.1); isti kod u oba poglavlja.
+
+2026-11-03 — Dodan slajd 28 „Ponovni pokušaji mogu srušiti uslugu” / „Retries can bring a service down” (34–35): 10 klijenata × 3 pokušaja prema preopterećenoj usluzi i shematska krivulja obrađenih zahtjeva (do kapaciteta raste, iznad pada); nenamjerni DDoS. Rasprava u paru traje 2 min; 45 slajdova / 60 min. Dijagram `assets/retry-storm.{hr,en}` (`draw_retry_storm.py`), slika i u oba poglavlja. Slajd o etcd-u dobio je engleske termine (atomic, create-if-absent, read-then-write). Slajd o Cassandri dobio je redak „U odnosu na etcd” (većina i jedan redoslijed naspram potvrde jedne replike i kasnijeg usklađivanja) i manji font tablice; ista rečenica u oba poglavlja. Verzija decka 2.3. Provjere: language-check, browser-check (hr i en, 45 slajdova, PASS).

@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "1.8"
+version: "2.3"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -356,6 +356,77 @@ Sources: [Python, asyncio event loop](https://docs.python.org/3/library/asyncio-
 Sources: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
+## Same work, local and remote {.code-compare-slide}
+
+:::: {.columns}
+::: {.column width="33%"}
+**Local call**
+
+```python
+def check_deadline(task, now):
+    return now <= DEADLINES[task]
+
+try:
+    ok = check_deadline("rs-01", now)
+except KeyError:
+    ok = None  # unknown task
+```
+
+A value or an exception. It ran **exactly once**.
+:::
+::: {.column width="65%"}
+**Remote request**
+
+```python
+async def check_deadline(client, task, now):
+    for attempt in range(3):
+        t0 = time.perf_counter()
+        try:
+            r = await client.get(f"/tasks/{task}/deadline", timeout=2.0)
+            r.raise_for_status()
+            return now <= datetime.fromisoformat(r.json()["deadline"])
+        except httpx.ConnectError:
+            pass   # request not sent: safe to retry
+        except httpx.TimeoutException:
+            pass   # slow or crashed? a read is safe to retry
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code < 500:
+                raise  # 404: retrying does not help
+        except (KeyError, ValueError):
+            raise      # different reply: another service version
+        finally:
+            ms = (time.perf_counter() - t0) * 1000
+            log.info("deadline %s, attempt %d: %.0f ms", task, attempt + 1, ms)
+        await asyncio.sleep(0.2 * 2**attempt + random.uniform(0, 0.1))
+    raise RuntimeError("task service not responding")
+```
+:::
+::::
+
+**For a write (`POST /submissions`) a timeout means: the submission may or may not be stored.**
+
+::: {.notes}
+- **Story:** The same work in code: locally two outcomes, remotely a third one, "I don't know".
+
+- Local: a value or an exception; the function ran exactly once; the error is in our code or data.
+
+- Remote: no connection (request not sent), timeout (it may have been processed), the other service's error (status 404/503/500), a reply of unexpected shape (another service version).
+
+- The deadline check is a read: a retry changes nothing (idempotent, Web Apps). The problem is the write: a ReadTimeout after POST /submissions does not say whether the submission was stored.
+
+- Preview: give the operation an identity that survives retries (e.g. an Idempotency-Key header with the same submission_id); developed in Lecture 03.
+
+- Ask: how long should we wait? 2 s is our choice, not a guarantee of the service.
+
+- Retries: at most 3, with exponential waits (0.2 s, 0.4 s, 0.8 s) and random jitter, so thousands of clients do not hit at the same moment (retry storm). 4xx is not retried: the request is wrong. Only reads are retried; writes only with an operation identity.
+
+- finally logs the duration of every attempt, successful or not: without it we cannot tell a slow service from an unavailable one. Locally none of this is needed.
+
+Sources: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/).
+
+Sources: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+:::
+
 ## Delay, capacity, and completed work
 
 **More projects finish each second. Must my own upload finish sooner?**
@@ -583,6 +654,26 @@ A tempting approach: **“If no accepted entry exists, create one.”**
 - Propose “check, then create”; could both observe absence?
 
 - Identify the invariant before choosing a protocol.
+:::
+
+## Retries can bring a service down {.storm-slide}
+
+![](assets/retry-storm.en.svg){fig-alt="Left: ten clients, each with a first attempt and two retries, send requests to the same overloaded task service. Right: a schematic curve: up to capacity, completed requests grow with incoming requests; above capacity they fall because timeouts trigger more retries." width=100%}
+
+**Slower replies → more timeouts → even more retries.** Legitimate clients thus cause an **unintended DDoS**: a retry storm.
+
+::: {.notes}
+- **Story:** A retry helps one client, but when everyone retries, the struggling service gets even more work.
+
+- Left: 10 clients × 3 attempts = 30 requests instead of 10, exactly when the service is slowest.
+
+- Right: up to capacity the service works well. Above it, the queue grows, replies are late, clients time out, and the service keeps processing requests nobody is waiting for. The curve is schematic, not a measurement.
+
+- Ask: how would you limit the damage? Expected: at most N attempts, exponential backoff, jitter, a retry budget, a circuit breaker later.
+
+- This is not an attack: nobody is malicious, but the effect equals a DDoS.
+
+Sources: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/); [Google SRE Book, Addressing Cascading Failures](https://sre.google/sre-book/addressing-cascading-failures/).
 :::
 
 ## State the rule before choosing the protocol {.retry-overlap}
@@ -837,7 +928,7 @@ A replicated key-value store for coordination: **two clients try to claim the sa
 Sources: [etcd API guarantees](https://etcd.io/docs/v3.6/learning/api_guarantees/); [failure modes](https://etcd.io/docs/v3.6/op-guide/failures/); [Raft paper](https://raft.github.io/raft.pdf).
 :::
 
-## Cassandra: choose what a reply promises {.example-slide .system-example}
+## Cassandra: choose what a reply promises {.example-slide .system-example .dense-table}
 
 A distributed database: **three replicas; ordinary reads and writes at consistency level ONE**.
 
@@ -846,6 +937,7 @@ A distributed database: **three replicas; ordinary reads and writes at consisten
 | **Model assumptions** | Non-Byzantine replicas may crash and recover. Network delays and partitions are possible. |
 | **Safety / its limit** | Success requires one replica’s acknowledgement. Reads may be stale; ordinary “read then write” does **not** preserve “sell a seat at most once”. |
 | **Liveness conditions** | A reachable, responsive replica can serve the operation. Replicas converge after communication and repair deliver retained updates. |
+| **Compared with etcd** | etcd needs **a majority and one order** of writes (Raft) before confirming; in a partition the minority cannot write. Cassandra at ONE confirms after **one replica** and reconciles later: both sides of a partition write, and timestamps resolve conflicts. |
 
 **The choice matters:** QUORUM requires a majority; conditional reservations need stronger coordination, such as lightweight transactions (LWT).
 
@@ -863,6 +955,8 @@ A distributed database: **three replicas; ordinary reads and writes at consisten
 - “Last” means timestamp order, not necessarily real-world order.
 
 - QUORUM does not make read-then-write atomic; LWT adds conditional coordination.
+
+- Difference from etcd: etcd chooses consistency (CP: no majority, no write), Cassandra at ONE availability and speed (AP: writes even in a minority, reconciles later). etcd solves the duplicate problem; Cassandra at ONE does not.
 
 Sources: [Dynamo architecture](https://cassandra.apache.org/doc/stable/cassandra/architecture/dynamo.html); [guarantees](https://cassandra.apache.org/doc/stable/cassandra/architecture/guarantees.html); [hints and repair](https://cassandra.apache.org/doc/stable/cassandra/managing/operating/hints.html).
 :::

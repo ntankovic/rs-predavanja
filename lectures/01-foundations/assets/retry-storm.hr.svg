@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="432" viewBox="0 0 1120 432">
+<defs><marker id="hit" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#b33e44"/></marker><marker id="axis" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0 0L9 4.5L0 9Z" fill="#617886"/></marker></defs>
+<rect width="1120" height="432" fill="white"/>
+<rect x="20" y="18" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="39" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K1</text>
+<line x1="100" y1="27" x2="344" y2="152.0" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="33" x2="344" y2="155.0" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="39" x2="344" y2="157.9" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="55" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="76" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K2</text>
+<line x1="100" y1="64" x2="344" y2="160.9" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="70" x2="344" y2="163.9" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="76" x2="344" y2="166.8" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="92" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="113" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K3</text>
+<line x1="100" y1="101" x2="344" y2="169.8" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="107" x2="344" y2="172.8" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="113" x2="344" y2="175.7" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="129" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="150" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K4</text>
+<line x1="100" y1="138" x2="344" y2="178.7" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="144" x2="344" y2="181.7" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="150" x2="344" y2="184.6" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="166" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="187" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K5</text>
+<line x1="100" y1="175" x2="344" y2="187.6" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="181" x2="344" y2="190.6" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="187" x2="344" y2="193.5" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="203" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="224" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K6</text>
+<line x1="100" y1="212" x2="344" y2="196.5" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="218" x2="344" y2="199.4" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="224" x2="344" y2="202.4" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="240" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="261" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K7</text>
+<line x1="100" y1="249" x2="344" y2="205.4" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="255" x2="344" y2="208.3" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="261" x2="344" y2="211.3" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="277" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="298" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K8</text>
+<line x1="100" y1="286" x2="344" y2="214.3" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="292" x2="344" y2="217.2" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="298" x2="344" y2="220.2" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="314" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="335" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K9</text>
+<line x1="100" y1="323" x2="344" y2="223.2" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="329" x2="344" y2="226.1" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="335" x2="344" y2="229.1" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="20" y="351" width="78" height="30" rx="8" fill="#e6f6fd" stroke="#1585b4" stroke-width="1.4"/>
+<text x="59" y="372" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#18344b">K10</text>
+<line x1="100" y1="360" x2="344" y2="232.1" stroke="#b33e44" stroke-width="1.6" opacity="1" marker-end="url(#hit)"/>
+<line x1="100" y1="366" x2="344" y2="235.0" stroke="#b33e44" stroke-width="1.6" opacity="0.55" marker-end="url(#hit)"/>
+<line x1="100" y1="372" x2="344" y2="238.0" stroke="#b33e44" stroke-width="1.6" opacity="0.3" marker-end="url(#hit)"/>
+<rect x="350" y="140" width="210" height="110" rx="14" fill="#fdf3f3" stroke="#e3b9bc" stroke-width="1.5"/>
+<rect x="360" y="162" width="6" height="66" rx="3" fill="#b33e44"/>
+<text x="462.0" y="190" font-family="Arial, Helvetica, sans-serif" font-size="19" font-weight="700" text-anchor="middle" fill="#18344b">Usluga zadataka</text>
+<text x="462.0" y="216" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="400" text-anchor="middle" fill="#b33e44">preopterećena</text>
+<text x="275" y="412" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400" text-anchor="middle" fill="#617886">Puna crta: prvi pokušaj · svjetlije: ponovni pokušaji</text>
+<path d="M640 360H1090" stroke="#617886" stroke-width="2" marker-end="url(#axis)"/>
+<path d="M640 360V40" stroke="#617886" stroke-width="2" marker-end="url(#axis)"/>
+<text x="1090" y="388" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400" text-anchor="end" fill="#617886">Pristigli zahtjevi u sekundi</text>
+<text x="626" y="50" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400" text-anchor="end" fill="#617886" transform="rotate(-90 626 50)">Obrađeno u sekundi</text>
+<rect x="642" y="40" width="198" height="320" fill="#eaf5ec" opacity=".55"/>
+<text x="740.0" y="346" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" text-anchor="middle" fill="#3d7f4f">radi dobro</text>
+<line x1="840" y1="50" x2="840" y2="360" stroke="#617886" stroke-width="1.5" stroke-dasharray="5 5"/>
+<text x="840" y="44" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400" text-anchor="middle" fill="#617886">kapacitet</text>
+<path d="M640 360L840 110H1080" fill="none" stroke="#617886" stroke-width="2" stroke-dasharray="7 6"/>
+<path d="M640 360L810 125 Q850 92 900 150 T1070 320" fill="none" stroke="#b33e44" stroke-width="4"/>
+<line x1="640" y1="412" x2="674" y2="412" stroke="#617886" stroke-width="2" stroke-dasharray="7 6"/>
+<text x="682" y="417" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400" text-anchor="start" fill="#617886">idealno</text>
+<line x1="770" y1="412" x2="804" y2="412" stroke="#b33e44" stroke-width="4"/>
+<text x="812" y="417" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="700" text-anchor="start" fill="#b33e44">stvarno: timeouti → još pokušaja</text>
+</svg>
