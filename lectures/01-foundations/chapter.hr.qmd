@@ -227,6 +227,21 @@ async def provjeri_rok(klijent, zadatak, sada):
 
 Uz to treba odlučiti koliko puta ponoviti i koliko čekati između pokušaja: eksponencijalno rastuće čekanje s nasumičnim pomakom (jitter) sprječava da mnogo klijenata istodobno ponovi zahtjev. Zapis trajanja svakog pokušaja (`finally`) pokazuje je li usluga spora ili nedostupna. Ništa od toga lokalni poziv ne treba. Provjera roka samo čita, pa ponovni pokušaj ništa ne mijenja. Kod upisa je drukčije: ako nakon `POST /predaje` istekne čekanje, ne znamo je li predaja spremljena. Tome se vraćamo u odjeljku o tri slijeda iza jednog isteka čekanja.
 
+**Lanac poziva: pouzdanost se množi.** Predaja rijetko poziva samo jednu uslugu. Provjera roka, podaci o korisniku, pohrana i obavijest već su četiri udaljena poziva, a predaja uspijeva samo ako uspiju svi. Ako svaki od $N$ uzastopnih koraka uspijeva neovisno s vjerojatnošću $p$ i nema ponovnih pokušaja, cijeli tok uspijeva s vjerojatnošću
+
+$$P_\text{uspjeh} = p^N, \qquad P_\text{barem jedan ispad} = 1 - p^N.$$
+
+| Broj koraka $N$ | $p$ = 99,99 % | $p$ = 99,9 % | $p$ = 99 % | $p$ = 98 % |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 99,99 % | 99,9 % | 99 % | 98 % |
+| 4 | 99,96 % | 99,60 % | 96,06 % | 92,24 % |
+| 10 | 99,90 % | 99,00 % | 90,44 % | 81,71 % |
+| 100 | 99,005 % | 90,48 % | 36,60 % | 13,26 % |
+
+: Vjerojatnost uspjeha toka od $N$ uzastopnih koraka uz neovisne ispade i bez ponovnih pokušaja. {#tbl-foundations-chain}
+
+Već uz četiri poziva od 99 % svaka dvadeset i peta predaja negdje zapne. Kroz sto koraka razlika između 99,99 % i 98 % po koraku postaje razlika između 99 % i 13 % za cijeli tok. Obrnuto, cilj za cijeli tok određuje zahtjev za svaki korak: $p_\text{min} = P_\text{cilj}^{1/N}$. Za 99,9 % kroz 100 koraka svaki korak mora uspjeti u barem 99,999 % slučajeva, odnosno smije pasti otprilike deset puta na milijun poziva. Isto vrijedi za kašnjenje: ako je 1 % odgovora pojedine usluge sporo, a zahtjev čeka odgovore sto usluga, spor je oko 63 % takvih zahtjeva [4]. Pretpostavke su pojednostavljene. Stvarni ispadi često su povezani (zajednička mreža, zajednička baza), a ponovni pokušaj povećava $p$ pojedinog koraka, ali dodaje opterećenje. Tome se vraćamo kod ponovnih pokušaja.
+
 **Latencija** (latency) opisuje kašnjenje, na primjer vrijeme od slanja zahtjeva do primitka odgovora. **Kapacitet veze** (bandwidth) opisuje koliko podataka veza može prenijeti. **Propusnost** (throughput) je brzina dovršavanja posla, na primjer broj prihvaćenih projekata u sekundi. Veza velikog kapaciteta i dalje može imati veliku latenciju; usluga velike propusnosti i dalje može imati spore pojedinačne zahtjeve. Navedite mjeru i njezine jedinice umjesto da pojmove smatrate zamjenjivima [3, odjeljak 1.2]. Arhiva od 20 MB čini vrijeme prijenosa primjetnim, ali potvrdu mogu odgoditi i provjera, čekanje u redu i pohrana. Veličina datoteke je ilustracija, a ne izmjerena tvrdnja o performansama.
 
 ![Analogija s dostavom razdvaja vrijeme jedne dostave, kapacitet tereta na ruti i broj dovršenih dostava. To su različite mjere: velik kapacitet tereta sam po sebi ne jamči kratko putovanje ni brzo prihvaćanje na odredištu.](assets/latency-bandwidth-throughput.hr.pdf){#fig-foundations-performance width=100% fig-pos="H" fig-alt="Tri panela prikazuju vremenski mjereno putovanje kamiona, teret koji se kreće rutom i dovršene dostave. Jedinice u portalu su sekunde po zahtjevu, bitovi u sekundi i prihvaćeni projekti u sekundi."}
@@ -546,3 +561,5 @@ Najprije navedite pravilo o roku: koji se događaj računa kao predaja? To što 
 [2] Jim Waldo, Geoff Wyant, Ann Wollrath i Sam Kendall. *[A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing)*. Sun Microsystems Laboratories, 1994. Javna stranica autora s priloženim radom. Čitajte zbog razlike između lokalnog i udaljenog računanja, uključujući latenciju, konkurentnost i djelomični ispad.
 
 [3] Martin Kleppmann. *[Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf)*. University of Cambridge, 2021./22. Javne bilješke s predavanja objavljene pod licencom CC BY-SA. Pročitajte odjeljke 1.1–1.3 za osnove i RPC, 2.1 za neizvjesnost i 2.3 za modele čvorova, mreže i vremena. Odjeljak 5.1 neobavezno je nastavno čitanje o ponovnim pokušajima i dupliciranim učincima.
+
+[4] Jeffrey Dean i Luiz André Barroso. *[The Tail at Scale](https://doi.org/10.1145/2408776.2408794)*. Communications of the ACM 56(2), 2013. Kako kašnjenje rijetkih sporih odgovora raste kada zahtjev čeka mnogo usluga.

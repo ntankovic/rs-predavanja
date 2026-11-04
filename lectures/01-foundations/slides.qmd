@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "2.4"
+version: "2.5"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -425,6 +425,31 @@ async def check_deadline(client, task, now):
 Sources: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/).
 
 Sources: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+:::
+
+## A chain of calls: reliability multiplies {.chain-slide}
+
+```{=html}
+<div class="rc-widget" data-lang="en" data-steps="4" data-b="99"></div>
+<script src="assets/reliability-chain.js"></script>
+```
+
+::: {.notes}
+- **Story:** A submission rarely calls just one service: deadline check, users, storage, notification. That is already four remote calls, and every one must succeed.
+
+- Default N = 4: at 99% per call the workflow succeeds 0.99⁴ ≈ 96% of the time; one submission in 25 gets stuck somewhere. With 10 calls ≈ 90%.
+
+- Click "Compare scenarios" (N = 100): 99.99% per step gives 99.005%, 98% gives 13.262%. Two percentage points per step, 86 points for the whole workflow.
+
+- Run the simulation: the observed value differs from the theoretical one because it is random, but stays close.
+
+- Reverse calculation: for 99.9% over 100 steps, each step may fail only 10 times per million calls.
+
+- Latency behaves the same: if 1% of replies are slow, a request that waits for 100 services is slow 63% of the time (Dean and Barroso).
+
+- Assumptions: independent failures, every step required, no retries. A retry raises a step's p but adds load: we return to this with retry storms.
+
+Sources: [Dean and Barroso, The Tail at Scale](https://doi.org/10.1145/2408776.2408794); [Google SRE Book, Embracing Risk](https://sre.google/sre-book/embracing-risk/).
 :::
 
 ## Delay, capacity, and completed work
