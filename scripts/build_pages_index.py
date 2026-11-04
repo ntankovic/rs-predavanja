@@ -188,7 +188,7 @@ def page(decks):
       <p>Fakultet informatike · Sveučilište Jurja Dobrile u Puli</p>
       <h1>Raspodijeljeni sustavi</h1>
       <p>izv. prof. dr. sc. Nikola Tanković · slajdovi predavanja</p>
-      <div class="links"><a href="{YOUTUBE}">Snimke predavanja na YouTubeu</a></div>
+      <div class="links"><a href="{YOUTUBE}" target="_blank" rel="noopener">Snimke predavanja na YouTubeu</a></div>
     </div>
   </div>
 </header>
@@ -205,6 +205,14 @@ def page(decks):
   Slajdovi se otvaraju u pregledniku. <kbd>F</kbd> cijeli zaslon · <kbd>S</kbd> bilješke · <kbd>Esc</kbd> pregled svih slajdova.
   Kratke poveznice: <code>01.html</code>, <code>02.html</code>… · Ažurirano {date.today().strftime('%d. %m. %Y.')}
 </footer>
+<script>
+  // When embedded (e.g. in Moodle), report the page height so the parent can size its iframe.
+  if (window.parent !== window) {{
+    const sendHeight = () => parent.postMessage({{ rsHeight: document.documentElement.scrollHeight }}, '*');
+    window.addEventListener('load', sendHeight);
+    new ResizeObserver(sendHeight).observe(document.body);
+  }}
+</script>
 </body>
 </html>
 '''
