@@ -73,34 +73,35 @@ Timings include explanation and student participation. `timing.json` is the mach
 | 16 | 19–20 | Same work, local and remote |
 | 17 | 20–22 | A chain of calls: reliability multiplies |
 | 18 | 22–23 | Delay, capacity, and completed work |
-| 19 | 23–24 | Recall Web Apps: time to first byte |
-| 20 | 24–25 | One component fails; others keep running |
-| 21 | 25–25:30 | A client can be another service |
-| 22 | 25:30–26 | Timeout |
-| 23 | 26–27:30 | History A: the request is lost |
-| 24 | 27:30–29 | History B: the reply is lost |
-| 25 | 29–30 | History C: the server process crashes |
-| 26 | 30–31 | Same observation, different outcomes |
-| 27 | 31–33 | Pair exercise: should the client retry? |
-| 28 | 33–34 | A retry can overlap the original request |
-| 29 | 34–35 | Retries can bring a service down |
-| 30 | 35–36 | State the rule before choosing the protocol |
-| 31 | 36–37 | Safety and liveness |
-| 32 | 37–38 | Safety and liveness in different systems |
-| 33 | 38–40 | A system model makes assumptions explicit |
-| 34 | 40–42 | Network assumptions: can messages get through? |
-| 35 | 42–44 | Three node-failure models |
-| 36 | 44–45 | How long should the portal wait? |
-| 37 | 45–47 | Timing models: what may we assume? |
-| 38 | 47–49 | etcd: one successful claim |
-| 39 | 49–51 | Cassandra: choose what a reply promises |
-| 40 | 51–53 | Bitcoin: confidence grows with confirmations |
-| 41 | 53–54 | Our portal: assumptions behind the promise |
-| 42 | 54–55 | 🔥 How to develop a bad system |
-| 43 | 55–57 | No reply after 101 ms |
-| 44 | 57–58 | Back to the start: did the portal accept the project? |
-| 45 | 58–59:30 | Design the next step: did I submit on time? |
-| 46 | 59:30–60 | Homework: invoices 1, 2, 3, … |
+| 19 | 23–25 | Simulator: latency and throughput |
+| 20 | 25–26 | Recall Web Apps: time to first byte |
+| 21 | 26–27 | One component fails; others keep running |
+| 22 | 27–27:30 | A client can be another service |
+| 23 | 27:30–28 | Timeout |
+| 24 | 28–29:30 | History A: the request is lost |
+| 25 | 29:30–31 | History B: the reply is lost |
+| 26 | 31–32 | History C: the server process crashes |
+| 27 | 32–33 | Same observation, different outcomes |
+| 28 | 33–35 | Pair exercise: should the client retry? |
+| 29 | 35–36 | A retry can overlap the original request |
+| 30 | 36–37 | Retries can bring a service down |
+| 31 | 37–38 | State the rule before choosing the protocol |
+| 32 | 38–39 | Safety and liveness |
+| 33 | 39–40 | Safety and liveness in different systems |
+| 34 | 40–42 | A system model makes assumptions explicit |
+| 35 | 42–44 | Network assumptions: can messages get through? |
+| 36 | 44–46 | Three node-failure models |
+| 37 | 46–47 | How long should the portal wait? |
+| 38 | 47–49 | Timing models: what may we assume? |
+| 39 | 49–51 | etcd: one successful claim |
+| 40 | 51–53 | Cassandra: choose what a reply promises |
+| 41 | 53–55 | Bitcoin: confidence grows with confirmations |
+| 42 | 55–56 | Our portal: assumptions behind the promise |
+| 43 | 56–57 | 🔥 How to develop a bad system |
+| 44 | 57–59 | No reply after 101 ms |
+| 45 | 59–60 | Back to the start: did the portal accept the project? |
+| 46 | 60–61:30 | Design the next step: did I submit on time? |
+| 47 | 61:30–62 | Homework: invoices 1, 2, 3, … |
 
 ## Review checklist
 
@@ -225,3 +226,5 @@ Na nastavnikov zahtjev dodan je `chapter.hr.qmd`, prijevod engleskog `chapter.qm
 2026-11-03 — Dodan slajd 28 „Ponovni pokušaji mogu srušiti uslugu” / „Retries can bring a service down” (34–35): 10 klijenata × 3 pokušaja prema preopterećenoj usluzi i shematska krivulja obrađenih zahtjeva (do kapaciteta raste, iznad pada); nenamjerni DDoS. Rasprava u paru traje 2 min; 45 slajdova / 60 min. Dijagram `assets/retry-storm.{hr,en}` (`draw_retry_storm.py`), slika i u oba poglavlja. Slajd o etcd-u dobio je engleske termine (atomic, create-if-absent, read-then-write). Slajd o Cassandri dobio je redak „U odnosu na etcd” (većina i jedan redoslijed naspram potvrde jedne replike i kasnijeg usklađivanja) i manji font tablice; ista rečenica u oba poglavlja. Verzija decka 2.3. Provjere: language-check, browser-check (hr i en, 45 slajdova, PASS).
 
 2026-11-03 — Dodan slajd 17 „Lanac poziva: pouzdanost se množi” / „A chain of calls: reliability multiplies” (20–22) s interaktivnim prikazom P = p^N (`assets/reliability-chain.js`, ugrađen u dek; lanac usluga, krivulja, Monte Carlo sa 1000 izvođenja, izračun, obrnuti izračun, pretpostavke). Skraćeni: slajd 5 na 2,5 min, 10, 11 i 18 na 1 min; 46 slajdova / 60 min. Verzija decka 2.5 u oba jezika; isti sadržaj u oba poglavlja.
+
+2026-11-09 — Dodan slajd 19 „Simulator: latencija i propusnost” / „Simulator: latency and throughput” (23–25) s interaktivnim prikazom (`assets/latency-throughput.js`). Nijedan slajd nije skraćen; plan sada iznosi 62 minute.

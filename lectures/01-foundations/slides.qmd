@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "3.3"
+version: "4.7"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -478,6 +478,25 @@ Back to our portal: **high throughput does not guarantee a quick reply.**
 - Optional: 10 Gbit/s ≈ 22.2 h before overhead (decimal). High throughput ≠ quick reply.
 
 Sources: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
+:::
+
+## Simulator: latency and throughput
+
+```{=html}
+<div class="lt-widget" data-lang="en"></div>
+<script src="assets/latency-throughput.js"></script>
+```
+
+::: {.notes}
+- **Story:** The same concepts as the previous slide: we move the parameters and watch what changes.
+
+- "Small request": about 152 ms, almost all latency. Raise the bandwidth: the duration does not change.
+
+- "Large ZIP": about 16 s, sending dominates; now more bandwidth helps.
+
+- "Slow check": the transfer finishes in 180 ms, then processing takes another 2 s. The link allows 6.25 projects per second, the server 0.5: the bottleneck sets the throughput.
+
+- "100 TB by network": 22.2 h. "100 TB by truck": 12 h on the road. Ask what the model leaves out: copying, reading, verification.
 :::
 
 ## Recall Web Apps: time to first byte

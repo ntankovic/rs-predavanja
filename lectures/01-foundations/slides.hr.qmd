@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "3.3"
+version: "4.7"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -483,6 +483,25 @@ Latencija (**latency**) · kapacitet veze (**bandwidth**) · propusnost (**throu
 - Opcionalno: 10 Gbit/s ≈ 22,2 h prije dodatnih troškova (decimalno). Propusnost ≠ brz odgovor.
 
 Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
+:::
+
+## Simulator: latencija i propusnost
+
+```{=html}
+<div class="lt-widget" data-lang="hr"></div>
+<script src="assets/latency-throughput.js"></script>
+```
+
+::: {.notes}
+- **Priča:** Isti pojmovi kao na prethodnom slajdu: pomičemo parametre i gledamo što se mijenja.
+
+- „Mali zahtjev”: oko 152 ms, gotovo sve je latencija. Povećati kapacitet veze: trajanje se ne mijenja.
+
+- „Veliki ZIP”: oko 16 s, dominira slanje; sada veći kapacitet pomaže.
+
+- „Spora provjera”: prijenos je gotov za 180 ms, a obrada traje još 2 s. Veza dopušta 6,25 projekata u sekundi, poslužitelj 0,5: propusnost određuje usko grlo.
+
+- „100 TB mrežom”: 22,2 h. „100 TB kamionom”: 12 h puta. Pitati što model izostavlja: kopiranje, čitanje, provjeru.
 :::
 
 ## Prisjetimo se Web aplikacija: TTFB
