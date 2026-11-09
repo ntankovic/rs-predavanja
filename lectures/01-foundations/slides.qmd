@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "4.7"
+version: "5.2"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -841,7 +841,7 @@ Retries help only if some later attempt can reach the receiver.
 | Continued retries eventually get through | Eventual delivery is possible, without a fixed deadline. |
 | A permanent partition blocks every attempt | Acceptance needing that communication cannot progress. |
 
-Our example excludes forged or altered messages.
+For our portal, we assume nobody alters or fakes messages in transit.
 
 ::: {.notes}
 - **Story:** First model dimension: what the network may do to messages.
@@ -944,24 +944,24 @@ Internet congestion and process pauses motivate **partial synchrony**. It is a *
 Sources: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
-## etcd: one successful claim {.example-slide .system-example}
+## etcd: only one client creates the key {.example-slide .system-example}
 
-A replicated key-value store for coordination: **two clients try to claim the same name**.
+**etcd** is a replicated key-value store where distributed systems (e.g. Kubernetes) keep configuration and coordination data. Example: **two clients try to create the same key at the same time**.
 
 | What we reason about | Three-member etcd cluster |
 |:---|:---|
-| **Model assumptions** | Trusted, non-Byzantine members; crash-recovery with durable state. Delays and partitions are possible. |
-| **Invariant / safety** | Atomic “if absent, create” lets **at most one claimant succeed**, until the key is deleted. A separate read then write would not suffice. |
-| **Liveness conditions** | A reachable **majority (2 of 3)**, a stable leader, and timely communication and processing allow progress. |
+| **Model assumptions** | Members follow the protocol (they do not lie); they can crash and recover with state kept on disk. Messages can be delayed, and the network can split (partition). |
+| **Invariant / safety** | The command “if the key is absent, create it” runs as one indivisible (atomic) step, so **only one client succeeds**, until the key is deleted. With a separate read and write, both clients could see that the key is absent and both write it. |
+| **Liveness conditions** | Requests complete if **at least 2 of 3 members (a majority)** are reachable and have a leader, and delays are not so long that the leader keeps changing. |
 
-**Partition 2 + 1:** the majority can commit; the isolated member cannot commit a competing claim.
+**If the network cuts 2 members off from 1:** those two keep confirming writes. The isolated member cannot confirm any write, so nobody can create the same key through it.
 
 ::: {.notes}
 - **Story:** A real system solves our duplicate problem with an atomic create-if-absent.
 
 - Replica = maintained copy; majority = 2/3.
 
-- Atomic compare-absence + create allows one claimant; separate read/write does not.
+- Atomic compare-absence + create lets one client win; separate read/write does not.
 
 - Assume no deletion, expiry or bypass; external resources need fencing.
 
@@ -976,16 +976,16 @@ Sources: [etcd API guarantees](https://etcd.io/docs/v3.6/learning/api_guarantees
 
 ## Cassandra: choose what a reply promises {.example-slide .system-example .dense-table}
 
-A distributed database: **three replicas; ordinary reads and writes at consistency level ONE**.
+**Apache Cassandra** is a distributed NoSQL database that keeps the same data on several servers. Example: **three copies of the data (replicas); reads and writes wait for only one (consistency level ONE)**.
 
 | What we reason about | This Cassandra configuration |
 |:---|:---|
-| **Model assumptions** | Non-Byzantine replicas may crash and recover. Network delays and partitions are possible. |
-| **Safety / its limit** | Success requires one replica’s acknowledgement. Reads may be stale; ordinary “read then write” does **not** preserve “sell a seat at most once”. |
-| **Liveness conditions** | A reachable, responsive replica can serve the operation. Replicas converge after communication and repair deliver retained updates. |
-| **Compared with etcd** | etcd needs **a majority and one order** of writes (Raft) before confirming; in a partition the minority cannot write. Cassandra at ONE confirms after **one replica** and reconciles later: both sides of a partition write, and timestamps resolve conflicts. |
+| **Model assumptions** | Replicas follow the protocol (they do not lie); they can crash and recover. Messages can be delayed, and the network can split (partition). |
+| **Safety / its limit** | One replica’s acknowledgement is enough for success. A read can therefore return old data, so “read then write” does **not** prevent selling the same seat twice. |
+| **Liveness conditions** | An operation succeeds as soon as one reachable replica responds. The other replicas receive the change later, once the connection recovers and repair delivers the retained updates. |
+| **Compared with etcd** | etcd needs **a majority and one order** of writes (Raft) before confirming; in a partition the minority cannot write. Cassandra at ONE confirms after **one replica** and reconciles later: both sides of a partition write, and on a conflict the newer timestamp wins. |
 
-**The choice matters:** QUORUM requires a majority; conditional reservations need stronger coordination, such as lightweight transactions (LWT).
+**The choice matters:** QUORUM waits for a majority (2 of 3), and the condition “sell only if free” needs stronger coordination, such as lightweight transactions (LWT).
 
 ::: {.notes}
 - **Story:** Contrast: a weaker configuration buys speed but does not protect our rule.
@@ -1013,7 +1013,7 @@ A shared payment history in an **open network with potentially malicious partici
 
 | What we reason about | Bitcoin’s proof-of-work model |
 |:---|:---|
-| **Model assumptions** | Secure cryptography, dominant honest mining power, and block propagation fast enough relative to mining. |
+| **Model assumptions** | Secure cryptography; **an honest majority of hash rate** (honest miners hold most of the mining compute; node count does not matter); blocks propagate fast enough relative to new ones appearing. |
 | **Invariant / safety** | A valid chain never spends the same transaction output twice. Nodes can temporarily follow different branches; **settlement is probabilistic**. |
 | **Liveness conditions** | Continued mining and communication allow chain growth. A transaction must remain valid, reach miners, and be selected; **no fixed inclusion deadline**. |
 
@@ -1022,35 +1022,39 @@ A shared payment history in an **open network with potentially malicious partici
 ::: {.notes}
 - **Story:** The extreme case: malicious participants and probabilistic safety.
 
-- Adversarial network; honest mining power, secure cryptography, adequate propagation.
+- Adversarial network; honest majority of hash rate, secure cryptography, adequate propagation.
 
 - Same valid chain cannot spend an output twice; conflicting branches may coexist.
 
 - Confirmations reduce reversal risk under assumptions, never to zero.
 
-- Honest dominance = hash power, not node count; select greatest cumulative work.
+- Majority means hash rate, not node count; select greatest cumulative work.
 
 - Growth needs mining/communication; transaction inclusion also needs selection, without fixed deadline.
 
-- Majority hash power cannot make honest nodes accept invalid signatures.
+- Majority hash rate cannot make honest nodes accept invalid signatures.
 
 Sources: [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf); [Bitcoin developer guide: block chain](https://developer.bitcoin.org/devguide/block_chain.html).
 :::
 
-## Our portal: assumptions behind the promise
+## Our portal: assumptions behind the promise {.dense-table}
 
-**Retries must not create duplicate accepted entries, including after a restart.**
+**Goal:** a retry must not create a second accepted entry, even after the service restarts. The model consists of **reasonable assumptions that we, as architects, can anticipate**: the faults our design must handle.
 
-| Dimension | Model for this example |
+| Dimension | What we assume |
 |:---|:---|
-| Network | Requests and replies may be delayed, lost, repeated, or reordered; no tampering. |
-| Nodes | Services can crash and restart; durable records survive, memory may be lost. |
+| Network | Requests and replies may be delayed, lost, repeated, or reordered; nobody alters them in transit. |
+| Nodes | Services can crash and restart; records on disk (RAID) survive, the contents of main memory (RAM) are lost. |
 | Timing | No guaranteed maximum response time. |
+
+: {tbl-colwidths="[18,82]"}
 
 **To promise eventual acceptance:** services eventually stay available, communication succeeds, and retained or retried work is processed.
 
 ::: {.notes}
 - **Story:** We apply all three model dimensions to our portal.
+
+- Assumptions are not facts about the system: we, the architects, anticipate them, and the design holds only while they hold.
 
 - One example model, not a universal portal model.
 
@@ -1095,33 +1099,9 @@ Sources: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122
 
 - Abstractions can offer conditional guarantees; hidden assumptions are the problem.
 
-- Next: the 101 ms exercise — which assumption is missing?
+- Next: back to the opening question — did the portal accept the project?
 
 Sources: [Oracle, Fallacies of distributed systems](https://blogs.oracle.com/developers/fallacies-of-distributed-systems).
-:::
-
-## No reply after 101 ms {.exercise-slide}
-
-The assignment service **usually replies within 100 ms**.
-
-![](assets/reply-wait.en.svg){height=280px fig-alt="Client timeline: request sent at 0 ms, reply usually arrives within 100 ms, but no reply has arrived at 101 ms. Time moves right; spacing is not to scale. The service's state is unknown."}
-
-**Does that prove the service has crashed?**
-
-**State one alternative explanation and the extra guarantee your conclusion would need.**
-
-::: {.notes}
-- **Story:** Students catch the hidden timing assumption themselves.
-
-- Give 30 s: distinguish typical time from guaranteed bound.
-
-- No reply yet; process or communication may be delayed/unavailable.
-
-- Diagram shows only client observations, not an actual crash.
-
-- Invented times; spacing not to scale. Ask what end-to-end guarantee is missing.
-
-Sources: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
 ## Back to the start: did the portal accept the project?

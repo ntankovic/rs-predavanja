@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "4.7"
+version: "5.2"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -846,7 +846,7 @@ Ponavljanje pomaže samo ako neki kasniji pokušaj može stići.
 | Uporno ponavljanje konačno uspijeva | Dostava je moguća, bez fiksnog roka. |
 | Trajna mrežna particija (network partition) blokira sve pokušaje | Prihvaćanje koje treba tu komunikaciju ne napreduje. |
 
-U primjeru isključujemo krivotvorenje i izmjenu poruka.
+Za naš portal pretpostavljamo da nitko usput ne mijenja niti lažira poruke.
 
 ::: {.notes}
 - **Priča:** Prva dimenzija modela: što mreža smije raditi s porukama.
@@ -855,7 +855,7 @@ U primjeru isključujemo krivotvorenje i izmjenu poruka.
 
 - Fair loss: uporni pokušaji između ispravnih sudionika konačno uspiju; bez fiksnog roka.
 
-- Pouzdane veze: konačna dostava bez duplikata/krivotvorenja; redoslijed je zaseban.
+- Pouzdane veze: konačna dostava bez duplikata/lažnih poruka; redoslijed je zaseban.
 
 - Privremene particije odgađaju; trajne krše uvjet konačne komunikacije.
 
@@ -951,17 +951,17 @@ Zagušenje i zastoji motiviraju djelomičnu sinkronost. To je **pretpostavka**, 
 Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
-## etcd: jedno uspješno zauzimanje {.example-slide .system-example}
+## etcd: isti ključ stvara samo jedan klijent {.example-slide .system-example}
 
-Replicirana pohrana ključ–vrijednost: **dva klijenta žele isti naziv**.
+**etcd** je replicirana pohrana parova (ključ: vrijednost) u kojoj raspodijeljeni sustavi (npr. Kubernetes) drže konfiguraciju i podatke za koordinaciju. Primjer: **dva klijenta istodobno pokušavaju stvoriti isti ključ**.
 
 | O čemu zaključujemo | Klaster etcd s tri člana |
 |:---|:---|
-| **Pretpostavke modela** | Pouzdani, nebizantski članovi; ispad s oporavkom i trajnim stanjem. Moguća kašnjenja i particije. |
-| **Invarijanta / sigurnost** | Atomarno (atomic) „ako ne postoji, stvori” (create-if-absent) dopušta **najviše jedan uspjeh** dok se ključ ne izbriše. Odvojeno čitanje pa upis (read-then-write) nije dovoljno. |
-| **Uvjeti napredovanja** | Dostupna **većina (majority, 2 od 3)**, stabilan vođa te pravodobna komunikacija i obrada. |
+| **Pretpostavke modela** | Članovi slijede protokol (ne lažu); mogu se srušiti i oporaviti uz stanje sačuvano na disku. Poruke mogu kasniti, a mreža se može podijeliti (particija). |
+| **Invarijanta / sigurnost** | Naredba „ako ključ ne postoji, stvori ga” (create-if-absent) izvršava se kao jedan nedjeljiv (atomic) korak, pa **uspijeva samo jedan klijent**, sve dok se ključ ne izbriše. Da su čitanje i upis dva zasebna poziva (read-then-write), oba bi klijenta mogla vidjeti da ključa nema i oba ga upisati. |
+| **Uvjeti napredovanja** | Zahtjevi se izvršavaju ako su **barem 2 od 3 člana (većina, majority)** dostupna i imaju vođu (leader), a kašnjenja nisu tolika da se vođa stalno mijenja. |
 
-**Particija 2 + 1:** većina može potvrditi upis; izolirani član ne može potvrditi konkurentsko zauzimanje.
+**Ako mreža odvoji 2 člana od 1:** ta dva člana i dalje potvrđuju upise. Odsječeni član ne može potvrditi nijedan upis, pa preko njega nitko ne može stvoriti isti ključ.
 
 ::: {.notes}
 - **Priča:** Stvarni sustav rješava naš problem duplikata atomarnim „stvori ako ne postoji”.
@@ -983,16 +983,16 @@ Izvori: [etcd API guarantees](https://etcd.io/docs/v3.6/learning/api_guarantees/
 
 ## Cassandra: što odgovor obećava? {.example-slide .system-example .dense-table}
 
-Raspodijeljena baza: **tri replike; obična čitanja i upisi uz razinu konzistentnosti (consistency level) ONE**.
+**Apache Cassandra** je raspodijeljena NoSQL baza koja iste podatke čuva na više poslužitelja. Primjer: **tri kopije podataka (replike); čitanje i upis čekaju potvrdu samo jedne (consistency level ONE)**.
 
 | O čemu zaključujemo | Ova konfiguracija Cassandre |
 |:---|:---|
-| **Pretpostavke modela** | Nebizantske replike mogu pasti i oporaviti se. Moguća mrežna kašnjenja i particije. |
-| **Sigurnost i ograničenje** | Uspjeh traži potvrdu jedne replike. Čitanje može biti zastarjelo; „pročitaj pa upiši” **ne čuva** pravilo „prodaj sjedalo najviše jednom”. |
-| **Uvjeti napredovanja** | Dostupna, odzivna replika može obraditi operaciju. Replike se usklade kad komunikacija i popravak dostave sačuvane promjene. |
-| **U odnosu na etcd** | etcd prije potvrde traži **većinu i jedan redoslijed** upisa (Raft); u particiji manjina ne piše. Cassandra s ONE potvrđuje nakon **jedne replike** i usklađuje kasnije: obje strane particije pišu, a sukob rješava vremenska oznaka. |
+| **Pretpostavke modela** | Replike slijede protokol (ne lažu); mogu se srušiti i oporaviti. Poruke mogu kasniti, a mreža se može podijeliti (particija). |
+| **Sigurnost i ograničenje** | Za uspjeh je dovoljna potvrda jedne replike. Čitanje zato može vratiti stari podatak, pa „pročitaj pa upiši” **ne sprječava** da se isto sjedalo proda dvaput. |
+| **Uvjeti napredovanja** | Operacija uspijeva čim odgovori jedna dostupna replika. Ostale replike dobiju promjenu kasnije, kad se veza oporavi i popravak (repair) dostavi sačuvane promjene. |
+| **U odnosu na etcd** | etcd prije potvrde traži **većinu i jedan redoslijed** upisa (Raft); u particiji manjina ne piše. Cassandra s ONE potvrđuje nakon **jedne replike** i usklađuje kasnije: obje strane particije pišu, a pri sukobu pobjeđuje novija vremenska oznaka. |
 
-**Izbor je važan:** QUORUM traži većinu; uvjetne rezervacije trebaju jaču koordinaciju, npr. lake transakcije (LWT).
+**Izbor je važan:** razina QUORUM čeka većinu (2 od 3), a za uvjet „prodaj samo ako je slobodno” treba jača koordinacija, npr. lake transakcije (lightweight transactions, LWT).
 
 ::: {.notes}
 - **Priča:** Kontrast: slabija konfiguracija daje brzinu, ali ne čuva naše pravilo.
@@ -1020,7 +1020,7 @@ Zajednička povijest plaćanja u **otvorenoj mreži s mogućim zlonamjernim sudi
 
 | O čemu zaključujemo | Bitcoinov dokaz rada (proof of work) |
 |:---|:---|
-| **Pretpostavke modela** | Sigurna kriptografija, prevladavajuća poštena rudarska snaga i dovoljno brzo širenje blokova u odnosu na rudarenje. |
+| **Pretpostavke modela** | Sigurna kriptografija; **većinski pošten hash-rate** (većinu računalne snage rudarenja drže pošteni rudari, broj čvorova nije bitan); blokovi se šire dovoljno brzo u odnosu na nastanak novih. |
 | **Invarijanta / sigurnost** | Valjani lanac ne troši isti izlaz transakcije dvaput. Čvorovi privremeno mogu pratiti različite grane; **konačnost je probabilistička**. |
 | **Uvjeti napredovanja** | Rudarenje i komunikacija omogućuju rast lanca. Transakcija mora ostati valjana, stići rudarima i biti odabrana; **nema fiksnog roka uključivanja**. |
 
@@ -1029,35 +1029,39 @@ Zajednička povijest plaćanja u **otvorenoj mreži s mogućim zlonamjernim sudi
 ::: {.notes}
 - **Priča:** Krajnji slučaj: zlonamjerni sudionici i probabilistička sigurnost.
 
-- Protivničko okruženje; poštena rudarska snaga, kriptografija, dovoljno brzo širenje.
+- Protivničko okruženje; većinski pošten hash-rate, kriptografija, dovoljno brzo širenje.
 
 - Valjani lanac ne troši izlaz dvaput; proturječne grane mogu postojati.
 
 - Potvrde pod pretpostavkama smanjuju rizik poništenja, ne na nulu.
 
-- Dominacija znači hash snagu, ne broj čvorova; bira se najveći kumulativni rad.
+- Većina znači hash-rate, ne broj čvorova; bira se najveći kumulativni rad.
 
 - Rast traži rudarenje/komunikaciju; uključivanje transakcije i odabir, bez fiksnog roka.
 
-- Većinska hash snaga ne može nametnuti nevaljan potpis poštenim čvorovima.
+- Većinski hash-rate ne može nametnuti nevaljan potpis poštenim čvorovima.
 
 Izvori: [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf); [Bitcoin developer guide: block chain](https://developer.bitcoin.org/devguide/block_chain.html).
 :::
 
-## Naš portal: pretpostavke iza obećanja
+## Naš portal: pretpostavke iza obećanja {.dense-table}
 
-**Ponovni pokušaji ne smiju stvoriti duplikate, ni nakon ponovnog pokretanja.**
+**Cilj:** ponovni pokušaj ne smije stvoriti drugi prihvaćeni zapis, ni nakon ponovnog pokretanja usluge. Model čine **razumne pretpostavke koje mi kao arhitekti možemo predvidjeti**: kvarovi na koje naš dizajn mora računati.
 
-| Dimenzija | Model za ovaj primjer |
+| Dimenzija | Što pretpostavljamo |
 |:---|:---|
-| Mreža | Zahtjevi i odgovori mogu kasniti, nestati, ponoviti se ili promijeniti redoslijed; bez neovlaštene izmjene. |
-| Čvorovi | Usluge se mogu srušiti i ponovno pokrenuti; trajni zapisi ostaju, memorija se može izgubiti. |
+| Mreža | Zahtjevi i odgovori mogu kasniti, nestati, ponoviti se ili promijeniti redoslijed; nitko ih usput ne mijenja. |
+| Čvorovi | Usluge se mogu srušiti i ponovno pokrenuti; zapisi na disku (RAID) ostaju, sadržaj radne memorije (RAM) se gubi. |
 | Vrijeme | Nema zajamčenog najduljeg vremena odgovora. |
+
+: {tbl-colwidths="[18,82]"}
 
 **Za konačno prihvaćanje:** usluge konačno ostaju dostupne, komunikacija uspijeva, a sačuvani ili ponovljeni posao se obrađuje.
 
 ::: {.notes}
 - **Priča:** Sve tri dimenzije modela primjenjujemo na naš portal.
+
+- Pretpostavke nisu činjenice o sustavu: predviđamo ih mi, arhitekti, a dizajn vrijedi samo dok one vrijede.
 
 - Jedan primjer modela, ne univerzalni model portala.
 
@@ -1102,33 +1106,9 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 - Apstrakcije mogu dati uvjetna jamstva; problem su skrivene pretpostavke.
 
-- Slijedi: vježba o 101 ms — koja pretpostavka nedostaje?
+- Slijedi: povratak na početno pitanje — je li portal prihvatio projekt?
 
 Izvori: [Oracle, Fallacies of distributed systems](https://blogs.oracle.com/developers/fallacies-of-distributed-systems).
-:::
-
-## Nema odgovora nakon 101 ms {.exercise-slide}
-
-Usluga zadataka **obično odgovori unutar 100 ms**.
-
-![](assets/reply-wait.hr.svg){height=280px fig-alt="Zahtjev je poslan u 0 ms. U 101 ms još nema odgovora, iako obično stigne unutar 100 ms. Stanje usluge nije poznato; razmaci nisu u mjerilu."}
-
-**Dokazuje li to da se usluga srušila?**
-
-**Navedite drugo objašnjenje i dodatno jamstvo koje vaš zaključak treba.**
-
-::: {.notes}
-- **Priča:** Studenti sami hvataju skrivenu pretpostavku o vremenu.
-
-- Dati 30 s: razlikovati uobičajeno trajanje od zajamčene granice.
-
-- Još nema odgovora; proces ili komunikacija možda kasni ili nije dostupan.
-
-- Dijagram prikazuje opažanje klijenta, ne stvarni ispad.
-
-- Izmišljena vremena, razmaci nisu u mjerilu. Koje jamstvo cijelog poziva nedostaje?
-
-Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
 ## Natrag na početak: je li portal prihvatio projekt?

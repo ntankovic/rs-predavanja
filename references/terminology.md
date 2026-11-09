@@ -80,6 +80,7 @@ Additional provisional terms used in the synchronized Lecture 01 draft:
 | vertikalno / horizontalno skaliranje | scale up / scale out | Larger components / more components |
 | razina konzistentnosti | consistency level | Cassandra acknowledgement requirement |
 | dokaz rada | proof of work | Bitcoin chain selection and mining |
+| većinski pošten hash-rate | honest majority of hash rate | Honest miners hold most mining compute; not node count; replaces "rudarska snaga" (lecturer, 2026-11-09) |
 
 These are wording decisions from Lecture 01 review, not approved Croatian translations.
 

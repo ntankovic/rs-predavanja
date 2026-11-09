@@ -93,15 +93,14 @@ Timings include explanation and student participation. `timing.json` is the mach
 | 36 | 44–46 | Three node-failure models |
 | 37 | 46–47 | How long should the portal wait? |
 | 38 | 47–49 | Timing models: what may we assume? |
-| 39 | 49–51 | etcd: one successful claim |
+| 39 | 49–51 | etcd: only one client creates the key |
 | 40 | 51–53 | Cassandra: choose what a reply promises |
 | 41 | 53–55 | Bitcoin: confidence grows with confirmations |
 | 42 | 55–56 | Our portal: assumptions behind the promise |
 | 43 | 56–57 | 🔥 How to develop a bad system |
-| 44 | 57–59 | No reply after 101 ms |
-| 45 | 59–60 | Back to the start: did the portal accept the project? |
-| 46 | 60–61:30 | Design the next step: did I submit on time? |
-| 47 | 61:30–62 | Homework: invoices 1, 2, 3, … |
+| 44 | 57–58 | Back to the start: did the portal accept the project? |
+| 45 | 58–59:30 | Design the next step: did I submit on time? |
+| 46 | 59:30–60 | Homework: invoices 1, 2, 3, … |
 
 ## Review checklist
 
@@ -228,3 +227,5 @@ Na nastavnikov zahtjev dodan je `chapter.hr.qmd`, prijevod engleskog `chapter.qm
 2026-11-03 — Dodan slajd 17 „Lanac poziva: pouzdanost se množi” / „A chain of calls: reliability multiplies” (20–22) s interaktivnim prikazom P = p^N (`assets/reliability-chain.js`, ugrađen u dek; lanac usluga, krivulja, Monte Carlo sa 1000 izvođenja, izračun, obrnuti izračun, pretpostavke). Skraćeni: slajd 5 na 2,5 min, 10, 11 i 18 na 1 min; 46 slajdova / 60 min. Verzija decka 2.5 u oba jezika; isti sadržaj u oba poglavlja.
 
 2026-11-09 — Dodan slajd 19 „Simulator: latencija i propusnost” / „Simulator: latency and throughput” (23–25) s interaktivnim prikazom (`assets/latency-throughput.js`). Nijedan slajd nije skraćen; plan sada iznosi 62 minute.
+
+2026-11-09 — Lecturer review of the etcd, Cassandra and Bitcoin examples and the portal-assumptions slide: plainer wording (no "nebizantski", "zauzimanje" or "rudarska snaga"; honest majority of hash rate; RAM; RAID), one-sentence descriptions of etcd and Cassandra, and an explicit statement that we, as architects, anticipate the model's assumptions. At the lecturer's request the slide "No reply after 101 ms" was removed because earlier timing slides already make its point; the exercise stays in the chapter. The deck now has 46 slides and totals 60 minutes. Deck version 5.2; Croatian and English translation review pending.
