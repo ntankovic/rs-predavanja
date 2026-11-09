@@ -1,0 +1,191 @@
+[
+  {
+    "slide": 1,
+    "title": "Komunikacija i udaljeni pozivi",
+    "start": 0.0,
+    "end": 0.5,
+    "minutes": 0.5
+  },
+  {
+    "slide": 2,
+    "title": "Evidencija prisutnosti (zajednički slajd)",
+    "start": 0.5,
+    "end": 1.0,
+    "minutes": 0.5
+  },
+  {
+    "slide": 3,
+    "title": "Zadatak: obavijest poslana dvaput",
+    "start": 1.0,
+    "end": 4.0,
+    "minutes": 3
+  },
+  {
+    "slide": 4,
+    "title": "Provjera ne odgovara",
+    "start": 4.0,
+    "end": 6.0,
+    "minutes": 2
+  },
+  {
+    "slide": 5,
+    "title": "Što trebamo znati da bismo odlučili?",
+    "start": 6.0,
+    "end": 7.0,
+    "minutes": 1
+  },
+  {
+    "slide": 6,
+    "title": "Lokalni i udaljeni poziv",
+    "start": 7.0,
+    "end": 9.0,
+    "minutes": 2
+  },
+  {
+    "slide": 7,
+    "title": "Zahtjev–odgovor: tri ishoda",
+    "start": 9.0,
+    "end": 11.0,
+    "minutes": 2
+  },
+  {
+    "slide": 8,
+    "title": "RPC: udaljeni poziv koji izgleda lokalno",
+    "start": 11.0,
+    "end": 13.0,
+    "minutes": 2
+  },
+  {
+    "slide": 9,
+    "title": "Tijek jednog RPC poziva",
+    "start": 13.0,
+    "end": 16.0,
+    "minutes": 3
+  },
+  {
+    "slide": 10,
+    "title": "gRPC: ugovor u datoteci `.proto`",
+    "start": 16.0,
+    "end": 18.0,
+    "minutes": 2
+  },
+  {
+    "slide": 11,
+    "title": "Poziv iz Pythona",
+    "start": 18.0,
+    "end": 20.0,
+    "minutes": 2
+  },
+  {
+    "slide": 12,
+    "title": "Serijalizacija: JSON i Protocol Buffers",
+    "start": 20.0,
+    "end": 22.0,
+    "minutes": 2
+  },
+  {
+    "slide": 13,
+    "title": "Promjena ugovora bez rušenja klijenata",
+    "start": 22.0,
+    "end": 25.0,
+    "minutes": 3
+  },
+  {
+    "slide": 14,
+    "title": "Istek čekanja ne kaže što se dogodilo",
+    "start": 25.0,
+    "end": 26.0,
+    "minutes": 1
+  },
+  {
+    "slide": 15,
+    "title": "Rok u gRPC-u",
+    "start": 26.0,
+    "end": 28.0,
+    "minutes": 2
+  },
+  {
+    "slide": 16,
+    "title": "Kako odabrati rok i prenijeti ga lancem",
+    "start": 28.0,
+    "end": 31.0,
+    "minutes": 3
+  },
+  {
+    "slide": 17,
+    "title": "Semantike ponovnih pokušaja",
+    "start": 31.0,
+    "end": 34.0,
+    "minutes": 3
+  },
+  {
+    "slide": 18,
+    "title": "Ponovni pokušaji se množe",
+    "start": 34.0,
+    "end": 36.0,
+    "minutes": 2
+  },
+  {
+    "slide": 19,
+    "title": "Ponovni pokušaj u gRPC-u",
+    "start": 36.0,
+    "end": 38.0,
+    "minutes": 2
+  },
+  {
+    "slide": 20,
+    "title": "Idempotentnost",
+    "start": 38.0,
+    "end": 41.0,
+    "minutes": 3
+  },
+  {
+    "slide": 21,
+    "title": "Ključ idempotentnosti",
+    "start": 41.0,
+    "end": 44.0,
+    "minutes": 3
+  },
+  {
+    "slide": 22,
+    "title": "Ključ i učinak u jednoj transakciji",
+    "start": 44.0,
+    "end": 47.0,
+    "minutes": 3
+  },
+  {
+    "slide": 23,
+    "title": "Simulator: ponovni pokušaj i ključ",
+    "start": 47.0,
+    "end": 52.0,
+    "minutes": 5
+  },
+  {
+    "slide": 24,
+    "title": "Natrag na početak: smije li predaja ponoviti poziv?",
+    "start": 52.0,
+    "end": 54.0,
+    "minutes": 2
+  },
+  {
+    "slide": 25,
+    "title": "🔥 Kako napraviti loš udaljeni poziv",
+    "start": 54.0,
+    "end": 55.0,
+    "minutes": 1
+  },
+  {
+    "slide": 26,
+    "title": "Sažetak",
+    "start": 55.0,
+    "end": 57.0,
+    "minutes": 2
+  },
+  {
+    "slide": 27,
+    "title": "Osmislite sljedeći korak: dva uređaja i e-pošta",
+    "start": 57.0,
+    "end": 60.0,
+    "minutes": 3
+  }
+]

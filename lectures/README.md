@@ -7,7 +7,7 @@ See [COURSE.md](../COURSE.md) for the proposed course sequence. Lecture 01 is a 
 | 00 | Course introduction and assessment (slides only, 20 min) | [00-course-introduction](00-course-introduction/) | coordinating agent | review | None |
 | 01 | Foundations and system models | [01-foundations](01-foundations/) | coordinating agent | review | Programming, processes, and basic networking |
 | 02 | Architectures and service boundaries | [02-architectures](02-architectures/) | coordinating agent | drafting (Croatian full draft, 2026-10-27) | Lecture 01 |
-| 03 | Communication and remote calls | [03-communication](03-communication/) | unassigned | drafting | Lectures 01–02 |
+| 03 | Communication and remote calls | [03-communication](03-communication/) | coordinating agent | drafting (Croatian full draft, 2026-11-09) | Lectures 01–02 |
 | 04 | Naming and service discovery | [04-naming](04-naming/) | unassigned | drafting | Lectures 02–03 |
 | 05 | Time and event ordering | [05-time](05-time/) | unassigned | drafting | Lectures 01 and 03 |
 | 06 | Replication and consistency | [06-replication](06-replication/) | unassigned | drafting | Lectures 03 and 05 |

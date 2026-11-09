@@ -52,6 +52,29 @@ Agent suggestions from the Croatian Lecture 02 draft; none is lecturer-approved.
 | upravitelj klastera | cluster manager | Spark; driver and executor kept in English | provisional |
 | dvoslojni / troslojni smještaj | two-tier / three-tier | Placement of UI, logic and data | provisional |
 
+## Lecture 03 provisional terms (2026-11-09)
+
+Agent suggestions from the Croatian Lecture 03 draft; none is lecturer-approved.
+
+| Croatian term | English term | Context | Status |
+| --- | --- | --- | --- |
+| zahtjev–odgovor | request–response | Definition 3.1 | provisional |
+| poziv udaljene procedure (RPC) | remote procedure call (RPC) | Definition 3.2 | provisional |
+| stub | stub | Kept in English; explained as "lokalna funkcija s istim potpisom kao udaljena" | provisional |
+| lokacijska transparentnost | location transparency | System hides where a resource is located | provisional |
+| jezik za opis sučelja (IDL) | interface definition language (IDL) | `.proto` in gRPC | provisional |
+| ugovor (sučelja) | (API) contract | Shared interface description between services | provisional |
+| serijalizacija / deserijalizacija | serialization (marshalling) / deserialization | Definition 3.3 | provisional |
+| broj polja | field number | Protocol Buffers; never changed or reused; removed numbers reserved | provisional |
+| nepoznato polje | unknown field | Preserved by proto3 parsers | provisional |
+| rok | deadline | Definition 3.4: a moment; distinct from „istek vremena čekanja” (duration) | provisional |
+| prijenos roka | deadline propagation | Same absolute deadline through a call tree | provisional |
+| najviše jednom / barem jednom / učinak točno jednom | at-most-once / at-least-once / exactly-once | Retry semantics; „učinak” stresses effect, not delivery | provisional |
+| politika ponovnih pokušaja | retry policy | gRPC service config | provisional |
+| idempotentnost, idempotentan | idempotency, idempotent | Definition 3.5 | provisional |
+| ključ idempotentnosti | idempotency key | Definition 3.6; `Idempotency-Key` header (IETF draft) | provisional |
+| sigurna metoda | safe method | RFC 9110: essentially read-only | provisional |
+
 ## Confirmed English teaching preferences
 
 Additional provisional terms used in the synchronized Lecture 01 draft:

@@ -1,0 +1,17 @@
+syntax = "proto3";
+package predaja;
+
+service Predaja {
+  rpc SnimiPredaju(ZahtjevPredaje) returns (OdgovorPredaje);
+}
+
+message ZahtjevPredaje {
+  string predaja_id = 1;      // isti u svakom pokušaju
+  string zadatak = 2;
+  int64 velicina_bajtova = 3;
+}
+
+message OdgovorPredaje {
+  string zapis_id = 1;
+  bool vec_snimljeno = 2;     // true: ponovljeni pokušaj
+}
