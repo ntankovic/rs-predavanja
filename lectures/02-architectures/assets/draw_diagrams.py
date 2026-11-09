@@ -224,3 +224,85 @@ f.text(260, 425, 'Ispad računala zaustavlja sve.', 17, RED)
 f.text(830, 395, 'Ispad jednog čvora: ostale replike rade.', 17, GREEN)
 f.text(830, 421, 'Ali baza je i dalje samo na čvoru 2.', 17, RED)
 f.save('compose-swarm')
+
+
+# 9. UML component diagrams: the same required/provided interface, local versus across a service boundary.
+def component(f, x, y, w, h, name, stereotype='component', icon=True, fill='white'):
+    f.parts.append(f'<rect x="{x}" y="{y}" width="{w}" height="{h}" fill="{fill}" stroke="{INK}" stroke-width="2"/>')
+    f.text(x + w / 2, y + h / 2 - 8, f'«{stereotype}»', 15, GRAY)
+    f.text(x + w / 2, y + h / 2 + 20, name, 21, INK, 700)
+    if icon:
+        ix, iy = x + w - 22, y + 7
+        f.parts.append(f'<rect x="{ix}" y="{iy}" width="14" height="18" fill="white" stroke="{INK}" stroke-width="1.3"/>'
+                       f'<rect x="{ix-4}" y="{iy+3}" width="8" height="4" fill="white" stroke="{INK}" stroke-width="1.3"/>'
+                       f'<rect x="{ix-4}" y="{iy+11}" width="8" height="4" fill="white" stroke="{INK}" stroke-width="1.3"/>')
+
+
+def socket(f, cx, cy, r=17):
+    f.parts.append(f'<path d="M {cx} {cy-r} A {r} {r} 0 0 0 {cx} {cy+r}" fill="none" stroke="{ACCENT}" stroke-width="3"/>')
+
+
+def ball(f, cx, cy, r=11):
+    f.parts.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="white" stroke="{ACCENT}" stroke-width="3"/>')
+
+
+def assembly(f, x1, x2, cx, cy):
+    f.line(x1, cy, cx - 17, cy, ACCENT, 3)
+    f.line(cx + 11, cy, x2, cy, ACCENT, 3)
+    socket(f, cx, cy)
+    ball(f, cx, cy)
+
+
+def uses(f, x1, y1, x2, y2, label_side='start'):
+    from math import atan2, cos, sin
+    a = atan2(y2 - y1, x2 - x1)
+    head = ' '.join(f'{x2 - 14 * cos(a + s):.1f},{y2 - 14 * sin(a + s):.1f}' for s in (.45,))
+    tail = f'{x2 - 14 * cos(a - .45):.1f},{y2 - 14 * sin(a - .45):.1f}'
+    f.line(x1, y1, x2, y2, GRAY, 2, True)
+    f.parts.append(f'<polyline points="{head} {x2},{y2} {tail}" fill="none" stroke="{GRAY}" stroke-width="2"/>')
+    mx, my = (x1 + x2) / 2, (y1 + y2) / 2
+    f.text(mx + (10 if label_side == 'start' else -10), my + 5, '«use»', 15, GRAY, 400, label_side)
+
+
+def label_on_white(f, cx, y, value, width, color=INK, size=16, weight=400):
+    f.parts.append(f'<rect x="{cx - width / 2}" y="{y - 16}" width="{width}" height="22" fill="white"/>')
+    f.text(cx, y, value, size, color, weight)
+
+
+f = Figure(h=470)
+f.text(280, 34, 'Monolit: moduli u jednom procesu', 23, INK, 700)
+f.text(840, 34, 'Usluge: zasebni procesi', 23, INK, 700)
+f.parts.append(f'<rect x="20" y="55" width="520" height="340" fill="#f3f9fc" stroke="{INK}" stroke-width="2"/>')
+f.text(36, 84, '«component» Portal', 18, INK, 700, 'start')
+ix, iy = 496, 66
+f.parts.append(f'<rect x="{ix}" y="{iy}" width="20" height="26" fill="white" stroke="{INK}" stroke-width="1.5"/>'
+               f'<rect x="{ix-6}" y="{iy+5}" width="12" height="6" fill="white" stroke="{INK}" stroke-width="1.5"/>'
+               f'<rect x="{ix-6}" y="{iy+15}" width="12" height="6" fill="white" stroke="{INK}" stroke-width="1.5"/>')
+component(f, 45, 125, 170, 84, 'Predaja')
+component(f, 345, 125, 170, 84, 'Rokovi')
+assembly(f, 215, 345, 280, 167)
+f.text(280, 140, 'RokoviAPI', 16, INK, 600)
+f.text(280, 206, 'lokalni poziv', 16, GRAY)
+component(f, 180, 290, 200, 84, 'Baza portala', 'database', False)
+uses(f, 130, 213, 205, 286, 'end')
+uses(f, 430, 213, 355, 286, 'start')
+f.line(560, 50, 560, 400, '#c6dbe8', 2)
+f.line(840, 76, 840, 395, RED, 2, True)
+f.text(840, 66, 'granica usluge', 17, RED, 700)
+component(f, 590, 125, 170, 84, 'Predaja')
+component(f, 920, 125, 170, 84, 'Rokovi')
+assembly(f, 760, 920, 840, 167)
+label_on_white(f, 840, 140, 'RokoviAPI', 96, INK, 16, 600)
+label_on_white(f, 840, 206, 'mrežni poziv', 108, RED, 16, 600)
+component(f, 590, 290, 170, 84, 'Baza predaja', 'database', False)
+component(f, 920, 290, 170, 84, 'Baza rokova', 'database', False)
+uses(f, 675, 213, 675, 286)
+uses(f, 1005, 213, 1005, 286)
+ball(f, 70, 425); f.text(92, 431, 'ponuđeno sučelje', 17, GRAY, 400, 'start')
+socket(f, 325, 425); f.text(342, 431, 'traženo sučelje', 17, GRAY, 400, 'start')
+uses_y = 425
+f.line(560, uses_y, 612, uses_y, GRAY, 2, True)
+f.parts.append(f'<polyline points="600,{uses_y-6} 614,{uses_y} 600,{uses_y+6}" fill="none" stroke="{GRAY}" stroke-width="2"/>')
+f.text(626, 431, '«use»: komponenta koristi bazu', 17, GRAY, 400, 'start')
+f.text(560, 460, 'Dijagram prikazuje ovisnosti, a ne redoslijed poruka.', 17, GRAY)
+f.save('uml-components')

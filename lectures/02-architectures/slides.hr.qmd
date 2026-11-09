@@ -1,6 +1,6 @@
 ---
 title: "Arhitekture i granice usluga"
-version: "1.1"
+version: "1.8"
 subtitle: "Raspodijeljeni sustavi · Predavanje 02"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -29,8 +29,8 @@ Više poslužitelja izdaje račune. Brojevi idu **slijedno: bez ponavljanja i be
 |:---|:---|
 | Tko odlučuje o broju? | [Samo brojač: slijed je lako očuvati.]{.fragment fragment-index=1} |
 | Što ako brojač ne radi? | [Nitko ne može izdati račun: jedina točka ispada.]{.fragment fragment-index=2} |
-| Broj 42, pa rušenje prije spremanja? | [Rupa u slijedu, osim ako se broj dodjeljuje pri spremanju.]{.fragment fragment-index=3} |
-| Istek čekanja i ponovni pokušaj? | [Identifikator namjeravanog računa sprječava dva računa.]{.fragment fragment-index=4} |
+| Broj 42, pa rušenje prije spremanja? | [Rupa u slijedu, osim ako su dodjela broja i spremanje atomarni.]{.fragment fragment-index=3} |
+| Istek čekanja i ponovni pokušaj? | [Isti identifikator zahtjeva sprječava dva računa.]{.fragment fragment-index=4} |
 
 ::: {.notes}
 - **Priča:** Rješenje domaće zadaće već je arhitekturna odluka; danas takve odluke učimo imenovati.
@@ -46,9 +46,9 @@ Više poslužitelja izdaje račune. Brojevi idu **slijedno: bez ponavljanja i be
 
 Portal dobiva novu funkciju: **provjeru projekta** (raspakiraj ZIP, provjeri strukturu, skeniraj).
 
-- Sve je u **jednom programu**: prijava, predaja, rokovi i provjera.
-- Večer prije roka provjere zauzmu procesor: **usporavaju se prijava i preuzimanja**.
-- Pogreška u raspakiravanju **sruši proces**: nitko ne može predati.
+- Portal je danas **jedan program**: prijava, predaja i rokovi.
+- Ako provjeru dodamo u taj program, večer prije roka zauzet će procesor: **usporavaju se prijava i preuzimanja**.
+- Pogreška u raspakiravanju tada **sruši proces**: nitko ne može predati.
 
 **Kamo staviti provjeru projekta?**
 
@@ -70,7 +70,7 @@ Portal dobiva novu funkciju: **provjeru projekta** (raspakiraj ZIP, provjeri str
 
 - Kako opisati **arhitekturu** sustava?
 - Koje **organizacije** postoje: klijent–poslužitelj, slojevi, replike, P2P?
-- Gdje povući **granicu usluge** i što ona **košta**?
+- Gdje povući **granicu usluge** i koje **troškove** donosi izdvajanje u zasebnu uslugu?
 - Što se **ruši zajedno**, a što neovisno?
 
 **Pratimo portal od jednog programa do više usluga na više računala.**
@@ -165,14 +165,16 @@ Izvori: [van Steen and Tanenbaum, Distributed Systems, pogl. 2](https://www.dist
 | lokalni poziv je brz i ne gubi se u mreži | provjera troši procesor koji treba prijavi |
 | jedna transakcija obuhvaća sve module | ne možemo skalirati samo provjeru |
 | jednostavan razvoj, test i pokretanje | pogreška u jednom modulu ruši sve |
-| pozivi se lako prate pri traženju pogrešaka | svaka promjena traži novo izdanje svega |
+| pozivi se lako prate pri traženju pogrešaka | **veliki timovi:** svi dijele kod i svako izdanje |
 
-**Monolit je često razuman početak. Problem nastaje kad dijelovi imaju različite zahtjeve.**
+**Monolit je često razuman početak. Problem nastaje kad dijelovi imaju različite zahtjeve ili kad ga razvija mnogo timova.**
 
 ::: {.notes}
 - **Priča:** Prva verzija portala je monolit; on nije pogreška nego odluka s cijenom.
 
 - Ne ismijavati monolit: za mnoge sustave, osobito na početku, dobar je izbor.
+
+- Resursi i ispadi često se rješavaju zasebnim radnim procesom (worker) i redom poslova; timovi su razlog koji se tehnički teško zaobilazi (Conwayev zakon).
 
 - Svi moduli dijele istu granicu ispada; to vodi do pitanja granice.
 :::
@@ -201,6 +203,20 @@ Sve iz predavanja 01 sada vrijedi za taj poziv: djelomični ispad, istek čekanj
 Izvori: [Lewis and Fowler, Microservices](https://martinfowler.com/articles/microservices.html).
 :::
 
+## UML: isto sučelje, različita granica
+
+![](assets/uml-components.hr.svg){fig-alt="Dva UML dijagrama komponenti. Lijevo komponenta Portal sadrži Predaju i Rokove spojene sučeljem RokoviAPI lokalnim pozivom, a oboje koristi Bazu portala. Desno Predaja i Rokovi su zasebne komponente, spoj sučelja RokoviAPI prelazi granicu usluge kao mrežni poziv, a svaka usluga koristi vlastitu bazu." height=500px}
+
+::: {.notes}
+- **Priča:** Ista ovisnost, dva smještaja: Predaja treba RokoviAPI, a Rokovi ga nude.
+
+- Kružić je ponuđeno sučelje, polukrug traženo; spoj znači da jedno zadovoljava drugo.
+
+- Lijevo je spoj lokalni poziv. Desno isti spoj prelazi granicu i postaje mrežni poziv.
+
+- Dijagram ne pokazuje vrijeme: tko kada šalje poruku vidi se na dijagramu slijeda.
+:::
+
 ## Gdje povući granicu?
 
 | Pitanje | Provjera projekta | Formatiranje datuma |
@@ -221,15 +237,41 @@ Izvori: [Lewis and Fowler, Microservices](https://martinfowler.com/articles/micr
 - Zasebna usluga za formatiranje datuma donijela bi samo troškove.
 :::
 
-## Cijena granice 1: latencija
+## Cijena granice 1: latencija {.latency-slide}
 
-**Memorija ≈ 100 ns · povratno putovanje u podatkovnom centru ≈ 500 µs: oko 5000 puta dulje.**
+::: {.latency-stats}
+::: {.latency-stat}
+[100 ns]{.latency-value}
+[memorija]{.latency-label}
+:::
+::: {.latency-ratio}
+oko 5000 puta dulje
+:::
+::: {.latency-stat .latency-stat-far}
+[500 µs]{.latency-value}
+[povratno putovanje u podatkovnom centru]{.latency-label}
+:::
+:::
 
 Nastavnik otvori **popis od 200 predaja**. Usluga predaje za svaku predaju pita uslugu korisnika za ime.
 
-- [200 uzastopnih zahtjeva × 2 ms ≈ **400 ms** samo čekanja; svaki može isteći.]{.fragment fragment-index=1}
-- [**Jedan zahtjev za svih 200** imena: manje poruka, nova operacija u sučelju.]{.fragment fragment-index=2}
-- [**Lokalna kopija imena:** nema poziva, ali kopija može zastarjeti.]{.fragment fragment-index=3}
+::: {.latency-cards}
+::: {.latency-card .latency-problem .fragment fragment-index=1}
+[Problem]{.latency-kicker}
+[≈ 400 ms]{.latency-big}
+200 uzastopnih zahtjeva × 2 ms samo čekanja; svaki može isteći.
+:::
+::: {.latency-card .fragment fragment-index=2}
+[Rješenje 1]{.latency-kicker}
+[Skupni zahtjev]{.latency-big}
+Jedan zahtjev za svih 200 imena: manje poruka, nova operacija u sučelju.
+:::
+::: {.latency-card .fragment fragment-index=3}
+[Rješenje 2]{.latency-kicker}
+[Lokalna kopija]{.latency-big}
+Nema poziva, ali kopija imena može zastarjeti.
+:::
+:::
 
 **Razgovorljivo sučelje (chatty interface)** množi cijenu jednog poziva.
 
@@ -257,6 +299,27 @@ Izvori: [Dean, LADIS 2009](https://www.cs.cornell.edu/projects/ladis2009/talks/d
 - Pretpostavka neovisnih ispada: ako sve tri rade na istom računalu, ruše se zajedno.
 
 - Lanac isteka čekanja i ponovnih pokušaja može pojačati jedan spori dio.
+:::
+
+## Simulator: dostupnost lanca
+
+```{=html}
+<div class="ac-widget"></div>
+<script src="assets/availability-chain.js"></script>
+```
+
+::: {.notes}
+- **Priča:** Odgovaramo na prethodno pitanje: treba li zahtjev doista sinkroni odgovor svih usluga?
+
+- Zadano: tri usluge po 99,9 % daju 99,7 %, oko 26 sati godišnje.
+
+- „Jedna slaba karika”: Korisnici 95 %, lanac oko 94,8 %. Cijeli lanac ne može biti bolji od najslabije usluge.
+
+- Dodati usluge do šest: oko 99,4 %, oko 52 sata.
+
+- „Obavijesti i provjera asinkrono”: ostaju četiri nužne usluge, oko 99,6 %. Njihov ispad više ne ruši predaju, ali posao čeka u redu.
+
+- Pretpostavke: neovisni ispadi, bez ponovnih pokušaja. Stvarni ispadi često su povezani.
 :::
 
 ## Cijena granice 3: podaci i pravila

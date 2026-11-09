@@ -27,7 +27,7 @@ Nakon ovog predavanja trebali biste moći:
 
 U predavanju 01 pratili smo jednu predaju projekta kroz portal. Sada portal raste. Nastavnici traže novu funkciju: nakon prijenosa portal treba **provjeriti projekt**. Provjera raspakira ZIP datoteku s Unity projektom, provjeri očekivanu strukturu mapa i skenira datoteke na zlonamjerni kod. Provjera intenzivno koristi procesor i traje znatno dulje od običnog zahtjeva.
 
-Prva verzija portala je jedan program: prijava korisnika, predaja, rokovi i nova provjera nalaze se u istom procesu i dijele jednu bazu. Večer prije roka stotine studenata predaju projekte gotovo istodobno. Provjere zauzmu procesor pa se usporavaju i dijelovi koji s provjerom nemaju veze: prijava i preuzimanje radova za nastavnike. Zatim pogreška u biblioteci za raspakiravanje sruši proces. Budući da je sve u istom procesu, nitko ne može predati projekt dok se portal ponovno ne pokrene. Popravak provjere traži novo izdanje cijelog portala.
+Portal je zasad jedan program: prijava korisnika, predaja i rokovi nalaze se u istom procesu i dijele jednu bazu. Najjednostavnije je u njega dodati i provjeru, ali zamislimo što se tada događa večer prije roka, kada stotine studenata predaju projekte gotovo istodobno. Provjere zauzimaju procesor pa se usporavaju i dijelovi koji s provjerom nemaju veze: prijava i preuzimanje radova za nastavnike. Pogreška u biblioteci za raspakiravanje ruši proces. Budući da je sve u istom procesu, nitko ne može predati projekt dok se portal ponovno ne pokrene. Popravak provjere traži novo izdanje cijelog portala.
 
 **Pitanje za ovo predavanje:** kamo staviti provjeru projekta? U isti program kao ostatak portala, u zasebnu uslugu ili „ovisi”? Da bismo odgovorili, trebamo rječnik za opis arhitekture i način da procijenimo što pojedina podjela košta.
 
@@ -35,7 +35,7 @@ Prva verzija portala je jedan program: prijava korisnika, predaja, rokovi i nova
 
 Domaća zadaća iz predavanja 01 tražila je slijedne brojeve računa koje izdaje više poslužitelja, bez ponavljanja i bez preskakanja. Najjednostavnije rješenje je jedan **središnji brojač**: svaki poslužitelj od njega traži sljedeći broj. To je arhitekturna odluka. Jedna komponenta dobiva odgovornost i jedini drži stanje (posljednji izdani broj), a ostale joj šalju zahtjeve.
 
-Ta odluka ima posljedice. Slijed je lako očuvati jer o broju odlučuje jedno mjesto. Ali brojač postaje usko grlo i jedina točka ispada: kada je nedostupan, nijedan poslužitelj ne može izdati račun. Ako poslužitelj uzme broj 42 i sruši se prije spremanja računa, nastaje rupa u slijedu, osim ako se broj dodjeljuje tek pri spremanju računa. Ako blagajni istekne vrijeme čekanja pa pokuša ponovno, potreban je identifikator namjeravanog računa kako ponovni pokušaj ne bi stvorio dva računa. U ovom predavanju naučit ćemo takve odluke imenovati i usporediti.
+Ta odluka ima posljedice. Slijed je lako očuvati jer o broju odlučuje jedno mjesto. Ali brojač postaje usko grlo i jedina točka ispada: kada je nedostupan, nijedan poslužitelj ne može izdati račun. Ako poslužitelj uzme broj 42 i sruši se prije spremanja računa, nastaje rupa u slijedu. Ni kasnija dodjela broja sama po sebi to ne rješava jer povećanje brojača može uspjeti, a spremanje računa ne; dodjela broja i spremanje moraju biti atomarni, kako bi neuspjeh poništio oboje. To je jednostavno ako su brojač i računi u istoj bazi, gdje čine jednu transakciju, ali ako je brojač zasebna usluga, atomarnost traži dodatnu koordinaciju među sustavima. Ako blagajni istekne vrijeme čekanja pa pokuša ponovno, potreban je identifikator zahtjeva koji ostaje isti u svakom pokušaju, kako ponovni pokušaj ne bi stvorio dva računa. U ovom predavanju naučit ćemo takve odluke imenovati i usporediti.
 
 ## Što je arhitektura sustava?
 
@@ -90,6 +90,8 @@ Monolit ima stvarne prednosti. Lokalni poziv je brz i ne može se izgubiti u mre
 
 Problemi nastaju kada dijelovi sustava imaju različite zahtjeve. U našem primjeru provjera troši procesor koji trebaju i prijava i preuzimanje, pa se ne može skalirati zasebno: da dobijemo više provjera, moramo pokrenuti više kopija cijelog portala. Pogreška u jednom modulu ruši cijeli proces. Promjena jednog modula traži novo izdanje svega. Svi moduli dijele istu **granicu ispada**.
 
+Dio tih problema rješava se i bez podjele na usluge: zaseban radni proces (worker) s redom poslova izolira provjeru od ostatka portala i može se zasebno skalirati. Teže je zaobići organizacijski problem. Dok portal razvija nekoliko ljudi, zajednički kod i zajedničko izdanje ne smetaju; kada isti kod mijenja mnogo timova, svaka promjena traži usklađivanje, a svako izdanje uključuje tuđe promjene. Conway je već 1968. uočio da organizacije proizvode dizajne koji preslikavaju njihove komunikacijske strukture [8], a Lewis i Fowler na taj se zakon pozivaju kada opisuju usluge organizirane oko poslovnih sposobnosti i timove koji ih razvijaju [2]. Zato postoje dva različita razloga za granicu: različiti zahtjevi dijelova sustava i neovisan rad timova.
+
 ### Usluga i granica usluge
 
 Alternativa je podijeliti aplikaciju na **usluge** (services). Lewis i Fowler opisuju stil mikroservisa kao razvoj jedne aplikacije kao skupa malih usluga od kojih se svaka izvršava u vlastitom procesu, komunicira laganim mehanizmima, organizirana je oko poslovne sposobnosti i izdaje se neovisno; svaka usluga upravlja vlastitim podacima [2].
@@ -103,6 +105,10 @@ Alternativa je podijeliti aplikaciju na **usluge** (services). Lewis i Fowler op
 :::
 
 Granica usluge nije samo crta na dijagramu. Ona određuje tko smije mijenjati koje podatke i koji poziv postaje mrežna poruka. Kada usluga predaje treba rok, više ne čita varijablu ni tablicu modula rokova; šalje zahtjev usluzi rokova i čeka odgovor. Sve što smo u predavanju 01 rekli o udaljenim zahtjevima, djelomičnim ispadima i isteku čekanja sada vrijedi za taj poziv.
+
+UML dijagram komponenti pokazuje tu razliku preko sučelja (@fig-arch-uml). Komponenta može **nuditi** sučelje (kružić) i **tražiti** sučelje (polukrug). Predaja traži sučelje `RokoviAPI`, a Rokovi ga nude. U monolitu su obje dijelovi komponente Portal, pa je spoj lokalni poziv. Kao zasebne usluge imaju isti spoj, ali on sada prelazi granicu usluge i postaje mrežni poziv, a svaka usluga koristi vlastitu bazu.
+
+![Lijevo: Predaja i Rokovi kao dijelovi komponente Portal, spojeni lokalnim pozivom, sa zajedničkom bazom. Desno: iste komponente kao zasebne usluge; spoj sučelja prelazi granicu usluge kao mrežni poziv. Kružić je ponuđeno, a polukrug traženo sučelje; isprekidana strelica «use» znači da komponenta koristi bazu. Dijagram prikazuje ovisnosti, a ne redoslijed poruka.](assets/uml-components.hr.pdf){#fig-arch-uml width=100% fig-pos="H" fig-alt="Dva UML dijagrama komponenti. Lijevo komponenta Portal sadrži Predaju i Rokove spojene sučeljem RokoviAPI lokalnim pozivom, a oboje koristi Bazu portala. Desno Predaja i Rokovi su zasebne komponente, spoj sučelja RokoviAPI prelazi granicu usluge kao mrežni poziv, a svaka usluga koristi vlastitu bazu."}
 
 ### Gdje povući granicu?
 
@@ -272,3 +278,4 @@ Nastavnik želi dobiti e-poštu kada stigne predaja. Usluga za slanje e-pošte p
 5. Apache Spark, „Cluster Mode Overview”. <https://spark.apache.org/docs/latest/cluster-overview.html>
 6. J. Dean, „Designs, Lessons and Advice from Building Large Distributed Systems”, LADIS 2009, slajd „Numbers Everyone Should Know”. <https://www.cs.cornell.edu/projects/ladis2009/talks/dean-keynote-ladis2009.pdf>
 7. Docker, „Swarm mode key concepts”. <https://docs.docker.com/engine/swarm/key-concepts/>
+8. M. E. Conway, „How Do Committees Invent?”, *Datamation*, travanj 1968. <https://www.melconway.com/Home/Committees_Paper.html>

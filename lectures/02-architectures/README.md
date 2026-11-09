@@ -36,23 +36,25 @@ Timings include explanation and student participation. `timing.json` is the mach
 | 9 | 13–15 | Vertikalna i horizontalna raspodjela |
 | 10 | 15–17 | Monolit: jedan proces, jedno izdanje |
 | 11 | 17–19 | Usluga i granica usluge |
-| 12 | 19–21 | Gdje povući granicu? |
-| 13 | 21–24 | Cijena granice 1: latencija |
-| 14 | 24–26 | Cijena granice 2: dostupnost lanca |
-| 15 | 26–28 | Cijena granice 3: podaci i pravila |
-| 16 | 28–32 | Podijelite portal u usluge |
-| 17 | 32–34 | Jedno moguće rješenje |
-| 18 | 34–36 | P2P: svi su klijenti i poslužitelji |
-| 19 | 36–38 | BitTorrent: P2P uz tracker |
-| 20 | 38–40 | Može li portal biti P2P? |
-| 21 | 40–42 | Klaster s koordinatorom: Spark |
-| 22 | 42–45 | Granice razmještaja |
-| 23 | 45–47 | Ista arhitektura, različiti ispadi |
-| 24 | 47–50 | Natrag na početak: kamo s provjerom? |
-| 25 | 50–52 | 🔥 Kako napraviti lošu granicu |
-| 26 | 52–54 | Sažetak |
-| 27 | 54–58 | Osmislite sljedeći korak: obavijesti nastavniku |
-| 28 | 58–60 | Za vaš projekt: granice i smještaj |
+| 12 | 19–20 | UML: isto sučelje, različita granica |
+| 13 | 20–22 | Gdje povući granicu? |
+| 14 | 22–25 | Cijena granice 1: latencija |
+| 15 | 25–27 | Cijena granice 2: dostupnost lanca |
+| 16 | 27–29 | Simulator: dostupnost lanca |
+| 17 | 29–31 | Cijena granice 3: podaci i pravila |
+| 18 | 31–35 | Podijelite portal u usluge |
+| 19 | 35–37 | Jedno moguće rješenje |
+| 20 | 37–39 | P2P: svi su klijenti i poslužitelji |
+| 21 | 39–41 | BitTorrent: P2P uz tracker |
+| 22 | 41–43 | Može li portal biti P2P? |
+| 23 | 43–45 | Klaster s koordinatorom: Spark |
+| 24 | 45–48 | Granice razmještaja |
+| 25 | 48–50 | Ista arhitektura, različiti ispadi |
+| 26 | 50–53 | Natrag na početak: kamo s provjerom? |
+| 27 | 53–55 | 🔥 Kako napraviti lošu granicu |
+| 28 | 55–57 | Sažetak |
+| 29 | 57–61 | Osmislite sljedeći korak: obavijesti nastavniku |
+| 30 | 61–63 | Za vaš projekt: granice i smještaj |
 
 ## Language workflow
 
