@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "2.5"
+version: "3.3"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -433,20 +433,22 @@ Izvori: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et
 ## Lanac poziva: pouzdanost se množi {.chain-slide}
 
 ```{=html}
-<div class="rc-widget" data-lang="hr" data-steps="4" data-b="99"></div>
+<div class="rc-widget" data-lang="hr" data-steps="4"></div>
 <script src="assets/reliability-chain.js"></script>
 ```
 
 ::: {.notes}
 - **Priča:** Predaja rijetko zove samo jednu uslugu: provjera roka, korisnici, pohrana, obavijest. Već su to četiri udaljena poziva, i svaki mora uspjeti.
 
-- Zadano N = 4: uz 99 % po pozivu tok uspijeva u 0,99⁴ ≈ 96 % slučajeva; svaka 25. predaja negdje zapne. Uz 10 poziva ≈ 90 %.
+- Zadano „Pouzdan sustav”, N = 4: 0,9999⁴ ≈ 99,96 %. Postaviti p = 99 %: 0,99⁴ ≈ 96 %; svaka 25. predaja negdje zapne. Uz 10 poziva ≈ 90 %.
 
-- Kliknuti „Usporedi scenarije” (N = 100): 99,99 % po koraku daje 99,005 %, 98 % daje 13,262 %. Dva postotna boda po koraku, 86 bodova za cijeli tok.
+- Uz N = 10 „Pouzdan sustav” daje 99,900 %. Učitati „Nepouzdan sustav” (p = 98 %, m = 99 %): oko 74 %. Tri postotna boda po pozivu, oko 26 bodova za cijeli tok.
+
+- Pomaknuti mrežu m ispod 100 %: svaki poziv tada uspijeva s p · m. Ispad usluge pada na usluzi, ispad mreže na vezi prije nje.
 
 - Pokrenuti simulaciju: opaženo se razlikuje od teorijskog jer je slučajno, ali je blizu.
 
-- Obrnuti izračun: za 99,9 % cijelog toka kroz 100 koraka svaki korak smije pasti tek 10 puta na milijun poziva.
+- Obrnuti izračun: za 99,9 % cijelog toka kroz 10 koraka svaki korak smije pasti tek oko 100 puta na milijun poziva.
 
 - Isto vrijedi za kašnjenje: ako je 1 % odgovora sporo, zahtjev koji čeka 100 usluga spor je u 63 % slučajeva (Dean i Barroso).
 

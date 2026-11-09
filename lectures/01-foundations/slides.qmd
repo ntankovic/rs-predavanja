@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "2.5"
+version: "3.3"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -430,20 +430,22 @@ Sources: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo e
 ## A chain of calls: reliability multiplies {.chain-slide}
 
 ```{=html}
-<div class="rc-widget" data-lang="en" data-steps="4" data-b="99"></div>
+<div class="rc-widget" data-lang="en" data-steps="4"></div>
 <script src="assets/reliability-chain.js"></script>
 ```
 
 ::: {.notes}
 - **Story:** A submission rarely calls just one service: deadline check, users, storage, notification. That is already four remote calls, and every one must succeed.
 
-- Default N = 4: at 99% per call the workflow succeeds 0.99⁴ ≈ 96% of the time; one submission in 25 gets stuck somewhere. With 10 calls ≈ 90%.
+- Default "Reliable system", N = 4: 0.9999⁴ ≈ 99.96%. Set p = 99%: 0.99⁴ ≈ 96%; one submission in 25 gets stuck somewhere. With 10 calls ≈ 90%.
 
-- Click "Compare scenarios" (N = 100): 99.99% per step gives 99.005%, 98% gives 13.262%. Two percentage points per step, 86 points for the whole workflow.
+- At N = 10, "Reliable system" gives 99.900%. Load "Unreliable system" (p = 98%, m = 99%): about 74%. Three percentage points per call, about 26 points for the whole workflow.
+
+- Move the network m below 100%: each call now succeeds with p · m. A service failure drops at the service, a network failure on the link before it.
 
 - Run the simulation: the observed value differs from the theoretical one because it is random, but stays close.
 
-- Reverse calculation: for 99.9% over 100 steps, each step may fail only 10 times per million calls.
+- Reverse calculation: for 99.9% over 10 steps, each step may fail only about 100 times per million calls.
 
 - Latency behaves the same: if 1% of replies are slow, a request that waits for 100 services is slow 63% of the time (Dean and Barroso).
 
