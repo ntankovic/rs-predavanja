@@ -21,6 +21,7 @@ Lecturer-approved choices and provisional suggestions are tracked separately bel
 | procjena arhitekture | architecture review | Evaluating system structure, decisions and guarantees; Lecture 00 course overview. | pregled dizajna (ambiguous here) | approved (Croatian); provisional (English) | 2026-09-18, lecturer approved revised row |
 | jamstvo | guarantee | What a system can promise under stated assumptions. | | approved (Croatian); provisional (English) | 2026-09-18, lecturer approved revised row |
 | proces | process | Lecture 00 data-analysis diagram labels: Proces 1/2. Croatian label approved; English equivalent pending review. | radnik (in this diagram) | approved (Croatian); provisional (English) | 2026-09-17, lecturer request |
+| nazivlje | naming | Lecture 04 topic: names, addresses, identifiers and their resolution. Lecturer choice (2026-11-10); rejected „imenovanje”. Use „ime” for a single name. | approved (Croatian); provisional (English) | 2026-11-10, lecturer |
 | ispad | failure | Failure of a participant or service; use across lectures. | otkaz | approved | 2026-09-17, lecturer correction: Otkaz > Ispad |
 | konkurentnost | concurrency | Overlapping work; distinct from parallelism. | | provisional | 2026-09-17, initial Croatian Lecture 00 draft |
 | zajedničko stanje | shared state | State shared by system participants. | | provisional | 2026-09-17, initial Croatian Lecture 00 draft |
@@ -75,6 +76,30 @@ Agent suggestions from the Croatian Lecture 03 draft; none is lecturer-approved.
 | ključ idempotentnosti | idempotency key | Definition 3.6; `Idempotency-Key` header (IETF draft) | provisional |
 | sigurna metoda | safe method | RFC 9110: essentially read-only | provisional |
 
+## Lecture 04 provisional terms (2026-11-09)
+
+Agent suggestions from the Croatian Lecture 04 draft; none is lecturer-approved.
+
+| Croatian term | English term | Context | Status |
+| --- | --- | --- | --- |
+| ime / adresa / identifikator | name / address / identifier | Definition 4.1 | provisional |
+| razrješavanje imena | name resolution | Definition 4.2 | provisional |
+| poslužitelj imena / resolver | name server / resolver | DNS roles (RFC 1034); "resolver" kept in English | provisional |
+| predmemorija, predmemorirati | cache, to cache | DNS and client caches | provisional |
+| TTL (vrijeme valjanosti zapisa) | TTL (time to live) | Definition 4.3: DNS record cache lifetime; kept as TTL; also used for lease TTL | provisional |
+| negativno predmemoriranje | negative caching | RFC 2308 | provisional |
+| otkrivanje usluga | service discovery | Definition 4.4 | provisional |
+| registar usluga | service registry | List of live instances per service name | provisional |
+| otkrivanje na klijentu / preko usmjernika | client-side / server-side discovery | Richardson's patterns; „usmjernik” for router/load balancer | provisional |
+| samoregistracija / registracija treće strane | self-registration / third-party registration | Richardson's patterns | provisional |
+| provjera zdravlja | health check | Registrar checks instances | provisional |
+| najam, obnova najma | lease, lease renewal (keep-alive) | Definition 4.5; etcd LeaseKeepAlive | provisional |
+| slika / kontejner | image / container | Docker: read-only template / runnable instance of an image | provisional |
+| registar slika | image registry | Stores images (e.g. Docker Hub); distinct from „registar usluga” (service registry) | provisional |
+| željeno stanje | desired state | Docker Swarm: what we asked for (e.g. 3 containers of a service); the manager reconciles actual to desired | provisional |
+| upravitelj / radni čvor / zadatak | manager / worker node / task | Docker Swarm roles; a task is one container | provisional |
+| lažno uklanjanje | false removal | Live but paused instance removed after lease expiry | provisional |
+
 ## Confirmed English teaching preferences
 
 Additional provisional terms used in the synchronized Lecture 01 draft:
@@ -127,3 +152,5 @@ These are wording decisions from Lecture 01 review, not approved Croatian transl
 - 2026-09-17 — Lecturer selected „ispad” instead of „otkaz”. Applied to all three occurrences in Lecture 00, including natural noun phrasing in the course overview. No other Croatian slide/chapter sources currently contain the rejected term.
 
 - 2026-09-18 — Lecturer approved the Lecture 00 row: „Sigurnost i procjena arhitekture” / „Koja jamstva sustav može pružiti i pod kojim pretpostavkama?”. English wording updated consistently, pending translation review.
+
+- 2026-11-10 — Lecturer chose „nazivlje” for naming instead of „imenovanje”. Applied to Lecture 04 (title, slides, chapter, timing, brief).

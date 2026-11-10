@@ -64,7 +64,7 @@ Timings include explanation and student participation. `timing.json` is the mach
 | 7 | 8:30–10:30 | Distributed system or not? |
 | 8 | 10:30–12:30 | Why distribute the work? |
 | 9 | 12:30–13:30 | Facebook: scale changes the architecture |
-| 10 | 13:30–14:30 | Must everyone wait for one submission? |
+| 10 | 13:30–14:30 | Delay, capacity, and completed work |
 | 11 | 14:30–15:30 | Several submissions can make progress together |
 | 12 | 15:30–16:30 | When does a worker switch tasks? |
 | 13 | 16:30–17:30 | Two schedulers: the OS and the event loop |
@@ -72,7 +72,7 @@ Timings include explanation and student participation. `timing.json` is the mach
 | 15 | 18–19 | Local function calls and remote requests |
 | 16 | 19–20 | Same work, local and remote |
 | 17 | 20–22 | A chain of calls: reliability multiplies |
-| 18 | 22–23 | Delay, capacity, and completed work |
+| 18 | 22–23 | Must everyone wait for one submission? |
 | 19 | 23–25 | Simulator: latency and throughput |
 | 20 | 25–26 | Recall Web Apps: time to first byte |
 | 21 | 26–27 | One component fails; others keep running |
@@ -229,3 +229,5 @@ Na nastavnikov zahtjev dodan je `chapter.hr.qmd`, prijevod engleskog `chapter.qm
 2026-11-09 — Dodan slajd 19 „Simulator: latencija i propusnost” / „Simulator: latency and throughput” (23–25) s interaktivnim prikazom (`assets/latency-throughput.js`). Nijedan slajd nije skraćen; plan sada iznosi 62 minute.
 
 2026-11-09 — Lecturer review of the etcd, Cassandra and Bitcoin examples and the portal-assumptions slide: plainer wording (no "nebizantski", "zauzimanje" or "rudarska snaga"; honest majority of hash rate; RAM; RAID), one-sentence descriptions of etcd and Cassandra, and an explicit statement that we, as architects, anticipate the model's assumptions. At the lecturer's request the slide "No reply after 101 ms" was removed because earlier timing slides already make its point; the exercise stays in the chapter. The deck now has 46 slides and totals 60 minutes. Deck version 5.2; Croatian and English translation review pending.
+
+2026-11-10 — At the lecturer's request, swapped slides 10 („Moraju li svi čekati jednu predaju?”) and 18 („Kašnjenje, kapacitet i dovršeni posao”) in both languages; both are 1 minute, total unchanged. Note: the latency/throughput simulator (slide 19) no longer directly follows its introduction slide. Deck version 5.3.

@@ -1,6 +1,6 @@
 ---
 title: "Komunikacija i udaljeni pozivi"
-version: "1.2"
+version: "1.3"
 subtitle: "Raspodijeljeni sustavi · Predavanje 03"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -569,14 +569,14 @@ Izvori: [Kleppmann, odj. 5.1](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/
 
 ## Osmislite sljedeći korak: dva uređaja i e-pošta {.exercise-slide}
 
-1. Studentica šalje isti ZIP s **laptopa i mobitela**; svaki uređaj generira **svoj ključ**. Koliko predaja nastaje? Što bi bio bolji ključ?
+1. Studentica pošalje ZIP s **laptopa**; ništa se ne događa, pa **isti ZIP** pošalje i s **mobitela**. Svaki preglednik generira **svoj ključ**. Koliko zapisa nastaje? Što bi bio bolji ključ?
 2. Usluga predaje **pošalje e-poštu** nastavniku, a zatim se **sruši** prije spremanja ključa i zapisa. Što se događa pri ponovnom pokušaju?
 3. Zašto transakcija u bazi u drugom slučaju **ne pomaže**?
 
 ::: {.notes}
 - **Priča:** Primjenjujemo ključ i atomarnost na dva slučaja na kojima jednostavno rješenje pada.
 
-- 1: dva ključa = dvije operacije za poslužitelj. Bolji ključ veže se uz namjeru, npr. student + zadatak + sadržaj (sažetak datoteke), ili portal izda identifikator predaje prije prijenosa.
+- 1: dva ključa = dvije operacije za poslužitelj, dakle dva zapisa iste predaje. Ključ iz preglednika označava pokušaj s uređaja, a ne predaju. Bolji ključ opisuje predaju: student + zadatak + sažetak ZIP-a; ili portal izda identifikator predaje prije prijenosa.
 
 - 2: snimanje se ponovi i nastavnik dobije drugu e-poštu. E-pošta je vanjski učinak izvan transakcije.
 

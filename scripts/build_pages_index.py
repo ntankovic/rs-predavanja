@@ -139,24 +139,24 @@ def page(decks):
   .hero .links a {{ color: var(--accent); font-weight: 600; text-decoration: none; }}
   .hero .links a:hover {{ text-decoration: underline; }}
   h2 {{ font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 40px 0 14px; }}
-  .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }}
+  .grid {{ display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }}
   .card {{ display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line);
     border-radius: 14px; overflow: hidden; transition: transform .15s ease, box-shadow .15s ease; }}
   .card:hover {{ transform: translateY(-2px); box-shadow: 0 10px 24px rgba(16, 32, 48, .12); }}
-  .cover {{ position: relative; display: block; aspect-ratio: 16 / 7; background: var(--cover); text-decoration: none;
+  .cover {{ position: relative; display: block; height: 76px; background: var(--cover); text-decoration: none;
     background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,.09) 1px, transparent 0);
     background-size: 18px 18px; }}
   .cover::after {{ content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--accent); }}
-  .num {{ position: absolute; left: 20px; bottom: 12px; font-size: 64px; font-weight: 700; line-height: 1;
+  .num {{ position: absolute; left: 16px; bottom: 8px; font-size: 42px; font-weight: 700; line-height: 1;
     color: var(--cover-ink); opacity: .92; font-variant-numeric: tabular-nums; }}
-  .body {{ padding: 16px 20px 20px; display: flex; flex-direction: column; flex: 1; }}
-  .kicker {{ margin: 0; font-size: 13px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }}
-  .card h3 {{ margin: 4px 0 6px; font-size: 21px; line-height: 1.25; }}
+  .body {{ padding: 12px 16px 14px; display: flex; flex-direction: column; flex: 1; }}
+  .kicker {{ margin: 0; font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }}
+  .card h3 {{ margin: 3px 0 4px; font-size: 17px; line-height: 1.25; }}
   .card h3 a {{ text-decoration: none; }}
-  .facts {{ margin: 0 0 16px; color: var(--muted); font-size: 14px; }}
-  .actions {{ margin-top: auto; display: flex; flex-wrap: wrap; gap: 8px; }}
-  .btn {{ display: inline-block; padding: 8px 14px; border-radius: 8px; background: var(--accent); color: var(--accent-ink);
-    font-weight: 600; font-size: 15px; text-decoration: none; border: 1px solid var(--accent); }}
+  .facts {{ margin: 0 0 10px; color: var(--muted); font-size: 13px; }}
+  .actions {{ margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; }}
+  .btn {{ display: inline-block; padding: 4px 8px; border-radius: 6px; white-space: nowrap; background: var(--accent); color: var(--accent-ink);
+    font-weight: 600; font-size: 12.5px; text-decoration: none; border: 1px solid var(--accent); }}
   .btn:hover {{ filter: brightness(1.08); }}
   .btn.ghost {{ background: transparent; color: var(--accent); }}
   .btn.ghost:hover {{ background: var(--accent-soft); filter: none; }}

@@ -1,0 +1,77 @@
+.reveal { font-size: 32px; }
+.reveal h1, .reveal h2 { color: #18344b; text-transform: none; }
+.reveal h2 { font-size: 1.55em; line-height: 1.15; margin-bottom: 0.6em; }
+.reveal #title-slide h1 { font-size: 2.0em; line-height: 1.1; max-width: 950px; }
+.reveal #title-slide .subtitle { color: #1585b4; margin-top: 0.9em; }
+.reveal #title-slide .quarto-title-author-name { font-size: 0.8em; }
+.reveal #title-slide .institute { font-size: 0.7em; }
+.reveal table { font-size: 0.86em; width: 100%; }
+.reveal table th, .reveal table td { padding: 0.45em; border-bottom: 1px solid #c5d5df; }
+.reveal img { object-fit: contain; }
+.reveal .property-examples table { font-size: 0.76em; table-layout: fixed; }
+.reveal .property-examples th:first-child, .reveal .property-examples td:first-child { width: 18%; }
+.reveal .property-examples td, .reveal .property-examples th { padding: 0.4em; }
+.reveal .property-examples > p { font-size: 0.78em; }
+.reveal .submission-flow ol { display: flex; list-style: none; counter-reset: submission-step; gap: 28px; margin: 0.65em 0 0.9em; padding: 0; width: 100%; }
+.reveal .submission-flow li { counter-increment: submission-step; position: relative; flex: 1; margin: 0; padding: 20px 8px 17px; border: 1.5px solid #a3c9dc; border-radius: 12px; background: #edf7fc; color: #18344b; text-align: center; font-size: 23px; font-weight: 600; line-height: 1.25; }
+.reveal .submission-flow li::before { content: counter(submission-step); display: block; margin: 0 auto 10px; width: 28px; height: 28px; line-height: 28px; border-radius: 50%; background: #1585b4; color: white; font-size: 17px; }
+.reveal .submission-flow li:not(:last-child)::after { content: "→"; position: absolute; right: -25px; top: 50%; transform: translateY(-50%); color: #1585b4; font-size: 26px; font-weight: 400; }
+.reveal .classification-exercise table { font-size: 0.68em; }
+.reveal .classification-exercise table td, .reveal .classification-exercise table th { padding: 0.35em 0.5em; }
+.reveal .classification-exercise table td:first-child { width: 43%; }
+.reveal .example-slide > h2::before,
+.reveal .use-case-slide > h2::before,
+.reveal .exercise-slide > h2::before { display: table; padding: 0.25em 0.7em; margin-bottom: 0.6em; border-radius: 999px; font-family: inherit; font-size: 20px; line-height: 1.2; font-weight: 600; letter-spacing: normal; }
+.reveal .use-case-slide > h2::before { content: "🎓 Use case"; background: #e7f3fb; color: #184d70; }
+.reveal .exercise-slide > h2::before { content: "✏️ Exercise"; background: #f0ebfa; color: #594079; }
+.reveal .answer-chips p { display: flex; flex-wrap: wrap; gap: 0.65em; align-items: center; }
+.reveal .answer-chip { display: inline-flex; align-items: center; gap: 0.5em; padding: 0.35em 0.75em; border-radius: 999px; border: 2px solid; font-size: 0.9em; }
+.reveal .answer-chip strong { color: inherit; }
+.reveal .answer-a { background: #e7f3fb; border-color: #8cbad7; color: #184d70; }
+.reveal .answer-b { background: #f0ebfa; border-color: #b5a0d4; color: #594079; }
+.reveal .answer-c { background: #fff2df; border-color: #d5ad70; color: #795219; }
+.reveal strong { color: #105d80; }
+
+.reveal .retry-overlap .definition { font-size: 0.85em; margin: 0.6em 0; padding: 0.6em 0.75em; }
+
+.reveal .visual-definitions .definition { font-size: 0.78em; margin: 0.4em 0; padding: 0.45em 0.7em; }
+
+.reveal .example-slide > h2::before { content: "💡 Example"; background: #e7f3fb; color: #184d70; }
+.reveal .system-example table { font-size: 0.76em; }
+.reveal .system-example col:first-child { width: 23% !important; }
+.reveal .system-example col:last-child { width: 77% !important; }
+.reveal .system-example td:first-child { width: 23%; }
+.reveal .system-example > p { font-size: 0.82em; }
+.reveal .facebook-scale > p { font-size: 0.82em; }
+.reveal .facebook-scale > p img { display: inline-block; vertical-align: middle; margin: 0 0.4em 0 0; }
+
+.reveal .latency-slide h2 { margin-bottom: 0.4em; }
+.reveal .latency-stats { display: flex; align-items: stretch; gap: 14px; margin-bottom: 16px; }
+.reveal .latency-stat { flex: 1; padding: 12px 20px; background: #edf7fc; border: 1.5px solid #a3c9dc; border-radius: 12px; text-align: center; }
+.reveal .latency-stat-far { background: #fdf3f3; border-color: #e3b9bc; }
+.reveal .latency-stat p, .reveal .latency-card p { margin: 0; }
+.reveal .latency-value { display: block; font-size: 46px; font-weight: 700; line-height: 1.1; color: #18344b; }
+.reveal .latency-stat-far .latency-value { color: #b33e44; }
+.reveal .latency-label { display: block; font-size: 20px; color: #546573; }
+.reveal .latency-ratio { align-self: center; max-width: 150px; font-size: 26px; line-height: 1.15; font-weight: 700; color: #105d80; text-align: center; }
+.reveal .latency-slide > p { font-size: 25px; margin: 0.3em 0 0.55em; }
+.reveal .latency-cards { display: flex; gap: 14px; margin-bottom: 14px; }
+.reveal .latency-card { flex: 1; padding: 12px 16px; background: #f8fbfd; border: 1.2px solid #c6dbe8; border-left: 6px solid #3886ad; border-radius: 12px; font-size: 21px; line-height: 1.28; }
+.reveal .latency-problem { background: #fdf3f3; border-color: #e3b9bc; border-left-color: #b33e44; }
+.reveal .latency-kicker { display: block; font-size: 16px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #546573; }
+.reveal .latency-big { display: block; font-size: 29px; font-weight: 700; line-height: 1.2; color: #18344b; margin-bottom: 4px; }
+.reveal .latency-problem .latency-big { color: #b33e44; }
+
+/* Lecture 03 additions (2026-11-09). */
+.reveal .dense-table table { font-size: 0.74em; }
+.reveal .dense-table table td, .reveal .dense-table table th { padding: 0.32em 0.45em; }
+.reveal .dense-table > p { font-size: 0.86em; }
+.reveal pre { width: 100%; margin: 0.4em 0; box-shadow: none; }
+.reveal pre code { font-size: 19px; line-height: 1.32; max-height: none; padding: 0.6em 0.8em; background: #f6f9fb; border: 1px solid #d5e3ec; border-radius: 8px; }
+.reveal .code-slide ul { font-size: 0.82em; }
+.reveal .code-slide > p { font-size: 0.86em; }
+.reveal .code-slide .columns pre code { font-size: 17.5px; }
+.reveal .code-slide .columns ul { font-size: 0.74em; }
+
+.reveal .vote-explain ul { font-size: 0.72em; margin-top: 0.5em; }
+.reveal .vote-explain li { margin: 0.15em 0; }

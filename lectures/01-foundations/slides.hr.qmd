@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "5.2"
+version: "5.3"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -193,36 +193,32 @@ Od Q1 2024. Facebook ne objavljuje zasebne dnevne/mjesečne brojke. Noviji podac
 Izvori: [2012 milestone](https://about.fb.com/news/2012/10/one-billion-people-on-facebook/); [2019 results](https://investor.atmeta.com/investor-news/press-release-details/2020/Facebook-Reports-Fourth-Quarter-and-Full-Year-2019-Results/default.aspx); [2023 results](https://investor.atmeta.com/investor-news/press-release-details/2024/Meta-Reports-Fourth-Quarter-and-Full-Year-2023-Results-Initiates-Quarterly-Dividend/default.aspx); [reporting change](https://investor.fb.com/files/doc_financials/2023/q4/META-Q4-2023-Prepared-Remarks.pdf); [Facebook engineering on scaling](https://engineering.fb.com/2010/07/21/core-infra/scaling-facebook-to-500-million-users-and-beyond/).
 :::
 
-## Moraju li svi čekati jednu predaju?
+## Kašnjenje, kapacitet i dovršeni posao
 
-**Veliko sveučilište. Mnogo studenata. Jedan rok.**
+**Više projekata završi u sekundi. Mora li moj prijenos završiti brže?**
 
-::: {.submission-flow aria-label="Koraci obrade predaje slijeva nadesno"}
-1. Primi ZIP
-2. Provjeri pravila
-3. Raspakiraj i skeniraj
-4. Pohrani
-5. Prihvati
-:::
+![](assets/latency-bandwidth-throughput.hr.svg){fig-alt="Latencija je trajanje jednog putovanja; propusni kapacitet je kapacitet veze; propusnost je stvarno dovršeni posao u sekundi." height=295px}
 
-Pretpostavimo da jedna predaja zahtijeva **20 minuta obrade**.
+Latencija (**latency**) · kapacitet veze (**bandwidth**) · propusnost (**throughput**)
 
-Jedan izvršitelj završava posao prije sljedećeg: **3 posla/sat**.
+**Kako najbrže prenijeti 100 TB između podatkovnih centara?**
 
-**Mogu li drugi studenti slati projekte? Mogu li drugi poslovi napredovati?**
+**Velika propusnost ne jamči brz odgovor.**
 
 ::: {.notes}
-- **Priča:** Vraćamo se u portal: što kad tisuće studenata predaju pred rok?
+- **Priča:** Poruke traju: razlikujemo trajanje jednog odgovora od količine dovršenog posla.
 
-- Objasniti pet koraka; 20 minuta je pretpostavka.
+- Trajanje putovanja = latencija; kapacitet ceste = bandwidth; dovršene dostave = throughput.
 
-- 3 posla/sat vrijedi za jednog izvršitelja i uzastopnu obradu jednakih poslova.
+- Portal broji prihvaćene projekte, ne poslane bajtove. Čekanje/obrada dodaju latenciju.
 
-- Pitati (30 s): mogu li prijenosi čekati u zasebnom redu? Može li drugi posao napredovati dok prvi čeka?
+- 100 TB: 20 s za ideje; usporediti mrežu s prijevozom diskova.
 
-- Slijedi: preklapanje i istodobno izvršavanje.
+- Uključiti udaljenost, brzinu prijenosa, pisanje, put, čitanje i provjeru.
 
-Izvori: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-systems.net/index.php/books/ds4/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+- Opcionalno: 10 Gbit/s ≈ 22,2 h prije dodatnih troškova (decimalno). Propusnost ≠ brz odgovor.
+
+Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
 ## Više predaja može napredovati zajedno {.retry-overlap}
@@ -457,32 +453,36 @@ Izvori: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et
 Izvori: [Dean i Barroso, The Tail at Scale](https://doi.org/10.1145/2408776.2408794); [Google SRE Book, Embracing Risk](https://sre.google/sre-book/embracing-risk/).
 :::
 
-## Kašnjenje, kapacitet i dovršeni posao
+## Moraju li svi čekati jednu predaju?
 
-**Više projekata završi u sekundi. Mora li moj prijenos završiti brže?**
+**Veliko sveučilište. Mnogo studenata. Jedan rok.**
 
-![](assets/latency-bandwidth-throughput.hr.svg){fig-alt="Latencija je trajanje jednog putovanja; propusni kapacitet je kapacitet veze; propusnost je stvarno dovršeni posao u sekundi." height=295px}
+::: {.submission-flow aria-label="Koraci obrade predaje slijeva nadesno"}
+1. Primi ZIP
+2. Provjeri pravila
+3. Raspakiraj i skeniraj
+4. Pohrani
+5. Prihvati
+:::
 
-Latencija (**latency**) · kapacitet veze (**bandwidth**) · propusnost (**throughput**)
+Pretpostavimo da jedna predaja zahtijeva **20 minuta obrade**.
 
-**Kako najbrže prenijeti 100 TB između podatkovnih centara?**
+Jedan izvršitelj završava posao prije sljedećeg: **3 posla/sat**.
 
-**Velika propusnost ne jamči brz odgovor.**
+**Mogu li drugi studenti slati projekte? Mogu li drugi poslovi napredovati?**
 
 ::: {.notes}
-- **Priča:** Poruke traju: razlikujemo trajanje jednog odgovora od količine dovršenog posla.
+- **Priča:** Vraćamo se u portal: što kad tisuće studenata predaju pred rok?
 
-- Trajanje putovanja = latencija; kapacitet ceste = bandwidth; dovršene dostave = throughput.
+- Objasniti pet koraka; 20 minuta je pretpostavka.
 
-- Portal broji prihvaćene projekte, ne poslane bajtove. Čekanje/obrada dodaju latenciju.
+- 3 posla/sat vrijedi za jednog izvršitelja i uzastopnu obradu jednakih poslova.
 
-- 100 TB: 20 s za ideje; usporediti mrežu s prijevozom diskova.
+- Pitati (30 s): mogu li prijenosi čekati u zasebnom redu? Može li drugi posao napredovati dok prvi čeka?
 
-- Uključiti udaljenost, brzinu prijenosa, pisanje, put, čitanje i provjeru.
+- Slijedi: preklapanje i istodobno izvršavanje.
 
-- Opcionalno: 10 Gbit/s ≈ 22,2 h prije dodatnih troškova (decimalno). Propusnost ≠ brz odgovor.
-
-Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
+Izvori: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-systems.net/index.php/books/ds4/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
 :::
 
 ## Simulator: latencija i propusnost

@@ -1,6 +1,6 @@
 ---
 title: "Foundations and system models"
-version: "5.2"
+version: "5.3"
 subtitle: "Distributed Systems · Lecture 01"
 author: "assoc. prof. Nikola Tankovic, PhD"
 institute: "Faculty of Informatics, Juraj Dobrila University of Pula"
@@ -192,36 +192,30 @@ Facebook stopped reporting standalone daily/monthly user counts from Q1 2024. Me
 Sources: [2012 milestone](https://about.fb.com/news/2012/10/one-billion-people-on-facebook/); [2019 results](https://investor.atmeta.com/investor-news/press-release-details/2020/Facebook-Reports-Fourth-Quarter-and-Full-Year-2019-Results/default.aspx); [2023 results](https://investor.atmeta.com/investor-news/press-release-details/2024/Meta-Reports-Fourth-Quarter-and-Full-Year-2023-Results-Initiates-Quarterly-Dividend/default.aspx); [reporting change](https://investor.fb.com/files/doc_financials/2023/q4/META-Q4-2023-Prepared-Remarks.pdf); [Facebook engineering on scaling](https://engineering.fb.com/2010/07/21/core-infra/scaling-facebook-to-500-million-users-and-beyond/).
 :::
 
-## Must everyone wait for one submission?
+## Delay, capacity, and completed work
 
-**A large university. Many students. One deadline.**
+**More projects finish each second. Must my own upload finish sooner?**
 
-::: {.submission-flow aria-label="Submission processing steps, from left to right"}
-1. Receive ZIP
-2. Check rules
-3. Unpack & scan
-4. Store
-5. Accept
-:::
+![](assets/latency-bandwidth-throughput.svg){fig-alt="Latency times one journey. A multilane highway represents bandwidth, the link's capacity in bits per second. A receiving depot represents throughput, the actual rate of completed deliveries or accepted projects per second." height=295px}
 
-Suppose one submission needs **20 minutes of processing**.
+**Think: how would you move 100 TB between datacenters fastest?**
 
-One worker finishing each job before starting the next: **3 jobs/hour**.
-
-**Can other students upload? Can other jobs make progress?**
+Back to our portal: **high throughput does not guarantee a quick reply.**
 
 ::: {.notes}
-- **Story:** Back to the portal: what happens when thousands submit before the deadline?
+- **Story:** Messages take time: we separate one reply's duration from the amount of completed work.
 
-- Explain the five steps; 20 minutes is hypothetical.
+- Journey time = latency; highway capacity = bandwidth; completed deliveries = throughput.
 
-- 3 jobs/hour assumes one worker completes fixed-duration jobs sequentially.
+- Portal: accepted projects, not uploaded bytes. Queueing/processing add latency.
 
-- Ask (30 s): can uploads be queued separately? Can another job progress during a wait?
+- 100 TB: allow 20 s for ideas; compare network transfer with transporting drives.
 
-- Next: overlapping work versus simultaneous execution.
+- Include distance, transfer rate, writing, travel, reading and verification.
 
-Sources: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-systems.net/index.php/books/ds4/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+- Optional: 10 Gbit/s ≈ 22.2 h before overhead (decimal). High throughput ≠ quick reply.
+
+Sources: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
 :::
 
 ## Several submissions can make progress together {.retry-overlap}
@@ -454,30 +448,36 @@ Sources: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo e
 Sources: [Dean and Barroso, The Tail at Scale](https://doi.org/10.1145/2408776.2408794); [Google SRE Book, Embracing Risk](https://sre.google/sre-book/embracing-risk/).
 :::
 
-## Delay, capacity, and completed work
+## Must everyone wait for one submission?
 
-**More projects finish each second. Must my own upload finish sooner?**
+**A large university. Many students. One deadline.**
 
-![](assets/latency-bandwidth-throughput.svg){fig-alt="Latency times one journey. A multilane highway represents bandwidth, the link's capacity in bits per second. A receiving depot represents throughput, the actual rate of completed deliveries or accepted projects per second." height=295px}
+::: {.submission-flow aria-label="Submission processing steps, from left to right"}
+1. Receive ZIP
+2. Check rules
+3. Unpack & scan
+4. Store
+5. Accept
+:::
 
-**Think: how would you move 100 TB between datacenters fastest?**
+Suppose one submission needs **20 minutes of processing**.
 
-Back to our portal: **high throughput does not guarantee a quick reply.**
+One worker finishing each job before starting the next: **3 jobs/hour**.
+
+**Can other students upload? Can other jobs make progress?**
 
 ::: {.notes}
-- **Story:** Messages take time: we separate one reply's duration from the amount of completed work.
+- **Story:** Back to the portal: what happens when thousands submit before the deadline?
 
-- Journey time = latency; highway capacity = bandwidth; completed deliveries = throughput.
+- Explain the five steps; 20 minutes is hypothetical.
 
-- Portal: accepted projects, not uploaded bytes. Queueing/processing add latency.
+- 3 jobs/hour assumes one worker completes fixed-duration jobs sequentially.
 
-- 100 TB: allow 20 s for ideas; compare network transfer with transporting drives.
+- Ask (30 s): can uploads be queued separately? Can another job progress during a wait?
 
-- Include distance, transfer rate, writing, travel, reading and verification.
+- Next: overlapping work versus simultaneous execution.
 
-- Optional: 10 Gbit/s ≈ 22.2 h before overhead (decimal). High throughput ≠ quick reply.
-
-Sources: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
+Sources: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-systems.net/index.php/books/ds4/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
 :::
 
 ## Simulator: latency and throughput
