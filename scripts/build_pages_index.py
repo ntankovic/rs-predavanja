@@ -10,11 +10,13 @@ the approved Croatian topic blocks, so no unreviewed title is published.
 """
 
 import argparse
-from datetime import date
+from datetime import date, datetime
 import html
 import json
 from pathlib import Path
 import re
+import subprocess
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 SLIDES = ROOT / 'output/hr/slides'
@@ -42,6 +44,19 @@ def front_matter(path):
     return fields
 
 
+def last_change(path):
+    """Date and time (Europe/Zagreb) of the last commit that changed a published deck; file mtime outside git."""
+    try:
+        stamp = subprocess.run(['git', 'log', '-1', '--format=%cI', '--', str(path)], cwd=ROOT,
+                               capture_output=True, text=True, check=True).stdout.strip()
+        moment = datetime.fromisoformat(stamp) if stamp else None
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        moment = None
+    if moment is None:
+        moment = datetime.fromtimestamp(path.stat().st_mtime).astimezone()
+    return moment.astimezone(ZoneInfo('Europe/Zagreb'))
+
+
 def deck(html_path):
     name = html_path.stem
     lecture = ROOT / 'lectures' / name
@@ -56,6 +71,7 @@ def deck(html_path):
         'slides': len(timing) or None,
         'minutes': round(max(s['end'] for s in timing)) if timing else None,
         'pdf': f'pdf/{name}.pdf' if (PDFS / f'{name}.pdf').is_file() else None,
+        'updated': last_change(html_path),
     }
 
 
@@ -83,6 +99,7 @@ def card(d):
           <p class="kicker">{label}</p>
           <h3><a href="{e(d['name'])}.html" target="_blank" rel="noopener">{e(d['title'])}</a></h3>
           <p class="facts">{' · '.join(f for f in facts if f)}</p>
+          <p class="updated">Izmijenjeno <time datetime="{d['updated'].isoformat()}">{d['updated'].strftime('%d. %m. %Y. u %H:%M')}</time></p>
           <div class="actions">
             <a class="btn" href="{e(d['name'])}.html" target="_blank" rel="noopener">Otvori slajdove</a>{pdf}
           </div>
@@ -153,7 +170,8 @@ def page(decks):
   .kicker {{ margin: 0; font-size: 12px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }}
   .card h3 {{ margin: 3px 0 4px; font-size: 17px; line-height: 1.25; }}
   .card h3 a {{ text-decoration: none; }}
-  .facts {{ margin: 0 0 10px; color: var(--muted); font-size: 13px; }}
+  .facts {{ margin: 0; color: var(--muted); font-size: 13px; }}
+  .updated {{ margin: 0 0 10px; color: var(--muted); font-size: 12.5px; }}
   .actions {{ margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; }}
   .btn {{ display: inline-block; padding: 4px 8px; border-radius: 6px; white-space: nowrap; background: var(--accent); color: var(--accent-ink);
     font-weight: 600; font-size: 12.5px; text-decoration: none; border: 1px solid var(--accent); }}

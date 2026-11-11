@@ -30,6 +30,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # full history: index shows each deck's last change time
       - uses: actions/configure-pages@v5
       # Serve each deck under its full name and a short alias, e.g. 01-foundations.html and 01.html.
       - name: Stage decks
