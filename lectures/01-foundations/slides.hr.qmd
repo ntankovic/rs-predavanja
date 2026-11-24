@@ -1,6 +1,6 @@
 ---
 title: "Osnove i modeli sustava"
-version: "5.3"
+version: "5.6"
 subtitle: "Raspodijeljeni sustavi · Predavanje 01"
 author: "izv. prof. dr. sc. Nikola Tanković"
 institute: "Fakultet informatike Sveučilišta Jurja Dobrile u Puli"
@@ -34,6 +34,11 @@ format:
 ::: {.notes}
 - **Priča:** Otvaramo napetost: student vidi timeout i ne zna je li predao; na to odgovaramo cijelo predavanje.
 
+- **Sažetak:**
+  - Student šalje Unity ZIP od 20 MB; portal javlja istek čekanja bez potvrde prihvaćanja.
+  - Pitanje: je li portal prihvatio projekt? A Da · B Ne · C Još ne znamo.
+  - Točan odgovor (C) obrazlažemo tek na kraju predavanja.
+
 - Zamišljeni portal: prijavljeni student šalje Unity ZIP (kod, scene, resursi).
 
 - Prihvaćeno = cijeli projekt + trajni zapis; napredak prijenosa nije potvrda.
@@ -60,6 +65,11 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 ::: {.notes}
 - **Priča:** Jedno pitanje razbijamo u pet manjih koja čine plan predavanja.
 
+- **Sažetak:**
+  - Pet pitanja = plan predavanja: komponente, komunikacija i podjela posla, djelomični ispadi, siguran ponovni pokušaj, pretpostavke.
+  - Tijek jedne predaje pratimo kroz komponente portala.
+  - Predznanje: osnove programiranja, procesa i mreža.
+
 - Glasanje ostaje neriješeno: što se dogodilo unutar portala?
 
 - Put: komponente → dijeljenje rada → djelomični ispadi → sigurno ponavljanje → pretpostavke.
@@ -77,6 +87,11 @@ Svaki proces ima **lokalno stanje (local state)**. Strelica znači **„poziva i
 
 ::: {.notes}
 - **Priča:** Otvaramo „crnu kutiju” portala: više procesa, svaki zna samo svoj dio.
+
+- **Sažetak:**
+  - Karta portala: studentski klijent → usluga predaje → usluga zadataka (rokovi, pravila) i pohrana (projekt, prihvaćeni zapis).
+  - Svaki proces ima lokalno stanje; strelica znači „poziva i ovisi o”.
+  - Pitanja: tko zna rok, a tko zna je li projekt pohranjen?
 
 - Pratiti pozivatelj → ovisnost; oznake su zahtjevi. Odgovori izostavljeni.
 
@@ -103,6 +118,11 @@ Jedan naziv **usluge (service)** može skrivati mnogo procesa koji surađuju.
 
 ::: {.notes}
 - **Priča:** Imenujemo ono što smo upravo vidjeli: neovisne komponente koje surađuju porukama.
+
+- **Sažetak:**
+  - Def. 1.1: raspodijeljeni sustav čine neovisno izvršavane komponente koje komuniciraju i koordiniraju razmjenom poruka radi zajedničkog cilja.
+  - Tri sastojka: sudionici s lokalnim stanjem, poruke, zajednički cilj.
+  - Jedan naziv usluge može skrivati mnogo procesa.
 
 - Proces = program u izvođenju; čvor u modelu može biti proces ili računalo.
 
@@ -131,6 +151,11 @@ Izvori: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-s
 ::: {.notes}
 - **Priča:** Provjeravamo razumijevanje definicije na rubnim primjerima.
 
+- **Sažetak:**
+  - Šest primjera; za svaki tražimo komponente, poruke i zajednički cilj.
+  - Da: preglednik + API + baza na istom računalu, render farma, API + kontejner na prijenosniku, MPI prosjek temperature.
+  - Ne: nepovezani prijenosnici na istom Wi-Fiju (nema zajedničkog zadatka), dretve samo s dijeljenom memorijom (nema poruka).
+
 - Otkrivati odgovor tek nakon studentske procjene.
 
 - Isti domaćin odgovara našoj definiciji, ali dijeli ispade; strože definicije traže više računala.
@@ -152,6 +177,10 @@ Izvori: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-s
 
 ::: {.notes}
 - **Priča:** Ako je to teže, zašto to radimo? Tri razloga zbog kojih je gotovo svaki sustav raspodijeljen.
+
+- **Sažetak:**
+  - Tri razloga: komponente su fizički odvojene, potreban je veći kapacitet, sustav mora preživjeti ispade (redundancija).
+  - Zaključak: gotovo svaki današnji informacijski sustav je raspodijeljen.
 
 - Tri glavna razloga: geografska odvojenost, kapacitet, otpornost na ispade.
 
@@ -182,6 +211,11 @@ Od Q1 2024. Facebook ne objavljuje zasebne dnevne/mjesečne brojke. Noviji podac
 ::: {.notes}
 - **Priča:** Razlog kapaciteta na stvarnim brojkama: rast tjera arhitekturu na više računala.
 
+- **Sažetak:**
+  - Facebook MAU: 1,00 mlrd (10/2012) → 2,50 mlrd (12/2019) → 3,07 mlrd (12/2023).
+  - Vertikalno skaliranje (scale up) = snažnije računalo; horizontalno (scale out) = više računala dijeli posao.
+  - Od Q1 2024. nema zasebnih Facebook brojki; noviji podaci mjere Metine aplikacije.
+
 - Rast (20 s); scale up/out (25 s); cijena koordinacije (15 s).
 
 - MAU nije broj istodobnih korisnika ni zahtjeva u sekundi.
@@ -207,6 +241,11 @@ Latencija (**latency**) · kapacitet veze (**bandwidth**) · propusnost (**throu
 
 ::: {.notes}
 - **Priča:** Poruke traju: razlikujemo trajanje jednog odgovora od količine dovršenog posla.
+
+- **Sažetak:**
+  - Latencija = trajanje jednog putovanja; kapacitet veze (bandwidth) = koliko veza može prenijeti; propusnost (throughput) = stvarno dovršeni posao u sekundi.
+  - Pitanje za raspravu: kako najbrže prenijeti 100 TB između podatkovnih centara?
+  - Poruka slajda: velika propusnost ne jamči brz odgovor.
 
 - Trajanje putovanja = latencija; kapacitet ceste = bandwidth; dovršene dostave = throughput.
 
@@ -245,6 +284,11 @@ Izvršitelj može promijeniti zadatak pri čekanju ili ustupanju izvršavanja, u
 ::: {.notes}
 - **Priča:** Odgovor je preklapanje i istodobnost: uvodimo konkurentnost i paralelizam.
 
+- **Sažetak:**
+  - Def. 1.2 konkurentnost: više je zadataka u tijeku u razdobljima koja se preklapaju.
+  - Def. 1.3 paralelizam: više se zadataka izvršava istodobno.
+  - Dok A čeka pohranu, izvršitelj može raditi na B, uz poštovanje ovisnosti.
+
 - Pratiti jednog izvršitelja koji izmjenjuje A/B, zatim dva istodobna izvršitelja.
 
 - Objašnjenje u paru (45 s): konkurentnost i paralelizam.
@@ -273,6 +317,11 @@ async def provjeri(predaja):
 ::: {.notes}
 - **Priča:** Osvježavamo kako se izvršavanje doista izmjenjuje, jer na tome kasnije pada provjera duplikata.
 
+- **Sažetak:**
+  - Tri točke promjene zadatka: čekanje I/O (await), prekid OS-a (istek vremenskog odsječka), dobrovoljno ustupanje (await asyncio.sleep(0)).
+  - Kooperativno raspoređivanje mijenja zadatak samo na await; preemptivno između bilo koje dvije instrukcije.
+  - Poruka slajda: između provjere i upisa na red može doći netko drugi.
+
 - Tri točke promjene: čekanje I/O (await), prekid OS-a (istekne vremenski odsječak, dretva to ne bira) i dobrovoljno ustupanje bez I/O.
 
 - asyncio (jedna dretva): korutina se mijenja samo na await. OS i dalje može pauzirati cijeli proces, ali tada ne radi nijedna druga korutina iz iste petlje.
@@ -297,6 +346,11 @@ Izvori: [Python, asyncio.sleep](https://docs.python.org/3/library/asyncio-task.h
 
 ::: {.notes}
 - **Priča:** Ista logika na dvije razine: OS raspoređuje dretve, a petlja događaja korutine unutar jedne dretve.
+
+- **Sažetak:**
+  - OS preemptivno izmjenjuje dretve; petlja događaja unutar jedne dretve izmjenjuje korutine samo na await.
+  - Petlja događaja je obična petlja u jednoj dretvi: raspoređivač u korisničkom prostoru.
+  - Korutina bez await zaustavlja sve ostale; kod između dva await nedjeljiv je za druge korutine, ali ne i za druge dretve.
 
 - Usporedba: dretva ↔ zadatak (Task); red spremnih dretvi ↔ red spremnih poziva petlje; blokirajući syscall ↔ await na I/O (socket se registrira, epoll javi spremnost); sched_yield ↔ await asyncio.sleep(0); preempcija timerom ↔ ne postoji.
 
@@ -324,6 +378,11 @@ Izvori: [Python, asyncio event loop](https://docs.python.org/3/library/asyncio-e
 ::: {.notes}
 - **Priča:** Učvršćujemo razliku slikom koja se pamti.
 
+- **Sažetak:**
+  - Rob Pike: konkurentnost = baviti se mnogim stvarima odjednom; paralelizam = raditi mnogo stvari odjednom.
+  - Slika: jedan kuhar izmjenjuje pažnju između dva jela, dva kuhara rade istodobno.
+  - Paralelno izvršavanje jest konkurentno; konkurentni zadaci ne moraju biti paralelni.
+
 - Jedan kuhar mijenja pažnju; dva mogu raditi istodobno.
 
 - Analogija opisuje aktivnu pažnju; hrana se može grijati bez nje.
@@ -343,6 +402,10 @@ Lokalni poziv (**local call**) · udaljeni zahtjev (**remote request**)
 
 ::: {.notes}
 - **Priča:** Kad posao prijeđe na drugo računalo, poziv postaje poruka preko mreže; tu počinju problemi.
+
+- **Sažetak:**
+  - Provjera roka seli na drugi poslužitelj: lokalni poziv postaje zahtjev i odgovor preko mreže.
+  - Pitanje slajda: što se time mijenja za pozivatelja?
 
 - Pratiti zahtjev i odgovor preko mreže.
 
@@ -407,6 +470,11 @@ async def provjeri_rok(klijent, zadatak, sada):
 ::: {.notes}
 - **Priča:** Isti posao u kodu: lokalno dva ishoda, udaljeno i treći, „ne znam”.
 
+- **Sažetak:**
+  - Lijevo, lokalni poziv: vrijednost ili iznimka; izvršio se točno jednom.
+  - Desno, udaljeni zahtjev: timeout, do 3 pokušaja s eksponencijalnim čekanjem i jitterom, razlikovanje grešaka (veza, timeout, 4xx/5xx, neočekivan odgovor), mjerenje trajanja.
+  - Kod upisa (POST /predaje) timeout znači: predaja je možda spremljena, a možda nije.
+
 - Lokalno: vrijednost ili iznimka; funkcija se izvršila točno jednom; greška je u našem kodu ili podacima.
 
 - Udaljeno: veza nije uspostavljena (zahtjev nije poslan), istek čekanja (možda je obrađen), greška druge usluge (status 404/503/500), odgovor neočekivanog oblika (druga verzija usluge).
@@ -421,9 +489,7 @@ async def provjeri_rok(klijent, zadatak, sada):
 
 - finally zapisuje trajanje svakog pokušaja, i uspješnog i neuspješnog: bez toga ne znamo je li usluga spora ili nedostupna. Lokalno ništa od toga ne treba.
 
-Izvori: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/).
-
-Izvori: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
+Izvori: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/); [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et al., A Note on Distributed Computing](https://waldo.scholars.harvard.edu/publications/note-distributed-computing).
 :::
 
 ## Lanac poziva: pouzdanost se množi {.chain-slide}
@@ -435,6 +501,11 @@ Izvori: [HTTPX, Exceptions](https://www.python-httpx.org/exceptions/); [Waldo et
 
 ::: {.notes}
 - **Priča:** Predaja rijetko zove samo jednu uslugu: provjera roka, korisnici, pohrana, obavijest. Već su to četiri udaljena poziva, i svaki mora uspjeti.
+
+- **Sažetak:**
+  - Interaktivni simulator: tok od N uzastopnih poziva; svaki uspijeva s p · m, cijeli tok s (p · m)^N.
+  - Kartice: simulacija 1000 izvođenja, izračun, obrnuti izračun (koliko pouzdan mora biti korak), pretpostavke.
+  - Poruka: pouzdanost komponenti nije isto što i pouzdanost cijelog sustava.
 
 - Zadano „Pouzdan sustav”, N = 4: 0,9999⁴ ≈ 99,96 %. Postaviti p = 99 %: 0,99⁴ ≈ 96 %; svaka 25. predaja negdje zapne. Uz 10 poziva ≈ 90 %.
 
@@ -474,6 +545,11 @@ Jedan izvršitelj završava posao prije sljedećeg: **3 posla/sat**.
 ::: {.notes}
 - **Priča:** Vraćamo se u portal: što kad tisuće studenata predaju pred rok?
 
+- **Sažetak:**
+  - Pet koraka obrade: primi ZIP, provjeri pravila, raspakiraj i skeniraj, pohrani, prihvati.
+  - Pretpostavka: 20 minuta po predaji; jedan izvršitelj koji radi posao po posao = 3 posla/sat.
+  - Pitanja: mogu li drugi studenti slati projekte i mogu li drugi poslovi napredovati?
+
 - Objasniti pet koraka; 20 minuta je pretpostavka.
 
 - 3 posla/sat vrijedi za jednog izvršitelja i uzastopnu obradu jednakih poslova.
@@ -495,6 +571,11 @@ Izvori: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-s
 ::: {.notes}
 - **Priča:** Isti pojmovi kao na prethodnom slajdu: pomičemo parametre i gledamo što se mijenja.
 
+- **Sažetak:**
+  - Interaktivni simulator: latencija, kapacitet veze, veličina projekta i obrada poslužitelja; prikazuje trajanje jedne predaje i propusnost.
+  - Gotovi scenariji: mali zahtjev, veliki ZIP, spora provjera, 100 TB mrežom, 100 TB kamionom.
+  - Poruka: što dominira ovisi o scenariju; propusnost određuje usko grlo.
+
 - „Mali zahtjev”: oko 152 ms, gotovo sve je latencija. Povećati kapacitet veze: trajanje se ne mijenja.
 
 - „Veliki ZIP”: oko 16 s, dominira slanje; sada veći kapacitet pomaže.
@@ -515,6 +596,11 @@ Izvori: [van Steen and Tanenbaum, Distributed Systems](https://www.distributed-s
 
 ::: {.notes}
 - **Priča:** Veza s Web aplikacijama: prvi bajt nije potvrda prihvaćanja.
+
+- **Sažetak:**
+  - TTFB mjeri čekanje na početak odgovora (DNS, TCP, TLS, čekanje na prvi bajt), ne cijelo preuzimanje.
+  - Velik kapacitet veze ne jamči nizak TTFB; važni su mreža i obrada.
+  - Prvi bajt ne dokazuje prihvaćanje predaje.
 
 - Navesti početak mjerenja: navigacija uključuje uspostavu veze; početak zahtjeva je isključuje.
 
@@ -540,6 +626,11 @@ Izvori: [web.dev, Time to First Byte](https://web.dev/articles/ttfb).
 ::: {.notes}
 - **Priča:** Dijelovi sustava otkazuju zasebno: djelomični ispad.
 
+- **Sažetak:**
+  - Portal se otvara, ali usluga zadataka je stala; ostali procesi rade.
+  - Def. 1.4: djelomični ispad nastaje kad neke komponente prestanu raditi, a druge nastavljaju.
+  - Što još radi ovisi o tome o čemu ovisi svaka operacija.
+
 - Pitati: može li se dohvatiti stara potvrda dok provjera roka ne radi?
 
 - Ovisi o ovisnostima svake operacije.
@@ -557,6 +648,10 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 ::: {.notes}
 - **Priča:** Pripremamo teren: tko koga čeka i tko postavlja rok čekanja.
+
+- **Sažetak:**
+  - Preglednik poziva uslugu predaje, a ona poziva uslugu zadataka.
+  - Klijent i poslužitelj su uloge u komunikaciji; usluga predaje ima obje.
 
 - Klijent/poslužitelj su uloge; usluga predaje ima obje.
 
@@ -580,6 +675,12 @@ Timeout **ne**:
 ::: {.notes}
 - **Priča:** Vraćamo se početnom timeoutu: što on znači, a što ne.
 
+- **Sažetak:**
+  - Pozivatelj postavlja rok čekanja da ne čeka zauvijek.
+  - Timeout znači samo jedno: pozivatelj je odustao od čekanja.
+  - Timeout ne uništava zahtjev, ne prekida udaljeni posao i ne otkriva ishod.
+  - Najava: tri priče koje završavaju istim timeoutom.
+
 - Središnja misao predavanja: timeout prekida čekanje, ne udaljeni rad i njegove učinke.
 
 - Izričito otkazivanje je zasebna poruka i može se utrkivati s dovršetkom.
@@ -593,6 +694,10 @@ Timeout **ne**:
 
 ::: {.notes}
 - **Priča:** Prva priča iza timeouta: zahtjev nije ni stigao.
+
+- **Sažetak:**
+  - Slijed A: zahtjev se izgubi prije primitka; predaja nije prihvaćena.
+  - Klijentu istekne vrijeme čekanja.
 
 - Čitati prema dolje: cijeli zahtjev nije stigao; nema prihvaćene predaje.
 
@@ -612,6 +717,10 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 ::: {.notes}
 - **Priča:** Druga priča: posao je obavljen, ali odgovor se izgubio.
 
+- **Sažetak:**
+  - Slijed B: predaja je prihvaćena i trajno pohranjena, ali se odgovor izgubi.
+  - Klijentu istekne vrijeme čekanja, isto kao u slijedu A.
+
 - Prihvaćeno i trajno pohranjeno; potvrda izgubljena.
 
 - Usporediti A: drugo stanje poslužitelja, isti timeout.
@@ -627,6 +736,10 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 ::: {.notes}
 - **Priča:** Treća priča: poslužitelj je spremio predaju i pao prije odgovora.
+
+- **Sažetak:**
+  - Slijed C: predaja je trajno prihvaćena, a proces poslužitelja se sruši prije odgovora.
+  - Zapis ostaje; klijentu istekne vrijeme čekanja.
 
 - Trajno prihvaćanje → rušenje procesa prije odgovora.
 
@@ -645,6 +758,11 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 ::: {.notes}
 - **Priča:** Spajamo tri priče: isti timeout, različiti ishodi; zato je odgovor na glasanje „ne znamo”.
+
+- **Sažetak:**
+  - Usporedba: izgubljen zahtjev → predaja nije prihvaćena; izgubljen odgovor ili rušenje nakon pohrane → predaja je prihvaćena.
+  - Svaki slijed klijentu izgleda jednako: timeout.
+  - Poruka slajda: timeout ograničava čekanje; ne određuje udaljeni ishod.
 
 - Ponoviti glasanje: C. Isto opažanje, različiti udaljeni učinci.
 
@@ -665,6 +783,10 @@ Za svaki slijed predvidite što može učiniti drugi zahtjev.
 
 ::: {.notes}
 - **Priča:** Prirodna reakcija je ponoviti; studenti predviđaju posljedice.
+
+- **Sažetak:**
+  - Vježba: za svaki slijed predvidjeti što može učiniti drugi zahtjev.
+  - Tri pitanja: što popravlja ponovni pokušaj, može li nastavnik dobiti dva zapisa, koji podatak označava istu namjeravanu operaciju.
 
 - Parovi (1 min), odgovori (1 min), povezivanje (1 min).
 
@@ -698,6 +820,11 @@ Primamljiv pristup: **„Ako nema prihvaćenog zapisa, stvori ga.”**
 ::: {.notes}
 - **Priča:** Ponovni pokušaj preklapa se s prvim: konkurentnost se vraća kao problem.
 
+- **Sažetak:**
+  - Nakon timeouta pokušaj A možda još putuje, čeka u redu ili se obrađuje; pokušaj B kreće usporedno.
+  - A i B mogu obrađivati istu namjeravanu predaju.
+  - „Ako nema prihvaćenog zapisa, stvori ga” puca kad oba provjere prije nego što ijedan upiše.
+
 - A/B sada su pokušaji iste predaje, ne različiti studenti.
 
 - Prvi zahtjev nakon timeouta možda još putuje, čeka ili radi.
@@ -715,6 +842,11 @@ Primamljiv pristup: **„Ako nema prihvaćenog zapisa, stvori ga.”**
 
 ::: {.notes}
 - **Priča:** Ponovni pokušaj pomaže jednom klijentu, ali kad pokušavaju svi, usluga koja pati dobiva još više posla.
+
+- **Sažetak:**
+  - Lijevo: deset klijenata s prvim i dva ponovna pokušaja šalje zahtjeve istoj preopterećenoj usluzi.
+  - Desno, shematski: do kapaciteta obrađeni zahtjevi rastu s pristiglima, iznad kapaciteta padaju.
+  - Petlja: sporiji odgovori → više timeouta → više pokušaja; legitimni klijenti izvode nenamjerni DDoS (oluja ponavljanja).
 
 - Lijevo: 10 klijenata × 3 pokušaja = 30 zahtjeva umjesto 10, baš kad je usluga najsporija.
 
@@ -741,6 +873,11 @@ Izvori: [AWS Builders’ Library, Timeouts, retries, and backoff with jitter](ht
 
 ::: {.notes}
 - **Priča:** Utrka pokazuje da prije protokola trebamo pravilo: invarijantu.
+
+- **Sažetak:**
+  - Provjera i upis su odvojeni, neatomarni koraci: A i B oba vide da nema zapisa i stvore dva prihvaćena zapisa.
+  - Def. 1.5: invarijanta je pravilo koje mora vrijediti u svakom dopuštenom stanju sustava.
+  - Zahtjev portala: najviše jedan prihvaćeni zapis po namjeravanoj predaji.
 
 - Atomarno = nedjeljivo u odnosu na druge operacije.
 
@@ -772,6 +909,11 @@ Uvjeti napretka: oporavak usluga, uspješna komunikacija i obrada posla.
 ::: {.notes}
 - **Priča:** Pravilo nije dovoljno: sustav koji sve odbija siguran je, ali beskoristan.
 
+- **Sažetak:**
+  - Odbijanje svih predaja izbjegava duplikate, ali portal je beskoristan.
+  - Def. 1.6 sigurnost: određeni loš događaj ili stanje nikad se ne dogodi. Def. 1.7 napredovanje: napredak se konačno ostvari pod navedenim pretpostavkama.
+  - Portal treba oboje: bez duplikata i konačno prihvaćanje valjanog rada; uvjeti su oporavak, komunikacija i obrada.
+
 - Sigurnost: nikad duplikati. Napredovanje: valjani posao konačno prihvaćen.
 
 - Treba oporavak/dostupnost, komunikaciju, sačuvan/ponovljen posao i obradu.
@@ -795,6 +937,10 @@ Uvjeti napretka: oporavak usluga, uspješna komunikacija i obrada posla.
 ::: {.notes}
 - **Priča:** Isti par svojstava prepoznajemo u plaćanjima, rezervacijama, redovima i zaključavanju.
 
+- **Sažetak:**
+  - Tablica s otkrivanjem: za plaćanja, rezervaciju sjedala, red poslova i raspodijeljeno zaključavanje po jedno svojstvo sigurnosti i napredovanja.
+  - Napredak traži oporavak, komunikaciju, sačuvan posao i pravedno raspoređivanje; zaključavanje se mora otpustiti ili sigurno zamijeniti.
+
 - Otkrivati sigurnost pa napredovanje; stupac sigurnosti navodi zabranjene događaje.
 
 - Plaćanje: ista namjera. Odbijenica zadovoljava obećanje odgovora na rezervaciju.
@@ -814,12 +960,19 @@ Uvjeti napretka: oporavak usluga, uspješna komunikacija i obrada posla.
 - disk strada i ne ostane obnovljiva kopija?
 - kabel bude prekinut, a usluga ostane odspojena?
 
+**Ne.** Nijedan dizajn to ne može obećati; svako obećanje vrijedi samo uz pretpostavke.
+
 **Model sustava (system model)** navodi dopušteno ponašanje i jamstva na koja se algoritam smije osloniti.
 
-Pretpostavke navodimo za **mrežu (network), čvorove (nodes) i vrijeme (timing)**.
+Pretpostavke navodimo u tri dimenzije, redom na sljedećim slajdovima: **mreža (network) → čvorovi (nodes) → vrijeme (timing)**.
 
 ::: {.notes}
 - **Priča:** Obećanja vrijede samo uz pretpostavke: uvodimo model sustava.
+
+- **Sažetak:**
+  - Tri slučaja u kojima ne možemo obećati prihvaćanje: struja ostane isključena, disk strada bez kopije, usluga ostane odspojena. Odgovor: ne; obećanja vrijede samo uz pretpostavke.
+  - Model sustava navodi dopušteno ponašanje i jamstva na koja se algoritam smije osloniti.
+  - Pretpostavke navodimo u tri dimenzije: mreža, čvorovi, vrijeme.
 
 - Ispadi ugrožavaju napredovanje; zaustavljen sustav može izbjeći duplikate.
 
@@ -840,16 +993,21 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 Ponavljanje pomaže samo ako neki kasniji pokušaj može stići.
 
-| Pretpostavka komunikacije | Posljedica za portal |
+| Što mreža smije učiniti? | Što to znači za portal? |
 |:---|:---|
-| Poruke se mogu izgubiti, duplicirati ili promijeniti redoslijed | Obraditi ponovljene zahtjeve i promijenjeni redoslijed. |
-| Uporno ponavljanje konačno uspijeva | Dostava je moguća, bez fiksnog roka. |
-| Trajna mrežna particija (network partition) blokira sve pokušaje | Prihvaćanje koje treba tu komunikaciju ne napreduje. |
+| Izgubiti, duplicirati ili promijeniti redoslijed poruka | Obraditi ponovljene zahtjeve i promijenjeni redoslijed. |
+| Kasniti, ali uporno ponavljanje konačno uspijeva | Dostava je moguća, bez fiksnog roka. |
+| Trajno se podijeliti (network partition) | Prihvaćanje koje treba tu komunikaciju ne napreduje. |
 
-Za naš portal pretpostavljamo da nitko usput ne mijenja niti lažira poruke.
+**Za portal:** prva dva retka; nitko usput ne mijenja niti lažira poruke. Tijekom particije čuvamo sigurnost, a napredak čeka oporavak veze.
 
 ::: {.notes}
 - **Priča:** Prva dimenzija modela: što mreža smije raditi s porukama.
+
+- **Sažetak:**
+  - Ponavljanje pomaže samo ako neki kasniji pokušaj može stići.
+  - Tri pretpostavke: poruke se gube, dupliciraju ili mijenjaju redoslijed; uporno ponavljanje konačno uspijeva; trajna particija blokira sve pokušaje.
+  - Za portal: prva dva retka, bez lažiranja poruka; tijekom particije sigurnost ostaje, napredak čeka oporavak veze.
 
 - Pitati (30 s): pomažu li pokušaji ako se put nikad ne oporavi?
 
@@ -870,16 +1028,22 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 **Usluga stane nakon prihvaćanja projekta. Što se događa kad se vrati?**
 
-| Model | Primjer u portalu |
-|:---|:---|
-| **Ispad bez oporavka (crash-stop)** | Sudionik trajno staje unutar modela. Primjer: izvršitelj se sruši; ostali moraju završiti bez njega. |
-| **Ispad s oporavkom (crash-recovery)** | Ponovno se pokrene. Prihvaćeni zapisi ostaju u trajnoj pohrani; red u memoriji nestaje. |
-| **Bizantski model (Byzantine)** | Neispravna usluga studentu kaže „prihvaćeno”, a nastavniku „nije prihvaćeno”. |
+| Model | Što čvor smije učiniti | Primjer u portalu |
+|:---|:---|:---|
+| **Ispad bez oporavka (crash-stop)** | Stane i više se ne vraća. | Izvršitelj se sruši; ostali moraju završiti bez njega. |
+| **Ispad s oporavkom (crash-recovery)** | Stane i kasnije se vrati; zadrži samo ono što je na disku. | Prihvaćeni zapisi ostaju u trajnoj pohrani; red u memoriji nestaje. |
+| **Bizantski model (Byzantine)** | Odstupi od protokola: laže ili proturječi. | Neispravna usluga studentu kaže „prihvaćeno”, a nastavniku „nije prihvaćeno”. |
 
-Modeli opisuju dopušteno ponašanje, ne trenutak otkrivanja ispada.
+: {tbl-colwidths="[30,30,40]"}
+
+Modeli opisuju dopušteno ponašanje, ne trenutak otkrivanja ispada. **Za portal: ispad s oporavkom.**
 
 ::: {.notes}
 - **Priča:** Druga dimenzija: kako komponente smiju otkazati.
+
+- **Sažetak:**
+  - Crash-stop: sudionik trajno staje. Crash-recovery: ponovno se pokrene, trajni zapisi ostaju, red u memoriji nestaje. Bizantski: proturječni ili lažni odgovori.
+  - Modeli opisuju dopušteno ponašanje, ne trenutak otkrivanja ispada. Za portal biramo ispad s oporavkom.
 
 - Pitati što preživi ponovno pokretanje: trajni zapisi nasuprot memoriji.
 
@@ -901,14 +1065,19 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 - Beskonačno čekanje ostavlja studenta bez rezultata.
 - Ponovni pokušaj može se preklopiti s poslom koji još traje.
 
-**Koje jamstvo razlikuje „sporo” od „zaustavljeno”?**
-
 Mi, **arhitekti sustava i programeri**, biramo timeout; time ne stvaramo jamstvo brzine odgovora.
+
+**Koje jamstvo razlikuje „sporo” od „zaustavljeno”?** To određuje vremenski model.
 
 > **💡 Uvid:** prekratki timeouti i agresivni ponovni pokušaji mnogih klijenata mogu stvoriti **oluju ponavljanja (retry storm)**: samouzrokovanu uskratu usluge s učincima poput DDoS-a.
 
 ::: {.notes}
 - **Priča:** Treća dimenzija počinje praktičnim pitanjem: koliko dugo čekati?
+
+- **Sažetak:**
+  - Beskonačno čekanje ostavlja studenta bez rezultata; ponovni pokušaj se može preklopiti s poslom koji još traje.
+  - Timeout biramo mi; on ne stvara jamstvo brzine odgovora. Prekratki timeouti i agresivni pokušaji → oluja ponavljanja.
+  - Završno pitanje vodi na sljedeći slajd: koje jamstvo razlikuje „sporo” od „zaustavljeno”? To određuje vremenski model.
 
 - Pitati (20 s): je li rok navika ili jamstvo?
 
@@ -938,6 +1107,11 @@ Zagušenje i zastoji motiviraju djelomičnu sinkronost. To je **pretpostavka**, 
 ::: {.notes}
 - **Priča:** Formaliziramo vrijeme: što smijemo pretpostaviti o kašnjenju.
 
+- **Sažetak:**
+  - Sinkroni model: poznata granica kašnjenja. Asinkroni: nema granice. Djelomično sinkroni: granica vrijedi nakon nepoznatog trenutka stabilizacije.
+  - Djelomična sinkronost je pretpostavka, ne „99 % brzo” ni jamstvo Interneta.
+  - Cilj: sigurnost tijekom poremećaja, napredak nakon stabilizacije.
+
 - Δ = gornja granica, ne prosjek. Asinkroni primitak može kasniti iza timeouta.
 
 - Eventual synchrony: nepoznata konačna stabilizacija, zatim granice vrijede do kraja.
@@ -953,18 +1127,24 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 ## etcd: isti ključ stvara samo jedan klijent {.example-slide .system-example}
 
-**etcd** je replicirana pohrana parova (ključ: vrijednost) u kojoj raspodijeljeni sustavi (npr. Kubernetes) drže konfiguraciju i podatke za koordinaciju. Primjer: **dva klijenta istodobno pokušavaju stvoriti isti ključ**.
+**etcd** je replicirana pohrana parova (ključ: vrijednost) u kojoj raspodijeljeni sustavi (npr. Kubernetes) drže konfiguraciju i podatke za koordinaciju. Primjer: **dva klijenta istodobno pokušavaju stvoriti isti ključ**, kao A i B s istom predajom.
 
 | O čemu zaključujemo | Klaster etcd s tri člana |
 |:---|:---|
-| **Pretpostavke modela** | Članovi slijede protokol (ne lažu); mogu se srušiti i oporaviti uz stanje sačuvano na disku. Poruke mogu kasniti, a mreža se može podijeliti (particija). |
-| **Invarijanta / sigurnost** | Naredba „ako ključ ne postoji, stvori ga” (create-if-absent) izvršava se kao jedan nedjeljiv (atomic) korak, pa **uspijeva samo jedan klijent**, sve dok se ključ ne izbriše. Da su čitanje i upis dva zasebna poziva (read-then-write), oba bi klijenta mogla vidjeti da ključa nema i oba ga upisati. |
-| **Uvjeti napredovanja** | Zahtjevi se izvršavaju ako su **barem 2 od 3 člana (većina, majority)** dostupna i imaju vođu (leader), a kašnjenja nisu tolika da se vođa stalno mijenja. |
+| **Pretpostavke modela** | **Čvorovi:** ispad s oporavkom, stanje na disku; ne lažu. **Mreža:** poruke kasne, moguća particija. **Vrijeme:** napredak traži djelomičnu sinkronost. |
+| **Sigurnost (invarijanta)** | Naredba „ako ključ ne postoji, stvori ga” (create-if-absent) izvršava se kao jedan nedjeljiv (atomic) korak, pa **uspijeva samo jedan klijent**, sve dok se ključ ne izbriše. Da su čitanje i upis dva zasebna poziva (read-then-write), oba bi klijenta mogla vidjeti da ključa nema i oba ga upisati. |
+| **Napredovanje** | Zahtjevi se izvršavaju ako su **barem 2 od 3 člana (većina, majority)** dostupna i imaju vođu (leader), a kašnjenja nisu tolika da se vođa stalno mijenja. |
 
-**Ako mreža odvoji 2 člana od 1:** ta dva člana i dalje potvrđuju upise. Odsječeni član ne može potvrditi nijedan upis, pa preko njega nitko ne može stvoriti isti ključ.
+**Tijekom particije 2 + 1:** većina i dalje potvrđuje upise. Odsječeni član ne potvrđuje nijedan upis, pa preko njega nitko ne može stvoriti isti ključ.
 
 ::: {.notes}
 - **Priča:** Stvarni sustav rješava naš problem duplikata atomarnim „stvori ako ne postoji”.
+
+- **Sažetak:**
+  - etcd: replicirana pohrana ključ–vrijednost (npr. za Kubernetes); dva klijenta istodobno stvaraju isti ključ.
+  - Model u tri dimenzije: čvorovi s oporavkom (ne lažu), mreža s kašnjenjem i particijom, za napredak djelomična sinkronost.
+  - Sigurnost: atomarni create-if-absent → uspijeva samo jedan klijent. Napredak: dostupna većina (2 od 3) s vođom.
+  - Particija 2 + 1: većina i dalje potvrđuje upise, odsječeni član ne može potvrditi nijedan.
 
 - Replika = održavana kopija; većina = 2/3.
 
@@ -987,15 +1167,21 @@ Izvori: [etcd API guarantees](https://etcd.io/docs/v3.6/learning/api_guarantees/
 
 | O čemu zaključujemo | Ova konfiguracija Cassandre |
 |:---|:---|
-| **Pretpostavke modela** | Replike slijede protokol (ne lažu); mogu se srušiti i oporaviti. Poruke mogu kasniti, a mreža se može podijeliti (particija). |
-| **Sigurnost i ograničenje** | Za uspjeh je dovoljna potvrda jedne replike. Čitanje zato može vratiti stari podatak, pa „pročitaj pa upiši” **ne sprječava** da se isto sjedalo proda dvaput. |
-| **Uvjeti napredovanja** | Operacija uspijeva čim odgovori jedna dostupna replika. Ostale replike dobiju promjenu kasnije, kad se veza oporavi i popravak (repair) dostavi sačuvane promjene. |
+| **Pretpostavke modela** | **Čvorovi:** ispad s oporavkom; replike ne lažu. **Mreža:** poruke kasne, moguća particija. **Vrijeme:** bez granice kašnjenja; replike se usklađuju kasnije. |
+| **Sigurnost (invarijanta)** | Za uspjeh je dovoljna potvrda jedne replike. Čitanje zato može vratiti stari podatak, pa „pročitaj pa upiši” **ne sprječava** da se isto sjedalo proda dvaput. |
+| **Napredovanje** | Operacija uspijeva čim odgovori jedna dostupna replika. Ostale replike dobiju promjenu kasnije, kad se veza oporavi i popravak (repair) dostavi sačuvane promjene. |
 | **U odnosu na etcd** | etcd prije potvrde traži **većinu i jedan redoslijed** upisa (Raft); u particiji manjina ne piše. Cassandra s ONE potvrđuje nakon **jedne replike** i usklađuje kasnije: obje strane particije pišu, a pri sukobu pobjeđuje novija vremenska oznaka. |
 
 **Izbor je važan:** razina QUORUM čeka većinu (2 od 3), a za uvjet „prodaj samo ako je slobodno” treba jača koordinacija, npr. lake transakcije (lightweight transactions, LWT).
 
 ::: {.notes}
 - **Priča:** Kontrast: slabija konfiguracija daje brzinu, ali ne čuva naše pravilo.
+
+- **Sažetak:**
+  - Cassandra s tri replike i razinom ONE: čitanje i upis čekaju potvrdu jedne replike.
+  - Sigurnost: čitanje može vratiti stari podatak, pa „pročitaj pa upiši” ne sprječava dvostruku prodaju sjedala.
+  - Napredak: dovoljna je jedna dostupna replika; ostale se usklade kasnije (repair).
+  - Za razliku od etcd-a obje strane particije pišu, a pobjeđuje novija vremenska oznaka; jače opcije su QUORUM i LWT.
 
 - RF=3; ONE čeka relevantnu repliku, ne znači samo jednu kopiju.
 
@@ -1020,14 +1206,20 @@ Zajednička povijest plaćanja u **otvorenoj mreži s mogućim zlonamjernim sudi
 
 | O čemu zaključujemo | Bitcoinov dokaz rada (proof of work) |
 |:---|:---|
-| **Pretpostavke modela** | Sigurna kriptografija; **većinski pošten hash-rate** (većinu računalne snage rudarenja drže pošteni rudari, broj čvorova nije bitan); blokovi se šire dovoljno brzo u odnosu na nastanak novih. |
-| **Invarijanta / sigurnost** | Valjani lanac ne troši isti izlaz transakcije dvaput. Čvorovi privremeno mogu pratiti različite grane; **konačnost je probabilistička**. |
-| **Uvjeti napredovanja** | Rudarenje i komunikacija omogućuju rast lanca. Transakcija mora ostati valjana, stići rudarima i biti odabrana; **nema fiksnog roka uključivanja**. |
+| **Pretpostavke modela** | **Čvorovi:** bizantski, ali **većinski pošten hash-rate** (računalna snaga, ne broj čvorova); sigurna kriptografija. **Mreža i vrijeme:** blokovi se šire mnogo brže nego što nastaju novi. |
+| **Sigurnost (invarijanta)** | Valjani lanac ne troši isti izlaz transakcije dvaput. Čvorovi privremeno mogu pratiti različite grane; **konačnost je probabilistička**. |
+| **Napredovanje** | Rudarenje i komunikacija omogućuju rast lanca. Transakcija mora ostati valjana, stići rudarima i biti odabrana; **nema fiksnog roka uključivanja**. |
 
 **Tijekom particije:** rastu konkurentske grane. Potvrde smanjuju rizik poništenja pod pretpostavkama; ne svode ga na nulu.
 
 ::: {.notes}
 - **Priča:** Krajnji slučaj: zlonamjerni sudionici i probabilistička sigurnost.
+
+- **Sažetak:**
+  - Bitcoin: zajednička povijest plaćanja u otvorenoj mreži s mogućim zlonamjernim sudionicima.
+  - Model: bizantski čvorovi uz većinski pošten hash-rate, sigurna kriptografija, blokovi se šire mnogo brže nego što nastaju.
+  - Sigurnost: valjani lanac ne troši isti izlaz dvaput; konačnost je probabilistička. Napredak: lanac raste, bez fiksnog roka uključivanja.
+  - U particiji rastu konkurentske grane; potvrde smanjuju rizik poništenja, ali ne na nulu.
 
 - Protivničko okruženje; većinski pošten hash-rate, kriptografija, dovoljno brzo širenje.
 
@@ -1051,8 +1243,8 @@ Izvori: [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf); [Bitcoin develope
 | Dimenzija | Što pretpostavljamo |
 |:---|:---|
 | Mreža | Zahtjevi i odgovori mogu kasniti, nestati, ponoviti se ili promijeniti redoslijed; nitko ih usput ne mijenja. |
-| Čvorovi | Usluge se mogu srušiti i ponovno pokrenuti; zapisi na disku (RAID) ostaju, sadržaj radne memorije (RAM) se gubi. |
-| Vrijeme | Nema zajamčenog najduljeg vremena odgovora. |
+| Čvorovi | **Ispad s oporavkom:** usluge se mogu srušiti i ponovno pokrenuti; zapisi na disku (RAID) ostaju, sadržaj radne memorije (RAM) se gubi. |
+| Vrijeme | **Asinkrono:** nema zajamčenog najduljeg vremena odgovora. |
 
 : {tbl-colwidths="[18,82]"}
 
@@ -1060,6 +1252,11 @@ Izvori: [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf); [Bitcoin develope
 
 ::: {.notes}
 - **Priča:** Sve tri dimenzije modela primjenjujemo na naš portal.
+
+- **Sažetak:**
+  - Cilj: ponovni pokušaj ne smije stvoriti drugi prihvaćeni zapis, ni nakon ponovnog pokretanja usluge.
+  - Mreža: kašnjenje, gubitak, ponavljanje i promjena redoslijeda, bez izmjena. Čvorovi: ispad s oporavkom (disk ostaje, RAM se gubi). Vrijeme: asinkrono, nema zajamčenog najduljeg odgovora.
+  - Za konačno prihvaćanje: usluge su konačno dostupne, komunikacija uspijeva, sačuvani ili ponovljeni posao se obrađuje.
 
 - Pretpostavke nisu činjenice o sustavu: predviđamo ih mi, arhitekti, a dizajn vrijedi samo dok one vrijede.
 
@@ -1074,6 +1271,45 @@ Izvori: [Bitcoin whitepaper](https://bitcoin.org/bitcoin.pdf); [Bitcoin develope
 - Nepouzdani klijenti ne zahtijevaju automatski bizantski konsenzus pouzdanih poslužitelja.
 
 Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/ConcDisSys/dist-sys-notes.pdf).
+:::
+
+## Uvijek isti izbori, različite postavke {.system-example .dense-table}
+
+**Svaki raspodijeljeni sustav donosi iste odluke. Razlikuju se po tome što nude kao postavku i koje funkcije daju.**
+
+| Odluka | Što biramo i što to košta | Primjer postavke |
+|:---|:---|:---|
+| **RAM ili disk** | Potvrditi tek nakon trajnog upisa (sigurno, sporije) ili prije njega (brže, rušenje gubi zadnje upise). | Redis `appendfsync` (always / everysec / no); PostgreSQL `synchronous_commit` |
+| **Particije su uvijek moguće** | Ne biramo hoće li ih biti, nego što radimo dok traju: čekamo (dosljednost) ili odgovaramo (dostupnost). | etcd: manjina ne piše; Cassandra s ONE: piše i manjina |
+| **Razina konzistentnosti** | Jaka za ono što ne smije poći krivo, slabija za ono što smije kasniti. | Cassandra ONE / QUORUM / ALL po upitu; etcd linearizabilno ili serijalizabilno čitanje |
+| **Brzina** | I bez particije: čekamo potvrde replika (dosljedno, sporije) ili odgovaramo odmah (brže, moguće zastarjelo). | PostgreSQL asinkrona (zadano) ili sinkrona replikacija (`synchronous_standby_names`) |
+
+: {tbl-colwidths="[18,46,36]"}
+
+**Funkcije čine razliku:** etcd nudi atomarni „stvori ako ne postoji”, Cassandra lake transakcije (LWT). Bez njih istu invarijantu moramo graditi sami.
+
+::: {.notes}
+- **Priča:** Nakon tri sustava i našeg portala izvlačimo obrazac: odluke su uvijek iste, a sustavi se razlikuju po postavkama i funkcijama.
+
+- **Sažetak:**
+  - Četiri odluke: RAM ili disk, ponašanje tijekom particije, razina konzistentnosti, brzina.
+  - Za svaku: što biramo, koja je cijena i primjer stvarne postavke (Redis, PostgreSQL, etcd, Cassandra).
+  - Funkcije poput atomarnog „stvori ako ne postoji” ili LWT-a odlučuju moramo li invarijantu graditi sami.
+  - Za portal (samo u bilješkama, pitati studente): prihvaćeni zapis tek nakon trajnog upisa i uz jaku konzistentnost; popis predaja za nastavnika smije kasniti nekoliko sekundi.
+
+- RAM ili disk veže se na ispad s oporavkom: što nije na disku, nestaje pri rušenju. Redis zadano radi fsync svake sekunde; PostgreSQL s isključenim synchronous_commit potvrđuje prije upisa WAL-a na disk.
+
+- Particije: rijetke su, ali se u mreži ne mogu isključiti; CAP ograničava samo ponašanje tijekom particije (Brewer).
+
+- Brzina: čim se podaci repliciraju, i bez particije biramo između dosljednosti i latencije (Abadi, PACELC).
+
+- Razina konzistentnosti često se bira po operaciji, ne za cijeli sustav: isti klaster Cassandre može čitati s ONE i pisati s QUORUM.
+
+- Pitati: što u portalu smije biti zastarjelo, a što ne? Očekivano: popis predaja smije; potvrda prihvaćanja ne smije.
+
+- Detaljnije: replikacija (predavanje 06), konsenzus (07), transakcije (09).
+
+Izvori: [Brewer, CAP Twelve Years Later](https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/); [Abadi, Consistency Tradeoffs in Modern Distributed Database System Design](https://www.cs.umd.edu/~abadi/papers/abadi-pacelc.pdf); [Redis persistence](https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/); [PostgreSQL, Asynchronous Commit](https://www.postgresql.org/docs/current/wal-async-commit.html); [PostgreSQL, Synchronous Replication](https://www.postgresql.org/docs/current/warm-standby.html).
 :::
 
 ## 🔥 Kako razviti loš sustav
@@ -1099,6 +1335,10 @@ Izvori: [Kleppmann, Distributed Systems](https://www.cl.cam.ac.uk/teaching/2122/
 
 ::: {.notes}
 - **Priča:** Suprotan primjer: što se dogodi kad pretpostavke prešutimo.
+
+- **Sažetak:**
+  - Osam prešutnih pretpostavki (zablude raspodijeljenog računarstva): mreža uvijek dostavlja, komunikacija ne traje, neograničen kapacitet, sigurna mreža, nepromjenjiva topologija, jedan administrator, besplatan prijenos, isti jezik.
+  - Umjesto toga: navesti pretpostavke i objasniti što slijedi kad ne vrijede.
 
 - Pregled (35 s); koja pretpostavka pada u priči o timeoutu (25 s)?
 
@@ -1126,6 +1366,11 @@ Izvori: [Oracle, Fallacies of distributed systems](https://blogs.oracle.com/deve
 ::: {.notes}
 - **Priča:** Zatvaramo krug: odgovor na glasanje je C, i sad znamo zašto.
 
+- **Sažetak:**
+  - Odgovor: još ne znamo (C), i sada znamo zašto.
+  - Pet pojmova: djelomični ispad, istek čekanja, invarijanta, sigurnost i napredovanje, model sustava.
+  - Siguran ponovni pokušaj traži pravilo i pretpostavke, a ne samo dulji timeout.
+
 - Vratiti se na glasanje s početka: tko je glasao C? Odgovor C je točan jer isto opažanje odgovara različitim ishodima.
 
 - Pitati (15 s): koji je pojam još nejasan?
@@ -1147,6 +1392,11 @@ Predložite što **pohraniti i prikazati**, **jedno pravilo koje treba očuvati*
 
 ::: {.notes}
 - **Priča:** Naučeno primjenjujemo na novi problem s rokom i potvrdom.
+
+- **Sažetak:**
+  - Rok je ponoć; prijenos završi u 23:59, provjere u 00:19.
+  - Pitanje: kako student može znati je li predao na vrijeme, i nakon zatvaranja preglednika?
+  - Studenti predlažu što pohraniti i prikazati, jedno pravilo koje treba očuvati te pretpostavke o mreži, ponovnom pokretanju i vremenu.
 
 - Pitati (10 s): što ostaje nakon zatvaranja preglednika?
 
@@ -1174,6 +1424,11 @@ Tvrtka izdaje račune s **više poslužitelja**. Brojevi moraju ići **slijedno:
 
 ::: {.notes}
 - **Priča:** Ideje prenosimo na problem iz prakse i ostavljamo pitanje za kasnija predavanja.
+
+- **Sažetak:**
+  - Računi s više poslužitelja; brojevi idu slijedno, bez ponavljanja i bez preskakanja.
+  - Četiri pitanja: invarijanta, tko dodjeljuje broj, što s brojem 42 nakon rušenja, kako izbjeći dva računa nakon timeouta.
+  - Završno: postoji li rješenje bez žrtve dostupnosti, brzine ili strogog slijeda; ako ne, što žrtvovati?
 
 - Zadati za doma; ne rješavati na satu. Stvarni problem iz nastavnikove prakse.
 
